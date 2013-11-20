@@ -7,6 +7,7 @@ import org.bouncycastle.crypto.prng.SP800SecureRandom;
 import org.bouncycastle.crypto.prng.SP800SecureRandomBuilder;
 
 import javax.crypto.SecretKey;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 
 /**
@@ -16,43 +17,61 @@ import java.nio.charset.Charset;
  */
 public final class NonceUtil
 {
-  /** Fixed part of nonce described in http://tools.ietf.org/html/rfc5116#section-3.2. */
-  private static final byte[] FIXED_NONCE_PART = "cryptosis.org.NonceUtils".getBytes(Charset.forName("ASCII"));
-
-
   /** Private constructor of utility class. */
   private NonceUtil() {}
 
 
   /**
-   * Generates a nonce using the strategy described in RFC-5116, section 3.2,
-   * <a href="http://tools.ietf.org/html/rfc5116#section-3.2">http://tools.ietf.org/html/rfc5116#section-3.2</a>,
-   * where nonce is composed of a fixed part and a sequential part. The sequential part is provided by a timestamp
-   * with nanosecond resolution, i.e. {@link System#nanoTime()}.
+   * Generates a nonce of the given size by repetitively concatenating system timestamps
+   * (i.e. {@link System#nanoTime()}) up to the required size.
    *
-   * @param  length  Number of bytes in nonce, in the range 12-32.
+   * @param length  Positive number of bytes in nonce.
    *
    * @return  Nonce bytes.
    */
-  public static byte[] rfc5116Nonce(final int length)
+  public static byte[] timestampNonce(final int length)
   {
-    if (length < 12 || length > 32) {
-      throw new IllegalArgumentException("Nonce must be 12 - 32 bytes.");
+    if (length <= 0) {
+      throw new IllegalArgumentException(length + " is invalid. Length must be positive.");
     }
     final byte[] nonce = new byte[length];
-    System.arraycopy(FIXED_NONCE_PART, 0, nonce, 0, length - 8);
-    long timestamp = System.nanoTime();
-    for (int i = length - 8; i > 0; i--) {
-      nonce[i] = (byte)(timestamp & 0xFF);
-      timestamp >>= 8;
+    int count = 0;
+    long timestamp;
+    while (count < length) {
+      timestamp = System.nanoTime();
+      for (int i = 0; i < 8 && count < length; i++) {
+        nonce[count++] = (byte)(timestamp & 0xFF);
+        timestamp >>= 8;
+      }
     }
     return nonce;
   }
 
 
   /**
-   * Generates a random IV according to method 1 (encrypted nonce) in NIST SP800-63a, appendix C,
-   * <a href="http://goo.gl/S9z8qF">http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf</a>,
+   * Generates a nonce/IV using the strategy described in
+   * <a href="http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf">NIST SP 800-38d</a>, section 8.2.2,
+   * "RBG-based Construction". This nonce generation strategy is suitable for GCM ciphers.
+   *
+   * @param  length  Number of bytes in nonce; MUST be 12 or more.
+   *
+   * @return  Nonce bytes.
+   */
+  public static byte[] nist80038d(final int length)
+  {
+    if (length < 12) {
+      throw new IllegalArgumentException("Length must be at least 12 bytes (96 bits).");
+    }
+    final byte[] nonce = timestampNonce(length);
+    return nist80063a(
+      new SP800SecureRandomBuilder().buildHash(new SHA256Digest(), nonce, false),
+      length);
+  }
+
+
+  /**
+   * Generates a random IV according to
+   * <a href="http://goo.gl/S9z8qF">NIST SP 800-63a</a>, appendix C, method 1 (encrypted nonce),
    * suitable for use with any block cipher mode described in that standard.
    *
    * @param  cipher  Block cipher.
@@ -61,19 +80,27 @@ public final class NonceUtil
    *
    * @return  Cipher block size number of random bytes.
    */
-  public static byte[] nist800IV(final BlockCipher cipher, final SecretKey key)
+  public static byte[] nist80063a(final BlockCipher cipher, final SecretKey key)
   {
-    cipher.init(true, new KeyParameter(key.getEncoded()));
-    final byte[] result = new byte[cipher.getBlockSize()];
-    cipher.processBlock(rfc5116Nonce(cipher.getBlockSize()), 0, result, 0);
-    cipher.reset();
+    BlockCipher raw = cipher;
+    // Get the underlying cipher if there is one
+    final Method method = ReflectUtil.getMethod(cipher.getClass(), "getUnderlyingCipher");
+    if (method != null) {
+      raw = (BlockCipher) ReflectUtil.invoke(cipher, method);
+    }
+    raw.init(true, new KeyParameter(key.getEncoded()));
+
+    final byte[] result = new byte[raw.getBlockSize()];
+    final byte[] nonce = timestampNonce(raw.getBlockSize());
+    raw.processBlock(nonce, 0, result, 0);
+    raw.reset();
     return result;
   }
 
 
   /**
-   * Generates a random IV according to method 2 (pseudorandom) in NIST SP800-63a, appendix C,
-   * <a href="http://goo.gl/S9z8qF">http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf</a>,
+   * Generates a random IV according to
+   * <a href="http://goo.gl/S9z8qF">NIST SP 800-63a</a>, appendix C, method 2 (pseudorandom),
    * suitable for use with any block cipher mode described in that standard.
    *
    * @param  prng  NIST SP800-63a approved pseudorandom number generator.
@@ -81,7 +108,7 @@ public final class NonceUtil
    *
    * @return  Cipher block size number of random bytes.
    */
-  public static byte[] nist800IV(final SP800SecureRandom prng, final int blockSize)
+  public static byte[] nist80063a(final SP800SecureRandom prng, final int blockSize)
   {
     prng.setSeed(System.nanoTime());
     final byte[] iv = new byte[blockSize];
@@ -91,19 +118,19 @@ public final class NonceUtil
 
 
   /**
-   * Generates a random IV according to method 2 (pseudorandom) in NIST SP800-63a, appendix C,
-   * <a href="http://goo.gl/S9z8qF">http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf</a>,
-   * suitable for use with any block cipher mode described in that standard. This method uses a hash DRBG
-   * based on a SHA-256 digest function.
+   * Generates a random IV according to
+   * <a href="http://goo.gl/S9z8qF">NIST SP 800-63a</a>, appendix C, method 2 (pseudorandom),
+   * suitable for use with any block cipher mode described in that standard.
+   * This method uses a hash DRBG based on a SHA-256 digest function.
    *
    * @param  cipher  Block cipher.
    *
    * @return  Cipher block size number of random bytes.
    */
-  public static byte[] nist800IV(final BlockCipher cipher)
+  public static byte[] nist80063a(final BlockCipher cipher)
   {
-    final byte[] nonce = rfc5116Nonce(cipher.getBlockSize());
-    return nist800IV(
+    final byte[] nonce = timestampNonce(cipher.getBlockSize());
+    return nist80063a(
         new SP800SecureRandomBuilder().buildHash(new SHA256Digest(), nonce, false),
         cipher.getBlockSize());
   }

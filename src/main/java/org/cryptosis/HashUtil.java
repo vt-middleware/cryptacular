@@ -19,13 +19,14 @@ public final class HashUtil
     final byte[] result = new byte[digest.getDigestSize()];
     digest.update(data, 0, data.length);
     digest.doFinal(result, 0);
+    digest.reset();
     return result;
   }
 
   public static byte[] hash(final Digest digest, final byte[] data, final int saltSize)
   {
     final DigestRandomGenerator rng = new DigestRandomGenerator(digest);
-    rng.addSeedMaterial(System.nanoTime());
+    rng.addSeedMaterial(NonceUtil.timestampNonce(saltSize));
     final byte[] salt = new byte[saltSize];
     rng.nextBytes(salt);
     digest.reset();

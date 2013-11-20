@@ -69,7 +69,7 @@ public class CiphertextHeader
     final byte[] nonce = new byte[bb.getInt()];
     bb.get(nonce);
     String keyName = null;
-    if (length > nonce.length + 4) {
+    if (length > nonce.length + 8) {
       final byte[] b = new byte[bb.getInt()];
       bb.get(b);
       keyName = new String(b);
