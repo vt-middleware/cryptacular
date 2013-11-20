@@ -51,7 +51,8 @@ public final class NonceUtil
   /**
    * Generates a nonce/IV using the strategy described in
    * <a href="http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf">NIST SP 800-38d</a>, section 8.2.2,
-   * "RBG-based Construction". This nonce generation strategy is suitable for GCM ciphers.
+   * "RBG-based Construction". Uses a DRBG based on a SHA-256 digest. This nonce generation strategy is suitable for
+   * GCM ciphers.
    *
    * @param  length  Number of bytes in nonce; MUST be 12 or more.
    *

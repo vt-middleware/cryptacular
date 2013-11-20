@@ -27,6 +27,18 @@ public final class CipherUtil
   /** Private constructor of utility class. */
   private CipherUtil() {}
 
+
+  /**
+   * Encrypts data using an AEAD cipher. A {@link CiphertextHeader} is prepended to the resulting ciphertext and
+   * used as AAD (Additional Authenticated Data) passed to the AEAD cipher.
+   *
+   * @param  cipher  AEAD cipher.
+   * @param  key  Encryption key.
+   * @param  data  Plaintext data to be encrypted.
+   *
+   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
+   * byte array.
+   */
   public static byte[] encrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)
   {
     final byte[] nonce = NonceUtil.nist80038d(DEFAULT_NONCE_SIZE);
@@ -35,6 +47,17 @@ public final class CipherUtil
     return encrypt(new AEADCipherAdapter(cipher), header, data);
   }
 
+
+  /**
+   * Decrypts data using an AEAD cipher.
+   *
+   * @param  cipher  AEAD cipher.
+   * @param  key  Encryption key.
+   * @param  data  Ciphertext data containing a prepended {@link CiphertextHeader} that is verified as part of the
+   *               decryption process.
+   *
+   * @return  Decrypted data that completely fills the returned byte array.
+   */
   public static byte[] decrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)
   {
     final CiphertextHeader header = CiphertextHeader.decode(data);
@@ -44,6 +67,18 @@ public final class CipherUtil
     return decrypt(new AEADCipherAdapter(cipher), data, header.getLength());
   }
 
+
+  /**
+   * Encrypts data using the given block cipher with PKCS5 padding. A {@link CiphertextHeader} is prepended to the
+   * resulting ciphertext.
+   *
+   * @param  cipher  Block cipher.
+   * @param  key  Encryption key.
+   * @param  data  Plaintext data to be encrypted.
+   *
+   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
+   * byte array.
+   */
   public static byte[] encrypt(final BlockCipher cipher, final SecretKey key, final byte[] data)
   {
     final byte[] iv = NonceUtil.nist80063a(cipher, key);
@@ -53,6 +88,16 @@ public final class CipherUtil
     return encrypt(new PaddedCipherAdapter(padded), header, data);
   }
 
+
+  /**
+   * Decrypts data using the given block cipher with PKCS5 padding.
+   *
+   * @param  cipher  Block cipher.
+   * @param  key  Encryption key.
+   * @param  data  Ciphertext data containing a prepended {@link CiphertextHeader}.
+   *
+   * @return  Decrypted data that completely fills the returned byte array.
+   */
   public static byte[] decrypt(final BlockCipher cipher, final SecretKey key, final byte[] data)
   {
     final CiphertextHeader header = CiphertextHeader.decode(data);
@@ -61,6 +106,16 @@ public final class CipherUtil
     return decrypt(new PaddedCipherAdapter(padded), data, header.getLength());
   }
 
+
+  /**
+   * Encrypts the given data.
+   *
+   * @param  cipher  Adapter for either a block or AEAD cipher.
+   * @param  header  Encoded ciphertext header.
+   * @param  data  Plaintext data to encrypt.
+   *
+   * @return  Concatenation of encoded header and encrypted data that completely fills the returned byte array.
+   */
   private static byte[] encrypt(final CipherAdapter cipher, final byte[] header, final byte[] data)
   {
     final int outSize = header.length + cipher.getOutputSize(data.length);
@@ -73,6 +128,16 @@ public final class CipherUtil
     return output;
   }
 
+
+  /**
+   * Decrypts the given data.
+   *
+   * @param  cipher  Adapter for either a block or AEAD cipher.
+   * @param  data  Ciphertext data containing prepended header bytes.
+   * @param  inOff  Offset into ciphertext at which encrypted data starts (i.e. after header).
+   *
+   * @return  Decrypted data that completely fills the returned byte array.
+   */
   private static byte[] decrypt(final CipherAdapter cipher, final byte[] data, final int inOff)
   {
     final int len = data.length - inOff;
