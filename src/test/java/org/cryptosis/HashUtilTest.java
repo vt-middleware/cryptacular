@@ -1,5 +1,8 @@
 package org.cryptosis;
 
+import java.io.File;
+import java.io.InputStream;
+
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
@@ -46,11 +49,40 @@ public class HashUtilTest
     };
   }
 
+
+  @DataProvider(name = "file-hashes")
+  public Object[][] getFileHashes()
+  {
+    return new Object[][] {
+      new Object[] {
+        "src/test/resources/plaintexts/lorem-1200.txt",
+        "f0746e8978b3eccca05284dd12f098fdea32c8bc",
+      },
+      new Object[] {
+        "src/test/resources/plaintexts/lorem-5000.txt",
+        "1142d7a2661760624fa41b002be6c66c23b50602",
+      },
+    };
+  }
+
+
   @Test(dataProvider = "salted-hash-iter")
   public void testSaltedHashIter(
     final Digest digest, final String data, final byte[] salt, final int iterations, final String expected)
     throws Exception
   {
     assertEquals(Hex.toHexString(HashUtil.hash(digest, data.getBytes("ASCII"), salt, iterations)), expected);
+  }
+
+
+  @Test(dataProvider = "file-hashes")
+  public void testHashStream(final String path, final String expected) throws Exception
+  {
+    final InputStream in = StreamUtil.makeStream(new File(path));
+    try {
+      assertEquals(Hex.toHexString(HashUtil.sha1(in)), expected);
+    } finally {
+      in.close();
+    }
   }
 }
