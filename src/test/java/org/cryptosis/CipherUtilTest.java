@@ -1,13 +1,13 @@
 package org.cryptosis;
 
-import java.security.SecureRandom;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.engines.BlowfishEngine;
-import org.bouncycastle.crypto.engines.DESedeEngine;
 import org.bouncycastle.crypto.engines.TwofishEngine;
 import org.bouncycastle.crypto.modes.AEADBlockCipher;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
@@ -84,12 +84,20 @@ public class CipherUtilTest
   }
 
 
+  @DataProvider(name = "plaintext-files")
+  public Object[][] getPlaintextFiles()
+  {
+    return new Object[][] {
+      new Object[] {"src/test/resources/plaintexts/lorem-1200.txt"},
+      new Object[] {"src/test/resources/plaintexts/lorem-5000.txt"},
+    };
+  }
+
+
   @Test(dataProvider = "block-cipher")
   public void testBlockCipherEncryptDecrypt(final String plaintext, final BlockCipher cipher)
   {
-    final byte[] keyBytes = new byte[cipher.getBlockSize()];
-    new SecureRandom().nextBytes(keyBytes);
-    final SecretKey key = new SecretKeySpec(keyBytes, cipher.getAlgorithmName());
+    final SecretKey key = SecretKeyGenerator.generate(cipher);
     final byte[] ciphertext = CipherUtil.encrypt(cipher, key, plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
     assertEquals(new String(result), plaintext);
@@ -100,11 +108,41 @@ public class CipherUtilTest
   public void testAeadBlockCipherEncryptDecrypt(final String plaintext, final AEADBlockCipher cipher)
   {
     final BlockCipher under = cipher.getUnderlyingCipher();
-    final byte[] keyBytes = new byte[under.getBlockSize()];
-    new SecureRandom().nextBytes(keyBytes);
-    final SecretKey key = new SecretKeySpec(keyBytes, under.getAlgorithmName());
+    final SecretKey key = SecretKeyGenerator.generate(under);
     final byte[] ciphertext = CipherUtil.encrypt(cipher, key, plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
     assertEquals(new String(result), plaintext);
+  }
+
+
+  @Test(dataProvider = "plaintext-files")
+  public void testBlockCipherEncryptDecryptStream(final String path) throws Exception
+  {
+    final BlockCipher cipher = new CBCBlockCipher(new AESEngine());
+    final SecretKey key = SecretKeyGenerator.generate(cipher);
+    final File file = new File(path);
+    final String expected = new String(StreamUtil.readAll(file));
+    final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+    CipherUtil.encrypt(cipher, key, StreamUtil.makeStream(file), tempOut);
+    final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
+    final ByteArrayOutputStream actual = new ByteArrayOutputStream();
+    CipherUtil.decrypt(cipher, key, tempIn, actual);
+    assertEquals(new String(actual.toByteArray()), expected);
+  }
+
+
+  @Test(dataProvider = "plaintext-files")
+  public void testAeadBlockCipherEncryptDecryptStream(final String path) throws Exception
+  {
+    final AEADBlockCipher cipher = new GCMBlockCipher(new AESEngine());
+    final SecretKey key = SecretKeyGenerator.generate(cipher.getUnderlyingCipher());
+    final File file = new File(path);
+    final String expected = new String(StreamUtil.readAll(file));
+    final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+    CipherUtil.encrypt(cipher, key, StreamUtil.makeStream(file), tempOut);
+    final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
+    final ByteArrayOutputStream actual = new ByteArrayOutputStream();
+    CipherUtil.decrypt(cipher, key, tempIn, actual);
+    assertEquals(new String(actual.toByteArray()), expected);
   }
 }

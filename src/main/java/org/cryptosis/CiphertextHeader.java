@@ -1,6 +1,9 @@
 package org.cryptosis;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 /**
  * Cleartext header prepended to ciphertext providing data required for decryption.
@@ -102,8 +105,9 @@ public class CiphertextHeader
    */
   public byte[] encode()
   {
-    ByteBuffer bb = ByteBuffer.allocate(this.length);
-    bb.putInt(this.length);
+    ByteBuffer bb = ByteBuffer.allocate(length);
+    bb.order(ByteOrder.BIG_ENDIAN);
+    bb.putInt(length);
     bb.putInt(nonce.length);
     bb.put(nonce);
     if (keyName != null) {
@@ -125,6 +129,7 @@ public class CiphertextHeader
   public static CiphertextHeader decode(final byte[] data)
   {
     final ByteBuffer bb = ByteBuffer.wrap(data);
+    bb.order(ByteOrder.BIG_ENDIAN);
     final int length = bb.getInt();
     final byte[] nonce = new byte[bb.getInt()];
     bb.get(nonce);
@@ -132,6 +137,36 @@ public class CiphertextHeader
     if (length > nonce.length + 8) {
       final byte[] b = new byte[bb.getInt()];
       bb.get(b);
+      keyName = new String(b);
+    }
+    return new CiphertextHeader(nonce, keyName);
+  }
+
+
+  /**
+   * Creates a header from encrypted data containing a cleartext header prepended to the start.
+   *
+   * @param  input  Input stream that is positioned at the start of ciphertext header data.
+   *
+   * @return  Decoded header.
+   */
+  public static CiphertextHeader decode(final InputStream input)
+  {
+    final int length = ByteUtil.readInt(input);
+    final byte[] nonce = new byte[ByteUtil.readInt(input)];
+    try {
+      input.read(nonce);
+    } catch (IOException e) {
+      throw new RuntimeException("Error reading from stream", e);
+    }
+    String keyName = null;
+    if (length > nonce.length + 8) {
+      final byte[] b = new byte[ByteUtil.readInt(input)];
+      try {
+        input.read(b);
+      } catch (IOException e) {
+        throw new RuntimeException("Error reading from stream", e);
+      }
       keyName = new String(b);
     }
     return new CiphertextHeader(nonce, keyName);
