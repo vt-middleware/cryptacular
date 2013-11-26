@@ -2,12 +2,17 @@ package org.cryptosis;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 
 import org.bouncycastle.util.io.Streams;
 
@@ -30,7 +35,12 @@ public final class StreamUtil
 
   public static byte[] readAll(final File file)
   {
-    return readAll(makeStream(file), (int) file.length());
+    final InputStream input = makeStream(file);
+    try {
+      return readAll(input, (int) file.length());
+    } finally {
+      closeStream(input);
+    }
   }
 
 
@@ -55,10 +65,45 @@ public final class StreamUtil
   }
 
 
+  public static String readAll(final Reader reader)
+  {
+    return readAll(reader, 1024);
+  }
+
+
+  public static String readAll(final Reader reader, final int sizeHint)
+  {
+    final CharArrayWriter writer = new CharArrayWriter(sizeHint);
+    final char[] buffer = new char[1024];
+    int len;
+    try {
+      while ((len = reader.read(buffer)) > 0) {
+        writer.write(buffer, 0, len);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("IO error reading/writing stream", e);
+    } finally {
+      closeReader(reader);
+      closeWriter(writer);
+    }
+    return writer.toString();
+  }
+
+
   public static InputStream makeStream(final File file)
   {
     try {
       return new BufferedInputStream(new FileInputStream(file));
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(file + " does not exist");
+    }
+  }
+
+
+  public static Reader makeReader(final File file)
+  {
+    try {
+      return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)));
     } catch (FileNotFoundException e) {
       throw new RuntimeException(file + " does not exist");
     }
@@ -79,6 +124,26 @@ public final class StreamUtil
   {
     try {
       out.close();
+    } catch (IOException e) {
+      // Ignore IO errors on close
+    }
+  }
+
+
+  public static void closeReader(final Reader reader)
+  {
+    try {
+      reader.close();
+    } catch (IOException e) {
+      // Ignore IO errors on close
+    }
+  }
+
+
+  public static void closeWriter(final Writer writer)
+  {
+    try {
+      writer.close();
     } catch (IOException e) {
       // Ignore IO errors on close
     }
