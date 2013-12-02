@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.util;
 
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.digests.SHA256Digest;

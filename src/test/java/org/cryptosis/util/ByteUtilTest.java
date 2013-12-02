@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.util;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.util;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

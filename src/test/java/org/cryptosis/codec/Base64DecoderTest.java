@@ -5,8 +5,8 @@ import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
-import org.cryptosis.ByteUtil;
-import org.cryptosis.StreamUtil;
+import org.cryptosis.util.ByteUtil;
+import org.cryptosis.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 

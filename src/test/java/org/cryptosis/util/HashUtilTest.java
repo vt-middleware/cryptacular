@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.util;
 
 import java.io.File;
 import java.io.InputStream;

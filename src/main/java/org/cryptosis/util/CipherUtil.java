@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +12,7 @@ import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
+import org.cryptosis.CiphertextHeader;
 
 import javax.crypto.SecretKey;
 
@@ -33,14 +34,14 @@ public final class CipherUtil
 
 
   /**
-   * Encrypts data using an AEAD cipher. A {@link CiphertextHeader} is prepended to the resulting ciphertext and
+   * Encrypts data using an AEAD cipher. A {@link org.cryptosis.CiphertextHeader} is prepended to the resulting ciphertext and
    * used as AAD (Additional Authenticated Data) passed to the AEAD cipher.
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
    * @param  data  Plaintext data to be encrypted.
    *
-   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
+   * @return  Concatenation of encoded {@link org.cryptosis.CiphertextHeader} and encrypted data that completely fills the returned
    * byte array.
    */
   public static byte[] encrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)

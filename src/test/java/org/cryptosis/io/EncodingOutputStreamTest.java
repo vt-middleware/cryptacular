@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import org.bouncycastle.util.io.Streams;
-import org.cryptosis.ByteUtil;
-import org.cryptosis.StreamUtil;
+import org.cryptosis.util.ByteUtil;
+import org.cryptosis.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 

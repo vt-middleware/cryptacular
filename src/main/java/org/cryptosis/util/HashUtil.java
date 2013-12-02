@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.util;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.util;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import org.cryptosis.util.ByteUtil;
+
 /**
  * Cleartext header prepended to ciphertext providing data required for decryption.
  * <p>

@@ -7,6 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.prng.SP800SecureRandomBuilder;
+import org.cryptosis.util.NonceUtil;
 
 /**
  * Factory class with static methods for generating {@link SecretKey}s.

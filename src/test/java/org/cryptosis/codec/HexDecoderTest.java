@@ -2,9 +2,8 @@ package org.cryptosis.codec;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 
-import org.cryptosis.ByteUtil;
+import org.cryptosis.util.ByteUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
