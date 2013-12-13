@@ -35,13 +35,28 @@ public final class CodecUtil
 
 
   /**
+   * Encodes raw bytes to the equivalent hexadecimal encoded string with optional delimiting of output.
+   *
+   * @param  raw  Raw bytes to encode.
+   * @param  delimit  True to delimit every two characters (i.e. every byte) of output with ':' character,
+   *                  false otherwise.
+   *
+   * @return  Hexadecimal encoded string.
+   */
+  public static String hex(final byte[] raw, final boolean delimit)
+  {
+    return encode(new HexEncoder(delimit), raw);
+  }
+
+
+  /**
    * Decodes a hexadecimal encoded string to raw bytes.
    *
-   * @param  encoded  Hex encoded string.
+   * @param  encoded  Hex encoded character data.
    *
    * @return  Raw bytes of hex string.
    */
-  public static byte[] hex(final String encoded)
+  public static byte[] hex(final CharSequence encoded)
   {
     return decode(new HexDecoder(), encoded);
   }
@@ -63,11 +78,11 @@ public final class CodecUtil
   /**
    * Decodes a base64-encoded string into raw bytes
    *
-   * @param  encoded  Base64-encoded string to decode.
+   * @param  encoded  Base64-encoded character data.
    *
    * @return  Base64-decoded bytes.
    */
-  public static byte[] b64(final String encoded)
+  public static byte[] b64(final CharSequence encoded)
   {
     return decode(new Base64Decoder(), encoded);
   }
@@ -100,7 +115,7 @@ public final class CodecUtil
     final CharBuffer output = CharBuffer.allocate(encoder.outputSize(raw.length));
     encoder.encode(ByteBuffer.wrap(raw), output);
     encoder.finalize(output);
-    return output.toString();
+    return output.flip().toString();
   }
 
 
@@ -108,15 +123,16 @@ public final class CodecUtil
    * Decodes the given encoded data using the given char-to-byte decoder.
    *
    * @param  decoder  Decoder to perform char-to-byte conversion.
-   * @param  encoded  Encoded string data.
+   * @param  encoded  Encoded character data.
    *
    * @return  Decoded data as raw bytes.
    */
-  public static byte[] decode(final Decoder decoder, final String encoded)
+  public static byte[] decode(final Decoder decoder, final CharSequence encoded)
   {
     final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(encoded.length()));
     decoder.decode(CharBuffer.wrap(encoded), output);
     decoder.finalize(output);
+    output.flip();
     return ByteUtil.toArray(output);
   }
 }

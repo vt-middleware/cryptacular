@@ -39,7 +39,7 @@ public class HexDecoder implements Decoder
     char current;
     while (input.hasRemaining()) {
       current = input.get();
-      if (Character.isWhitespace(current)) {
+      if (current == ':' || Character.isWhitespace(current)) {
         continue;
       }
       if ((count++ & 0x01) == 0) {

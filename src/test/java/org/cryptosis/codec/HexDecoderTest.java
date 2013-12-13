@@ -30,7 +30,18 @@ public class HexDecoderTest
       new Object[] {
         "41626c652 077617320492065726520492073617720656c626\n",
         "Able was I ere I saw elb"
-      }
+      },
+      new Object[] {
+        "41:62:6c:65:20:77:61:73:20:49:20:65:72:65:20:49:20:73:61:77:20:65:6c:62:61",
+        "Able was I ere I saw elba"
+      },
+      new Object[] {
+        "9c63b0547798b60d5e04",
+        ByteUtil.toString(new byte[] {
+          (byte) -100, (byte)  99, (byte) -80, (byte) 84, (byte) 119,
+          (byte) -104, (byte) -74, (byte)  13, (byte) 94, (byte)   4,
+        }),
+      },
     };
   }
 
