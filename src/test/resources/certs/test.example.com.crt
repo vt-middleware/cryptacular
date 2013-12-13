@@ -1,0 +1,94 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: DC=com, DC=example, C=US, ST=New York, L=New York, O=Snake Oil Unlimited, CN=root.example.com
+        Validity
+            Not Before: Dec  4 16:50:56 2013 GMT
+            Not After : Apr 21 16:50:56 2041 GMT
+        Subject: C=US, ST=New York, O=Snake Oil Unlimited, CN=test.example.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (2048 bit)
+                Modulus (2048 bit):
+                    00:dc:9e:9a:3e:fd:99:af:e3:ef:91:40:b1:6f:50:
+                    4b:d3:7c:04:eb:34:cb:fc:99:2a:6d:fc:fe:74:8b:
+                    62:0a:90:d0:d3:7f:79:5b:f0:f6:fe:76:3a:ee:9f:
+                    09:e7:3e:3b:58:a6:dd:90:7f:16:d8:4d:85:64:1d:
+                    cf:44:7f:03:f5:57:74:86:55:c6:c3:d2:77:16:08:
+                    3f:00:86:b8:b3:8e:12:1e:eb:9b:fe:b3:57:78:01:
+                    11:be:26:07:54:04:be:fc:f7:ac:42:8c:62:be:12:
+                    6c:3f:9d:29:5f:43:fd:d8:03:a8:b7:d5:a5:71:1f:
+                    e7:62:5a:39:4c:0b:e1:0f:0e:31:48:d8:38:61:ae:
+                    48:be:24:f2:f4:35:fd:c7:da:aa:bf:a3:d2:22:46:
+                    35:c2:f0:0b:38:00:7a:b6:71:ea:ff:10:b0:16:c6:
+                    96:64:9f:55:8c:fe:cb:c9:a2:9a:79:99:8e:81:0e:
+                    af:0d:92:94:c0:9b:62:7e:55:4a:b1:06:1f:52:f0:
+                    a1:b0:54:c9:1d:b2:99:4b:74:14:80:bb:2e:63:b2:
+                    24:e4:c7:20:3f:c2:ac:e4:ba:59:67:ec:45:fd:1e:
+                    12:7d:3c:b5:da:ac:64:23:aa:8f:72:85:b2:29:c7:
+                    61:f3:f7:d0:3b:54:7a:d4:53:6a:62:13:92:91:66:
+                    28:75
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier: 
+                44:88:EF:79:2B:51:0B:16:31:FE:62:C3:2E:D3:26:F6:A8:EF:CD:A3
+            X509v3 Authority Key Identifier: 
+                keyid:7D:5A:81:08:93:BB:52:CF:2C:66:CD:D7:C1:47:B3:11:4B:01:43:6C
+                DirName:/DC=com/DC=example/C=US/ST=New York/L=New York/O=Snake Oil Unlimited/CN=root.example.com
+                serial:B9:3D:73:80:5C:40:DE:43
+
+            X509v3 Issuer Alternative Name: 
+                DNS:snake-1.example.com, DNS:snake-2.example.com
+            Netscape CA Revocation Url: 
+                http://crl.example.com/ca-crl.pem
+    Signature Algorithm: sha256WithRSAEncryption
+        a3:f0:4a:d0:e6:2a:b2:f2:ab:4e:68:05:89:9d:d4:95:cc:7d:
+        7c:01:39:44:f0:9a:52:18:3c:49:78:3b:1b:95:00:7a:25:f0:
+        c7:e6:25:a0:41:20:5f:86:8d:e3:c5:59:79:fe:6d:99:81:23:
+        40:a7:52:ed:b8:18:dd:f8:37:b9:5b:99:39:c2:6f:0f:8f:4a:
+        5f:c3:dd:b4:fd:ca:be:a2:5d:f5:56:8a:d6:f2:cd:ce:e7:92:
+        01:0f:4c:9c:a8:63:5a:2a:53:ca:ce:fe:88:87:f1:76:7e:6f:
+        0d:d0:55:b3:c2:db:03:13:f2:ea:88:0a:1b:a7:0e:cf:54:a9:
+        02:63:fc:1a:0f:94:40:68:46:f5:e2:4a:77:d1:fa:a7:35:d3:
+        0e:ba:17:1c:55:08:ca:e4:30:39:0f:c9:39:0b:e6:a7:f9:f9:
+        25:2f:8e:0f:88:81:5c:16:04:e0:0f:69:9b:21:87:4f:92:dd:
+        ed:37:f6:a6:01:5d:7d:af:1d:fb:9f:53:67:2f:d2:8c:10:dd:
+        d7:fb:16:ea:18:7f:47:28:d0:91:d7:1e:d7:25:a0:ed:0b:8c:
+        29:94:d5:a8:43:e8:74:f4:bf:f6:bd:d4:78:fe:c5:bd:5a:87:
+        53:27:ad:70:2c:77:61:4c:98:50:c9:c6:db:c8:d6:74:0e:1b:
+        a9:04:2a:db
+-----BEGIN CERTIFICATE-----
+MIIFBjCCA+6gAwIBAgIBATANBgkqhkiG9w0BAQsFADCBmjETMBEGCgmSJomT8ixk
+ARkWA2NvbTEXMBUGCgmSJomT8ixkARkWB2V4YW1wbGUxCzAJBgNVBAYTAlVTMREw
+DwYDVQQIEwhOZXcgWW9yazERMA8GA1UEBxMITmV3IFlvcmsxHDAaBgNVBAoTE1Nu
+YWtlIE9pbCBVbmxpbWl0ZWQxGTAXBgNVBAMTEHJvb3QuZXhhbXBsZS5jb20wHhcN
+MTMxMjA0MTY1MDU2WhcNNDEwNDIxMTY1MDU2WjBZMQswCQYDVQQGEwJVUzERMA8G
+A1UECBMITmV3IFlvcmsxHDAaBgNVBAoTE1NuYWtlIE9pbCBVbmxpbWl0ZWQxGTAX
+BgNVBAMTEHRlc3QuZXhhbXBsZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDcnpo+/Zmv4++RQLFvUEvTfATrNMv8mSpt/P50i2IKkNDTf3lb8Pb+
+djrunwnnPjtYpt2QfxbYTYVkHc9EfwP1V3SGVcbD0ncWCD8AhrizjhIe65v+s1d4
+ARG+JgdUBL7896xCjGK+Emw/nSlfQ/3YA6i31aVxH+diWjlMC+EPDjFI2Dhhrki+
+JPL0Nf3H2qq/o9IiRjXC8As4AHq2cer/ELAWxpZkn1WM/svJopp5mY6BDq8NkpTA
+m2J+VUqxBh9S8KGwVMkdsplLdBSAuy5jsiTkxyA/wqzkulln7EX9HhJ9PLXarGQj
+qo9yhbIpx2Hz99A7VHrUU2piE5KRZih1AgMBAAGjggGVMIIBkTAJBgNVHRMEAjAA
+MCwGCWCGSAGG+EIBDQQfFh1PcGVuU1NMIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAd
+BgNVHQ4EFgQURIjveStRCxYx/mLDLtMm9qjvzaMwgc8GA1UdIwSBxzCBxIAUfVqB
+CJO7Us8sZs3XwUezEUsBQ2yhgaCkgZ0wgZoxEzARBgoJkiaJk/IsZAEZFgNjb20x
+FzAVBgoJkiaJk/IsZAEZFgdleGFtcGxlMQswCQYDVQQGEwJVUzERMA8GA1UECBMI
+TmV3IFlvcmsxETAPBgNVBAcTCE5ldyBZb3JrMRwwGgYDVQQKExNTbmFrZSBPaWwg
+VW5saW1pdGVkMRkwFwYDVQQDExByb290LmV4YW1wbGUuY29tggkAuT1zgFxA3kMw
+MwYDVR0SBCwwKoITc25ha2UtMS5leGFtcGxlLmNvbYITc25ha2UtMi5leGFtcGxl
+LmNvbTAwBglghkgBhvhCAQQEIxYhaHR0cDovL2NybC5leGFtcGxlLmNvbS9jYS1j
+cmwucGVtMA0GCSqGSIb3DQEBCwUAA4IBAQCj8ErQ5iqy8qtOaAWJndSVzH18ATlE
+8JpSGDxJeDsblQB6JfDH5iWgQSBfho3jxVl5/m2ZgSNAp1LtuBjd+De5W5k5wm8P
+j0pfw920/cq+ol31VorW8s3O55IBD0ycqGNaKlPKzv6Ih/F2fm8N0FWzwtsDE/Lq
+iAobpw7PVKkCY/waD5RAaEb14kp30fqnNdMOuhccVQjK5DA5D8k5C+an+fklL44P
+iIFcFgTgD2mbIYdPkt3tN/amAV19rx37n1NnL9KMEN3X+xbqGH9HKNCR1x7XJaDt
+C4wplNWoQ+h09L/2vdR4/sW9WodTJ61wLHdhTJhQycbbyNZ0DhupBCrb
+-----END CERTIFICATE-----
