@@ -95,9 +95,9 @@ public class KeyPairUtilTest
   public Object[][] getEncryptedPrivateKeyFiles()
   {
     return new Object[][] {
-//      new Object[] { KEY_PATH + "dsa-openssl-des3.pem", "vtcrypt", DSAPrivateKey.class },
+      new Object[] { KEY_PATH + "dsa-openssl-des3.pem", "vtcrypt", DSAPrivateKey.class },
       new Object[] { KEY_PATH + "rsa-openssl-des.pem", "vtcrypt", RSAPrivateCrtKey.class },
-//      new Object[] { KEY_PATH + "rsa-openssl-des3.pem", "vtcrypt", DSAPrivateKey.class },
+      new Object[] { KEY_PATH + "rsa-openssl-des3.pem", "vtcrypt", RSAPrivateCrtKey.class },
     };
   }
 
