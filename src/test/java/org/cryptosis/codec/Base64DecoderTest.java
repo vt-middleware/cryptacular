@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 import org.cryptosis.util.ByteUtil;
+import org.cryptosis.util.HashUtil;
 import org.cryptosis.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -25,11 +26,15 @@ public class Base64DecoderTest
     return new Object[][] {
       new Object[] {
         "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYQ==",
-        "Able was I ere I saw elba"
+        ByteUtil.toBytes("Able was I ere I saw elba"),
       },
       new Object[] {
         "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYS4=",
-        "Able was I ere I saw elba."
+        ByteUtil.toBytes("Able was I ere I saw elba."),
+      },
+      new Object[] {
+        "safx/LW8+SsSy/o3PmCNy4VEm5s=",
+        HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
       },
     };
   }
@@ -47,7 +52,7 @@ public class Base64DecoderTest
 
 
   @Test(dataProvider = "b64-data")
-  public void testDecode(final String data, String expected) throws Exception
+  public void testDecode(final String data, final byte[] expected) throws Exception
   {
     final Base64Decoder decoder = new Base64Decoder();
     final CharBuffer input = CharBuffer.wrap(data);
@@ -55,7 +60,7 @@ public class Base64DecoderTest
     decoder.decode(input, output);
     decoder.finalize(output);
     output.flip();
-    assertEquals(ByteUtil.toString(output), expected);
+    assertEquals(ByteUtil.toArray(output), expected);
   }
 
 

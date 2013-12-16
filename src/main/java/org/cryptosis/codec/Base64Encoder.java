@@ -66,7 +66,7 @@ public class Base64Encoder implements Encoder
   {
     while (input.hasRemaining()) {
       remaining -= 8;
-      block |= input.get() << remaining;
+      block |= (input.get() & 0xff) << remaining;
       if (remaining == 0) {
         writeOutput(output, 0);
       }

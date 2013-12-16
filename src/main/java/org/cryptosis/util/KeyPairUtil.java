@@ -1,5 +1,9 @@
 package org.cryptosis.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.PrivateKey;
@@ -21,6 +25,7 @@ import org.bouncycastle.crypto.signers.DSASigner;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
 import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
+import org.bouncycastle.util.io.Streams;
 
 /**
  * Utility methods for public/private key pairs used for asymmetric encryption.
@@ -205,4 +210,152 @@ public final class KeyPairUtil
       return false;
     }
   }
+
+
+  /**
+   * Reads an encoded private key from a file at the given path. Both PKCS#8 and OpenSSL "traditional" formats
+   * are supported in DER or PEM encoding. See {@link #decodeKey(byte[])} for supported asymmetric algorithms.
+   *
+   * @param  path  Path to private key file.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey readPrivateKey(final String path) throws IOException
+  {
+    return readPrivateKey(new File(path));
+  }
+
+
+  /**
+   * Reads an encoded private key from a file. Both PKCS#8 and OpenSSL "traditional" formats
+   * are supported in DER or PEM encoding. See {@link #decodeKey(byte[])} for supported asymmetric algorithms.
+   *
+   * @param  file  Private key file.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey readPrivateKey(final File file) throws IOException
+  {
+    return readPrivateKey(new FileInputStream(file));
+  }
+
+
+  /**
+   * Reads an encoded private key from an input stream. Both PKCS#8 and OpenSSL "traditional" formats
+   * are supported in DER or PEM encoding. See {@link #decodeKey(byte[])} for supported asymmetric algorithms.
+   *
+   * @param  file  Private key file.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey readPrivateKey(final InputStream in) throws IOException
+  {
+    return decodeKey(Streams.readAll(in));
+  }
+
+
+  /**
+   * Reads an encrypted private key from a file at the given path. Both PKCS#8 and OpenSSL "traditional" formats
+   * are supported in DER or PEM encoding. See {@link #decodeKey(byte[])} for supported asymmetric algorithms.
+   *
+   * @param  path  Path to private key file.
+   * @param  password  Password used to encrypt private key.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey readPrivateKey(final String path, final char[] password) throws IOException
+  {
+    return readPrivateKey(new File(path), password);
+  }
+
+
+  /**
+   * Reads an encrypted private key from a file. Both PKCS#8 and OpenSSL "traditional" formats
+   * are supported in DER or PEM encoding. See {@link #decodeKey(byte[])} for supported asymmetric algorithms.
+   *
+   * @param  file  Private key file.
+   * @param  password  Password used to encrypt private key.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey readPrivateKey(final File file, final char[] password) throws IOException
+  {
+    return readPrivateKey(new FileInputStream(file), password);
+  }
+
+
+  /**
+   * Reads an encrypted private key from an input stream. Both PKCS#8 and OpenSSL "traditional" formats
+   * are supported in DER or PEM encoding. See {@link #decodeKey(byte[])} for supported asymmetric algorithms.
+   *
+   * @param  file  Private key file.
+   * @param  password  Password used to encrypt private key.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey readPrivateKey(final InputStream in, final char[] password) throws IOException
+  {
+    return decodeKey(Streams.readAll(in), password);
+  }
+
+
+  /**
+   * Decodes an encoded private key in either PKCS#8 or OpenSSL "traditional" format in either DER or PEM encoding.
+   * Keys from the following asymmetric algorithms are supported:
+   * <ul>
+   *   <li>DSA</li>
+   *   <li>RSA</li>
+   *   <li>Elliptic curve</li>
+   * </ul>
+   *
+   * @param  file  Private key file.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey decodeKey(final byte[] encodedKey)
+  {
+    return new StandardPrivateKeyDecoder().decode(encodedKey);
+  }
+
+
+  /**
+   * Decodes an encrypted private key. The following formats are supported:
+   * <ul>
+   *   <li>DER or PEM encoded PKCS#8 format</li>
+   *   <li>PEM encoded OpenSSL "traditional" format</li>
+   * </ul>
+   *
+   * Keys from the following asymmetric algorithms are supported:
+   * <ul>
+   *   <li>DSA</li>
+   *   <li>RSA</li>
+   *   <li>Elliptic curve</li>
+   * </ul>
+   *
+   * @param  file  Private key file.
+   * @param  password  Password used to encrypt private key.
+   *
+   * @return  Private key.
+   *
+   * @throws  IOException  On IO errors reading data from file.
+   */
+  public static PrivateKey decodeKey(final byte[] encryptedKey, final char[] password)
+  {
+    return new StandardPrivateKeyDecoder().decode(encryptedKey, password);
+  }
+
 }

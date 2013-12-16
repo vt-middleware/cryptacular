@@ -33,8 +33,8 @@ public class Base64Decoder implements Decoder
     for (int i = 0; i < 10; i++) {
       DECODING_TABLE[i + 48] = (byte) (i + 52);
     }
-    DECODING_TABLE[43] = (byte) 60;
-    DECODING_TABLE[47] = (byte) 61;
+    DECODING_TABLE[43] = (byte) 62;
+    DECODING_TABLE[47] = (byte) 63;
   }
 
 
