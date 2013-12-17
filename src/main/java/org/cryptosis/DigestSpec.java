@@ -31,6 +31,7 @@ public class DigestSpec
 
   private final int size;
 
+
   /**
    * Creates a new instance from the given algorithm name.
    *
@@ -38,7 +39,11 @@ public class DigestSpec
    */
   public DigestSpec(final String algName)
   {
-    this(algName, 0);
+    if (algName == null) {
+      throw new IllegalArgumentException("Algorithm name is required.");
+    }
+    this.algorithm = algName;
+    this.size = -1;
   }
 
 
@@ -50,8 +55,11 @@ public class DigestSpec
    */
   public DigestSpec(final String algName, final int digestSize)
   {
+    if (algName == null) {
+      throw new IllegalArgumentException("Algorithm name is required.");
+    }
     this.algorithm = algName;
-    if (digestSize < 1) {
+    if (digestSize < 0) {
       throw new IllegalArgumentException("Digest size must be positive.");
     }
     this.size = digestSize;
