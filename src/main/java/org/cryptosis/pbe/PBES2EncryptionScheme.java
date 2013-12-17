@@ -101,6 +101,7 @@ public class PBES2EncryptionScheme extends AbstractEncryptionScheme
         break;
 
       default:
+        setCipher(alg.getCipherSpec().newInstance());
         iv = ASN1OctetString.getInstance(scheme.getParameters()).getOctets();
     }
     if (iv != null) {

@@ -97,7 +97,25 @@ public class KeyPairUtilTest
     return new Object[][] {
       new Object[] { KEY_PATH + "dsa-openssl-des3.pem", "vtcrypt", DSAPrivateKey.class },
       new Object[] { KEY_PATH + "rsa-openssl-des.pem", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "rsa-openssl-des-noheader.pem", "vtcrypt", RSAPrivateCrtKey.class },
       new Object[] { KEY_PATH + "rsa-openssl-des3.pem", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "ec-openssl-secp224k1-explicit-des.pem", "vtcrypt", ECPrivateKey.class },
+      new Object[] { KEY_PATH + "ec-openssl-sect571r1-explicit-des.pem", "vtcrypt", ECPrivateKey.class },
+      new Object[] { KEY_PATH + "dsa-pkcs8-priv.der", "vtcrypt", DSAPrivateKey.class },
+      new Object[] { KEY_PATH + "dsa-pkcs8-priv.pem", "vtcrypt", DSAPrivateKey.class },
+      new Object[] { KEY_PATH + "dsa-pkcs8-v2-des3.der", "vtcrypt", DSAPrivateKey.class },
+      new Object[] { KEY_PATH + "dsa-pkcs8-v2-des3.pem", "vtcrypt", DSAPrivateKey.class },
+      new Object[] { KEY_PATH + "rsa-pkcs8-v1-md5-des.der", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "rsa-pkcs8-v1-md5-des.pem", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "rsa-pkcs8-v1-md5-rc2-64.der", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "rsa-pkcs8-v2-aes256.der", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "rsa-pkcs8-v2-aes256.pem", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "rsa-pkcs8-v2-aes256-noheader.pem", "vtcrypt", RSAPrivateCrtKey.class },
+      new Object[] { KEY_PATH + "ec-pkcs8-secp224k1-explicit-sha1-rc4-128.der", "vtcrypt", ECPrivateKey.class },
+      new Object[] { KEY_PATH + "ec-pkcs8-secp224k1-explicit-v1-sha1-rc2-64.der", "vtcrypt", ECPrivateKey.class },
+      new Object[] { KEY_PATH + "ec-pkcs8-secp224k1-explicit-v2-des3.pem", "vtcrypt", ECPrivateKey.class },
+      new Object[] { KEY_PATH + "ec-pkcs8-sect571r1-explicit-v2-aes128.pem", "vtcrypt", ECPrivateKey.class },
+      new Object[] { KEY_PATH + "ec-pkcs8-sect571r1-named-v1-sha1-rc2-64.der", "vtcrypt", ECPrivateKey.class },
     };
   }
 
