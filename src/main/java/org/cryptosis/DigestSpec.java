@@ -29,6 +29,7 @@ public class DigestSpec
   /** Digest algorithm name. */
   private final String algorithm;
 
+  /** Requested size of variable-size hash algorithms, e.g. SHA-3. -1 for hashes with fixed size outputs. */
   private final int size;
 
 
