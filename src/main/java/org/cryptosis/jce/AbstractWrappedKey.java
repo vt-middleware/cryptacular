@@ -15,13 +15,15 @@ public abstract class AbstractWrappedKey<T extends AsymmetricKeyParameter> imple
   protected final T delegate;
 
 
+  /**
+   * Creates a new instance that wraps the given BC key.
+   *
+   * @param  wrappedKey  BC key to wrap.
+   */
   public AbstractWrappedKey(final T wrappedKey)
   {
     if (wrappedKey == null) {
       throw new IllegalArgumentException("Wrapped key cannot be null.");
-    }
-    if (!wrappedKey.isPrivate()) {
-      throw new IllegalArgumentException(wrappedKey + " is not a private key");
     }
     delegate = wrappedKey;
   }

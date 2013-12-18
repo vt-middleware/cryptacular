@@ -10,12 +10,9 @@ import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
  *
  * @author Marvin S. Addison
  */
-public class WrappedRSAPrivateCrtKey extends AbstractWrappedKey<RSAPrivateCrtKeyParameters> implements RSAPrivateCrtKey
+public class WrappedRSAPrivateCrtKey
+  extends AbstractWrappedRSAKey<RSAPrivateCrtKeyParameters> implements RSAPrivateCrtKey
 {
-  /** DSA algorithm name. */
-  private static final String ALGORITHM = "RSA";
-
-
   /**
    * Creates a new instance that wraps the given BC RSA private key.
    *
@@ -83,18 +80,4 @@ public class WrappedRSAPrivateCrtKey extends AbstractWrappedKey<RSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
-  @Override
-  public BigInteger getModulus()
-  {
-    return delegate.getModulus();
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public String getAlgorithm()
-  {
-    return ALGORITHM;
-  }
 }

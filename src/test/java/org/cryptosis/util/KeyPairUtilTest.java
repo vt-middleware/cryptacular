@@ -5,8 +5,11 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.interfaces.DSAPrivateKey;
+import java.security.interfaces.DSAPublicKey;
 import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateCrtKey;
+import java.security.interfaces.RSAPublicKey;
 
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.cryptosis.KeyPairGenerator;
@@ -119,6 +122,20 @@ public class KeyPairUtilTest
     };
   }
 
+  @DataProvider(name = "public-key-files")
+  public Object[][] getPublicKeyFiles()
+  {
+    return new Object[][] {
+      new Object[] { KEY_PATH + "dsa-pub.der", DSAPublicKey.class },
+      new Object[] { KEY_PATH + "dsa-pub.pem", DSAPublicKey.class },
+      new Object[] { KEY_PATH + "ec-secp224k1-explicit-pub.der", ECPublicKey.class },
+      new Object[] { KEY_PATH + "ec-secp224k1-explicit-pub.pem", ECPublicKey.class },
+      new Object[] { KEY_PATH + "rsa-pub.der", RSAPublicKey.class },
+      new Object[] { KEY_PATH + "rsa-pub.pem", RSAPublicKey.class },
+    };
+  }
+
+
   @Test(dataProvider = "public-keys")
   public void testLengthPublicKey(final PublicKey key, final int expectedLength) throws Exception
   {
@@ -145,11 +162,18 @@ public class KeyPairUtilTest
     assertTrue(expectedType.isAssignableFrom(key.getClass()));
   }
 
-
   @Test(dataProvider = "encrypted-private-key-files")
   public void testReadEncryptedPrivateKey(final String path, final String password, final Class<?> expectedType) throws Exception
   {
     final PrivateKey key = KeyPairUtil.readPrivateKey(path, password.toCharArray());
+    assertNotNull(key);
+    assertTrue(expectedType.isAssignableFrom(key.getClass()));
+  }
+
+  @Test(dataProvider = "public-key-files")
+  public void testReadPublicKey(final String path, final Class<?> expectedType) throws Exception
+  {
+    final PublicKey key = KeyPairUtil.readPublicKey(path);
     assertNotNull(key);
     assertTrue(expectedType.isAssignableFrom(key.getClass()));
   }
