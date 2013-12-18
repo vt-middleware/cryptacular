@@ -11,6 +11,9 @@ import org.cryptosis.codec.Base64Encoder;
  */
 public final class PemUtil
 {
+  /** Line length. */
+  public static final int LINE_LENGTH = 64;
+
   /** PEM encoding header start string. */
   public static final String HEADER_BEGIN = "-----BEGIN";
 
@@ -43,10 +46,10 @@ public final class PemUtil
     if (!start.startsWith(HEADER_BEGIN) && !start.startsWith(PROC_TYPE)) {
       // Check all bytes in first line to make sure they are in the range
       // of base64 character set encoding
-      for (int i = 0; i < Base64Encoder.DEFAULT_LINE_LENGTH; i++) {
+      for (int i = 0; i < LINE_LENGTH; i++) {
         if (!isBase64Char(data[i])) {
           // Last two bytes may be padding character '=' (61)
-          if (i > Base64Encoder.DEFAULT_LINE_LENGTH - 3) {
+          if (i > LINE_LENGTH - 3) {
             if ( data[i] != 61) {
               return false;
             }

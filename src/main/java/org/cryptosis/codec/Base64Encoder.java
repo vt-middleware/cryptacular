@@ -10,9 +10,6 @@ import java.nio.CharBuffer;
  */
 public class Base64Encoder implements Encoder
 {
-  /** Default line length. */
-  public static final int DEFAULT_LINE_LENGTH = 64;
-
   /** Base64 character encoding table. */
   private static final char[] ENCODING_TABLE = new char[64];
 
@@ -40,12 +37,12 @@ public class Base64Encoder implements Encoder
 
 
   /**
-   * Creates a new instance that produces base64-encoded output with {@value #DEFAULT_LINE_LENGTH} characters per line.
-   * The default characters per line is compatible with the output of the OpenSSL base64 utility.
+   * Creates a new instance that produces base64-encoded output.
    */
   public Base64Encoder()
   {
-    this(DEFAULT_LINE_LENGTH);
+    // Default to no line breaks.
+    this(-1);
   }
 
 

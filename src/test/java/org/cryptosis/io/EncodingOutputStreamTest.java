@@ -33,7 +33,7 @@ public class EncodingOutputStreamTest
     final File file = new File(path);
     final String expected = new String(StreamUtil.readAll(path + ".b64"));
     final ByteArrayOutputStream bufOut = new ByteArrayOutputStream((int) file.length() * 4 / 3);
-    final EncodingOutputStream output = EncodingOutputStream.base64(bufOut);
+    final EncodingOutputStream output = EncodingOutputStream.base64(bufOut, 64);
     try {
       Streams.pipeAll(StreamUtil.makeStream(file), output);
     } finally {

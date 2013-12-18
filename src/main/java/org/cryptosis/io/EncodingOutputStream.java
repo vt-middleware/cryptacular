@@ -106,6 +106,8 @@ public class EncodingOutputStream extends FilterOutputStream
 
   /**
    * Creates a new instance that produces base64 output in the given stream.
+   * <p>
+   * <strong>NOTE:</strong> there are no line breaks in the output with this version.
    *
    * @param  out  Wrapped output stream.
    *
@@ -113,12 +115,30 @@ public class EncodingOutputStream extends FilterOutputStream
    */
   public static EncodingOutputStream base64(final OutputStream out)
   {
-    return new EncodingOutputStream(out, new Base64Encoder());
+    return base64(out, -1);
+  }
+
+
+  /**
+   * Creates a new instance that produces base64 output in the given stream.
+   * <p>
+   * <strong>NOTE:</strong> this version supports output with configurable line breaks.
+   *
+   * @param  out  Wrapped output stream.
+   * @param  lineLength  Length of each base64-encoded line in output. A zero or negative value disables line breaks.
+   *
+   * @return  Encoding output stream that produces base64 output.
+   */
+  public static EncodingOutputStream base64(final OutputStream out, final int lineLength)
+  {
+    return new EncodingOutputStream(out, new Base64Encoder(lineLength));
   }
 
 
   /**
    * Creates a new instance that produces hexadecimal output in the given stream.
+   * <p>
+   * <strong>NOTE:</strong> there are no line breaks in the output.
    *
    * @param  out  Wrapped output stream.
    *

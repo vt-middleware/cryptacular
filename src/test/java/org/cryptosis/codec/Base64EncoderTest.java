@@ -26,17 +26,14 @@ public class Base64EncoderTest
     return new Object[][] {
       new Object[] {
         ByteUtil.toBytes("Able was I ere I saw elba"),
-        0,
         "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYQ==",
       },
       new Object[] {
         ByteUtil.toBytes("Able was I ere I saw elba."),
-        0,
         "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYS4=",
       },
       new Object[] {
         HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
-        0,
         "safx/LW8+SsSy/o3PmCNy4VEm5s=",
       },
     };
@@ -55,10 +52,10 @@ public class Base64EncoderTest
 
 
   @Test(dataProvider = "text-data")
-  public void testEncode(final byte[] inBytes, final int lineLength, final String expected) throws Exception
+  public void testEncode(final byte[] inBytes, final String expected) throws Exception
   {
     final ByteBuffer input = ByteBuffer.wrap(inBytes);
-    final Base64Encoder encoder = new Base64Encoder(lineLength);
+    final Base64Encoder encoder = new Base64Encoder();
     final CharBuffer output = CharBuffer.allocate(encoder.outputSize(input.limit()));
     encoder.encode(input, output);
     encoder.finalize(output);
@@ -73,7 +70,7 @@ public class Base64EncoderTest
     final String expected = new String(StreamUtil.readAll(path + ".b64"));
     final StringBuilder actual = new StringBuilder(expected.length());
     final FileInputStream input = new FileInputStream(file);
-    final Base64Encoder encoder = new Base64Encoder();
+    final Base64Encoder encoder = new Base64Encoder(64);
     try {
       final ByteBuffer bufIn = ByteBuffer.allocate(512);
       final CharBuffer bufOut = CharBuffer.allocate(encoder.outputSize(512));
