@@ -13,6 +13,9 @@ public class Base64Encoder implements Encoder
   /** Base64 character encoding table. */
   private static final char[] ENCODING_TABLE = new char[64];
 
+  /** Platform-specific line terminator string, e.g. LF (Unix), CRLF (Windows). */
+  private static final String NEWLINE;
+
   /** Number of base64 characters per line. */
   private final int lineLength;
 
@@ -29,6 +32,7 @@ public class Base64Encoder implements Encoder
   /** Initializes the encoding character table. */
   static
   {
+    NEWLINE = System.lineSeparator();
     final String charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     for (int i = 0; i < charset.length(); i++) {
       ENCODING_TABLE[i] = charset.charAt(i);
@@ -84,7 +88,7 @@ public class Base64Encoder implements Encoder
     }
     // Append trailing newline to make consistent with OpenSSL base64 output
     if (lineLength > 0 && output.position() > 0) {
-      output.append('\n');
+      output.append(NEWLINE);
     }
     outCount = 0;
   }
@@ -96,7 +100,7 @@ public class Base64Encoder implements Encoder
     {
       int len = (inputSize + 2) * 4 / 3;
       if (lineLength > 0) {
-        len += len / lineLength;
+        len += (len / lineLength + 1) * NEWLINE.length();
       }
       return len;
     }
@@ -115,7 +119,7 @@ public class Base64Encoder implements Encoder
       output.put(ENCODING_TABLE[(block & mask) >> shift]);
       outCount++;
       if (lineLength > 0 && outCount % lineLength == 0) {
-        output.put('\n');
+        output.put(NEWLINE);
       }
       mask >>= 6;
     }

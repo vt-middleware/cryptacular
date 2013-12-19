@@ -31,7 +31,11 @@ public class EncodingOutputStreamTest
   public void testEncode(final String path) throws Exception
   {
     final File file = new File(path);
-    final String expected = new String(StreamUtil.readAll(path + ".b64"));
+    String expectedPath = path + ".b64";
+    if ("\r\n".equals(System.lineSeparator())) {
+      expectedPath += ".crlf";
+    }
+    final String expected = new String(StreamUtil.readAll(expectedPath));
     final ByteArrayOutputStream bufOut = new ByteArrayOutputStream((int) file.length() * 4 / 3);
     final EncodingOutputStream output = EncodingOutputStream.base64(bufOut, 64);
     try {

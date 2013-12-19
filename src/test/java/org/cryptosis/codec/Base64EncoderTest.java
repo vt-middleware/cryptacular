@@ -67,7 +67,11 @@ public class Base64EncoderTest
   public void testEncodeFile(final String path) throws Exception
   {
     final File file = new File(path);
-    final String expected = new String(StreamUtil.readAll(path + ".b64"));
+    String expectedPath = path + ".b64";
+    if ("\r\n".equals(System.lineSeparator())) {
+      expectedPath += ".crlf";
+    }
+    final String expected = new String(StreamUtil.readAll(expectedPath));
     final StringBuilder actual = new StringBuilder(expected.length());
     final FileInputStream input = new FileInputStream(file);
     final Base64Encoder encoder = new Base64Encoder(64);
