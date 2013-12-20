@@ -78,6 +78,14 @@ public final class ByteUtil
   }
 
 
+  public static byte[] toBytes(final int value)
+  {
+    final byte[] bytes = new byte[4];
+    toBytes(value, bytes, 0);
+    return bytes;
+  }
+
+
   public static void toBytes(final int value, final byte[] output, final int offset)
   {
     int shift = 24;
@@ -85,6 +93,14 @@ public final class ByteUtil
       output[offset + i] = (byte)(value >> shift);
       shift -= 8;
     }
+  }
+
+
+  public static byte[] toBytes(final long value)
+  {
+    final byte[] bytes = new byte[8];
+    toBytes(value, bytes, 0);
+    return bytes;
   }
 
 

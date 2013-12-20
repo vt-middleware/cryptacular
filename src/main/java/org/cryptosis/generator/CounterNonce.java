@@ -17,7 +17,7 @@ import org.cryptosis.util.ByteUtil;
  * including all IV lengths and all instances of the authenticated encryption function with the given key.
  * </blockquote>
  * Instances of this class enforce this constraint by considering the nonce length, which determines whether the
- * constraint applies, and the invocation count provided. The invocation count is incremented upon every invocation
+ * constraint applies, and the invocation count. The invocation count is incremented upon every invocation
  * of {@link #generate()} method. The current invocation count is accessible via {@link #getInvocations()}.
  * </p>
  * <p>
@@ -30,7 +30,10 @@ public class CounterNonce implements Nonce
   /** Default nonce getLength is {@value #DEFAULT_LENGTH} bytes. */
   public static final int DEFAULT_LENGTH = 12;
 
-  /** Maximum invocations is 2<sup>32</sup>. Does not apply to nonces with default getLength, {@value #DEFAULT_LENGTH}. */
+  /**
+   * Maximum invocations is 2<sup>32</sup>.
+   * Does not apply to nonces with default getLength, {@value #DEFAULT_LENGTH}.
+   */
   public static final long MAX_INVOCATIONS = 0xFFFFFFFFL;
 
   /** Fixed field value. */
@@ -41,10 +44,11 @@ public class CounterNonce implements Nonce
 
 
   /**
-   * Creates a new instance using the given fixed field value with invocation field that starts at the given value.
+   * Creates a new instance.
    *
    * @param  fixed  User-defined fixed field value.
    * @param  invocations  Initial invocation count.
+   *                      The invocations field is incremented _before_ use in {@link #generate()}.
    */
   public CounterNonce(final String fixed, final long invocations)
   {
@@ -53,10 +57,38 @@ public class CounterNonce implements Nonce
 
 
   /**
-   * Creates a new instance using the given fixed field value with invocation field that starts at the given value.
+   * Creates a new instance. Instances of this method produces nonces of the default length, {@value #DEFAULT_LENGTH},
+   * and are not subject to constraints on the number of invocations.
    *
    * @param  fixed  User-defined fixed field value.
    * @param  invocations  Initial invocation count.
+   *                      The invocations field is incremented _before_ use in {@link #generate()}.
+   */
+  public CounterNonce(final int fixed, final long invocations)
+  {
+    this(ByteUtil.toBytes(fixed), invocations);
+  }
+
+
+  /**
+   * Creates a new instance.
+   *
+   * @param  fixed  User-defined fixed field value.
+   * @param  invocations  Initial invocation count.
+   *                      The invocations field is incremented _before_ use in {@link #generate()}.
+   */
+  public CounterNonce(final long fixed, final long invocations)
+  {
+    this(ByteUtil.toBytes(fixed), invocations);
+  }
+
+
+  /**
+   * Creates a new instance.
+   *
+   * @param  fixed  User-defined fixed field value.
+   * @param  invocations  Initial invocation count.
+   *                      The invocations field is incremented _before_ use in {@link #generate()}.
    */
   public CounterNonce(final byte[] fixed, final long invocations)
   {
