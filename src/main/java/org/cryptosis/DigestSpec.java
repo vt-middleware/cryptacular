@@ -68,6 +68,24 @@ public class DigestSpec
 
 
   /**
+   * @return  Digest algorithm name.
+   */
+  public String getAlgorithm()
+  {
+    return algorithm;
+  }
+
+
+  /**
+   * @return  Size of digest output in bytes, or -1 if the digest does not support variable size output.
+   */
+  public int getSize()
+  {
+    return size;
+  }
+
+
+  /**
    * Creates a new digest instance.
    *
    * @return  Digest instance.
