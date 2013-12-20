@@ -13,6 +13,7 @@ import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.cryptosis.CiphertextHeader;
+import org.cryptosis.generator.Nonce;
 
 import javax.crypto.SecretKey;
 
@@ -39,16 +40,17 @@ public final class CipherUtil
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
+   * @param  nonce  Nonce generator.
    * @param  data  Plaintext data to be encrypted.
    *
    * @return  Concatenation of encoded {@link org.cryptosis.CiphertextHeader} and encrypted data that completely fills the returned
    * byte array.
    */
-  public static byte[] encrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)
+  public static byte[] encrypt(final AEADBlockCipher cipher, final SecretKey key, final Nonce nonce, final byte[] data)
   {
-    final byte[] nonce = NonceUtil.nist80038d(DEFAULT_NONCE_SIZE);
-    final byte[] header = new CiphertextHeader(nonce).encode();
-    cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, header));
+    final byte[] iv = nonce.generate();
+    final byte[] header = new CiphertextHeader(iv).encode();
+    cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
     return encrypt(new AEADCipherAdapter(cipher), header, data);
   }
 
@@ -59,16 +61,21 @@ public final class CipherUtil
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
+   * @param  nonce  Nonce generator.
    * @param  input  Input stream containing plaintext data.
    * @param  output  Output stream that receives a {@link CiphertextHeader} followed by ciphertext data
    *                 produced by the AEAD cipher in encryption mode.
    */
   public static void encrypt(
-    final AEADBlockCipher cipher, final SecretKey key, final InputStream input, final OutputStream output)
+    final AEADBlockCipher cipher,
+    final SecretKey key,
+    final Nonce nonce,
+    final InputStream input,
+    final OutputStream output)
   {
-    final byte[] nonce = NonceUtil.nist80038d(DEFAULT_NONCE_SIZE);
-    final byte[] header = new CiphertextHeader(nonce).encode();
-    cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, header));
+    final byte[] iv = nonce.generate();
+    final byte[] header = new CiphertextHeader(iv).encode();
+    cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
     writeHeader(header, output);
     process(new AEADCipherAdapter(cipher), input, output);
   }

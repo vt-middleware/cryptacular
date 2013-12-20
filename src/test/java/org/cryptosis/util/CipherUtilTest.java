@@ -17,6 +17,7 @@ import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.modes.OCBBlockCipher;
 import org.bouncycastle.crypto.modes.OFBBlockCipher;
 import org.cryptosis.SecretKeyGenerator;
+import org.cryptosis.generator.RBGNonce;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -110,7 +111,7 @@ public class CipherUtilTest
   {
     final BlockCipher under = cipher.getUnderlyingCipher();
     final SecretKey key = SecretKeyGenerator.generate(under);
-    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, plaintext.getBytes());
+    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, new RBGNonce(), plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
     assertEquals(new String(result), plaintext);
   }
@@ -140,7 +141,7 @@ public class CipherUtilTest
     final File file = new File(path);
     final String expected = new String(StreamUtil.readAll(file));
     final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-    CipherUtil.encrypt(cipher, key, StreamUtil.makeStream(file), tempOut);
+    CipherUtil.encrypt(cipher, key, new RBGNonce(), StreamUtil.makeStream(file), tempOut);
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);
