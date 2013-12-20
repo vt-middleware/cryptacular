@@ -36,11 +36,21 @@ public class RBGNonce implements Nonce
 
 
   /**
-   * Creates a new instance that produces 12-byte (96-bit) nonces where random bits from the RBG fill the entire space.
+   * Creates a new instance that produces 12-bytes (96-bits) of random data; that is, the fixed field of the nonce
+   * is null.
    */
   public RBGNonce()
   {
-    this(null, 12);
+    this(12);
+  }
+
+
+  /**
+   * Creates a new instance that produces length bytes of random data; that is, the fixed field of the nonce is null.
+   */
+  public RBGNonce(final int length)
+  {
+    this(null, length);
   }
 
 

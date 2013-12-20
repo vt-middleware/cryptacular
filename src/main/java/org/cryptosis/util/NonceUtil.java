@@ -5,10 +5,10 @@ import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.prng.SP800SecureRandom;
 import org.bouncycastle.crypto.prng.SP800SecureRandomBuilder;
+import org.cryptosis.generator.RBGNonce;
 
 import javax.crypto.SecretKey;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 
 /**
  * Utility class for generating secure nonce and initialization vectors.
@@ -49,10 +49,12 @@ public final class NonceUtil
 
 
   /**
-   * Generates a nonce/IV using the strategy described in
-   * <a href="http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf">NIST SP 800-38d</a>, section 8.2.2,
-   * "RBG-based Construction". Uses a DRBG based on a SHA-256 digest. This nonce generation strategy is suitable for
-   * GCM ciphers.
+   * Generates a nonce/IV using the strategy described in NIST
+   * <a href="http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf">SP-800-38d</a>, section 8.2.2,
+   * "RBG-based Construction". The implementation uses a hash-based DRBG based on a SHA-256 digest, and uses random
+   * data for all bits of the nonce; that is, the fixed field is null.
+   * <p>
+   * This nonce generation strategy is suitable for GCM ciphers.
    *
    * @param  length  Number of bytes in nonce; MUST be 12 or more.
    *
@@ -60,19 +62,13 @@ public final class NonceUtil
    */
   public static byte[] nist80038d(final int length)
   {
-    if (length < 12) {
-      throw new IllegalArgumentException("Length must be at least 12 bytes (96 bits).");
-    }
-    final byte[] nonce = timestampNonce(length);
-    return nist80063a(
-      new SP800SecureRandomBuilder().buildHash(new SHA256Digest(), nonce, false),
-      length);
+    return new RBGNonce(length).generate();
   }
 
 
   /**
-   * Generates a random IV according to
-   * <a href="http://goo.gl/S9z8qF">NIST SP 800-63a</a>, appendix C, method 1 (encrypted nonce),
+   * Generates a random IV according to NIST
+   * <a href="http://goo.gl/S9z8qF">SP-800-63a</a>, appendix C, method 1 (encrypted nonce),
    * suitable for use with any block cipher mode described in that standard.
    *
    * @param  cipher  Block cipher.
@@ -100,8 +96,8 @@ public final class NonceUtil
 
 
   /**
-   * Generates a random IV according to
-   * <a href="http://goo.gl/S9z8qF">NIST SP 800-63a</a>, appendix C, method 2 (pseudorandom),
+   * Generates a random IV according to NIST
+   * <a href="http://goo.gl/S9z8qF">SP-800-63a</a>, appendix C, method 2 (pseudorandom),
    * suitable for use with any block cipher mode described in that standard.
    *
    * @param  prng  NIST SP800-63a approved pseudorandom number generator.
@@ -119,8 +115,8 @@ public final class NonceUtil
 
 
   /**
-   * Generates a random IV according to
-   * <a href="http://goo.gl/S9z8qF">NIST SP 800-63a</a>, appendix C, method 2 (pseudorandom),
+   * Generates a random IV according to NIST
+   * <a href="http://goo.gl/S9z8qF">SP-800-63a</a>, appendix C, method 2 (pseudorandom),
    * suitable for use with any block cipher mode described in that standard.
    * This method uses a hash DRBG based on a SHA-256 digest function.
    *
