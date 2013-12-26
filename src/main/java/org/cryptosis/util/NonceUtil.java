@@ -1,10 +1,8 @@
 package org.cryptosis.util;
 
 import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.prng.SP800SecureRandom;
-import org.bouncycastle.crypto.prng.SP800SecureRandomBuilder;
+import org.cryptosis.generator.EncryptedNonce;
 import org.cryptosis.generator.RBGNonce;
 
 import javax.crypto.SecretKey;
@@ -69,13 +67,15 @@ public final class NonceUtil
   /**
    * Generates a random IV according to NIST
    * <a href="http://goo.gl/S9z8qF">SP-800-63a</a>, appendix C, method 1 (encrypted nonce),
-   * suitable for use with any block cipher mode described in that standard.
+   * suitable for use with any block cipher mode described in that standard. This method uses an instance of
+   * {@link EncryptedNonce} for the implementation.
    *
    * @param  cipher  Block cipher.
-   *
    * @param  key  Encryption key intended for use with IV.
    *
    * @return  Cipher block size number of random bytes.
+   *
+   * @see EncryptedNonce
    */
   public static byte[] nist80063a(final BlockCipher cipher, final SecretKey key)
   {
@@ -85,13 +85,7 @@ public final class NonceUtil
     if (method != null) {
       raw = (BlockCipher) ReflectUtil.invoke(cipher, method);
     }
-    raw.init(true, new KeyParameter(key.getEncoded()));
-
-    final byte[] result = new byte[raw.getBlockSize()];
-    final byte[] nonce = timestampNonce(raw.getBlockSize());
-    raw.processBlock(nonce, 0, result, 0);
-    raw.reset();
-    return result;
+    return new EncryptedNonce(raw, key).generate();
   }
 
 
@@ -115,20 +109,18 @@ public final class NonceUtil
 
 
   /**
-   * Generates a random IV according to NIST
-   * <a href="http://goo.gl/S9z8qF">SP-800-63a</a>, appendix C, method 2 (pseudorandom),
-   * suitable for use with any block cipher mode described in that standard.
-   * This method uses a hash DRBG based on a SHA-256 digest function.
+   * Generates a random IV according to NIST <a href="http://goo.gl/S9z8qF">SP-800-63a</a>, appendix C,
+   * method 2 (pseudorandom), suitable for use with any block cipher mode described in that standard. Uses an instance
+   * of {@link RBGNonce} internally with length equal to block size of given cipher.
    *
    * @param  cipher  Block cipher.
    *
    * @return  Cipher block size number of random bytes.
+   *
+   * @see RBGNonce
    */
   public static byte[] nist80063a(final BlockCipher cipher)
   {
-    final byte[] nonce = timestampNonce(cipher.getBlockSize());
-    return nist80063a(
-        new SP800SecureRandomBuilder().buildHash(new SHA256Digest(), nonce, false),
-        cipher.getBlockSize());
+    return new RBGNonce(cipher.getBlockSize()).generate();
   }
 }
