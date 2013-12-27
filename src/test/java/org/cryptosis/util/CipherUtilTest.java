@@ -16,7 +16,7 @@ import org.bouncycastle.crypto.modes.CFBBlockCipher;
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.modes.OCBBlockCipher;
 import org.bouncycastle.crypto.modes.OFBBlockCipher;
-import org.cryptosis.SecretKeyGenerator;
+import org.cryptosis.generator.SecretKeyGenerator;
 import org.cryptosis.generator.RBGNonce;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

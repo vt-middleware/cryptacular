@@ -11,8 +11,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPublicKey;
 
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
-import org.cryptosis.KeyPairGenerator;
+import org.cryptosis.generator.KeyPairGenerator;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 

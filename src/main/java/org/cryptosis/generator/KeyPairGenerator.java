@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.generator;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;

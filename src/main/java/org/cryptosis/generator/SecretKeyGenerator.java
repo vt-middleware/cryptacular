@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.generator;
 
 import java.security.SecureRandom;
 import javax.crypto.SecretKey;
