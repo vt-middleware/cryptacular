@@ -1,18 +1,13 @@
-package org.cryptosis;
+package org.cryptosis.spec;
 
-import org.cryptosis.codec.Base64Decoder;
-import org.cryptosis.codec.Base64Encoder;
-import org.cryptosis.codec.Decoder;
-import org.cryptosis.codec.Encoder;
-import org.cryptosis.codec.HexDecoder;
-import org.cryptosis.codec.HexEncoder;
+import org.cryptosis.codec.*;
 
 /**
  * Describes a string-to-byte encoding with methods to instantiate the appropriate {@link Encoder}/{@link Decoder}.
  *
  * @author Marvin S. Addison
  */
-public class CodecSpec
+public class CodecSpec implements Spec<Codec>
 {
   /** Hexadecimal encoding specification. */
   public static CodecSpec HEX = new CodecSpec("Hex");
@@ -42,42 +37,23 @@ public class CodecSpec
   /**
    * @return  The name of the encoding, e.g. "Hex", "Base64".
    */
-  public String getEncoding()
+  public String getAlgorithm()
   {
     return encoding;
   }
 
 
-  /**
-   * @return  New encoder instances that encodes bytes to characters according to the encoding.
-   */
-  public Encoder newEncoder()
+  /** {@inheritDoc} */
+  public Codec newInstance()
   {
-    final Encoder encoder;
+    final Codec codec;
     if ("Hex".equalsIgnoreCase(encoding)) {
-      encoder = new HexEncoder();
+      codec = new HexCodec();
     } else if ("Base64".equalsIgnoreCase(encoding) || "Base-64".equalsIgnoreCase(encoding)) {
-      encoder = new Base64Encoder();
+      codec = new Base64Codec();
     } else {
       throw new IllegalArgumentException("Invalid encoding.");
     }
-    return encoder;
-  }
-
-
-  /**
-   * @return  New decoder instances that decodes characters into bytes according to the encoding.
-   */
-  public Decoder newDecoder()
-  {
-    final Decoder decoder;
-    if ("Hex".equalsIgnoreCase(encoding)) {
-      decoder = new HexDecoder();
-    } else if ("Base64".equalsIgnoreCase(encoding) || "Base-64".equalsIgnoreCase(encoding)) {
-      decoder = new Base64Decoder();
-    } else {
-      throw new IllegalArgumentException("Invalid encoding.");
-    }
-    return decoder;
+    return codec;
   }
 }

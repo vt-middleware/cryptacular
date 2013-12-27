@@ -13,8 +13,8 @@
 */
 package org.cryptosis.pbe;
 
-import org.cryptosis.BlockCipherSpec;
-import org.cryptosis.DigestSpec;
+import org.cryptosis.spec.BufferedBlockCipherSpec;
+import org.cryptosis.spec.DigestSpec;
 
 /**
  * Password-based encryption algorithms defined in PKCS#5 for PBES1 scheme.
@@ -27,37 +27,37 @@ public enum PBES1Algorithm {
   /** PBES1 encryption method with MD2 hash and DES CBC cipher. */
   PbeWithMD2AndDES_CBC(
     "1.2.840.113549.1.5.1",
-    new BlockCipherSpec("DES", "CBC", "PKCS5"),
+    new BufferedBlockCipherSpec("DES", "CBC", "PKCS5"),
     new DigestSpec("MD2")),
 
   /** PBES1 encryption method with MD2 hash and RC2 CBC cipher. */
   PbeWithMD2AndRC2_CBC(
     "1.2.840.113549.1.5.4",
-    new BlockCipherSpec("RC2", "CBC", "PKCS5"),
+    new BufferedBlockCipherSpec("RC2", "CBC", "PKCS5"),
     new DigestSpec("MD2")),
 
   /** PBES1 encryption method with MD5 hash and DES CBC cipher. */
   PbeWithMD5AndDES_CBC(
     "1.2.840.113549.1.5.3",
-    new BlockCipherSpec("DES", "CBC", "PKCS5"),
+    new BufferedBlockCipherSpec("DES", "CBC", "PKCS5"),
     new DigestSpec("MD5")),
 
   /** PBES1 encryption method with MD5 hash and RC2 CBC cipher. */
   PbeWithMD5AndRC2_CBC(
     "1.2.840.113549.1.5.6",
-    new BlockCipherSpec("RC2", "CBC", "PKCS5"),
+    new BufferedBlockCipherSpec("RC2", "CBC", "PKCS5"),
     new DigestSpec("MD5")),
 
   /** PBES1 encryption method with SHA1 hash and DES CBC cipher. */
   PbeWithSHA1AndDES_CBC(
     "1.2.840.113549.1.5.10",
-    new BlockCipherSpec("DES", "CBC", "PKCS5"),
+    new BufferedBlockCipherSpec("DES", "CBC", "PKCS5"),
     new DigestSpec("SHA1")),
 
   /** PBES1 encryption method with SHA1 hash and RC2 CBC cipher. */
   PbeWithSHA1AndRC2_CBC(
     "1.2.840.113549.1.5.11",
-    new BlockCipherSpec("RC2", "CBC", "PKCS5"),
+    new BufferedBlockCipherSpec("RC2", "CBC", "PKCS5"),
     new DigestSpec("SHA1"));
 
 
@@ -65,7 +65,7 @@ public enum PBES1Algorithm {
   private final String oid;
 
   /** Cipher algorithm specification. */
-  private final BlockCipherSpec cipherSpec;
+  private final BufferedBlockCipherSpec cipherSpec;
 
   /** Pseudorandom function digest specification. */
   private final DigestSpec digestSpec;
@@ -78,7 +78,7 @@ public enum PBES1Algorithm {
    * @param  cipherSpec Cipher algorithm specification.
    * @param  digestSpec Digest specification used for pseudorandom function.
    */
-  PBES1Algorithm(final String id, final BlockCipherSpec cipherSpec, final DigestSpec digestSpec)
+  PBES1Algorithm(final String id, final BufferedBlockCipherSpec cipherSpec, final DigestSpec digestSpec)
   {
     this.oid = id;
     this.cipherSpec = cipherSpec;
@@ -114,7 +114,7 @@ public enum PBES1Algorithm {
 
 
   /** @return  Cipher algorithm specification. */
-  public BlockCipherSpec getCipherSpec()
+  public BufferedBlockCipherSpec getCipherSpec()
   {
     return cipherSpec;
   }

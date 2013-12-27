@@ -2,7 +2,7 @@ package org.cryptosis.generator;
 
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
-import org.cryptosis.BlockCipherSpec;
+import org.cryptosis.spec.BufferedBlockCipherSpec;
 import org.cryptosis.util.NonceUtil;
 
 import javax.crypto.SecretKey;
@@ -31,7 +31,7 @@ public class EncryptedNonce implements Nonce
    * @param  cipherSpec  Block cipher specification.
    * @param  key  Symmetric key.
    */
-  public EncryptedNonce(final BlockCipherSpec cipherSpec, final SecretKey key)
+  public EncryptedNonce(final BufferedBlockCipherSpec cipherSpec, final SecretKey key)
   {
     this(cipherSpec.newInstance().getUnderlyingCipher(), key);
   }

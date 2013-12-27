@@ -11,7 +11,7 @@
   Version: $Revision: 2744 $
   Updated: $Date: 2013-06-25 16:20:29 -0400 (Tue, 25 Jun 2013) $
 */
-package org.cryptosis;
+package org.cryptosis.spec;
 
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
@@ -52,9 +52,8 @@ import org.bouncycastle.crypto.paddings.ZeroBytePadding;
  * @author  Middleware Services
  * @version  $Revision: 2744 $
  */
-public class BlockCipherSpec
+public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
 {
-
   /** Cipher algorithm algorithm. */
   private final String algorithm;
 
@@ -70,7 +69,7 @@ public class BlockCipherSpec
    *
    * @param  algName  Cipher algorithm name.
    */
-  public BlockCipherSpec(final String algName)
+  public BufferedBlockCipherSpec(final String algName)
   {
     this(algName, null, null);
   }
@@ -82,10 +81,11 @@ public class BlockCipherSpec
    * @param  algName  Cipher algorithm name.
    * @param  cipherMode  Cipher mode.
    */
-  public BlockCipherSpec(final String algName, final String cipherMode)
+  public BufferedBlockCipherSpec(final String algName, final String cipherMode)
   {
     this(algName, cipherMode, null);
   }
+
 
   /**
    * Creates a new instance from the given cipher specifications.
@@ -94,7 +94,7 @@ public class BlockCipherSpec
    * @param  cipherMode  Cipher mode.
    * @param  cipherPadding  Cipher padding scheme algorithm.
    */
-  public BlockCipherSpec(final String algName, final String cipherMode, final String cipherPadding)
+  public BufferedBlockCipherSpec(final String algName, final String cipherMode, final String cipherPadding)
   {
     this.algorithm = algName;
     this.mode = cipherMode;
@@ -102,11 +102,7 @@ public class BlockCipherSpec
   }
 
 
-  /**
-   * Gets the cipher algorithm.
-   *
-   * @return  Algorithm algorithm.
-   */
+  /** {@inheritDoc} */
   public String getAlgorithm()
   {
     return algorithm;
@@ -135,48 +131,14 @@ public class BlockCipherSpec
   }
 
 
+  /**
+   * Creates a new buffered block cipher from the specification in this instance.
+   *
+   * @return  New buffered block cipher instance.
+   */
   public BufferedBlockCipher newInstance()
   {
-    BlockCipher cipher;
-    if ("AES".equals(algorithm)) {
-      cipher = new AESFastEngine();
-    } else if ("Blowfish".equals(algorithm)) {
-      cipher = new BlowfishEngine();
-    } else if ("Camellia".equals(algorithm)) {
-      cipher = new CamelliaEngine();
-    } else if ("CAST5".equals(algorithm)) {
-      cipher = new CAST5Engine();
-    } else if ("CAST6".equals(algorithm)) {
-      cipher = new CAST6Engine();
-    } else if ("DES".equals(algorithm)) {
-      cipher = new DESEngine();
-    } else if ("DESede".equals(algorithm)) {
-      cipher = new DESedeEngine();
-    } else if ("GOST".equals(algorithm) || "GOST28147".equals(algorithm)) {
-      cipher = new GOST28147Engine();
-    } else if ("Noekeon".equals(algorithm)) {
-      cipher = new NoekeonEngine();
-    } else if ("RC2".equals(algorithm)) {
-      cipher = new RC2Engine();
-    } else if ("RC5".equals(algorithm)) {
-      cipher = new RC564Engine();
-    } else if ("RC6".equals(algorithm)) {
-      cipher = new RC6Engine();
-    } else if ("SEED".equals(algorithm)) {
-      cipher = new SEEDEngine();
-    } else if ("Serpent".equals(algorithm)) {
-      cipher = new SerpentEngine();
-    } else if ("Skipjack".equals(algorithm)) {
-      cipher = new SkipjackEngine();
-    } else if ("TEA".equals(algorithm)) {
-      cipher = new TEAEngine();
-    } else if ("Twofish".equals(algorithm)) {
-      cipher = new TwofishEngine();
-    } else if ("XTEA".equals(algorithm)) {
-      cipher = new XTEAEngine();
-    } else {
-      throw new IllegalStateException("Unsupported cipher algorithm " + algorithm);
-    }
+    BlockCipher cipher = new BlockCipherSpec(algorithm).newInstance();
 
     if ("CBC".equals(mode)) {
       cipher = new CBCBlockCipher(cipher);
@@ -192,6 +154,14 @@ public class BlockCipherSpec
     return new BufferedBlockCipher(cipher);
   }
 
+
+  /**
+   * Gets a instance of block cipher padding from a padding name string.
+   *
+   * @param  padding  Name of padding algorithm.
+   *
+   * @return  Block cipher padding instance.
+   */
   private static BlockCipherPadding getPadding(final String padding)
   {
     final String name;

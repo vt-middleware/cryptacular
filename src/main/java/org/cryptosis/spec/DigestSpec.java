@@ -1,4 +1,4 @@
-package org.cryptosis;
+package org.cryptosis.spec;
 
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.GOST3411Digest;
@@ -24,7 +24,7 @@ import org.bouncycastle.crypto.digests.WhirlpoolDigest;
  *
  * @author Marvin S. Addison
  */
-public class DigestSpec
+public class DigestSpec implements Spec<Digest>
 {
   /** Digest algorithm name. */
   private final String algorithm;
@@ -67,9 +67,7 @@ public class DigestSpec
   }
 
 
-  /**
-   * @return  Digest algorithm name.
-   */
+  /** {@inheritDoc} */
   public String getAlgorithm()
   {
     return algorithm;

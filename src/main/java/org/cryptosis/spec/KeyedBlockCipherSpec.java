@@ -1,11 +1,11 @@
-package org.cryptosis;
+package org.cryptosis.spec;
 
 /**
  * Describes a block cipher algorithm with a known key size.
  *
  * @author Marvin S. Addison
  */
-public class KeySizeBlockCipherSpec extends BlockCipherSpec
+public class KeyedBlockCipherSpec extends BufferedBlockCipherSpec
 {
   /** Key length in bits. */
   private final int keyLength;
@@ -19,8 +19,8 @@ public class KeySizeBlockCipherSpec extends BlockCipherSpec
    * @param  cipherPadding  Cipher padding scheme algorithm.
    * @param  keyBitLength  Key length in bits.
    */
-  public KeySizeBlockCipherSpec(
-    final String algName, final String cipherMode, final String cipherPadding, final int keyBitLength)
+  public KeyedBlockCipherSpec(
+      final String algName, final String cipherMode, final String cipherPadding, final int keyBitLength)
   {
     super(algName, cipherMode, cipherPadding);
     if (keyBitLength < 0) {
