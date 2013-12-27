@@ -45,6 +45,9 @@ import org.bouncycastle.crypto.paddings.TBCPadding;
 import org.bouncycastle.crypto.paddings.X923Padding;
 import org.bouncycastle.crypto.paddings.ZeroBytePadding;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Describes a block cipher in terms of a (algorithm, mode, padding) tuple and provides a facility to create a
  * new instance of the cipher via the {@link #newInstance()} method.
@@ -54,6 +57,9 @@ import org.bouncycastle.crypto.paddings.ZeroBytePadding;
  */
 public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
 {
+  /** String specification format, <code>algorithm/mode/padding</code>. */
+  public static final Pattern FORMAT = Pattern.compile("(?<alg>[A-Za-z0-9_-]+)/(?<mode>\\w+)/(?<padding>\\w+)");
+
   /** Cipher algorithm algorithm. */
   private final String algorithm;
 
@@ -152,6 +158,23 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
       return new PaddedBufferedBlockCipher(cipher, getPadding(padding));
     }
     return new BufferedBlockCipher(cipher);
+  }
+
+
+  /**
+   * Parses a string representation of a buffered block cipher specification into an instance of this class.
+   *
+   * @param  specification  Block cipher specification of the form <code>algorithm/mode/padding</code>.
+   *
+   * @return  Buffered block cipher specification instance.
+   */
+  public static BufferedBlockCipherSpec parse(final String specification)
+  {
+    final Matcher m = FORMAT.matcher(specification);
+    if (!m.matches()) {
+      throw new IllegalArgumentException("Invalid specification " + specification);
+    }
+    return new BufferedBlockCipherSpec(m.group("alg"), m.group("mode"), m.group("padding"));
   }
 
 
