@@ -35,4 +35,12 @@ public class URLResource implements Resource
   {
     return url.openStream();
   }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString()
+  {
+    return url.toString();
+  }
 }

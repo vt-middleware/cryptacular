@@ -1,7 +1,5 @@
 package org.cryptosis.bean;
 
-import org.bouncycastle.jcajce.provider.keystore.bc.BcKeyStoreSpi;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.cryptosis.io.Resource;
 
 import java.security.KeyStore;

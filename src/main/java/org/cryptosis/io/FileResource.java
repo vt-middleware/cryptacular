@@ -38,4 +38,12 @@ public class FileResource implements Resource
   {
     return new BufferedInputStream(new FileInputStream(file));
   }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString()
+  {
+    return file.toString();
+  }
 }
