@@ -281,7 +281,6 @@ public final class HashUtil
    */
   private static byte[] hashInternal(final Digest digest, final byte[] data, final byte[] salt)
   {
-    digest.update(data, 0, data.length);
     final int outSize;
     if (salt != null) {
       digest.update(salt, 0, salt.length);
@@ -289,6 +288,7 @@ public final class HashUtil
     } else {
       outSize = digest.getDigestSize();
     }
+    digest.update(data, 0, data.length);
     final byte[] output = new byte[outSize];
     digest.doFinal(output, 0);
     return output;

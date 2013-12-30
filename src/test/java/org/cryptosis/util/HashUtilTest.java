@@ -37,14 +37,14 @@ public class HashUtilTest
         "protoporphyrin-9",
         SALT,
         1,
-        "e9269f1c8a13bac60de9d9cad69c71eee75a04b00001020304050607",
+        "98d8f48fbfa0d6923ba29b99a12591aba0b452380001020304050607",
       },
       new Object[] {
         new SHA256Digest(),
         "N-arachidonoylethanolamine",
         SALT,
         5,
-        "e9f2361c0ba0a4c4aec8d73316409e93f4cb8f3f1b30960d1be1d14a0aada9e50001020304050607",
+        "456220dc121776a64f23d0bb3c5bd29fada6894dcbf69a275592ef2a60bd5e540001020304050607",
       },
     };
   }
