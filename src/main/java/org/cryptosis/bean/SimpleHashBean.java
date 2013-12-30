@@ -1,29 +1,29 @@
 package org.cryptosis.bean;
 
-import org.cryptosis.spec.DigestSpec;
+import org.bouncycastle.crypto.Digest;
+import org.cryptosis.spec.Spec;
 import org.cryptosis.util.HashUtil;
 
 import java.io.InputStream;
 
 /**
- * Computes a hash using an instance of {@link org.bouncycastle.crypto.Digest} specified by
- * {@link #setDigestSpec(org.cryptosis.spec.DigestSpec)}.
+ * Computes a hash using an instance of {@link Digest} specified by
+ * {@link #setDigestSpec(org.cryptosis.spec.Spec)}.
  *
  * @author Marvin S. Addison
  */
 public class SimpleHashBean implements HashBean<byte[]>
 {
   /** Digest specification. */
-  private DigestSpec digestSpec;
+  private Spec<Digest> digestSpec;
 
 
   /**
-   * Sets the digest specification that determines the instance of {@link org.bouncycastle.crypto.Digest} used to
-   * compute the hash.
+   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
    *
    * @param  digestSpec  Digest algorithm specification.
    */
-  public void setDigestSpec(final DigestSpec digestSpec)
+  public void setDigestSpec(final Spec<Digest> digestSpec)
   {
     this.digestSpec = digestSpec;
   }

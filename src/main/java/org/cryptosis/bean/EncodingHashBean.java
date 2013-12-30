@@ -1,7 +1,10 @@
 package org.cryptosis.bean;
 
+import org.bouncycastle.crypto.Digest;
+import org.cryptosis.codec.Codec;
 import org.cryptosis.spec.CodecSpec;
 import org.cryptosis.spec.DigestSpec;
+import org.cryptosis.spec.Spec;
 import org.cryptosis.util.CodecUtil;
 import org.cryptosis.util.HashUtil;
 import org.cryptosis.util.StreamUtil;
@@ -16,15 +19,14 @@ import java.io.InputStream;
 public class EncodingHashBean implements HashBean<String>
 {
   /** Digest specification. */
-  protected DigestSpec digestSpec;
+  protected Spec<Digest> digestSpec;
 
   /** Determines kind of encoding. */
-  private CodecSpec codecSpec;
+  private Spec<Codec> codecSpec;
 
 
   /**
-   * Sets the digest specification that determines the instance of {@link org.bouncycastle.crypto.Digest} used to
-   * compute the hash.
+   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
    *
    * @param  digestSpec  Digest algorithm specification.
    */
@@ -39,7 +41,7 @@ public class EncodingHashBean implements HashBean<String>
    *
    * @param  codecSpec  Codec specification, e.g. {@link CodecSpec#BASE64}, {@link CodecSpec#HEX}.
    */
-  public void setCodecSpec(CodecSpec codecSpec)
+  public void setCodecSpec(final Spec<Codec> codecSpec)
   {
     this.codecSpec = codecSpec;
   }
