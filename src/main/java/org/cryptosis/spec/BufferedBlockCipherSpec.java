@@ -129,11 +129,23 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
   /**
    * Gets the cipher padding scheme.
    *
-   * @return  Padding scheme algorithm, e.g. PKCS5Padding.
+   * @return  Padding scheme algorithm, e.g. PKCS5Padding. The following names are equivalent for no padding:
+   * NULL, Zero, None.
    */
   public String getPadding()
   {
     return padding;
+  }
+
+
+  /**
+   * Gets the simple block cipher specification corresponding to this instance.
+   *
+   * @return  Simple block cipher specification.
+   */
+  public BlockCipherSpec getBlockCipherSpec()
+  {
+    return new BlockCipherSpec(this.algorithm);
   }
 
 
@@ -144,20 +156,28 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
    */
   public BufferedBlockCipher newInstance()
   {
-    BlockCipher cipher = new BlockCipherSpec(algorithm).newInstance();
+    BlockCipher cipher = getBlockCipherSpec().newInstance();
 
     if ("CBC".equals(mode)) {
       cipher = new CBCBlockCipher(cipher);
     } else if ("OFB".equals(mode)) {
-      cipher = new OFBBlockCipher(cipher, 128);
+      cipher = new OFBBlockCipher(cipher, cipher.getBlockSize());
     } else if ("CFB".equals(mode)) {
-      cipher = new CFBBlockCipher(cipher, 128);
+      cipher = new CFBBlockCipher(cipher, cipher.getBlockSize());
     }
 
     if (padding != null) {
       return new PaddedBufferedBlockCipher(cipher, getPadding(padding));
     }
     return new BufferedBlockCipher(cipher);
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString()
+  {
+    return algorithm + '/' + mode + '/' + padding;
   }
 
 
@@ -197,15 +217,15 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
     BlockCipherPadding blockCipherPadding;
     if ("ISO7816d4".equalsIgnoreCase(name) | "ISO7816".equalsIgnoreCase(name)) {
       blockCipherPadding = new ISO7816d4Padding();
-    } else if ("ISO10126".equalsIgnoreCase(padding) || "ISO10126-2".equalsIgnoreCase(padding)) {
+    } else if ("ISO10126".equalsIgnoreCase(name) || "ISO10126-2".equalsIgnoreCase(name)) {
       blockCipherPadding = new ISO10126d2Padding();
-    } else if ("PKCS7".equalsIgnoreCase(padding) || "PKCS5".equalsIgnoreCase(padding)) {
+    } else if ("PKCS7".equalsIgnoreCase(name) || "PKCS5".equalsIgnoreCase(name)) {
       blockCipherPadding = new PKCS7Padding();
-    } else if ("TBC".equalsIgnoreCase(padding)) {
+    } else if ("TBC".equalsIgnoreCase(name)) {
       blockCipherPadding = new TBCPadding();
-    } else if ("X923".equalsIgnoreCase(padding)) {
+    } else if ("X923".equalsIgnoreCase(name)) {
       blockCipherPadding = new X923Padding();
-    } else if ("NULL".equalsIgnoreCase(padding) || "Zero".equalsIgnoreCase(padding)) {
+    } else if ("NULL".equalsIgnoreCase(name) || "Zero".equalsIgnoreCase(name) || "None".equalsIgnoreCase(name)) {
       blockCipherPadding = new ZeroBytePadding();
     } else {
       throw new IllegalArgumentException("Invalid padding " + padding);

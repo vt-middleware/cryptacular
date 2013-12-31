@@ -56,4 +56,12 @@ public class CodecSpec implements Spec<Codec>
     }
     return codec;
   }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString()
+  {
+    return encoding;
+  }
 }

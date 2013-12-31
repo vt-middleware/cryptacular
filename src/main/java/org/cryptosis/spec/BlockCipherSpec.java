@@ -78,4 +78,12 @@ public class BlockCipherSpec implements Spec<BlockCipher>
     return cipher;
   }
 
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString()
+  {
+    return algorithm;
+  }
+
 }

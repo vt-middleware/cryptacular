@@ -128,4 +128,12 @@ public class DigestSpec implements Spec<Digest>
     }
     return digest;
   }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString()
+  {
+    return algorithm;
+  }
 }

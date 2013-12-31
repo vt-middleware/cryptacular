@@ -15,6 +15,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 import org.bouncycastle.util.io.Streams;
+import org.cryptosis.io.ChunkHandler;
 
 /**
  * Utility methods for stream handling.
@@ -23,6 +24,11 @@ import org.bouncycastle.util.io.Streams;
  */
 public final class StreamUtil
 {
+  /** Buffer size of chunked operations, e.g.
+   * {@link #pipeAll(java.io.InputStream, java.io.OutputStream, org.cryptosis.io.ChunkHandler)}.
+   */
+  public static final int CHUNK_SIZE = 1024;
+
   /** Private method of utility class. */
   private StreamUtil() {}
 
@@ -74,7 +80,7 @@ public final class StreamUtil
   public static String readAll(final Reader reader, final int sizeHint)
   {
     final CharArrayWriter writer = new CharArrayWriter(sizeHint);
-    final char[] buffer = new char[1024];
+    final char[] buffer = new char[CHUNK_SIZE];
     int len;
     try {
       while ((len = reader.read(buffer)) > 0) {
@@ -87,6 +93,20 @@ public final class StreamUtil
       closeWriter(writer);
     }
     return writer.toString();
+  }
+
+
+  public static void pipeAll(final InputStream in, final OutputStream out, final ChunkHandler handler)
+  {
+    final byte[] buffer = new byte[CHUNK_SIZE];
+    int count;
+    try {
+      while ((count = in.read(buffer)) > 0) {
+        handler.handle(buffer, 0, count, out);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("IO error reading/writing stream", e);
+    }
   }
 
 

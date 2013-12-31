@@ -58,4 +58,11 @@ public class StreamCipherSpec implements Spec<StreamCipher>
     return cipher;
   }
 
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString()
+  {
+    return algorithm;
+  }
 }
