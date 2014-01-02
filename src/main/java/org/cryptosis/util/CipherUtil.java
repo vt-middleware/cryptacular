@@ -13,6 +13,10 @@ import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.cryptosis.CiphertextHeader;
+import org.cryptosis.adapter.AEADBlockCipherAdapter;
+import org.cryptosis.adapter.BlockCipherAdapter;
+import org.cryptosis.adapter.BufferedBlockCipherAdapter;
+import org.cryptosis.adapter.CipherAdapter;
 import org.cryptosis.generator.Nonce;
 
 import javax.crypto.SecretKey;
@@ -24,9 +28,6 @@ import javax.crypto.SecretKey;
  */
 public final class CipherUtil
 {
-  /** Default nonce size in bytes. */
-  private static final int DEFAULT_NONCE_SIZE = 12;
-
   /** Mac size in bits. */
   private static final int MAC_SIZE_BITS = 128;
 
@@ -51,7 +52,7 @@ public final class CipherUtil
     final byte[] iv = nonce.generate();
     final byte[] header = new CiphertextHeader(iv).encode();
     cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
-    return encrypt(new AEADCipherAdapter(cipher), header, data);
+    return encrypt(new AEADBlockCipherAdapter(cipher), header, data);
   }
 
 
@@ -77,7 +78,7 @@ public final class CipherUtil
     final byte[] header = new CiphertextHeader(iv).encode();
     cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
     writeHeader(header, output);
-    process(new AEADCipherAdapter(cipher), input, output);
+    process(new AEADBlockCipherAdapter(cipher), input, output);
   }
 
 
@@ -97,7 +98,7 @@ public final class CipherUtil
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
     cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, hbytes));
-    return decrypt(new AEADCipherAdapter(cipher), data, header.getLength());
+    return decrypt(new AEADBlockCipherAdapter(cipher), data, header.getLength());
   }
 
 
@@ -117,7 +118,7 @@ public final class CipherUtil
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
     cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, hbytes));
-    process(new AEADCipherAdapter(cipher), input, output);
+    process(new AEADBlockCipherAdapter(cipher), input, output);
   }
 
 
@@ -138,7 +139,7 @@ public final class CipherUtil
     final byte[] header = new CiphertextHeader(iv).encode();
     final PaddedBufferedBlockCipher padded  = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));
-    return encrypt(new PaddedCipherAdapter(padded), header, data);
+    return encrypt(new BufferedBlockCipherAdapter(padded), header, data);
   }
 
 
@@ -159,7 +160,7 @@ public final class CipherUtil
     final PaddedBufferedBlockCipher padded  = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));
     writeHeader(header, output);
-    process(new PaddedCipherAdapter(padded), input, output);
+    process(new BufferedBlockCipherAdapter(padded), input, output);
   }
 
 
@@ -177,7 +178,7 @@ public final class CipherUtil
     final CiphertextHeader header = CiphertextHeader.decode(data);
     final PaddedBufferedBlockCipher padded  = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
-    return decrypt(new PaddedCipherAdapter(padded), data, header.getLength());
+    return decrypt(new BufferedBlockCipherAdapter(padded), data, header.getLength());
   }
 
 
@@ -195,7 +196,7 @@ public final class CipherUtil
     final CiphertextHeader header = CiphertextHeader.decode(input);
     final PaddedBufferedBlockCipher padded  = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
-    process(new PaddedCipherAdapter(padded), input, output);
+    process(new BufferedBlockCipherAdapter(padded), input, output);
   }
 
 
@@ -208,7 +209,7 @@ public final class CipherUtil
    *
    * @return  Concatenation of encoded header and encrypted data that completely fills the returned byte array.
    */
-  private static byte[] encrypt(final CipherAdapter cipher, final byte[] header, final byte[] data)
+  private static byte[] encrypt(final BlockCipherAdapter cipher, final byte[] header, final byte[] data)
   {
     final int outSize = header.length + cipher.getOutputSize(data.length);
     byte[] output = new byte[outSize];
@@ -230,7 +231,7 @@ public final class CipherUtil
    *
    * @return  Decrypted data that completely fills the returned byte array.
    */
-  private static byte[] decrypt(final CipherAdapter cipher, final byte[] data, final int inOff)
+  private static byte[] decrypt(final BlockCipherAdapter cipher, final byte[] data, final int inOff)
   {
     final int len = data.length - inOff;
     final int outSize = cipher.getOutputSize(len);
@@ -255,7 +256,7 @@ public final class CipherUtil
    * @param  input  Input stream containing data to be processed by the cipher.
    * @param  output  Output stream that receives the output of the cipher acting on the input.
    */
-  private static void process(final CipherAdapter cipher, final InputStream input, final OutputStream output)
+  private static void process(final BlockCipherAdapter cipher, final InputStream input, final OutputStream output)
   {
     final int inSize = 1024;
     final int outSize = cipher.getOutputSize(inSize);
@@ -291,92 +292,4 @@ public final class CipherUtil
     }
   }
 
-
-  /** Adapts BC classes with similar methods but no inheritance hierarchy. */
-  private static interface CipherAdapter
-  {
-    int getOutputSize(int len);
-
-    int processBytes(byte[] in, int inOff, int len, byte[] out, int outOff);
-
-    int doFinal(byte[] out, int outOff);
-
-    void reset();
-  }
-
-  private static class PaddedCipherAdapter implements CipherAdapter
-  {
-    private final PaddedBufferedBlockCipher cipher;
-
-    public PaddedCipherAdapter(final PaddedBufferedBlockCipher c)
-    {
-      this.cipher = c;
-    }
-
-    @Override
-    public int getOutputSize(final int len)
-    {
-      return cipher.getOutputSize(len);
-    }
-
-    @Override
-    public int processBytes(byte[] in, int inOff, int len, byte[] out, int outOff)
-    {
-      return cipher.processBytes(in, inOff, len, out, outOff);
-    }
-
-    @Override
-    public int doFinal(byte[] out, int outOff)
-    {
-      try {
-        return cipher.doFinal(out, outOff);
-      } catch (InvalidCipherTextException e) {
-        throw new RuntimeException("Cipher doFinal failed", e);
-      }
-    }
-
-    @Override
-    public void reset()
-    {
-      this.cipher.reset();
-    }
-  }
-
-  private static class AEADCipherAdapter implements CipherAdapter
-  {
-    private final AEADBlockCipher cipher;
-
-    public AEADCipherAdapter(final AEADBlockCipher c)
-    {
-      this.cipher = c;
-    }
-
-    @Override
-    public int getOutputSize(final int len)
-    {
-      return cipher.getOutputSize(len);
-    }
-
-    @Override
-    public int processBytes(byte[] in, int inOff, int len, byte[] out, int outOff)
-    {
-      return cipher.processBytes(in, inOff, len, out, outOff);
-    }
-
-    @Override
-    public int doFinal(byte[] out, int outOff)
-    {
-      try {
-        return cipher.doFinal(out, outOff);
-      } catch (InvalidCipherTextException e) {
-        throw new RuntimeException("Cipher doFinal failed", e);
-      }
-    }
-
-    @Override
-    public void reset()
-    {
-      this.cipher.reset();
-    }
-  }
 }
