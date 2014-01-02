@@ -5,11 +5,8 @@ import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.cryptosis.CiphertextHeader;
-import org.cryptosis.bean.adapter.BufferedBlockCipherAdapter;
-import org.cryptosis.spec.BufferedBlockCipherSpec;
+import org.cryptosis.adapter.BufferedBlockCipherAdapter;
 import org.cryptosis.spec.Spec;
-
-import javax.crypto.SecretKey;
 
 /**
  * Cipher bean that performs symmetric encryption/decryption using a standard block cipher in a standard mode

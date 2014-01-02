@@ -3,10 +3,9 @@ package org.cryptosis.bean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.crypto.SecretKey;
 
 import org.cryptosis.CiphertextHeader;
-import org.cryptosis.bean.adapter.BlockCipherAdapter;
+import org.cryptosis.adapter.BlockCipherAdapter;
 import org.cryptosis.io.ChunkHandler;
 import org.cryptosis.util.StreamUtil;
 

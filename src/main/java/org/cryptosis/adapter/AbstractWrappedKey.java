@@ -1,4 +1,4 @@
-package org.cryptosis.jce;
+package org.cryptosis.adapter;
 
 import java.security.Key;
 

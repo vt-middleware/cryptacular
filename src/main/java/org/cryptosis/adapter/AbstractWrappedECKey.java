@@ -1,11 +1,10 @@
-package org.cryptosis.jce;
+package org.cryptosis.adapter;
 
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECKeyParameters;
-import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.util.EC5Util;
 
 /**

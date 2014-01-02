@@ -1,4 +1,4 @@
-package org.cryptosis.bean.adapter;
+package org.cryptosis.adapter;
 
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;

@@ -30,7 +30,7 @@ import org.bouncycastle.util.io.Streams;
 import org.cryptosis.asn.OpenSSLPrivateKeyDecoder;
 import org.cryptosis.asn.PKCS8PrivateKeyDecoder;
 import org.cryptosis.asn.PublicKeyDecoder;
-import org.cryptosis.jce.Converter;
+import org.cryptosis.adapter.Converter;
 
 /**
  * Utility methods for public/private key pairs used for asymmetric encryption.

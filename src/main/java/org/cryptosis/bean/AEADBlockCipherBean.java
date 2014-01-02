@@ -8,7 +8,7 @@ import org.bouncycastle.crypto.modes.AEADBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.cryptosis.CiphertextHeader;
-import org.cryptosis.bean.adapter.AEADBlockCipherAdapter;
+import org.cryptosis.adapter.AEADBlockCipherAdapter;
 import org.cryptosis.spec.Spec;
 
 /**

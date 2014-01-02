@@ -1,9 +1,8 @@
-package org.cryptosis.jce;
+package org.cryptosis.adapter;
 
 import java.math.BigInteger;
 
 import org.bouncycastle.crypto.params.RSAKeyParameters;
-import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 
 /**
  * Base class for RSA wrapped keys.

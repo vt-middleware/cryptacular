@@ -1,4 +1,4 @@
-package org.cryptosis.bean.adapter;
+package org.cryptosis.adapter;
 
 /**
  * Adapter for all block cipher types.
