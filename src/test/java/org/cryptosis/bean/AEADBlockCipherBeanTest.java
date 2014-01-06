@@ -6,11 +6,9 @@ import java.io.File;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
 
-import org.cryptosis.generator.CounterNonce;
-import org.cryptosis.generator.EncryptedNonce;
+import org.cryptosis.generator.sp80038d.CounterNonce;
 import org.cryptosis.io.FileResource;
 import org.cryptosis.spec.AEADBlockCipherSpec;
-import org.cryptosis.spec.BufferedBlockCipherSpec;
 import org.cryptosis.util.ByteUtil;
 import org.cryptosis.util.StreamUtil;
 import org.testng.annotations.DataProvider;

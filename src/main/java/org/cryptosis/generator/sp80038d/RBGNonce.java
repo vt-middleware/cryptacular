@@ -1,9 +1,11 @@
-package org.cryptosis.generator;
+package org.cryptosis.generator.sp80038d;
 
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.prng.EntropySource;
 import org.bouncycastle.crypto.prng.drbg.HashSP800DRBG;
 import org.bouncycastle.crypto.prng.drbg.SP80090DRBG;
+import org.cryptosis.generator.LimitException;
+import org.cryptosis.generator.Nonce;
 import org.cryptosis.util.ByteUtil;
 import org.cryptosis.util.NonceUtil;
 
@@ -47,10 +49,12 @@ public class RBGNonce implements Nonce
 
   /**
    * Creates a new instance that produces length bytes of random data; that is, the fixed field of the nonce is null.
+
+   * @param  randomLength  Number of bytes in the random part of the nonce. MUST be at least 12.
    */
-  public RBGNonce(final int length)
+  public RBGNonce(final int randomLength)
   {
-    this(null, length);
+    this(null, randomLength);
   }
 
 
@@ -58,7 +62,7 @@ public class RBGNonce implements Nonce
    * Creates a new instance using the given fixed field value.
    *
    * @param  fixed  User-defined fixed field value.
-   * @param  randomLength  Number of bytes in the random part of the nonce.
+   * @param  randomLength  Number of bytes in the random part of the nonce. MUST be at least 12.
    */
   public RBGNonce(final String fixed, final int randomLength)
   {

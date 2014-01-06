@@ -3,11 +3,16 @@ package org.cryptosis.bean;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.math.BigInteger;
 import java.security.KeyStore;
 
 import javax.crypto.SecretKey;
 
-import org.cryptosis.generator.EncryptedNonce;
+import org.cryptosis.generator.Nonce;
+import org.cryptosis.generator.sp80038a.BigIntegerCounterNonce;
+import org.cryptosis.generator.sp80038a.EncryptedNonce;
+import org.cryptosis.generator.sp80038a.LongCounterNonce;
+import org.cryptosis.generator.sp80038a.RBGNonce;
 import org.cryptosis.io.FileResource;
 import org.cryptosis.spec.BufferedBlockCipherSpec;
 import org.cryptosis.util.ByteUtil;
@@ -32,21 +37,25 @@ public class BufferedBlockCipherBeanTest
         // Plaintext is NOT multiple of block size
         "Able was I ere I saw elba.",
         "AES/CBC/PKCS5",
+        new RBGNonce(16),
       },
       // Plaintext is multiple of block size
       new Object[] {
         "Four score and seven years ago, our forefathers ",
         "Blowfish/CBC/None",
+        new RBGNonce(8),
       },
       // OFB
       new Object[] {
         "Have you passed through this night?",
         "Blowfish/OFB/PKCS5Padding",
+        new LongCounterNonce(),
       },
       // CFB
       new Object[] {
         "I went to the woods because I wished to live deliberately, to front only the essential facts of life",
         "AES/CFB/PKCS5Padding",
+        new RBGNonce(16),
       },
     };
   }
@@ -58,29 +67,34 @@ public class BufferedBlockCipherBeanTest
       new Object[] {
         "src/test/resources/plaintexts/lorem-5000.txt",
         "AES/CBC/PKCS7",
+        new RBGNonce(16),
       },
       new Object[] {
         "src/test/resources/plaintexts/lorem-1200.txt",
         "Twofish/OFB/NULL",
+        new BigIntegerCounterNonce(BigInteger.ONE, 16),
       },
       new Object[] {
         "src/test/resources/plaintexts/lorem-1200.txt",
         "AES/CFB/PKCS5",
+        new RBGNonce(16),
       },
       new Object[] {
         "src/test/resources/plaintexts/lorem-1200.txt",
         "AES/ECB/PKCS5",
+        new RBGNonce(16),
       },
     };
   }
 
 
   @Test(dataProvider = "test-arrays")
-  public void testEncryptDecryptArray(final String input, final String cipherSpecString) throws Exception
+  public void testEncryptDecryptArray(
+    final String input, final String cipherSpecString, final Nonce nonce) throws Exception
   {
     final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
     final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
-    cipherBean.setNonce(new EncryptedNonce(cipherSpec.getBlockCipherSpec(), getTestKey()));
+    cipherBean.setNonce(nonce);
     cipherBean.setKeyAlias("vtcrypt");
     cipherBean.setKeyPassword("vtcrypt");
     cipherBean.setKeyStore(getTestKeyStore());
@@ -91,11 +105,12 @@ public class BufferedBlockCipherBeanTest
 
 
   @Test(dataProvider = "test-streams")
-  public void testEncryptDecryptStream(final String path, final String cipherSpecString) throws Exception
+  public void testEncryptDecryptStream(
+    final String path, final String cipherSpecString, final Nonce nonce) throws Exception
   {
     final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
     final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
-    cipherBean.setNonce(new EncryptedNonce(cipherSpec.getBlockCipherSpec(), getTestKey()));
+    cipherBean.setNonce(nonce);
     cipherBean.setKeyAlias("vtcrypt");
     cipherBean.setKeyPassword("vtcrypt");
     cipherBean.setKeyStore(getTestKeyStore());
@@ -115,14 +130,5 @@ public class BufferedBlockCipherBeanTest
     bean.setResource(new FileResource(new File("src/test/resources/keystores/cipher-bean.jceks")));
     bean.setType("JCEKS");
     return bean.newInstance();
-  }
-
-  private static SecretKey getTestKey()
-  {
-    final KeyStoreBasedSecretKeyFactoryBean secretKeyFactoryBean = new KeyStoreBasedSecretKeyFactoryBean();
-    secretKeyFactoryBean.setKeyStore(getTestKeyStore());
-    secretKeyFactoryBean.setPassword("vtcrypt");
-    secretKeyFactoryBean.setAlias("vtcrypt");
-    return secretKeyFactoryBean.newInstance();
   }
 }

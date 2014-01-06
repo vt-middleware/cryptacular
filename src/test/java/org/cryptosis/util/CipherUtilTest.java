@@ -16,8 +16,11 @@ import org.bouncycastle.crypto.modes.CFBBlockCipher;
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.modes.OCBBlockCipher;
 import org.bouncycastle.crypto.modes.OFBBlockCipher;
+import org.cryptosis.generator.Nonce;
 import org.cryptosis.generator.SecretKeyGenerator;
-import org.cryptosis.generator.RBGNonce;
+import org.cryptosis.generator.sp80038a.LongCounterNonce;
+import org.cryptosis.generator.sp80038a.RBGNonce;
+import org.cryptosis.generator.sp80038d.CounterNonce;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -37,22 +40,26 @@ public class CipherUtilTest
       new Object[] {
         // Plaintext is NOT multiple of block size
         "Able was I ere I saw elba.",
-        new CBCBlockCipher(new AESEngine())
+        new CBCBlockCipher(new AESEngine()),
+        new RBGNonce(16),
       },
       // Plaintext is multiple of block size
       new Object[] {
         "Four score and seven years ago, our forefathers ",
-        new CBCBlockCipher(new BlowfishEngine())
+        new CBCBlockCipher(new BlowfishEngine()),
+        new RBGNonce(8),
       },
       // OFB
       new Object[] {
         "Have you passed through this night?",
-        new OFBBlockCipher(new BlowfishEngine(), 64)
+        new OFBBlockCipher(new BlowfishEngine(), 64),
+        new LongCounterNonce(),
       },
       // CFB
       new Object[] {
         "I went to the woods because I wished to live deliberately, to front only the essential facts of life",
-        new CFBBlockCipher(new AESEngine(), 128)
+        new CFBBlockCipher(new AESEngine(), 128),
+        new RBGNonce(16),
       },
     };
   }
@@ -97,10 +104,10 @@ public class CipherUtilTest
 
 
   @Test(dataProvider = "block-cipher")
-  public void testBlockCipherEncryptDecrypt(final String plaintext, final BlockCipher cipher)
+  public void testBlockCipherEncryptDecrypt(final String plaintext, final BlockCipher cipher, final Nonce nonce)
   {
     final SecretKey key = SecretKeyGenerator.generate(cipher);
-    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, plaintext.getBytes());
+    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, nonce, plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
     assertEquals(new String(result), plaintext);
   }
@@ -111,7 +118,7 @@ public class CipherUtilTest
   {
     final BlockCipher under = cipher.getUnderlyingCipher();
     final SecretKey key = SecretKeyGenerator.generate(under);
-    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, new RBGNonce(), plaintext.getBytes());
+    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, new RBGNonce(12), plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
     assertEquals(new String(result), plaintext);
   }
@@ -122,10 +129,11 @@ public class CipherUtilTest
   {
     final BlockCipher cipher = new CBCBlockCipher(new AESEngine());
     final SecretKey key = SecretKeyGenerator.generate(cipher);
+    final Nonce nonce = new CounterNonce("vt-crypt", 1);
     final File file = new File(path);
     final String expected = new String(StreamUtil.readAll(file));
     final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-    CipherUtil.encrypt(cipher, key, StreamUtil.makeStream(file), tempOut);
+    CipherUtil.encrypt(cipher, key, nonce, StreamUtil.makeStream(file), tempOut);
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);

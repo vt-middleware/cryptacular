@@ -128,14 +128,16 @@ public final class CipherUtil
    *
    * @param  cipher  Block cipher.
    * @param  key  Encryption key.
+   * @param  nonce  IV generator. Callers must take care to ensure that the length of generated IVs is equal to the
+   *                cipher block size.
    * @param  data  Plaintext data to be encrypted.
    *
    * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
    * byte array.
    */
-  public static byte[] encrypt(final BlockCipher cipher, final SecretKey key, final byte[] data)
+  public static byte[] encrypt(final BlockCipher cipher, final SecretKey key, final Nonce nonce, final byte[] data)
   {
-    final byte[] iv = NonceUtil.nist80063a(cipher, key);
+    final byte[] iv = nonce.generate();
     final byte[] header = new CiphertextHeader(iv).encode();
     final PaddedBufferedBlockCipher padded  = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));
@@ -149,13 +151,19 @@ public final class CipherUtil
    *
    * @param  cipher  Block cipher.
    * @param  key  Encryption key.
+   * @param  nonce  IV generator. Callers must take care to ensure that the length of generated IVs is equal to the
+   *                cipher block size.
    * @param  input  Input stream containing plaintext data.
    * @param  output  Output stream that receives ciphertext produced by block cipher in encryption mode.
    */
   public static void encrypt(
-    final BlockCipher cipher, final SecretKey key, final InputStream input, final OutputStream output)
+    final BlockCipher cipher,
+    final SecretKey key,
+    final Nonce nonce,
+    final InputStream input,
+    final OutputStream output)
   {
-    final byte[] iv = NonceUtil.nist80063a(cipher, key);
+    final byte[] iv = nonce.generate();
     final byte[] header = new CiphertextHeader(iv).encode();
     final PaddedBufferedBlockCipher padded  = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));

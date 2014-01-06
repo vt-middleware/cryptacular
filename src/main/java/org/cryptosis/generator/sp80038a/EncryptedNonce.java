@@ -1,7 +1,9 @@
-package org.cryptosis.generator;
+package org.cryptosis.generator.sp80038a;
 
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.cryptosis.generator.LimitException;
+import org.cryptosis.generator.Nonce;
 import org.cryptosis.spec.Spec;
 import org.cryptosis.util.NonceUtil;
 
@@ -9,8 +11,8 @@ import javax.crypto.SecretKey;
 
 /**
  * Nonce generation strategy that produces a random value according to NIST
- * <a href="http://goo.gl/S9z8qF">SP-800-63a</a>, appendix C, method 1 (encrypted nonce),
- * suitable for use with any block cipher mode described in that standard.
+ * <a href="http://goo.gl/S9z8qF">SP-800-38a</a>, appendix C, method 1 (encrypted nonce),
+ * suitable for use with any block cipher mode described in that standard except OFB.
  * <p>
  * Instances of this class are thread safe.
  *

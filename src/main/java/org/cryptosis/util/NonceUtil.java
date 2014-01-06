@@ -2,8 +2,8 @@ package org.cryptosis.util;
 
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.prng.SP800SecureRandom;
-import org.cryptosis.generator.EncryptedNonce;
-import org.cryptosis.generator.RBGNonce;
+import org.cryptosis.generator.sp80038a.EncryptedNonce;
+import org.cryptosis.generator.sp80038d.RBGNonce;
 
 import javax.crypto.SecretKey;
 import java.lang.reflect.Method;
