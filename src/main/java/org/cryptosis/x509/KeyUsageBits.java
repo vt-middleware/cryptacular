@@ -1,20 +1,24 @@
 /*
-  $Id: KeyUsageBits.java 2745 2013-06-25 21:16:10Z dfisher $
-
-  Copyright (C) 2003-2013 Virginia Tech.
-  All rights reserved.
-
-  SEE LICENSE FOR MORE INFORMATION
-
-  Author:  Middleware Services
-  Email:   middleware@vt.edu
-  Version: $Revision: 2745 $
-  Updated: $Date: 2013-06-25 17:16:10 -0400 (Tue, 25 Jun 2013) $
-*/
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.cryptosis.x509;
 
 import java.util.BitSet;
-import java.util.List;
 
 import org.bouncycastle.asn1.x509.KeyUsage;
 

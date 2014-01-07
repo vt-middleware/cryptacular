@@ -1,11 +1,30 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.util;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.crypto.SecretKey;
 
 import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.modes.AEADBlockCipher;
 import org.bouncycastle.crypto.paddings.PKCS7Padding;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
@@ -16,10 +35,7 @@ import org.cryptosis.CiphertextHeader;
 import org.cryptosis.adapter.AEADBlockCipherAdapter;
 import org.cryptosis.adapter.BlockCipherAdapter;
 import org.cryptosis.adapter.BufferedBlockCipherAdapter;
-import org.cryptosis.adapter.CipherAdapter;
 import org.cryptosis.generator.Nonce;
-
-import javax.crypto.SecretKey;
 
 /**
  * Utility class that performs encryption and decryption operations using a block cipher.
@@ -36,7 +52,7 @@ public final class CipherUtil
 
 
   /**
-   * Encrypts data using an AEAD cipher. A {@link org.cryptosis.CiphertextHeader} is prepended to the resulting ciphertext and
+   * Encrypts data using an AEAD cipher. A {@link CiphertextHeader} is prepended to the resulting ciphertext and
    * used as AAD (Additional Authenticated Data) passed to the AEAD cipher.
    *
    * @param  cipher  AEAD cipher.
@@ -44,7 +60,7 @@ public final class CipherUtil
    * @param  nonce  Nonce generator.
    * @param  data  Plaintext data to be encrypted.
    *
-   * @return  Concatenation of encoded {@link org.cryptosis.CiphertextHeader} and encrypted data that completely fills the returned
+   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
    * byte array.
    */
   public static byte[] encrypt(final AEADBlockCipher cipher, final SecretKey key, final Nonce nonce, final byte[] data)
@@ -220,7 +236,7 @@ public final class CipherUtil
   private static byte[] encrypt(final BlockCipherAdapter cipher, final byte[] header, final byte[] data)
   {
     final int outSize = header.length + cipher.getOutputSize(data.length);
-    byte[] output = new byte[outSize];
+    final byte[] output = new byte[outSize];
     System.arraycopy(header, 0, output, 0, header.length);
     int outOff = header.length;
     outOff += cipher.processBytes(data, 0, data.length, output, outOff);

@@ -1,14 +1,33 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.bean;
 
-import org.cryptosis.CiphertextHeader;
-import org.cryptosis.generator.Nonce;
-
-import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Key;
 import java.security.KeyStore;
+import javax.crypto.SecretKey;
+
+import org.cryptosis.CiphertextHeader;
+import org.cryptosis.generator.Nonce;
 
 /**
  * Base class for all cipher beans. The base class assumes all ciphertext output will contain a prepended
@@ -157,7 +176,6 @@ public abstract class AbstractCipherBean implements CipherBean
    * Processes the given data under the action of the cipher.
    *
    * @param  header  Ciphertext header.
-   * @param  secretKey  Symmetric encryption key.
    * @param  mode  True for encryption; false for decryption.
    * @param  input  Stream containing input data.
    * @param  output  Stream that receives output of cipher.

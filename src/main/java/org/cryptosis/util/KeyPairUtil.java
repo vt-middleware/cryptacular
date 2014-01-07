@@ -1,3 +1,22 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.util;
 
 import java.io.File;
@@ -27,10 +46,10 @@ import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
 import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
 import org.bouncycastle.util.io.Streams;
+import org.cryptosis.adapter.Converter;
 import org.cryptosis.asn.OpenSSLPrivateKeyDecoder;
 import org.cryptosis.asn.PKCS8PrivateKeyDecoder;
 import org.cryptosis.asn.PublicKeyDecoder;
-import org.cryptosis.adapter.Converter;
 
 /**
  * Utility methods for public/private key pairs used for asymmetric encryption.
@@ -125,15 +144,17 @@ public final class KeyPairUtil
     }
 
     // Dispatch onto the algorithm-specific method
+    final boolean result;
     if ("DSA".equals(alg)) {
-      return isKeyPair((DSAPublicKey) pubKey, (DSAPrivateKey) privKey);
+      result = isKeyPair((DSAPublicKey) pubKey, (DSAPrivateKey) privKey);
     } else if ("RSA".equals(alg)) {
-      return isKeyPair((RSAPublicKey) pubKey, (RSAPrivateKey) privKey);
+      result = isKeyPair((RSAPublicKey) pubKey, (RSAPrivateKey) privKey);
     } else if ("EC".equals(alg)) {
-      return isKeyPair((ECPublicKey) pubKey, (ECPrivateKey) privKey);
+      result = isKeyPair((ECPublicKey) pubKey, (ECPrivateKey) privKey);
     } else {
       throw new IllegalArgumentException(alg + " not supported.");
     }
+    return result;
   }
 
 
@@ -253,7 +274,7 @@ public final class KeyPairUtil
    * Reads an encoded private key from an input stream. Both PKCS#8 and OpenSSL "traditional" formats
    * are supported in DER or PEM encoding. See {@link #decodePrivateKey(byte[])} for supported asymmetric algorithms.
    *
-   * @param  file  Private key file.
+   * @param  in  Input stream containing private key data.
    *
    * @return  Private key.
    *
@@ -303,7 +324,7 @@ public final class KeyPairUtil
    * Reads an encrypted private key from an input stream. Both PKCS#8 and OpenSSL "traditional" formats
    * are supported in DER or PEM encoding. See {@link #decodePrivateKey(byte[])} for supported asymmetric algorithms.
    *
-   * @param  file  Private key file.
+   * @param  in  Input stream containing private key data.
    * @param  password  Password used to encrypt private key.
    *
    * @return  Private key.
@@ -328,8 +349,6 @@ public final class KeyPairUtil
    * @param  encodedKey  Encoded private key data.
    *
    * @return  Private key.
-   *
-   * @throws  IOException  On IO errors reading data from file.
    */
   public static PrivateKey decodePrivateKey(final byte[] encodedKey)
   {
@@ -355,8 +374,6 @@ public final class KeyPairUtil
    * @param  password  Password used to encrypt private key.
    *
    * @return  Private key.
-   *
-   * @throws  IOException  On IO errors reading data from file.
    */
   public static PrivateKey decodePrivateKey(final byte[] encryptedKey, final char[] password)
   {
@@ -421,6 +438,8 @@ public final class KeyPairUtil
    * Decodes public keys formatted in an X.509 SubjectPublicKeyInfo structure in either PEM or DER encoding.
    *
    * @param  encoded  Encoded public key bytes.
+   *
+   * @return  Public key.
    */
   public static PublicKey decodePublicKey(final byte[] encoded)
   {

@@ -1,6 +1,28 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.spec;
 
-import org.cryptosis.codec.*;
+
+import org.cryptosis.codec.Base64Codec;
+import org.cryptosis.codec.Codec;
+import org.cryptosis.codec.HexCodec;
 
 /**
  * Describes a string-to-byte encoding with methods to instantiate the appropriate {@link Encoder}/{@link Decoder}.
@@ -10,10 +32,10 @@ import org.cryptosis.codec.*;
 public class CodecSpec implements Spec<Codec>
 {
   /** Hexadecimal encoding specification. */
-  public static CodecSpec HEX = new CodecSpec("Hex");
+  public static final CodecSpec HEX = new CodecSpec("Hex");
 
   /** Base64 encoding specification. */
-  public static CodecSpec BASE64 = new CodecSpec("Base64");
+  public static final CodecSpec BASE64 = new CodecSpec("Base64");
 
 
   /** Name of encoding, e.g. "Hex, "Base64". */

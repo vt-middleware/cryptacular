@@ -1,3 +1,22 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.util;
 
 import java.io.ByteArrayInputStream;
@@ -72,22 +91,22 @@ public class CipherUtilTest
       new Object[] {
         // Plaintext is NOT multiple of block size
         "I never picked cotton like my mother did",
-        new GCMBlockCipher(new AESEngine())
+        new GCMBlockCipher(new AESEngine()),
       },
       new Object[] {
         // Plaintext is multiple of block size
         "Cogito ergo sum.",
-        new GCMBlockCipher(new AESEngine())
+        new GCMBlockCipher(new AESEngine()),
       },
       // CCM
       new Object[] {
         "Thousands of candles can be lit from a single candle and the life of the candle will not be shortened.",
-        new CCMBlockCipher(new TwofishEngine())
+        new CCMBlockCipher(new TwofishEngine()),
       },
       // OCB
       new Object[] {
         "I slept and dreamt life was joy. I awoke and saw that life was service. I acted and behold: service was joy.",
-        new OCBBlockCipher(new AESEngine(), new AESEngine())
+        new OCBBlockCipher(new AESEngine(), new AESEngine()),
       },
     };
   }

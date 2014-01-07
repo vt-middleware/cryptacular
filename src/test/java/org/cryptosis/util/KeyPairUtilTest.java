@@ -1,3 +1,22 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.util;
 
 import java.security.KeyPair;
@@ -62,11 +81,11 @@ public class KeyPairUtilTest
   @DataProvider(name = "key-pairs")
   public Object[][] getKeyPairs()
   {
-    final KeyPair rsa512_2 = KeyPairGenerator.generateRSA(random, 512);
+    final KeyPair rsa512p2 = KeyPairGenerator.generateRSA(random, 512);
     return new Object[][] {
       new Object[] { rsa512.getPublic(), rsa512.getPrivate(), true },
-      new Object[] { rsa512_2.getPublic(), rsa512_2.getPrivate(), true },
-      new Object[] { rsa512.getPublic(), rsa512_2.getPrivate(), false },
+      new Object[] { rsa512p2.getPublic(), rsa512p2.getPrivate(), true },
+      new Object[] { rsa512.getPublic(), rsa512p2.getPrivate(), false },
     };
   }
 
@@ -162,7 +181,8 @@ public class KeyPairUtilTest
   }
 
   @Test(dataProvider = "encrypted-private-key-files")
-  public void testReadEncryptedPrivateKey(final String path, final String password, final Class<?> expectedType) throws Exception
+  public void testReadEncryptedPrivateKey(
+    final String path, final String password, final Class<?> expectedType) throws Exception
   {
     final PrivateKey key = KeyPairUtil.readPrivateKey(path, password.toCharArray());
     assertNotNull(key);

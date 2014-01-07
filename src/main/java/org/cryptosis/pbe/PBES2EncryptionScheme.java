@@ -1,22 +1,28 @@
 /*
-  $Id: PBES2EncryptionScheme.java 2744 2013-06-25 20:20:29Z dfisher $
-
-  Copyright (C) 2003-2013 Virginia Tech.
-  All rights reserved.
-
-  SEE LICENSE FOR MORE INFORMATION
-
-  Author:  Middleware Services
-  Email:   middleware@vt.edu
-  Version: $Revision: 2744 $
-  Updated: $Date: 2013-06-25 16:20:29 -0400 (Tue, 25 Jun 2013) $
-*/
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.cryptosis.pbe;
 
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.pkcs.*;
+import org.bouncycastle.asn1.pkcs.PBES2Parameters;
+import org.bouncycastle.asn1.pkcs.PBKDF2Params;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.PBEParametersGenerator;
 import org.bouncycastle.crypto.engines.RC532Engine;
@@ -76,33 +82,33 @@ public class PBES2EncryptionScheme extends AbstractEncryptionScheme
     byte[] iv = null;
     CipherParameters cipherParameters = generator.generateDerivedParameters(keyLength);
     switch (alg) {
-      case RC2:
-        setCipher(alg.getCipherSpec().newInstance());
-        final ASN1Sequence rc2Params= ASN1Sequence.getInstance(scheme.getParameters());
-        if (rc2Params.size() > 1) {
-          cipherParameters =new RC2Parameters(
-            ((KeyParameter) cipherParameters).getKey(),
-            ASN1Integer.getInstance(rc2Params.getObjectAt(0)).getValue().intValue());
-          iv = ASN1OctetString.getInstance(rc2Params.getObjectAt(0)).getOctets();
-        }
-        break;
+    case RC2:
+      setCipher(alg.getCipherSpec().newInstance());
+      final ASN1Sequence rc2Params = ASN1Sequence.getInstance(scheme.getParameters());
+      if (rc2Params.size() > 1) {
+        cipherParameters = new RC2Parameters(
+          ((KeyParameter) cipherParameters).getKey(),
+          ASN1Integer.getInstance(rc2Params.getObjectAt(0)).getValue().intValue());
+        iv = ASN1OctetString.getInstance(rc2Params.getObjectAt(0)).getOctets();
+      }
+      break;
 
-      case RC5:
-        final ASN1Sequence rc5Params = ASN1Sequence.getInstance(scheme.getParameters());
-        final int rounds = ASN1Integer.getInstance(rc5Params.getObjectAt(1)).getValue().intValue();
-        final int blockSize = ASN1Integer.getInstance(rc5Params.getObjectAt(2)).getValue().intValue();
-        if (blockSize == 32) {
-          setCipher(new PaddedBufferedBlockCipher(new CBCBlockCipher(new RC532Engine()), new PKCS7Padding()));
-        }
-        cipherParameters = new RC5Parameters(((KeyParameter) cipherParameters).getKey(), rounds);
-        if (rc5Params.size() > 3) {
-          iv = ASN1OctetString.getInstance(rc5Params.getObjectAt(3)).getOctets();
-        }
-        break;
+    case RC5:
+      final ASN1Sequence rc5Params = ASN1Sequence.getInstance(scheme.getParameters());
+      final int rounds = ASN1Integer.getInstance(rc5Params.getObjectAt(1)).getValue().intValue();
+      final int blockSize = ASN1Integer.getInstance(rc5Params.getObjectAt(2)).getValue().intValue();
+      if (blockSize == 32) {
+        setCipher(new PaddedBufferedBlockCipher(new CBCBlockCipher(new RC532Engine()), new PKCS7Padding()));
+      }
+      cipherParameters = new RC5Parameters(((KeyParameter) cipherParameters).getKey(), rounds);
+      if (rc5Params.size() > 3) {
+        iv = ASN1OctetString.getInstance(rc5Params.getObjectAt(3)).getOctets();
+      }
+      break;
 
-      default:
-        setCipher(alg.getCipherSpec().newInstance());
-        iv = ASN1OctetString.getInstance(scheme.getParameters()).getOctets();
+    default:
+      setCipher(alg.getCipherSpec().newInstance());
+      iv = ASN1OctetString.getInstance(scheme.getParameters()).getOctets();
     }
     if (iv != null) {
       cipherParameters = new ParametersWithIV(cipherParameters, iv);

@@ -1,3 +1,22 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.asn;
 
 import org.cryptosis.util.PemUtil;
@@ -6,6 +25,7 @@ import org.cryptosis.util.PemUtil;
  * Base class for all private key decoders.
  *
  * @author Marvin S. Addison
+ * @param  <T>  Type produced by decode operation.
  */
 public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
 {
@@ -15,7 +35,7 @@ public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
   {
     final byte[] asn1Bytes;
     if (args != null && args.length > 0 && args[0] instanceof char[]) {
-        asn1Bytes = decryptKey(encoded, (char[]) args[0]);
+      asn1Bytes = decryptKey(encoded, (char[]) args[0]);
     } else {
       asn1Bytes = tryConvertPem(encoded);
     }

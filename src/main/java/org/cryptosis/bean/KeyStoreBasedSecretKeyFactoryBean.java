@@ -1,8 +1,27 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.bean;
 
-import javax.crypto.SecretKey;
 import java.security.Key;
 import java.security.KeyStore;
+import javax.crypto.SecretKey;
 
 /**
  * Factory that produces a {@link SecretKey} from a {@link KeyStore}.
@@ -37,7 +56,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
    *
    * @param  alias  Keystore alias of secret key entry.
    */
-  public void setAlias(String alias)
+  public void setAlias(final String alias)
   {
     this.alias = alias;
   }
@@ -48,7 +67,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
    *
    * @param  password  Key entry password.
    */
-  public void setPassword(String password)
+  public void setPassword(final String password)
   {
     this.password = password;
   }

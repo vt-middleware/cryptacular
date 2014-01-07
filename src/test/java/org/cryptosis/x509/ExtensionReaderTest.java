@@ -1,3 +1,22 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.x509;
 
 import java.security.cert.X509Certificate;
@@ -47,7 +66,7 @@ public class ExtensionReaderTest
           "directory.vt.edu",
           "id.directory.vt.edu",
           "authn.directory.vt.edu",
-          "ldap.vt.edu"
+          "ldap.vt.edu",
         },
       },
     };
@@ -168,7 +187,7 @@ public class ExtensionReaderTest
           new DistributionPoint(
             new DistributionPointName(new GeneralNames(uri("http://EVSecure-crl.verisign.com/EVSecure2006.crl"))),
             null,
-            null)
+            null),
         },
       },
       new Object[] {
@@ -182,7 +201,7 @@ public class ExtensionReaderTest
             null,
             new GeneralNames(dirName(
               "CN=Virginia Tech Middleware CA,O=Virginia Polytechnic Institute and State University," +
-                "DC=vt,DC=edu,C=US")))
+                "DC=vt,DC=edu,C=US"))),
         },
       },
     };
@@ -234,7 +253,8 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "certificate-policies")
-  public void testReadCertificatePolicies(final X509Certificate cert, final PolicyInformation[] expected) throws Exception
+  public void testReadCertificatePolicies(
+    final X509Certificate cert, final PolicyInformation[] expected) throws Exception
   {
     final List<PolicyInformation> policies = new ExtensionReader(cert).readCertificatePolicies();
     assertEquals(policies.size(), expected.length);
@@ -289,7 +309,8 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "crl-distribution-points")
-  public void testReadCRLDistributionPoints(final X509Certificate cert, final DistributionPoint[] expected) throws Exception
+  public void testReadCRLDistributionPoints(
+    final X509Certificate cert, final DistributionPoint[] expected) throws Exception
   {
     final List<DistributionPoint> points = new ExtensionReader(cert).readCRLDistributionPoints();
     assertEquals(points.size(), expected.length);
@@ -299,7 +320,8 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "authority-information-access")
-  public void testReadAuthorityInformationAccess(final X509Certificate cert, final AccessDescription[] expected) throws Exception
+  public void testReadAuthorityInformationAccess(
+    final X509Certificate cert, final AccessDescription[] expected) throws Exception
   {
     final List<AccessDescription> descriptions = new ExtensionReader(cert).readAuthorityInformationAccess();
     assertEquals(descriptions.size(), expected.length);

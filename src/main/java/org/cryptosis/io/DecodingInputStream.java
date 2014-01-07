@@ -1,15 +1,34 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.io;
+
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 
 import org.cryptosis.codec.Base64Decoder;
 import org.cryptosis.codec.Decoder;
 import org.cryptosis.codec.HexDecoder;
-
-import java.io.FilterInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 
 /**
  * Filters read bytes through a {@link Decoder} such that consumers obtain raw (decoded) bytes from read operations.
@@ -108,6 +127,11 @@ public class DecodingInputStream extends FilterInputStream
   }
 
 
+  /**
+   * Prepares the input buffer to receive the given number of bytes.
+   *
+   * @param  required  Number of bytes required.
+   */
   private void prepareInputBuffer(final int required)
   {
     if (input == null || input.capacity() < required) {
@@ -117,6 +141,10 @@ public class DecodingInputStream extends FilterInputStream
     }
   }
 
+
+  /**
+   * Prepares the output buffer based on input buffer capacity.
+   */
   private void prepareOutputBuffer()
   {
     final int required = decoder.outputSize(input.capacity());

@@ -1,3 +1,22 @@
+/*
+ * Licensed to Virginia Tech under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Virginia Tech licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.cryptosis.codec;
 
 import java.nio.ByteBuffer;
@@ -26,7 +45,7 @@ public class Base64Encoder implements Encoder
   private int remaining = 24;
 
   /** Number of characters written. */
-  private int outCount = 0;
+  private int outCount;
 
 
   /** Initializes the encoding character table. */
@@ -80,11 +99,11 @@ public class Base64Encoder implements Encoder
   public void finalize(final CharBuffer output)
   {
     if (remaining == 16) {
-        writeOutput(output, 12);
-        output.put('=').put('=');
+      writeOutput(output, 12);
+      output.put('=').put('=');
     } else if (remaining == 8) {
-        writeOutput(output, 6);
-        output.put('=');
+      writeOutput(output, 6);
+      output.put('=');
     }
     // Append trailing newline to make consistent with OpenSSL base64 output
     if (lineLength > 0 && output.position() > 0) {
@@ -95,15 +114,15 @@ public class Base64Encoder implements Encoder
 
 
   /** {@inheritDoc} */
-    @Override
-    public int outputSize(final int inputSize)
-    {
-      int len = (inputSize + 2) * 4 / 3;
-      if (lineLength > 0) {
-        len += (len / lineLength + 1) * NEWLINE.length();
-      }
-      return len;
+  @Override
+  public int outputSize(final int inputSize)
+  {
+    int len = (inputSize + 2) * 4 / 3;
+    if (lineLength > 0) {
+      len += (len / lineLength + 1) * NEWLINE.length();
     }
+    return len;
+  }
 
 
   /**
