@@ -30,6 +30,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Unit test for {@link HashUtil}.
@@ -91,6 +92,15 @@ public class HashUtilTest
     throws Exception
   {
     assertEquals(Hex.toHexString(HashUtil.hash(digest, data.getBytes("ASCII"), salt, iterations)), expected);
+  }
+
+
+  @Test(dataProvider = "salted-hash-iter")
+  public void testCompareSaltedHash(
+    final Digest digest, final String data, final byte[] salt, final int iterations, final String expected)
+    throws Exception
+  {
+    assertTrue(HashUtil.compareSaltedHash(digest, data.getBytes("ASCII"), iterations, CodecUtil.hex(expected)));
   }
 
 

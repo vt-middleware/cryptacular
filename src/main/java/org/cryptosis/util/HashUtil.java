@@ -21,6 +21,7 @@ package org.cryptosis.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
@@ -183,6 +184,78 @@ public final class HashUtil
       System.arraycopy(salt, 0, result, digest.getDigestSize(), salt.length);
     }
     return result;
+  }
+
+
+  /**
+   * Determines whether the hash of the given input equals a known value.
+   *
+   * @param  digest  Hash algorithm.
+   * @param  input  Data to hash.
+   * @param  hash  Hash to compare with.
+   *
+   * @return  True if the hash of the data under the given digest is equal to the hash, false otherwise.
+   */
+  public static boolean compareHash(final Digest digest, final byte[] input, final byte[] hash)
+  {
+    return Arrays.equals(hash(digest, input), hash);
+  }
+
+
+  /**
+   * Determines whether the hash of the given input equals a known value.
+   *
+   * @param  digest  Hash algorithm.
+   * @param  input  Input stream containing data to hash.
+   * @param  hash  Hash to compare with.
+   *
+   * @return  True if the hash of the data under the given digest is equal to the hash, false otherwise.
+   */
+  public static boolean compareHash(final Digest digest, final InputStream input, final byte[] hash)
+  {
+    return Arrays.equals(hash(digest, input), hash);
+  }
+
+
+  /**
+   * Determines whether the salted hash of the given input equals a known hash. The hash value is assumed to contain
+   * the salt appended to the hash output.
+   *
+   * @param  digest  Hash algorithm.
+   * @param  input  Input to hash.
+   * @param  iterations  Number of hash rounds.
+   * @param  saltedHash  Hash to compare with of the form <code>DIGEST+SALT</code>, that is, where the salt is appended
+   *                     to the digest output bytes.
+   *
+   * @return  True if the hash of the data under the given digest is equal to the hash, false otherwise.
+   */
+  public static boolean compareSaltedHash(
+    final Digest digest, final byte[] input, final int iterations, final byte[] saltedHash)
+  {
+    final byte[] salt = new byte[saltedHash.length - digest.getDigestSize()];
+    System.arraycopy(saltedHash, digest.getDigestSize(), salt, 0, salt.length);
+    return Arrays.equals(hash(digest, input, salt, iterations), saltedHash);
+  }
+
+
+  /**
+   * Determines whether the salted hash of the given input equals a known hash. The hash value is assumed to contain
+   * the salt appended to the hash output.
+   *
+   * @param  digest  Hash algorithm.
+   * @param  input  Input stream containing data to hash.
+   * @param  iterations  Number of hash rounds.
+   * @param  saltedHash  Hash to compare with of the form <code>DIGEST+SALT</code>, that is, where the salt is appended
+   *                     to the digest output bytes.
+   *
+   * @return  True if the hash of the data under the given digest is equal to the hash, false otherwise.
+   */
+  public static boolean compareSaltedHash(
+    final Digest digest, final InputStream input, final int iterations, final byte[] saltedHash)
+  {
+    final byte[] salt = new byte[saltedHash.length - digest.getDigestSize()];
+    System.arraycopy(saltedHash, digest.getDigestSize(), salt, 0, salt.length);
+    return Arrays.equals(hash(digest, input, salt, iterations), saltedHash);
   }
 
 
