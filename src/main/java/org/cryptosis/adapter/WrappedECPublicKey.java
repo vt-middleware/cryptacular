@@ -25,7 +25,7 @@ import java.security.spec.ECPoint;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 
 /**
- * JCE/JDK EC private key that wraps the corresponding BC EC private key type, {@link ECPrivateKeyParameters}.
+ * JCE/JDK EC public key that wraps the corresponding BC EC public key type, {@link ECPublicKeyParameters}.
  *
  * @author Marvin S. Addison
  */
