@@ -39,6 +39,15 @@ public class SaltedHashBean extends EncodingHashBean
 
 
   /**
+   * @return  Random salt source.
+   */
+  public Nonce getSaltSource()
+  {
+    return saltSource;
+  }
+
+
+  /**
    * Sets the random salt source.
    *
    * @param  saltSource  Source of random salt data.
@@ -46,6 +55,15 @@ public class SaltedHashBean extends EncodingHashBean
   public void setSaltSource(final Nonce saltSource)
   {
     this.saltSource = saltSource;
+  }
+
+
+  /**
+   * @return  Number of iterations the digest function is applied to the input data.
+   */
+  public int getIterations()
+  {
+    return iterations;
   }
 
 

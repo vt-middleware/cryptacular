@@ -41,6 +41,15 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
 
   /**
+   * @return  Keystore that contains the {@link SecretKey}.
+   */
+  public KeyStore getKeyStore()
+  {
+    return keyStore;
+  }
+
+
+  /**
    * Sets the keystore that contains the {@link SecretKey}.
    *
    * @param  keyStore  Non-null keystore.
@@ -48,6 +57,15 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
   public void setKeyStore(final KeyStore keyStore)
   {
     this.keyStore = keyStore;
+  }
+
+
+  /**
+   * @return  Alias that specifies the {@link KeyStore} entry containing the {@link SecretKey}.
+   */
+  public String getAlias()
+  {
+    return alias;
   }
 
 

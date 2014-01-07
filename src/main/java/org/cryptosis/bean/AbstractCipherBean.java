@@ -51,6 +51,15 @@ public abstract class AbstractCipherBean implements CipherBean
 
 
   /**
+   * @return  Keystore that contains the {@link SecretKey}.
+   */
+  public KeyStore getKeyStore()
+  {
+    return keyStore;
+  }
+
+
+  /**
    * Sets the keystore containing encryption/decryption key(s). The keystore must contain a {@link SecretKey} entry
    * whose alias is given by {@link #setKeyAlias(String)}, which will be used at the encryption key. It may contain
    * additional symmetric keys to support, for example, key rollover where some existing ciphertexts have headers
@@ -62,6 +71,15 @@ public abstract class AbstractCipherBean implements CipherBean
   public void setKeyStore(final KeyStore keyStore)
   {
     this.keyStore = keyStore;
+  }
+
+
+  /**
+   * @return  Alias that specifies the {@link KeyStore} entry containing the {@link SecretKey}.
+   */
+  public String getKeyAlias()
+  {
+    return keyAlias;
   }
 
 
@@ -84,6 +102,15 @@ public abstract class AbstractCipherBean implements CipherBean
   public void setKeyPassword(final String keyPassword)
   {
     this.keyPassword = keyPassword;
+  }
+
+
+  /**
+   * @return  Nonce/IV generation strategy.
+   */
+  public Nonce getNonce()
+  {
+    return nonce;
   }
 
 

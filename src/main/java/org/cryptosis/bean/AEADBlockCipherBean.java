@@ -45,6 +45,15 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
 
 
   /**
+   * @return  Block cipher specification.
+   */
+  public Spec<AEADBlockCipher> getBlockCipherSpec()
+  {
+    return blockCipherSpec;
+  }
+
+
+  /**
    * Sets the AEAD block cipher specification.
    *
    * @param  blockCipherSpec  Describes a block cipher in terms of algorithm, mode, and padding.

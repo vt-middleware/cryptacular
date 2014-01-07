@@ -41,13 +41,31 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
 
   /**
+   * @return  Key algorithm name, e.g. AES.
+   */
+  public String getAlgorithm()
+  {
+    return algorithm;
+  }
+
+
+  /**
    * Sets the key algorithm.
    *
-   * @param  algorithm  Secret key algorithm.
+   * @param  algorithm  Secret key algorithm, e.g. AES.
    */
   public void setAlgorithm(final String algorithm)
   {
     this.algorithm = algorithm;
+  }
+
+
+  /**
+   * @return  Resource containing key data.
+   */
+  public Resource getResource()
+  {
+    return resource;
   }
 
 

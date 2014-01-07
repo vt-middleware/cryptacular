@@ -38,6 +38,15 @@ public class SimpleHashBean implements HashBean<byte[]>
 
 
   /**
+   * @return  Digest specification that determines the instance of {@link Digest} used to compute the hash.
+   */
+  public Spec<Digest> getDigestSpec()
+  {
+    return digestSpec;
+  }
+
+
+  /**
    * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
    *
    * @param  digestSpec  Digest algorithm specification.

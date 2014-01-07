@@ -44,6 +44,15 @@ public class EncodingHashBean implements HashBean<String>
 
 
   /**
+   * @return  Digest specification that determines the instance of {@link Digest} used to compute the hash.
+   */
+  public Spec<Digest> getDigestSpec()
+  {
+    return digestSpec;
+  }
+
+
+  /**
    * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
    *
    * @param  digestSpec  Digest algorithm specification.
@@ -51,6 +60,15 @@ public class EncodingHashBean implements HashBean<String>
   public void setDigestSpec(final DigestSpec digestSpec)
   {
     this.digestSpec = digestSpec;
+  }
+
+
+  /**
+   * @return  codec specification that determines the encoding applied to the hash output bytes.
+   */
+  public Spec<Codec> getCodecSpec()
+  {
+    return codecSpec;
   }
 
 
