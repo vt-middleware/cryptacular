@@ -1,8 +1,11 @@
-# Cryptosis: Encryption Tools for Java
+# Cryptacular
 
-Cryptosis provides a set of lightweight utilities around the Bouncy Castle
-cryptography library for Java. The library strives to make common
-encryption operations simple and secure by providing sensible defaults
-and adhering to best practices recommended by US standards and Internet
-RFCs.
+The spectacular complement to the Bouncy Castle crypto API for Java.
+
+Cryptacular in a nutshell:
+
+* Utilities to perform common crypto operations (hash, encrypt, encode).
+* Stateful, thread-safe bean components.
+* Components to facilitate strict adherence to standards.
+* Comprehensive documentation and examples.
 
