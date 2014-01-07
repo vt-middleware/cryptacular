@@ -47,4 +47,26 @@ public interface HashBean<T>
    * @return  Raw digest output.
    */
   T hash(InputStream input);
+
+
+  /**
+   * Compares the hash of the input against a known hash output.
+   *
+   * @param  input  Data to hash.
+   * @param  hash  Known hash against which to compare.
+   *
+   * @return  True if hash of input under digest is equal to given hash, false otherwise.
+   */
+  boolean compare(byte[] input, T hash);
+
+
+  /**
+   * Compares the hash of the input against a known hash output.
+   *
+   * @param  input  Stream containing data to hash.
+   * @param  hash  Known hash against which to compare.
+   *
+   * @return  True if hash of input under digest is equal to given hash, false otherwise.
+   */
+  boolean compare(InputStream input, T hash);
 }

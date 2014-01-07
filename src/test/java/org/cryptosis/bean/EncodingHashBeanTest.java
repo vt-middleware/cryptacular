@@ -27,6 +27,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Unit test for {@link EncodingHashBean}.
@@ -62,5 +63,16 @@ public class EncodingHashBeanTest
     bean.setDigestSpec(digest);
     bean.setCodecSpec(codec);
     assertEquals(bean.hash(input), expected);
+  }
+
+
+  @Test(dataProvider = "test-data")
+  public void testCompare(
+    final byte[] input, final DigestSpec digest, final CodecSpec codec, final String expected) throws Exception
+  {
+    final EncodingHashBean bean = new EncodingHashBean();
+    bean.setDigestSpec(digest);
+    bean.setCodecSpec(codec);
+    assertTrue(bean.compare(input, expected));
   }
 }

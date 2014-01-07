@@ -28,6 +28,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Unit test for {@link SaltedHashBean}.
@@ -44,6 +45,7 @@ public class SaltedHashBeanTest
         CodecUtil.b64("7FHsteHnm6XQsJT1TTKbxw=="),
         new DigestSpec("SHA1"),
         CodecSpec.BASE64,
+        new StaticNonce(CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A==")),
         2,
         "xNnVXeRl3w5AWJBIdXSkmU1hFj16Gno8KeiNJ6AWlG9K2pD0",
       },
@@ -52,28 +54,72 @@ public class SaltedHashBeanTest
 
   @Test(dataProvider = "test-data")
   public void testHash(
-    final byte[] input, final DigestSpec digest, final CodecSpec codec, final int iterations, final String expected)
+    final byte[] input,
+    final DigestSpec digest,
+    final CodecSpec codec,
+    final Nonce saltSource,
+    final int iterations,
+    final String expected)
     throws Exception
   {
-
     final SaltedHashBean bean = new SaltedHashBean();
     bean.setDigestSpec(digest);
     bean.setCodecSpec(codec);
     bean.setIterations(iterations);
-    bean.setSaltSource(new Nonce()
-    {
-      @Override
-      public byte[] generate() throws LimitException
-      {
-        return CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A==");
-      }
-
-      @Override
-      public int getLength()
-      {
-        return 16;
-      }
-    });
+    bean.setSaltSource(saltSource);
     assertEquals(bean.hash(input), expected);
+  }
+
+
+  @Test(dataProvider = "test-data")
+  public void testCompare(
+    final byte[] input,
+    final DigestSpec digest,
+    final CodecSpec codec,
+    final Nonce saltSource,
+    final int iterations,
+    final String expected)
+    throws Exception
+  {
+    final SaltedHashBean bean = new SaltedHashBean();
+    bean.setDigestSpec(digest);
+    bean.setCodecSpec(codec);
+    bean.setSaltSource(saltSource);
+    bean.setIterations(iterations);
+    assertTrue(bean.compare(input, expected));
+  }
+
+
+  /**
+   * Nonce generator implementation with invariant nonce value.
+   */
+  private static class StaticNonce  implements Nonce
+  {
+    /** Static nonce value. */
+    private byte[] nonce;
+
+    /**
+     * Creates a new instance with given static nonce value.
+     *
+     * @param  nonce  Static nonce value.
+     */
+    public StaticNonce(final byte[] nonce)
+    {
+      this.nonce = nonce;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public byte[] generate() throws LimitException
+    {
+      return nonce;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getLength()
+    {
+      return nonce.length;
+    }
   }
 }

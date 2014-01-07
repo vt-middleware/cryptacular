@@ -19,6 +19,8 @@
 
 package org.cryptosis.bean;
 
+import java.io.InputStream;
+
 import org.cryptosis.generator.Nonce;
 import org.cryptosis.util.HashUtil;
 
@@ -55,6 +57,30 @@ public class SaltedHashBean extends EncodingHashBean
   public void setIterations(final int iterations)
   {
     this.iterations = iterations;
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean compare(final byte[] input, final String hash)
+  {
+    return HashUtil.compareSaltedHash(
+      digestSpec.newInstance(),
+      input,
+      iterations,
+      decode(hash));
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean compare(final InputStream input, final String hash)
+  {
+    return HashUtil.compareSaltedHash(
+      digestSpec.newInstance(),
+      input,
+      iterations,
+      decode(hash));
   }
 
 

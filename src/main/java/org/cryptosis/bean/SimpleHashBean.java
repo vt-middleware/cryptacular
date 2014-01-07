@@ -62,4 +62,20 @@ public class SimpleHashBean implements HashBean<byte[]>
   {
     return HashUtil.hash(digestSpec.newInstance(), input);
   }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean compare(final byte[] input, final byte[] hash)
+  {
+    return HashUtil.compareHash(digestSpec.newInstance(), input, hash);
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean compare(final InputStream input, final byte[] hash)
+  {
+    return HashUtil.compareHash(digestSpec.newInstance(), input, hash);
+  }
 }

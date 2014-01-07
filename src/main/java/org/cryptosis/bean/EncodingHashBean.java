@@ -70,7 +70,7 @@ public class EncodingHashBean implements HashBean<String>
   @Override
   public String hash(final byte[] input)
   {
-    return CodecUtil.encode(codecSpec.newInstance().getEncoder(), computeHash(input));
+    return encode(computeHash(input));
   }
 
 
@@ -78,7 +78,23 @@ public class EncodingHashBean implements HashBean<String>
   @Override
   public String hash(final InputStream input)
   {
-    return CodecUtil.encode(codecSpec.newInstance().getEncoder(), computeHash(StreamUtil.readAll(input)));
+    return encode(computeHash(StreamUtil.readAll(input)));
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean compare(final byte[] input, final String hash)
+  {
+    return hash(input).equals(hash);
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean compare(final InputStream input, final String hash)
+  {
+    return hash(input).equals(hash);
   }
 
 
@@ -92,5 +108,31 @@ public class EncodingHashBean implements HashBean<String>
   protected byte[] computeHash(final byte[] input)
   {
     return HashUtil.hash(digestSpec.newInstance(), input);
+  }
+
+
+  /**
+   * Encodes the given data to character output.
+   *
+   * @param  data  Data to character encode.
+   *
+   * @return  Encoded data.
+   */
+  protected String encode(final byte[] data)
+  {
+    return CodecUtil.encode(codecSpec.newInstance().getEncoder(), data);
+  }
+
+
+  /**
+   * Decodes the given character data to bytes.
+   *
+   * @param  data  Character data to decode.
+   *
+   * @return  Decoded data.
+   */
+  protected byte[] decode(final String data)
+  {
+    return CodecUtil.decode(codecSpec.newInstance().getDecoder(), data);
   }
 }
