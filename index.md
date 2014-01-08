@@ -17,8 +17,10 @@ CipherUtil.encrypt(cipher, key, new RBGNonce(), StreamUtil.makeStream(file), tem
 {% endhighlight %}
 
 ## Spectacularly secure
-Cryptography contains a number of pitfalls in the details, and Cryptacular components that do the right thing by
-default and APIs that suggest the right component to perform a particular operation according to best practices.
+Cryptography contains a number of pitfalls in the details, and Cryptacular provides prophylaxis:
+
+* Components that do the right thing by default
+* APIs that suggest the right component to perform a particular operation according to best practices
 
 {% highlight java %}
 // Cryptacular forces the use of a dynamic IV per encryption,
