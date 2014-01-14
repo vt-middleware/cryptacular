@@ -19,6 +19,9 @@
 
 package org.cryptacular.bean;
 
+import org.bouncycastle.crypto.Digest;
+import org.cryptacular.spec.Spec;
+
 /**
  * Computes a hash using an instance of {@link Digest} specified by
  * {@link #setDigestSpec(org.cryptacular.spec.Spec)}.
@@ -27,6 +30,22 @@ package org.cryptacular.bean;
  */
 public class SimpleHashBean extends AbstractHashBean implements HashBean<byte[]>
 {
+  /** Creates a new instance. */
+  public SimpleHashBean() {}
+
+
+  /**
+   * Creates a new instance by specifying all properties.
+   *
+   * @param  digestSpec  Digest specification.
+   * @param  iterations  Number of hash rounds.
+   */
+  public SimpleHashBean(final Spec<Digest> digestSpec, final int iterations)
+  {
+    super(digestSpec, iterations);
+  }
+
+
   /** {@inheritDoc} */
   @Override
   public byte[] hash(final Object ... data)

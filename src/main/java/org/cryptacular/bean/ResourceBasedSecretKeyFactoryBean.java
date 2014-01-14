@@ -40,6 +40,23 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
   private Resource resource;
 
 
+  /** Creates a new instance. */
+  public ResourceBasedSecretKeyFactoryBean() {}
+
+
+  /**
+   * Creates a new instance by specifying all properties.
+   *
+   * @param  resource  Resource containing encoded key data.
+   * @param  algorithm  Algorithm name of cipher with which key will be used.
+   */
+  public ResourceBasedSecretKeyFactoryBean(final Resource resource, final String algorithm)
+  {
+    setResource(resource);
+    setAlgorithm(algorithm);
+  }
+
+
   /**
    * @return  Key algorithm name, e.g. AES.
    */

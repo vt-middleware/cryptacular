@@ -44,6 +44,25 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
   private String password;
 
 
+  /** Creates a new instance. */
+  public KeyStoreFactoryBean() {}
+
+
+  /**
+   * Creates a new instance by specifying all properties.
+   *
+   * @param  resource  Resource containing encoded keystore data.
+   * @param  type  Keystore type, e.g. JCEKS.
+   * @param  password  Password used to decrypt key entry in keystore.
+   */
+  public KeyStoreFactoryBean(final Resource resource, final String type, final String password)
+  {
+    setResource(resource);
+    setType(type);
+    setPassword(password);
+  }
+
+
   /**
    * @return  Keystore type.
    */

@@ -19,6 +19,7 @@
 
 package org.cryptacular.bean;
 
+import org.bouncycastle.crypto.Digest;
 import org.cryptacular.codec.Codec;
 import org.cryptacular.spec.Spec;
 import org.cryptacular.util.CodecUtil;
@@ -32,6 +33,24 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
 {
   /** Determines kind of encoding. */
   private Spec<Codec> codecSpec;
+
+
+  /** Creates a new instance. */
+  public EncodingHashBean() {}
+
+
+  /**
+   * Creates a new instance by specifying all properties.
+   *
+   * @param  codecSpec  Digest specification.
+   * @param  digestSpec  Digest specification.
+   * @param  iterations  Number of hash rounds.
+   */
+  public EncodingHashBean(final Spec<Codec> codecSpec, final Spec<Digest> digestSpec, final int iterations)
+  {
+    super(digestSpec, iterations);
+    setCodecSpec(codecSpec);
+  }
 
 
   /**

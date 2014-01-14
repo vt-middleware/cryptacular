@@ -37,6 +37,23 @@ public abstract class AbstractHashBean
   private int iterations = 1;
 
 
+  /** Creates a new instance. */
+  public AbstractHashBean() {}
+
+
+  /**
+   * Creates a new instance by specifying all properties.
+   *
+   * @param  digestSpec  Digest specification.
+   * @param  iterations  Number of hash rounds.
+   */
+  public AbstractHashBean(final Spec<Digest> digestSpec, final int iterations)
+  {
+    setDigestSpec(digestSpec);
+    setIterations(iterations);
+  }
+
+
   /**
    * @return  Digest specification that determines the instance of {@link Digest} used to compute the hash.
    */

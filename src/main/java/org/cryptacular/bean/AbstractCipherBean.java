@@ -50,6 +50,27 @@ public abstract class AbstractCipherBean implements CipherBean
   private Nonce nonce;
 
 
+  /** Creates a new instance. */
+  public AbstractCipherBean() {}
+
+
+  /**
+   * Creates a new instance by specifying all properties.
+   *
+   * @param  keyStore  Key store containing encryption key.
+   * @param  keyAlias  Name of encryption key entry in key store.
+   * @param  keyPassword  Password used to decrypt key entry in keystore.
+   * @param  nonce  Nonce/IV generator.
+   */
+  public AbstractCipherBean(final KeyStore keyStore, final String keyAlias, final String keyPassword, final Nonce nonce)
+  {
+    setKeyStore(keyStore);
+    setKeyAlias(keyAlias);
+    setKeyPassword(keyPassword);
+    setNonce(nonce);
+  }
+
+
   /**
    * @return  Keystore that contains the {@link SecretKey}.
    */
