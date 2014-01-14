@@ -8,11 +8,10 @@ The spectacular complement to the Bouncy Castle crypto API for Java.
 Perform common cryptographic operations using familiar APIS, JCE and lightweight Bouncy Castle API.
 
 {% highlight java %}
-final AEADBlockCipher cipher = new GCMBlockCipher(new AESEngine());
-final SecretKey key = SecretKeyGenerator.generate(cipher.getUnderlyingCipher());
-final File file = new File("/path/to/plain.txt");
-final String expected = new String(StreamUtil.readAll(file));
-final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+AEADBlockCipher cipher = new GCMBlockCipher(new AESEngine());
+SecretKey key = SecretKeyGenerator.generate(cipher.getUnderlyingCipher());
+File file = new File("/path/to/plain.txt");
+ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
 CipherUtil.encrypt(cipher, key, new RBGNonce(), StreamUtil.makeStream(file), tempOut);
 {% endhighlight %}
 
@@ -45,28 +44,35 @@ Cryptacular provides a number of components to facilitate common use cases.
 
 {% highlight java %}
 // Static utility classes to quickly perform common operations
-byte[] hash = HashUtil.sha1(ByteUtil.toBytes("Some text"));
+byte[] hash = HashUtil.sha1("Some text");
+{% endhighlight %}
+
+{% highlight java %}
+// Consistent API for handling stream data as easily as strings/bytes
+byte[] hash = HashUtil.sha1(StreamUtil.makeStream(file));
 {% endhighlight %}
 
 {% highlight java %}
 // Factory beans for keys and keystores
-final KeyStoreFactoryBean keyStoreFactory = new KeyStoreFactoryBean();
+KeyStoreFactoryBean keyStoreFactory = new KeyStoreFactoryBean();
 keyStoreFactory.setResource(new FileResource(new File(keyStorePath)));
 keyStoreFactory.setPassword("vtcrypt");
 keyStoreFactory.setType(keyStoreType);
-final KeyStoreBasedSecretKeyFactoryBean secretKeyFactory = new KeyStoreBasedSecretKeyFactoryBean();
+KeyStoreBasedSecretKeyFactoryBean secretKeyFactory = new KeyStoreBasedSecretKeyFactoryBean();
 secretKeyFactory.setKeyStore(keyStoreFactory.newInstance());
 secretKeyFactory.setAlias(alias);
 secretKeyFactory.setPassword("vtcrypt");
-final SecretKey key = secretKeyFactory.newInstance();
+SecretKey key = secretKeyFactory.newInstance();
 {% endhighlight %}
 
 {% highlight java %}
 // Thread-safe beans for cryptographic operations
-final HashBean bean = new SaltedHashBean();
+// Here we demonstrate a bean to compute password hashes in a secure manner
+EncodingHashBean bean = new EncodingHashBean();
 bean.setDigestSpec(new DigestSpec("SHA-256"));
 bean.setCodecSpec(CodecSpec.HEX);
-bean.setSaltSource(new RBGNonce());
 bean.setIterations(5);
-final String hexHash = bean.digest(ByteUtil.toBytes("password"));
+Nonce saltSource = new RBGNonce(8);
+String hexHash = bean.digest("password", saltSource.generate());
 {% endhighlight %}
+
