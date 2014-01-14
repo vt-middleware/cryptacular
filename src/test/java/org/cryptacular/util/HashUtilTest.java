@@ -75,6 +75,25 @@ public class HashUtilTest
     };
   }
 
+  @DataProvider(name = "hash-compare")
+  public Object[][] getHashCompareData()
+  {
+    return new Object[][] {
+      {
+        new SHA1Digest(),
+        CodecUtil.b64("7fyOZXGp+gKMziV/2Px7RIMkxyI2O1H8"),
+        1,
+        ByteUtil.toBytes("password"),
+      },
+      {
+        new SHA1Digest(),
+        CodecUtil.b64("0aDM5g/qqfVV/8MIqkTKQaklWSg="),
+        1,
+        ByteUtil.toBytes("deoxyribonucleic acid"),
+      },
+    };
+  }
+
   @DataProvider(name = "salted-hash-compare")
   public Object[][] getSaltedHashCompareData()
   {
@@ -112,6 +131,18 @@ public class HashUtilTest
     throws Exception
   {
     assertEquals(CodecUtil.b64(HashUtil.hash(digest, iterations, data)), expected);
+  }
+
+
+  @Test(dataProvider = "hash-compare")
+  public void testCompareHash(
+    final Digest digest,
+    final byte[] hash,
+    final int iterations,
+    final byte[] data)
+    throws Exception
+  {
+    assertTrue(HashUtil.compareHash(digest, hash, iterations, data));
   }
 
 

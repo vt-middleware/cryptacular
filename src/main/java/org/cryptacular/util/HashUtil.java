@@ -125,14 +125,25 @@ public final class HashUtil
    * Determines whether the hash of the given input equals a known value.
    *
    * @param  digest  Hash algorithm.
-   * @param  hash  Hash to compare with.
+   * @param  hash  Hash to compare with. If the length of the array is greater than the length of the
+   *               digest output, anything beyond the digest length is considered salt data that is hashed
+   *               <strong>after</strong> the input data.
+   * @param  iterations  Number of hash rounds.
    * @param  data  Data to hash.
    *
    * @return  True if the hash of the data under the given digest is equal to the hash, false otherwise.
    */
-  public static boolean compareHash(final Digest digest, final byte[] hash, final Object ... data)
+  public static boolean compareHash(
+    final Digest digest, final byte[] hash, final int iterations, final Object ... data)
   {
-    return Arrays.equals(hash(digest, data), hash);
+    if (hash.length > digest.getDigestSize()) {
+      final byte[] hashPart = Arrays.copyOfRange(hash, 0, digest.getDigestSize());
+      final byte[] saltPart = Arrays.copyOfRange(hash, digest.getDigestSize(), hash.length);
+      final Object[] dataWithSalt = Arrays.copyOf(data, data.length + 1);
+      dataWithSalt[data.length] = saltPart;
+      return Arrays.equals(hash(digest, iterations, dataWithSalt), hashPart);
+    }
+    return Arrays.equals(hash(digest, iterations, data), hash);
   }
 
 

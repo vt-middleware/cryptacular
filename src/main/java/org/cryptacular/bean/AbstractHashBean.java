@@ -91,4 +91,20 @@ public abstract class AbstractHashBean
   {
     return HashUtil.hash(digestSpec.newInstance(), iterations, data);
   }
+
+
+  /**
+   * Compares the hash of the given data against a known hash output.
+   *
+   * @param  hash  Known hash value. If the length of the array is greater than the length of the
+   *               digest output, anything beyond the digest length is considered salt data that is hashed
+   *               <strong>after</strong> the input data.
+   * @param  data  Data to hash.
+   *
+   * @return  True if hashed data equals known hash output, false otherwise.
+   */
+  protected boolean compareInternal(final byte[] hash, final Object ... data)
+  {
+    return HashUtil.compareHash(digestSpec.newInstance(), hash, iterations, data);
+  }
 }

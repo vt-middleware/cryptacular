@@ -21,11 +21,13 @@ package org.cryptacular.bean;
 
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
+import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Unit test for {@link EncodingHashBean}.
@@ -34,8 +36,8 @@ import static org.testng.Assert.assertEquals;
  */
 public class EncodingHashBeanTest
 {
-  @DataProvider(name = "test-data")
-  public Object[][] getTestData()
+  @DataProvider(name = "hash-data")
+  public Object[][] getHashData()
   {
     return new Object[][] {
       {
@@ -61,7 +63,24 @@ public class EncodingHashBeanTest
     };
   }
 
-  @Test(dataProvider = "test-data")
+  @DataProvider(name = "compare-data")
+  public Object[][] getCompareData()
+  {
+    return new Object[][] {
+      {
+        new DigestSpec("SHA1"),
+        CodecSpec.BASE64,
+        "7fyOZXGp+gKMziV/2Px7RIMkxyI2O1H8",
+        1,
+        new Object[] {
+          ByteUtil.toBytes("password"),
+        },
+      },
+    };
+  }
+
+
+  @Test(dataProvider = "hash-data")
   public void testHash(
     final DigestSpec digest,
     final CodecSpec codec,
@@ -75,5 +94,22 @@ public class EncodingHashBeanTest
     bean.setCodecSpec(codec);
     bean.setIterations(iterations);
     assertEquals(bean.hash(input), expected);
+  }
+
+
+  @Test(dataProvider = "compare-data")
+  public void testCompare(
+    final DigestSpec digest,
+    final CodecSpec codec,
+    final String hash,
+    final int iterations,
+    final Object[] input)
+    throws Exception
+  {
+    final EncodingHashBean bean = new EncodingHashBean();
+    bean.setDigestSpec(digest);
+    bean.setCodecSpec(codec);
+    bean.setIterations(iterations);
+    assertTrue(bean.compare(hash, input));
   }
 }
