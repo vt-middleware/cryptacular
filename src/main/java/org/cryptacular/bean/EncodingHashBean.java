@@ -19,52 +19,23 @@
 
 package org.cryptacular.bean;
 
-import java.io.InputStream;
-
-import org.bouncycastle.crypto.Digest;
 import org.cryptacular.codec.Codec;
-import org.cryptacular.spec.DigestSpec;
 import org.cryptacular.spec.Spec;
 import org.cryptacular.util.CodecUtil;
-import org.cryptacular.util.HashUtil;
-import org.cryptacular.util.StreamUtil;
 
 /**
  * Computes a hash in an encoded format, e.g. hex, base64.
  *
  * @author Marvin S. Addison
  */
-public class EncodingHashBean implements HashBean<String>
+public class EncodingHashBean extends AbstractHashBean implements HashBean<String>
 {
-  /** Digest specification. */
-  protected Spec<Digest> digestSpec;
-
   /** Determines kind of encoding. */
   private Spec<Codec> codecSpec;
 
 
   /**
-   * @return  Digest specification that determines the instance of {@link Digest} used to compute the hash.
-   */
-  public Spec<Digest> getDigestSpec()
-  {
-    return digestSpec;
-  }
-
-
-  /**
-   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
-   *
-   * @param  digestSpec  Digest algorithm specification.
-   */
-  public void setDigestSpec(final DigestSpec digestSpec)
-  {
-    this.digestSpec = digestSpec;
-  }
-
-
-  /**
-   * @return  codec specification that determines the encoding applied to the hash output bytes.
+   * @return  Codec specification that determines the encoding applied to the hash output bytes.
    */
   public Spec<Codec> getCodecSpec()
   {
@@ -86,71 +57,9 @@ public class EncodingHashBean implements HashBean<String>
 
   /** {@inheritDoc} */
   @Override
-  public String hash(final byte[] input)
+  public String hash(final Object ... data)
   {
-    return encode(computeHash(input));
+    return CodecUtil.encode(codecSpec.newInstance().getEncoder(), hashInternal(data));
   }
 
-
-  /** {@inheritDoc} */
-  @Override
-  public String hash(final InputStream input)
-  {
-    return encode(computeHash(StreamUtil.readAll(input)));
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public boolean compare(final byte[] input, final String hash)
-  {
-    return hash(input).equals(hash);
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public boolean compare(final InputStream input, final String hash)
-  {
-    return hash(input).equals(hash);
-  }
-
-
-  /**
-   * Computes the hash.
-   *
-   * @param  input  Input data to hash.
-   *
-   * @return  Unencoded digest bytes.
-   */
-  protected byte[] computeHash(final byte[] input)
-  {
-    return HashUtil.hash(digestSpec.newInstance(), input);
-  }
-
-
-  /**
-   * Encodes the given data to character output.
-   *
-   * @param  data  Data to character encode.
-   *
-   * @return  Encoded data.
-   */
-  protected String encode(final byte[] data)
-  {
-    return CodecUtil.encode(codecSpec.newInstance().getEncoder(), data);
-  }
-
-
-  /**
-   * Decodes the given character data to bytes.
-   *
-   * @param  data  Character data to decode.
-   *
-   * @return  Decoded data.
-   */
-  protected byte[] decode(final String data)
-  {
-    return CodecUtil.decode(codecSpec.newInstance().getDecoder(), data);
-  }
 }

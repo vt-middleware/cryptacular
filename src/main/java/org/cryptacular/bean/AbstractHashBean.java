@@ -19,42 +19,41 @@
 
 package org.cryptacular.bean;
 
-import java.io.InputStream;
-
-import org.cryptacular.generator.Nonce;
+import org.bouncycastle.crypto.Digest;
+import org.cryptacular.spec.Spec;
 import org.cryptacular.util.HashUtil;
 
 /**
- * Computes a salted hash from a random salt source.
+ * Abstract base class for all hash beans.
  *
  * @author Marvin S. Addison
  */
-public class SaltedHashBean extends EncodingHashBean
+public abstract class AbstractHashBean
 {
-  /** Random salt source. */
-  private Nonce saltSource;
+  /** Digest specification. */
+  private Spec<Digest> digestSpec;
 
-  /** Number of hash iterations. */
+  /** Number of hash rounds. */
   private int iterations = 1;
 
 
   /**
-   * @return  Random salt source.
+   * @return  Digest specification that determines the instance of {@link Digest} used to compute the hash.
    */
-  public Nonce getSaltSource()
+  public Spec<Digest> getDigestSpec()
   {
-    return saltSource;
+    return digestSpec;
   }
 
 
   /**
-   * Sets the random salt source.
+   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
    *
-   * @param  saltSource  Source of random salt data.
+   * @param  digestSpec  Digest algorithm specification.
    */
-  public void setSaltSource(final Nonce saltSource)
+  public void setDigestSpec(final Spec<Digest> digestSpec)
   {
-    this.saltSource = saltSource;
+    this.digestSpec = digestSpec;
   }
 
 
@@ -70,42 +69,26 @@ public class SaltedHashBean extends EncodingHashBean
   /**
    * Sets the number of iterations the digest function is applied to the input data.
    *
-   * @param  iterations  Digest function iterations. Default value is 1.
+   * @param  iterations  Number of hash rounds. Default value is 1.
    */
   public void setIterations(final int iterations)
   {
+    if (iterations < 1) {
+      throw new IllegalArgumentException("Iterations must be positive");
+    }
     this.iterations = iterations;
   }
 
 
-  /** {@inheritDoc} */
-  @Override
-  public boolean compare(final byte[] input, final String hash)
+  /**
+   * Hashes the given data.
+   *
+   * @param  data  Data to hash.
+   *
+   * @return  Digest output.
+   */
+  protected byte[] hashInternal(final Object ... data)
   {
-    return HashUtil.compareSaltedHash(
-      digestSpec.newInstance(),
-      input,
-      iterations,
-      decode(hash));
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public boolean compare(final InputStream input, final String hash)
-  {
-    return HashUtil.compareSaltedHash(
-      digestSpec.newInstance(),
-      input,
-      iterations,
-      decode(hash));
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  protected byte[] computeHash(final byte[] input)
-  {
-    return HashUtil.hash(digestSpec.newInstance(), input, saltSource.generate(), iterations);
+    return HashUtil.hash(digestSpec.newInstance(), iterations, data);
   }
 }

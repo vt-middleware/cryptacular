@@ -19,72 +19,18 @@
 
 package org.cryptacular.bean;
 
-import java.io.InputStream;
-
-import org.bouncycastle.crypto.Digest;
-import org.cryptacular.spec.Spec;
-import org.cryptacular.util.HashUtil;
-
 /**
  * Computes a hash using an instance of {@link Digest} specified by
  * {@link #setDigestSpec(org.cryptacular.spec.Spec)}.
  *
  * @author Marvin S. Addison
  */
-public class SimpleHashBean implements HashBean<byte[]>
+public class SimpleHashBean extends AbstractHashBean implements HashBean<byte[]>
 {
-  /** Digest specification. */
-  private Spec<Digest> digestSpec;
-
-
-  /**
-   * @return  Digest specification that determines the instance of {@link Digest} used to compute the hash.
-   */
-  public Spec<Digest> getDigestSpec()
-  {
-    return digestSpec;
-  }
-
-
-  /**
-   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
-   *
-   * @param  digestSpec  Digest algorithm specification.
-   */
-  public void setDigestSpec(final Spec<Digest> digestSpec)
-  {
-    this.digestSpec = digestSpec;
-  }
-
-
   /** {@inheritDoc} */
   @Override
-  public byte[] hash(final byte[] input)
+  public byte[] hash(final Object ... data)
   {
-    return HashUtil.hash(digestSpec.newInstance(), input);
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public byte[] hash(final InputStream input)
-  {
-    return HashUtil.hash(digestSpec.newInstance(), input);
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public boolean compare(final byte[] input, final byte[] hash)
-  {
-    return HashUtil.compareHash(digestSpec.newInstance(), input, hash);
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public boolean compare(final InputStream input, final byte[] hash)
-  {
-    return HashUtil.compareHash(digestSpec.newInstance(), input, hash);
+    return hashInternal(data);
   }
 }

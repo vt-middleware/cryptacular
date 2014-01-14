@@ -19,7 +19,6 @@
 
 package org.cryptacular.bean;
 
-import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
 import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
@@ -28,11 +27,11 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 /**
- * Unit test for {@link EncodingHashBean}.
+ * Unit test for {@link SimpleHashBean}.
  *
  * @author Marvin S. Addison
  */
-public class EncodingHashBeanTest
+public class SimpleHashBeanTest
 {
   @DataProvider(name = "test-data")
   public Object[][] getTestData()
@@ -40,7 +39,6 @@ public class EncodingHashBeanTest
     return new Object[][] {
       {
         new DigestSpec("SHA1"),
-        CodecSpec.BASE64,
         new Object[] {
           CodecUtil.b64("7FHsteHnm6XQsJT1TTKbxw=="),
           CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A=="),
@@ -50,30 +48,24 @@ public class EncodingHashBeanTest
       },
       {
         new DigestSpec("SHA256"),
-        CodecSpec.HEX,
         new Object[] {
           CodecUtil.b64("7FHsteHnm6XQsJT1TTKbxw=="),
           CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A=="),
         },
         3,
-        "3a1edec6aef6d1736bec63130755690c07f04d7e7139d8fd685cc2d989961b79",
+        "Oh7exq720XNr7GMTB1VpDAfwTX5xOdj9aFzC2YmWG3k=",
       },
     };
   }
 
   @Test(dataProvider = "test-data")
   public void testHash(
-    final DigestSpec digest,
-    final CodecSpec codec,
-    final Object[] input,
-    final int iterations,
-    final String expected)
+    final DigestSpec digest, final Object[] input, final int iterations, final String expectedBase64)
     throws Exception
   {
-    final EncodingHashBean bean = new EncodingHashBean();
+    final SimpleHashBean bean = new SimpleHashBean();
     bean.setDigestSpec(digest);
-    bean.setCodecSpec(codec);
     bean.setIterations(iterations);
-    assertEquals(bean.hash(input), expected);
+    assertEquals(CodecUtil.b64(bean.hash(input)), expectedBase64);
   }
 }

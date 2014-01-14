@@ -19,8 +19,6 @@
 
 package org.cryptacular.bean;
 
-import java.io.InputStream;
-
 /**
  * Strategy interface to support beans that produce hash outputs in various formats, e.g. raw bytes, hex output, etc.
  *
@@ -32,41 +30,13 @@ public interface HashBean<T>
   /**
    * Hashes the given data.
    *
-   * @param  input  Data to hash.
+   * @param  data  Data to hash. Supported types are <code>byte[]</code>, {@link CharSequence} ,{@link InputStream},
+   *               and {@link org.cryptacular.io.Resource}.
+   *               Character data is processed in the <code>UTF-8</code> character set;
+   *               if another character set is desired, the caller should convert to <code>byte[]</code>
+   *               and provide the resulting bytes.
    *
-   * @return  Raw digest output.
+   * @return  Digest output.
    */
-  T hash(byte[] input);
-
-
-  /**
-   * Hashes the given data.
-   *
-   * @param  input  Data to hash.
-   *
-   * @return  Raw digest output.
-   */
-  T hash(InputStream input);
-
-
-  /**
-   * Compares the hash of the input against a known hash output.
-   *
-   * @param  input  Data to hash.
-   * @param  hash  Known hash against which to compare.
-   *
-   * @return  True if hash of input under digest is equal to given hash, false otherwise.
-   */
-  boolean compare(byte[] input, T hash);
-
-
-  /**
-   * Compares the hash of the input against a known hash output.
-   *
-   * @param  input  Stream containing data to hash.
-   * @param  hash  Known hash against which to compare.
-   *
-   * @return  True if hash of input under digest is equal to given hash, false otherwise.
-   */
-  boolean compare(InputStream input, T hash);
+  T hash(Object ... data);
 }

@@ -26,6 +26,7 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.util.encoders.Hex;
+import org.cryptacular.SaltedHash;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -41,30 +42,49 @@ public class HashUtilTest
 {
   private static final byte[] SALT = new byte[] {0, 1, 2, 3, 4, 5, 6, 7};
 
-  @DataProvider(name = "salted-hash-iter")
+  @DataProvider(name = "salted-hashes")
   public Object[][] getSaltedHashData()
   {
     return new Object[][] {
-      new Object[] {
+      {
         new SHA1Digest(),
-        "deoxyribonucleic acid",
-        null,
+        new Object[] {
+          ByteUtil.toBytes("deoxyribonucleic acid"),
+        },
         1,
-        "d1a0cce60feaa9f555ffc308aa44ca41a9255928",
+        "0aDM5g/qqfVV/8MIqkTKQaklWSg=",
       },
-      new Object[] {
+      {
         new SHA1Digest(),
-        "protoporphyrin-9",
-        SALT,
+        new Object[] {
+          ByteUtil.toBytes("protoporphyrin-9"),
+          SALT,
+        },
         1,
-        "98d8f48fbfa0d6923ba29b99a12591aba0b452380001020304050607",
+        "6SafHIoTusYN6dnK1pxx7udaBLA=",
       },
-      new Object[] {
+      {
         new SHA256Digest(),
-        "N-arachidonoylethanolamine",
-        SALT,
+        new Object[] {
+          SALT,
+          ByteUtil.toBytes("N-arachidonoylethanolamine"),
+        },
         5,
-        "456220dc121776a64f23d0bb3c5bd29fada6894dcbf69a275592ef2a60bd5e540001020304050607",
+        "RWIg3BIXdqZPI9C7PFvSn62miU3L9ponVZLvKmC9XlQ=",
+      },
+    };
+  }
+
+  @DataProvider(name = "salted-hash-compare")
+  public Object[][] getSaltedHashCompareData()
+  {
+    return new Object[][] {
+      {
+        new SHA1Digest(),
+        new SaltedHash(CodecUtil.b64("7fyOZXGp+gKMziV/2Px7RIMkxyI2O1H8"), 20, true),
+        1,
+        true,
+        ByteUtil.toBytes("password"),
       },
     };
   }
@@ -86,21 +106,25 @@ public class HashUtilTest
   }
 
 
-  @Test(dataProvider = "salted-hash-iter")
-  public void testSaltedHashIter(
-    final Digest digest, final String data, final byte[] salt, final int iterations, final String expected)
+  @Test(dataProvider = "salted-hashes")
+  public void testSaltedHash(
+    final Digest digest, final Object[] data, final int iterations, final String expected)
     throws Exception
   {
-    assertEquals(Hex.toHexString(HashUtil.hash(digest, data.getBytes("ASCII"), salt, iterations)), expected);
+    assertEquals(CodecUtil.b64(HashUtil.hash(digest, iterations, data)), expected);
   }
 
 
-  @Test(dataProvider = "salted-hash-iter")
+  @Test(dataProvider = "salted-hash-compare")
   public void testCompareSaltedHash(
-    final Digest digest, final String data, final byte[] salt, final int iterations, final String expected)
+    final Digest digest,
+    final SaltedHash saltedHash,
+    final int iterations,
+    final boolean saltAfterData,
+    final byte[] data)
     throws Exception
   {
-    assertTrue(HashUtil.compareSaltedHash(digest, data.getBytes("ASCII"), iterations, CodecUtil.hex(expected)));
+    assertTrue(HashUtil.compareHash(digest, saltedHash, iterations, saltAfterData, data));
   }
 
 
