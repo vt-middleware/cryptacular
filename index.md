@@ -25,14 +25,14 @@ Cryptography contains a number of pitfalls in the details, and Cryptacular provi
 // Cryptacular forces the use of a dynamic IV per encryption,
 // one of the most common pitfalls for block ciphers,
 // and makes storage of the IV secure and convenient for decryption
-final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
-final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
+BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
+BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
 cipherBean.setNonce(nonce);
 cipherBean.setKeyAlias("vtcrypt");
 cipherBean.setKeyPassword("vtcrypt");
 cipherBean.setKeyStore(getTestKeyStore());
 cipherBean.setBlockCipherSpec(cipherSpec);
-final byte[] ciphertext = cipherBean.encrypt(ByteUtil.toBytes(input));
+byte[] ciphertext = cipherBean.encrypt(ByteUtil.toBytes(input));
 assertEquals(ByteUtil.toString(cipherBean.decrypt(ciphertext)), input);
 {% endhighlight %}
 
@@ -40,7 +40,7 @@ Beyond avoiding cryptography errors, Cryptacular ships with components that enco
 (e.g. GCM ciphers, SHA-3 digest) and current standard (e.g. NIST SP-800-63).
 
 ## Spectacularly convenient
-Cryptacular provides a number of components to facilitate common use cases.
+Cryptacular facilitates common use cases and provides extension points to for complex cases.
 
 {% highlight java %}
 // Static utility classes to quickly perform common operations
