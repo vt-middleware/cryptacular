@@ -12,3 +12,6 @@ Years of experience with vt-crypt provided insight into what capabilities of the
 was more maintenance burden than benefit. We have attempted to build out the useful components and have dropped the
 overhead. The result is a lean extension library for Bouncy Castle that truly adds benefit in terms of capabilities
 and ease of use.
+
+This project is unrelated to the [Python module](https://pypi.python.org/pypi/cryptacular/) of the same name.
+It's worth mentioning that we contacted the author of that project for permission to overload the name.
