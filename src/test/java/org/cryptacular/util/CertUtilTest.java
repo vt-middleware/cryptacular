@@ -218,6 +218,15 @@ public class CertUtilTest
     };
   }
 
+  @DataProvider(name = "cert-chains")
+  public Object[][] getCertificateChains() throws Exception
+  {
+    return new Object[][] {
+      { CRT_PATH + "vtgsca_chain.pem", 4 },
+      { CRT_PATH + "vtuca_chain.p7b", 2 },
+    };
+  }
+
 
 
   @Test(dataProvider = "subject-cn")
@@ -312,5 +321,12 @@ public class CertUtilTest
   public void testAuthorityKeyId(final X509Certificate cert, final String expectedKeyId) throws Exception
   {
     assertEquals(CertUtil.authorityKeyId(cert).toUpperCase(), expectedKeyId);
+  }
+
+
+  @Test(dataProvider = "cert-chains")
+  public void testReadCertificateChains(final String path, final int expectedCount) throws Exception
+  {
+    assertEquals(CertUtil.readCertificateChain(path).length, expectedCount);
   }
 }

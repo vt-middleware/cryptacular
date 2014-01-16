@@ -18,9 +18,11 @@
  */
 package org.cryptacular.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.security.PrivateKey;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -232,6 +234,79 @@ public final class CertUtil
     } catch (CertificateException e) {
       throw new IllegalArgumentException("Error reading certificate", e);
     }
+  }
+
+
+  /**
+   * Creates an X.509 certificate from its ASN.1 encoded form.
+   *
+   * @param  encoded  PEM or DER encoded ASN.1 data.
+   *
+   * @return  Certificate.
+   */
+  public static X509Certificate decodeCertificate(final byte[] encoded)
+  {
+    return readCertificate(new ByteArrayInputStream(encoded));
+  }
+
+
+  /**
+   * Reads an X.509 certificate chain from ASN.1 encoded format in the file at the given location.
+   *
+   * @param  path  Path to file containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
+   *
+   * @return  Certificate.
+   */
+  public static X509Certificate[] readCertificateChain(final String path)
+  {
+    return readCertificateChain(StreamUtil.makeStream(new File(path)));
+  }
+
+
+  /**
+   * Reads an X.509 certificate chain from ASN.1 encoded format from the given file.
+   *
+   * @param  file  File containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
+   *
+   * @return  Certificate.
+   */
+  public static X509Certificate[] readCertificateChain(final File file)
+  {
+    return readCertificateChain(StreamUtil.makeStream(file));
+  }
+
+
+  /**
+   * Reads an X.509 certificate chain from ASN.1 encoded data in the given stream.
+   *
+   * @param  in  Input stream containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
+   *
+   * @return  Certificate.
+   */
+  public static X509Certificate[] readCertificateChain(final InputStream in)
+  {
+    try {
+      final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+      final Collection<? extends Certificate> certs = factory.generateCertificates(in);
+      final X509Certificate[] chain = new X509Certificate[certs.size()];
+      certs.toArray(chain);
+      return chain;
+    } catch (CertificateException e) {
+      throw new IllegalArgumentException("Error reading certificate", e);
+    }
+  }
+
+
+  /**
+   * Creates an X.509 certificate chain from its ASN.1 encoded form.
+   *
+   * @param  encoded  Sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
+   *
+   * @return  Certificate.
+   */
+  public static X509Certificate[] decodeCertificateChain(final byte[] encoded)
+  {
+    return readCertificateChain(new ByteArrayInputStream(encoded));
   }
 
 
