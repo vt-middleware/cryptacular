@@ -23,7 +23,12 @@ import java.lang.reflect.Method;
 import javax.crypto.SecretKey;
 
 import org.bouncycastle.crypto.BlockCipher;
+import org.bouncycastle.crypto.Digest;
+import org.bouncycastle.crypto.digests.SHA256Digest;
+import org.bouncycastle.crypto.prng.EntropySource;
 import org.bouncycastle.crypto.prng.SP800SecureRandom;
+import org.bouncycastle.crypto.prng.drbg.HashSP800DRBG;
+import org.bouncycastle.crypto.prng.drbg.SP80090DRBG;
 import org.cryptacular.generator.sp80038a.EncryptedNonce;
 import org.cryptacular.generator.sp80038d.RBGNonce;
 
@@ -141,5 +146,55 @@ public final class NonceUtil
   public static byte[] nist80063a(final BlockCipher cipher)
   {
     return new RBGNonce(cipher.getBlockSize()).generate();
+  }
+
+
+  /**
+   * Creates a new DRBG instance based on a SHA-256 digest.
+   *
+   * @param  length  Length in bits of values to be produced by DRBG instance.
+   *
+   * @return  New DRGB instance.
+   */
+  public static SP80090DRBG newRBG(final int length)
+  {
+    return newRBG(new SHA256Digest(), length);
+  }
+
+
+  /**
+   * Creates a new hash-based DRBG instance that uses the given digest as the pseudorandom source.
+   *
+   * @param  digest  Digest algorithm.
+   * @param  length  Length in bits of values to be produced by DRBG instance.
+   *
+   * @return  New DRGB instance.
+   */
+  public static SP80090DRBG newRBG(final Digest digest, final int length)
+  {
+    return new HashSP800DRBG(
+      digest,
+      length,
+      new EntropySource() {
+        @Override
+        public boolean isPredictionResistant()
+        {
+          return false;
+        }
+
+        @Override
+        public byte[] getEntropy()
+        {
+          return NonceUtil.timestampNonce(length);
+        }
+
+        @Override
+        public int entropySize()
+        {
+          return length;
+        }
+      },
+      null,
+      NonceUtil.timestampNonce(8));
   }
 }

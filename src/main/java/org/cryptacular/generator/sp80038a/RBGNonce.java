@@ -19,9 +19,6 @@
 
 package org.cryptacular.generator.sp80038a;
 
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.prng.EntropySource;
-import org.bouncycastle.crypto.prng.drbg.HashSP800DRBG;
 import org.bouncycastle.crypto.prng.drbg.SP80090DRBG;
 import org.cryptacular.generator.LimitException;
 import org.cryptacular.generator.Nonce;
@@ -65,7 +62,7 @@ public class RBGNonce implements Nonce
       throw new IllegalArgumentException("Length must be positive");
     }
     this.length = length;
-    this.rbg = newRBG(length);
+    this.rbg = NonceUtil.newRBG(length);
   }
 
 
@@ -86,41 +83,5 @@ public class RBGNonce implements Nonce
   public int getLength()
   {
     return length;
-  }
-
-
-  /**
-   * Creates a new DRBG instance.
-   *
-   * @param  length  Length in bits of values to be produced by DRBG instance.
-   *
-   * @return  New DRGB instance.
-   */
-  private static SP80090DRBG newRBG(final int length)
-  {
-    return new HashSP800DRBG(
-      new SHA256Digest(),
-      length,
-      new EntropySource() {
-        @Override
-        public boolean isPredictionResistant()
-        {
-          return false;
-        }
-
-        @Override
-        public byte[] getEntropy()
-        {
-          return NonceUtil.timestampNonce(length);
-        }
-
-        @Override
-        public int entropySize()
-        {
-          return length;
-        }
-      },
-      null,
-      NonceUtil.timestampNonce(8));
   }
 }
