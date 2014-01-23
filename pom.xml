@@ -1,44 +1,43 @@
-<!--
-  ~ Licensed to Virginia Tech under one or more contributor license
-  ~ agreements. See the NOTICE file distributed with this work
-  ~ for additional information regarding copyright ownership.
-  ~ Virginia Tech licenses this file to you under the Apache License,
-  ~ Version 2.0 (the "License"); you may not use this file
-  ~ except in compliance with the License.  You may obtain a
-  ~ copy of the License at the following location:
-  ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing,
-  ~ software distributed under the License is distributed on an
-  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  ~ KIND, either express or implied.  See the License for the
-  ~ specific language governing permissions and limitations
-  ~ under the License.
-  -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>org.cryptacular</groupId>
   <artifactId>cryptacular</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-
-  <name>cryptacular</name>
-  <description>
-    The spectacular complement to the Bouncy Castle crypto API for Java.
-  </description>
-  <url>https://github.com/vt-middleware/cryptacular</url>
-
+  <version>1.0-SNAPSHOT</version>
+  <name>Cryptacular Library</name>
+  <description>The spectacular complement to the Bouncy Castle crypto API for Java.</description>
+  <url>http://www.cryptacular.org</url>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/organizations/vt-middleware/dashboard/issues</url>
+  </issueManagement>
+  <mailingLists>
+    <mailingList>
+      <name>cryptacular</name>
+      <subscribe>cryptacular+subscribe@googlegroups.com</subscribe>
+      <unsubscribe>cryptacular+unsubscribe@googlegroups.com</unsubscribe>
+      <post>cryptacular@googlegroups.com</post>
+      <archive>http://groups.google.com/group/cryptacular</archive>
+    </mailingList>
+  </mailingLists>
   <licenses>
     <license>
       <name>Apache 2</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+    </license>
   </licenses>
-
+  <scm>
+    <connection>scm:git:git@github.com:vt-middleware/cryptacular.git</connection>
+    <url>scm:git:git@github.com:vt-middleware/cryptacular.git</url>
+  </scm>
   <developers>
     <developer>
       <id>dfisher</id>
@@ -62,9 +61,15 @@
     </developer>
   </developers>
 
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <checkstyle.dir>src/checkstyle</checkstyle.dir>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
+    <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
   </properties>
 
   <dependencies>
@@ -84,9 +89,53 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-info</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/package-info</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}</directory>
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>README*</include>
+                    <include>LICENSE*</include>
+                    <include>NOTICE*</include>
+                    <include>pom.xml</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-scripts</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/bin</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>bin</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.0</version>
+        <version>3.1</version>
         <configuration>
           <fork>true</fork>
           <debug>true</debug>
@@ -99,32 +148,12 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
-        <configuration>
-          <links>
-            <link>http://download.oracle.com/javase/6/docs/api</link>
-          </links>
-          <bottom><![CDATA[<i>Copyright &#169; 2014 Virginia Tech. All Rights Reserved.</i>]]></bottom>
-        </configuration>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>2.11</version>
         <configuration>
-          <configLocation>${checkstyle.dir}/checkstyle_checks.xml</configLocation>
+          <configLocation>${checkstyle.dir}/checks.xml</configLocation>
           <headerLocation>${checkstyle.dir}/header.txt</headerLocation>
-          <suppressionsFile>${checkstyle.dir}/suppressions.xml</suppressionsFile>
+          <suppressionsLocation>${checkstyle.dir}/suppressions.xml</suppressionsLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <failsOnError>true</failsOnError>
           <outputFileFormat>plain</outputFileFormat>
@@ -140,6 +169,106 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <configuration>
+          <links>
+            <link>http://download.oracle.com/javase/7/docs/api</link>
+          </links>
+          <bottom><![CDATA[<i>Copyright &#169; 2003-2014 Virginia Tech. All Rights Reserved.</i>]]></bottom>
+        </configuration>
+        <executions>
+          <execution>
+            <id>javadoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>source</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <appendAssemblyId>true</appendAssemblyId>
+          <descriptors>
+            <descriptor>${assembly.dir}/cryptacular.xml</descriptor>
+          </descriptors>
+          <archiverConfig>
+            <defaultDirectoryMode>0755</defaultDirectoryMode>
+          </archiverConfig>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>sign-artifacts</id>
+      <activation>
+        <property>
+          <name>sign</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
