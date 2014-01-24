@@ -31,7 +31,7 @@ import org.bouncycastle.crypto.modes.AEADBlockCipher;
 public class AEADBlockCipherAdapter implements BlockCipherAdapter
 {
   /** All methods delegate to this instance. */
-  private final AEADBlockCipher delegate;
+  private final AEADBlockCipher cipherDelegate;
 
 
   /**
@@ -41,7 +41,7 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
    */
   public AEADBlockCipherAdapter(final AEADBlockCipher delegate)
   {
-    this.delegate = delegate;
+    cipherDelegate = delegate;
   }
 
 
@@ -49,7 +49,7 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
   @Override
   public int getOutputSize(final int len)
   {
-    return delegate.getOutputSize(len);
+    return cipherDelegate.getOutputSize(len);
   }
 
 
@@ -57,7 +57,7 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
   @Override
   public void init(final boolean forEncryption, final CipherParameters params)
   {
-    delegate.init(forEncryption, params);
+    cipherDelegate.init(forEncryption, params);
   }
 
 
@@ -65,7 +65,7 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
   @Override
   public int processBytes(final byte[] in, final int inOff, final int len, final byte[] out, final int outOff)
   {
-    return delegate.processBytes(in, inOff, len, out, outOff);
+    return cipherDelegate.processBytes(in, inOff, len, out, outOff);
   }
 
 
@@ -74,7 +74,7 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
   public int doFinal(final byte[] out, final int outOff)
   {
     try {
-      return delegate.doFinal(out, outOff);
+      return cipherDelegate.doFinal(out, outOff);
     } catch (InvalidCipherTextException e) {
       throw new RuntimeException("Error finalizing cipher", e);
     }
@@ -85,6 +85,6 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
   @Override
   public void reset()
   {
-    delegate.reset();
+    cipherDelegate.reset();
   }
 }

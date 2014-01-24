@@ -76,7 +76,7 @@ public class Base64Encoder implements Encoder
    */
   public Base64Encoder(final int charactersPerLine)
   {
-    this.lineLength = charactersPerLine;
+    lineLength = charactersPerLine;
   }
 
 

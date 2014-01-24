@@ -62,8 +62,8 @@ public class DecodingInputStream extends FilterInputStream
     if (d == null) {
       throw new IllegalArgumentException("Decoder cannot be null.");
     }
-    this.decoder = d;
-    this.reader = new InputStreamReader(in);
+    decoder = d;
+    reader = new InputStreamReader(in);
   }
 
 

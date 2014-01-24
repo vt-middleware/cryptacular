@@ -59,8 +59,8 @@ public class EncodingOutputStream extends FilterOutputStream
     if (e == null) {
       throw new IllegalArgumentException("Encoder cannot be null.");
     }
-    this.encoder = e;
-    this.writer = new OutputStreamWriter(out);
+    encoder = e;
+    writer = new OutputStreamWriter(out);
   }
 
 
