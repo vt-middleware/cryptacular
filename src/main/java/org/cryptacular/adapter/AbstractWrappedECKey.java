@@ -41,8 +41,8 @@ public abstract class AbstractWrappedECKey<T extends ECKeyParameters>
       new ECParameterSpec(
         EC5Util.convertCurve(params.getCurve(), params.getSeed()),
         new ECPoint(
-          params.getG().getX().toBigInteger(),
-          params.getG().getY().toBigInteger()),
+          params.getG().normalize().getXCoord().toBigInteger(),
+          params.getG().normalize().getYCoord().toBigInteger()),
         params.getN(),
         params.getH().intValue());
   }

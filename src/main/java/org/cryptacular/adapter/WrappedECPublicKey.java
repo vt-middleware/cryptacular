@@ -32,8 +32,8 @@ public class WrappedECPublicKey
   {
     return
       new ECPoint(
-        delegate.getQ().getX().toBigInteger(),
-        delegate.getQ().getY().toBigInteger());
+        delegate.getQ().normalize().getXCoord().toBigInteger(),
+        delegate.getQ().normalize().getYCoord().toBigInteger());
   }
 
 }
