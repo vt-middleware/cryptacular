@@ -158,7 +158,7 @@ public final class ExtensionReader
       return null;
     }
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
-    final List<PolicyInformation> list = new ArrayList<PolicyInformation>(sequence.size());
+    final List<PolicyInformation> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {
       list.add(PolicyInformation.getInstance(sequence.getObjectAt(i)));
     }
@@ -213,7 +213,7 @@ public final class ExtensionReader
       return null;
     }
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
-    final List<KeyPurposeId> list = new ArrayList<KeyPurposeId>(sequence.size());
+    final List<KeyPurposeId> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {
       list.add(KeyPurposeId.getInstance(sequence.getObjectAt(i)));
     }
@@ -234,7 +234,7 @@ public final class ExtensionReader
       return null;
     }
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
-    final List<DistributionPoint> list = new ArrayList<DistributionPoint>(sequence.size());
+    final List<DistributionPoint> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {
       list.add(DistributionPoint.getInstance(sequence.getObjectAt(i)));
     }
@@ -255,7 +255,7 @@ public final class ExtensionReader
       return null;
     }
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
-    final List<AccessDescription> list = new ArrayList<AccessDescription>(sequence.size());
+    final List<AccessDescription> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {
       list.add(AccessDescription.getInstance(sequence.getObjectAt(i)));
     }

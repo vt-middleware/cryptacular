@@ -93,9 +93,8 @@ public class Base64EncoderTest
     }
     final String expected = new String(StreamUtil.readAll(expectedPath));
     final StringBuilder actual = new StringBuilder(expected.length());
-    final FileInputStream input = new FileInputStream(file);
     final Base64Encoder encoder = new Base64Encoder(64);
-    try {
+    try (FileInputStream input = new FileInputStream(file)) {
       final ByteBuffer bufIn = ByteBuffer.allocate(512);
       final CharBuffer bufOut = CharBuffer.allocate(encoder.outputSize(512));
       final FileChannel chIn = input.getChannel();
@@ -110,8 +109,6 @@ public class Base64EncoderTest
       encoder.finalize(bufOut);
       bufOut.flip();
       actual.append(bufOut);
-    } finally {
-      input.close();
     }
     assertEquals(actual.toString(), expected);
   }

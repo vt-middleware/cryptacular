@@ -32,7 +32,7 @@ import java.util.List;
 public class Attributes implements Iterable<Attribute>
 {
   /** Underlying attributes. */
-  private final List<Attribute> attributes = new ArrayList<Attribute>(20);
+  private final List<Attribute> attributes = new ArrayList<>(20);
 
 
   /**
@@ -94,7 +94,7 @@ public class Attributes implements Iterable<Attribute>
    */
   public List<String> getValues(final AttributeType type)
   {
-    final List<String> values = new ArrayList<String>(attributes.size());
+    final List<String> values = new ArrayList<>(attributes.size());
     for (Attribute attr : attributes) {
       if (attr.getType().equals(type)) {
         values.add(attr.getValue());

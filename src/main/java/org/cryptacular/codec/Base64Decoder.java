@@ -34,7 +34,7 @@ public class Base64Decoder implements Decoder
   private static final byte[] DECODING_TABLE = new byte[128];
 
   /** Block of encoded characters. */
-  private char[] block = new char[4];
+  private final char[] block = new char[4];
 
   /** Current position in character block. */
   private int blockPos;

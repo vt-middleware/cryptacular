@@ -162,11 +162,8 @@ public class HashUtilTest
   @Test(dataProvider = "file-hashes")
   public void testHashStream(final String path, final String expected) throws Exception
   {
-    final InputStream in = StreamUtil.makeStream(new File(path));
-    try {
+    try (InputStream in = StreamUtil.makeStream(new File(path))) {
       assertEquals(Hex.toHexString(HashUtil.sha1(in)), expected);
-    } finally {
-      in.close();
     }
   }
 }

@@ -48,7 +48,7 @@ import org.cryptacular.util.ByteUtil;
  */
 public class CounterNonce implements Nonce
 {
-  /** Default nonce getLength is {@value #DEFAULT_LENGTH} bytes. */
+  /** Default nonce getLength is {@value} bytes. */
   public static final int DEFAULT_LENGTH = 12;
 
   /**

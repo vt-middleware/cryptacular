@@ -31,7 +31,7 @@ public interface Decoder
 {
   /**
    * Decodes characters in input buffer into bytes placed in the output buffer.
-   * This method may be called multiple times, followed by {@link #finalize(java.nio.CharBuffer)}
+   * This method may be called multiple times, followed by {@link #finalize(ByteBuffer)}.
    * after all input bytes have been provided.
    *
    * @param  input  Input character buffer.

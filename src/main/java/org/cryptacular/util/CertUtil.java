@@ -116,7 +116,7 @@ public final class CertUtil
    */
   public static List<String> subjectNames(final X509Certificate cert)
   {
-    final List<String> names = new ArrayList<String>();
+    final List<String> names = new ArrayList<>();
     final String cn = subjectCN(cert);
     if (cn != null) {
       names.add(cn);
@@ -143,7 +143,7 @@ public final class CertUtil
    */
   public static List<String> subjectNames(final X509Certificate cert, final GeneralNameType... types)
   {
-    final List<String> names = new ArrayList<String>();
+    final List<String> names = new ArrayList<>();
     final String cn = subjectCN(cert);
     if (cn != null) {
       names.add(cn);
@@ -288,9 +288,7 @@ public final class CertUtil
     try {
       final CertificateFactory factory = CertificateFactory.getInstance("X.509");
       final Collection<? extends Certificate> certs = factory.generateCertificates(in);
-      final X509Certificate[] chain = new X509Certificate[certs.size()];
-      certs.toArray(chain);
-      return chain;
+      return certs.toArray(new X509Certificate[certs.size()]);
     } catch (CertificateException e) {
       throw new IllegalArgumentException("Error reading certificate", e);
     }

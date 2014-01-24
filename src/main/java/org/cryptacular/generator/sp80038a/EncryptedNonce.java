@@ -40,10 +40,10 @@ import org.cryptacular.util.NonceUtil;
 public class EncryptedNonce implements Nonce
 {
   /** Block cipher. */
-  private BlockCipher cipher;
+  private final BlockCipher cipher;
 
   /** Encryption key. */
-  private SecretKey key;
+  private final SecretKey key;
 
 
   /**

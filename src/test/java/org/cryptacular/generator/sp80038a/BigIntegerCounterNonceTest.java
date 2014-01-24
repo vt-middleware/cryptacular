@@ -41,7 +41,7 @@ public class BigIntegerCounterNonceTest
       new Object[] {1, 8},
       new Object[] {2199023255552L, 16},
     };
-  };
+  }
 
   @Test(dataProvider = "test-data")
   public void testGenerate(final long start, final int expectedLength) throws Exception

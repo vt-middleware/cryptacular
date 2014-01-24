@@ -31,7 +31,7 @@ import java.util.Map;
 public final class ReflectUtil
 {
   /** Method cache. */
-  private static final Map<String, Method> METHOD_CACHE = new HashMap<String, Method>();
+  private static final Map<String, Method> METHOD_CACHE = new HashMap<>();
 
   /** Private constructor of utility class. */
   private ReflectUtil() {}

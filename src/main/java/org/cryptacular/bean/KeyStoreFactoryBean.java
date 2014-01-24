@@ -31,7 +31,7 @@ import org.cryptacular.io.Resource;
  */
 public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
 {
-  /** Default keystore type, {@value #DEFAULT_TYPE} */
+  /** Default keystore type, {@value} */
   public static final String DEFAULT_TYPE = "JCEKS";
 
   /** Keystore type, e.g. JKS, JCEKS, BKS. */
