@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
 import java.lang.reflect.Method;
@@ -26,10 +8,11 @@ import java.util.Map;
 /**
  * Reflection utilities.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public final class ReflectUtil
 {
+
   /** Method cache. */
   private static final Map<String, Method> METHOD_CACHE = new HashMap<>();
 
@@ -38,7 +21,8 @@ public final class ReflectUtil
 
 
   /**
-   * Gets the method defined on the target class. The method is cached to speed up subsequent lookups.
+   * Gets the method defined on the target class. The method is cached to speed
+   * up subsequent lookups.
    *
    * @param  target  Target class that contains method.
    * @param  name  Method name.
@@ -46,7 +30,10 @@ public final class ReflectUtil
    *
    * @return  Method if found, otherwise null.
    */
-  public static Method getMethod(final Class<?> target, final String name, final Class<?> ... parameters)
+  public static Method getMethod(
+    final Class<?> target,
+    final String name,
+    final Class<?>... parameters)
   {
     final String key = target.getName() + '.' + name;
     Method method = METHOD_CACHE.get(key);
@@ -72,7 +59,10 @@ public final class ReflectUtil
    *
    * @return  Method return value. A void method returns null.
    */
-  public static Object invoke(final Object target, final Method method, final Object ... parameters)
+  public static Object invoke(
+    final Object target,
+    final Method method,
+    final Object... parameters)
   {
     try {
       return method.invoke(target, parameters);

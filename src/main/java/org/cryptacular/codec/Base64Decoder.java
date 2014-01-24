@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.codec;
 
 import java.nio.ByteBuffer;
@@ -26,21 +8,18 @@ import java.util.Arrays;
 /**
  * Stateful base64 decoder with support for line breaks.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class Base64Decoder implements Decoder
 {
+
   /** Base64 character decoding table. */
   private static final byte[] DECODING_TABLE = new byte[128];
 
-  /** Block of encoded characters. */
-  private final char[] block = new char[4];
 
-  /** Current position in character block. */
-  private int blockPos;
-
-
-  /** Initializes the character decoding table. */
+  /**
+   * Initializes the character decoding table.
+   */
   static {
     Arrays.fill(DECODING_TABLE, (byte) -1);
     for (int i = 0; i < 26; i++) {
@@ -55,6 +34,12 @@ public class Base64Decoder implements Decoder
     DECODING_TABLE[43] = (byte) 62;
     DECODING_TABLE[47] = (byte) 63;
   }
+
+  /** Block of encoded characters. */
+  private final char[] block = new char[4];
+
+  /** Current position in character block. */
+  private int blockPos;
 
 
   /** {@inheritDoc} */

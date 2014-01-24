@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.io;
 
 import java.io.FilterInputStream;
@@ -25,18 +7,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-
 import org.cryptacular.codec.Base64Decoder;
 import org.cryptacular.codec.Decoder;
 import org.cryptacular.codec.HexDecoder;
 
 /**
- * Filters read bytes through a {@link Decoder} such that consumers obtain raw (decoded) bytes from read operations.
+ * Filters read bytes through a {@link Decoder} such that consumers obtain raw
+ * (decoded) bytes from read operations.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class DecodingInputStream extends FilterInputStream
 {
+
   /** Performs decoding. */
   private final Decoder decoder;
 
@@ -51,7 +34,8 @@ public class DecodingInputStream extends FilterInputStream
 
 
   /**
-   * Creates a new instance that wraps the given stream and performs decoding using the given encoder component.
+   * Creates a new instance that wraps the given stream and performs decoding
+   * using the given encoder component.
    *
    * @param  in  Input stream to wrap.
    * @param  d  Decoder that provides on-the-fly decoding.
@@ -68,21 +52,27 @@ public class DecodingInputStream extends FilterInputStream
 
 
   /** {@inheritDoc} */
-  public int read() throws IOException
+  @Override
+  public int read()
+    throws IOException
   {
     return read(new byte[1]);
   }
 
 
   /** {@inheritDoc} */
-  public int read(final byte[] b) throws IOException
+  @Override
+  public int read(final byte[] b)
+    throws IOException
   {
     return read(b, 0, b.length);
   }
 
 
   /** {@inheritDoc} */
-  public int read(final byte[] b, final int off, final int len) throws IOException
+  @Override
+  public int read(final byte[] b, final int off, final int len)
+    throws IOException
   {
     prepareInputBuffer(len - off);
     prepareOutputBuffer();
@@ -115,7 +105,8 @@ public class DecodingInputStream extends FilterInputStream
 
 
   /**
-   * Creates a new instance that decodes hexadecimal input from the given stream.
+   * Creates a new instance that decodes hexadecimal input from the given
+   * stream.
    *
    * @param  in  Wrapped input stream.
    *
@@ -142,9 +133,7 @@ public class DecodingInputStream extends FilterInputStream
   }
 
 
-  /**
-   * Prepares the output buffer based on input buffer capacity.
-   */
+  /** Prepares the output buffer based on input buffer capacity. */
   private void prepareOutputBuffer()
   {
     final int required = decoder.outputSize(input.capacity());

@@ -1,34 +1,18 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular;
 
 import org.cryptacular.codec.Encoder;
 import org.cryptacular.util.CodecUtil;
 
 /**
- * Container for the output of a salted hash operation that includes both the digest output and salt value.
+ * Container for the output of a salted hash operation that includes both the
+ * digest output and salt value.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class SaltedHash
 {
+
   /** Digest output. */
   private final byte[] hash;
 
@@ -50,13 +34,18 @@ public class SaltedHash
 
 
   /**
-   * Creates a new instance from byte input that contains the concatenation of digest output and salt.
+   * Creates a new instance from byte input that contains the concatenation of
+   * digest output and salt.
    *
    * @param  hashWithSalt  Concatenation of hash and salt.
    * @param  digestLength  Number of bytes in digest output.
-   * @param  toEnd  True if salt is appended to end of hash, false if salt is prepended to hash.
+   * @param  toEnd  True if salt is appended to end of hash, false if salt is
+   * prepended to hash.
    */
-  public SaltedHash(final byte[] hashWithSalt, final int digestLength, final boolean toEnd)
+  public SaltedHash(
+    final byte[] hashWithSalt,
+    final int digestLength,
+    final boolean toEnd)
   {
     this.hash = new byte[digestLength];
     this.salt = new byte[hashWithSalt.length - digestLength];
@@ -70,18 +59,14 @@ public class SaltedHash
   }
 
 
-  /**
-   * @return  Digest output.
-   */
+  /** @return  Digest output. */
   public byte[] getHash()
   {
     return hash;
   }
 
 
-  /**
-   * @return  Salt value.
-   */
+  /** @return  Salt value. */
   public byte[] getSalt()
   {
     return salt;
@@ -91,7 +76,8 @@ public class SaltedHash
   /**
    * Gets an encoded string of the concatenation of digest output and salt.
    *
-   * @param  toEnd  True to append salt to end of hash, false to prefix hash with salt.
+   * @param  toEnd  True to append salt to end of hash, false to prefix hash
+   * with salt.
    * @param  encoder  Encodes concatenated bytes to a string.
    *
    * @return  Salt concatenated to hash encoded as a string.
@@ -105,7 +91,8 @@ public class SaltedHash
   /**
    * Gets a byte array containing the concatenation of digest output and salt.
    *
-   * @param  toEnd  True to append salt to end of hash, false to prefix hash with salt.
+   * @param  toEnd  True to append salt to end of hash, false to prefix hash
+   * with salt.
    *
    * @return  Salt concatenated to hash.
    */

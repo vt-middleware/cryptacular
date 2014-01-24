@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.spec;
 
 import org.bouncycastle.crypto.BlockCipher;
@@ -42,10 +24,11 @@ import org.bouncycastle.crypto.engines.XTEAEngine;
 /**
  * Block cipher specification.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class BlockCipherSpec implements Spec<BlockCipher>
 {
+
   /** Cipher algorithm algorithm. */
   private final String algorithm;
 
@@ -62,6 +45,7 @@ public class BlockCipherSpec implements Spec<BlockCipher>
 
 
   /** {@inheritDoc} */
+  @Override
   public String getAlgorithm()
   {
     return algorithm;
@@ -69,6 +53,7 @@ public class BlockCipherSpec implements Spec<BlockCipher>
 
 
   /** {@inheritDoc} */
+  @Override
   public BlockCipher newInstance()
   {
     BlockCipher cipher;
@@ -84,9 +69,13 @@ public class BlockCipherSpec implements Spec<BlockCipher>
       cipher = new CAST6Engine();
     } else if ("DES".equalsIgnoreCase(algorithm)) {
       cipher = new DESEngine();
-    } else if ("DESede".equalsIgnoreCase(algorithm) || "DES3".equalsIgnoreCase(algorithm)) {
+    } else if (
+      "DESede".equalsIgnoreCase(algorithm) ||
+        "DES3".equalsIgnoreCase(algorithm)) {
       cipher = new DESedeEngine();
-    } else if ("GOST".equalsIgnoreCase(algorithm) || "GOST28147".equals(algorithm)) {
+    } else if (
+      "GOST".equalsIgnoreCase(algorithm) ||
+        "GOST28147".equals(algorithm)) {
       cipher = new GOST28147Engine();
     } else if ("Noekeon".equalsIgnoreCase(algorithm)) {
       cipher = new NoekeonEngine();
@@ -109,7 +98,8 @@ public class BlockCipherSpec implements Spec<BlockCipher>
     } else if ("XTEA".equalsIgnoreCase(algorithm)) {
       cipher = new XTEAEngine();
     } else {
-      throw new IllegalStateException("Unsupported cipher algorithm " + algorithm);
+      throw new IllegalStateException(
+        "Unsupported cipher algorithm " + algorithm);
     }
     return cipher;
   }

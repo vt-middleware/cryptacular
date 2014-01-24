@@ -1,28 +1,10 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.x509;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Primitive;
@@ -38,19 +20,22 @@ import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 
 /**
- * Reads X.509v3 extended properties from an {@link java.security.cert.X509Certificate} object. The available
- * properties are described in section 4.2 of RFC 2459, http://www.faqs.org/rfcs/rfc2459.html.
+ * Reads X.509v3 extended properties from an {@link
+ * java.security.cert.X509Certificate} object. The available properties are
+ * described in section 4.2 of RFC 2459, http://www.faqs.org/rfcs/rfc2459.html.
  *
  * @author  Middleware Services
  */
 public final class ExtensionReader
 {
+
   /** The X509Certificate whose extension fields will be read. */
   private final X509Certificate certificate;
 
 
   /**
-   * Creates a new instance that can read extension fields from the given X.509 certificate.
+   * Creates a new instance that can read extension fields from the given X.509
+   * certificate.
    *
    * @param  cert  Certificate to read.
    */
@@ -61,11 +46,12 @@ public final class ExtensionReader
 
 
   /**
-   * Reads the value of the extension given by OID or name as defined in section 4.2 of RFC 2459.
+   * Reads the value of the extension given by OID or name as defined in section
+   * 4.2 of RFC 2459.
    *
-   * @param  extensionOidOrName  OID or extension name, e.g. 2.5.29.14 orSubjectK eyIdentifier.
-   *                             In the case of extension name, the name is case-sensitive and follows the conventions
-   *                             in RFC 2459.
+   * @param  extensionOidOrName  OID or extension name, e.g. 2.5.29.14
+   * orSubjectK eyIdentifier. In the case of extension name, the name is
+   * case-sensitive and follows the conventions in RFC 2459.
    *
    * @return  Extension type containing data from requested extension field.
    */
@@ -110,11 +96,14 @@ public final class ExtensionReader
 
 
   /**
-   * Reads the value of the SubjectAlternativeName extension field of the certificate.
+   * Reads the value of the SubjectAlternativeName extension field of the
+   * certificate.
    *
-   * @return  Collection of subject alternative names or null if the certificate does not define this extension field.
-   * Note that an empty collection of names is different from a null return value; in the former case the field
-   * is defined but empty, whereas in the latter the field is not defined on the certificate.
+   * @return  Collection of subject alternative names or null if the certificate
+   * does not define this extension field. Note that an empty collection of
+   * names is different from a null return value; in the former case the field
+   * is defined but empty, whereas in the latter the field is not defined on the
+   * certificate.
    */
   public GeneralNames readSubjectAlternativeName()
   {
@@ -123,11 +112,14 @@ public final class ExtensionReader
 
 
   /**
-   * Reads the value of the <code>IssuerAlternativeName</code> extension field of the certificate.
+   * Reads the value of the <code>IssuerAlternativeName</code> extension field
+   * of the certificate.
    *
-   * @return  Collection of issuer alternative names or null if the certificate does not define this extension field.
-   * Note that an empty collection of names is different from a null return value; in the former case the field
-   * is defined but empty, whereas in the latter the field is not defined on the certificate.
+   * @return  Collection of issuer alternative names or null if the certificate
+   * does not define this extension field. Note that an empty collection of
+   * names is different from a null return value; in the former case the field
+   * is defined but empty, whereas in the latter the field is not defined on the
+   * certificate.
    */
   public GeneralNames readIssuerAlternativeName()
   {
@@ -136,9 +128,11 @@ public final class ExtensionReader
 
 
   /**
-   * Reads the value of the <code>BasicConstraints</code> extension field of the certificate.
+   * Reads the value of the <code>BasicConstraints</code> extension field of the
+   * certificate.
    *
-   * @return  Basic constraints defined on certificate or null if the certificate does not define the field.
+   * @return  Basic constraints defined on certificate or null if the
+   * certificate does not define the field.
    */
   public BasicConstraints readBasicConstraints()
   {
@@ -147,9 +141,11 @@ public final class ExtensionReader
 
 
   /**
-   * Reads the value of the <code>CertificatePolicies</code> extension field of the certificate.
+   * Reads the value of the <code>CertificatePolicies</code> extension field of
+   * the certificate.
    *
-   * @return  List of certificate policies defined on certificate or null if the certificate does not define the field.
+   * @return  List of certificate policies defined on certificate or null if the
+   * certificate does not define the field.
    */
   public List<PolicyInformation> readCertificatePolicies()
   {
@@ -157,6 +153,7 @@ public final class ExtensionReader
     if (data == null) {
       return null;
     }
+
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
     final List<PolicyInformation> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {
@@ -167,13 +164,16 @@ public final class ExtensionReader
 
 
   /**
-   * Reads the value of the <code>SubjectKeyIdentifier</code> extension field of the certificate.
+   * Reads the value of the <code>SubjectKeyIdentifier</code> extension field of
+   * the certificate.
    *
    * @return  Subject key identifier.
    */
   public SubjectKeyIdentifier readSubjectKeyIdentifier()
   {
-    return SubjectKeyIdentifier.getInstance(read(ExtensionType.SubjectKeyIdentifier));
+    return
+      SubjectKeyIdentifier.getInstance(
+        read(ExtensionType.SubjectKeyIdentifier));
   }
 
 
@@ -185,12 +185,15 @@ public final class ExtensionReader
    */
   public AuthorityKeyIdentifier readAuthorityKeyIdentifier()
   {
-    return AuthorityKeyIdentifier.getInstance(read(ExtensionType.AuthorityKeyIdentifier));
+    return
+      AuthorityKeyIdentifier.getInstance(
+        read(ExtensionType.AuthorityKeyIdentifier));
   }
 
 
   /**
-   * Reads the value of the <code>KeyUsage</code> extension field of the certificate.
+   * Reads the value of the <code>KeyUsage</code> extension field of the
+   * certificate.
    *
    * @return  Key usage data or null if extension field is not defined.
    */
@@ -204,7 +207,8 @@ public final class ExtensionReader
    * Reads the value of the <code>ExtendedKeyUsage</code> extension field of the
    * certificate.
    *
-   * @return  List of supported extended key usages or null if extension is not defined.
+   * @return  List of supported extended key usages or null if extension is not
+   * defined.
    */
   public List<KeyPurposeId> readExtendedKeyUsage()
   {
@@ -212,6 +216,7 @@ public final class ExtensionReader
     if (data == null) {
       return null;
     }
+
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
     final List<KeyPurposeId> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {
@@ -225,7 +230,8 @@ public final class ExtensionReader
    * Reads the value of the <code>CRLDistributionPoints</code> extension field
    * of the certificate.
    *
-   * @return  List of CRL distribution points or null if extension is not defined.
+   * @return  List of CRL distribution points or null if extension is not
+   * defined.
    */
   public List<DistributionPoint> readCRLDistributionPoints()
   {
@@ -233,6 +239,7 @@ public final class ExtensionReader
     if (data == null) {
       return null;
     }
+
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
     final List<DistributionPoint> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {
@@ -254,6 +261,7 @@ public final class ExtensionReader
     if (data == null) {
       return null;
     }
+
     final ASN1Sequence sequence = ASN1Sequence.getInstance(data);
     final List<AccessDescription> list = new ArrayList<>(sequence.size());
     for (int i = 0; i < sequence.size(); i++) {

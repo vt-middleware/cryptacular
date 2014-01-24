@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
 import java.io.IOException;
@@ -25,18 +7,19 @@ import java.io.OutputStream;
 import java.security.Key;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
-
 import org.cryptacular.CiphertextHeader;
 import org.cryptacular.generator.Nonce;
 
 /**
- * Base class for all cipher beans. The base class assumes all ciphertext output will contain a prepended
- * {@link CiphertextHeader} containing metadata that facilitates decryption.
+ * Base class for all cipher beans. The base class assumes all ciphertext output
+ * will contain a prepended {@link CiphertextHeader} containing metadata that
+ * facilitates decryption.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public abstract class AbstractCipherBean implements CipherBean
 {
+
   /** Keystore containing symmetric key(s). */
   private KeyStore keyStore;
 
@@ -62,7 +45,11 @@ public abstract class AbstractCipherBean implements CipherBean
    * @param  keyPassword  Password used to decrypt key entry in keystore.
    * @param  nonce  Nonce/IV generator.
    */
-  public AbstractCipherBean(final KeyStore keyStore, final String keyAlias, final String keyPassword, final Nonce nonce)
+  public AbstractCipherBean(
+    final KeyStore keyStore,
+    final String keyAlias,
+    final String keyPassword,
+    final Nonce nonce)
   {
     setKeyStore(keyStore);
     setKeyAlias(keyAlias);
@@ -71,9 +58,7 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /**
-   * @return  Keystore that contains the {@link SecretKey}.
-   */
+  /** @return  Keystore that contains the {@link SecretKey}. */
   public KeyStore getKeyStore()
   {
     return keyStore;
@@ -81,11 +66,13 @@ public abstract class AbstractCipherBean implements CipherBean
 
 
   /**
-   * Sets the keystore containing encryption/decryption key(s). The keystore must contain a {@link SecretKey} entry
-   * whose alias is given by {@link #setKeyAlias(String)}, which will be used at the encryption key. It may contain
-   * additional symmetric keys to support, for example, key rollover where some existing ciphertexts have headers
-   * specifying a different key. In general all keys used for outstanding ciphertexts should be contained in the
-   * keystore.
+   * Sets the keystore containing encryption/decryption key(s). The keystore
+   * must contain a {@link SecretKey} entry whose alias is given by {@link
+   * #setKeyAlias(String)}, which will be used at the encryption key. It may
+   * contain additional symmetric keys to support, for example, key rollover
+   * where some existing ciphertexts have headers specifying a different key. In
+   * general all keys used for outstanding ciphertexts should be contained in
+   * the keystore.
    *
    * @param  keyStore  Keystore containing encryption key(s).
    */
@@ -96,7 +83,8 @@ public abstract class AbstractCipherBean implements CipherBean
 
 
   /**
-   * @return  Alias that specifies the {@link KeyStore} entry containing the {@link SecretKey}.
+   * @return  Alias that specifies the {@link KeyStore} entry containing the
+   * {@link SecretKey}.
    */
   public String getKeyAlias()
   {
@@ -126,9 +114,7 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /**
-   * @return  Nonce/IV generation strategy.
-   */
+  /** @return  Nonce/IV generation strategy. */
   public Nonce getNonce()
   {
     return nonce;
@@ -150,7 +136,8 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public byte[] encrypt(final byte[] input)
   {
-    return process(new CiphertextHeader(nonce.generate(), keyAlias), true, input);
+    return
+      process(new CiphertextHeader(nonce.generate(), keyAlias), true, input);
   }
 
 
@@ -158,11 +145,15 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public void encrypt(final InputStream input, final OutputStream output)
   {
-    final CiphertextHeader header = new CiphertextHeader(nonce.generate(), keyAlias);
+    final CiphertextHeader header = new CiphertextHeader(
+      nonce.generate(),
+      keyAlias);
     try {
       output.write(header.encode());
     } catch (IOException e) {
-      throw new RuntimeException("Error writing ciphertext header to output stream", e);
+      throw new RuntimeException(
+        "Error writing ciphertext header to output stream",
+        e);
     }
     process(header, true, input, output);
   }
@@ -217,7 +208,10 @@ public abstract class AbstractCipherBean implements CipherBean
    *
    * @return  Ciphertext data under encryption, plaintext data under decryption.
    */
-  protected abstract byte[] process(CiphertextHeader header, boolean mode, byte[] input);
+  protected abstract byte[] process(
+    CiphertextHeader header,
+    boolean mode,
+    byte[] input);
 
 
   /**
@@ -228,5 +222,9 @@ public abstract class AbstractCipherBean implements CipherBean
    * @param  input  Stream containing input data.
    * @param  output  Stream that receives output of cipher.
    */
-  protected abstract void process(CiphertextHeader header, boolean mode, InputStream input, OutputStream output);
+  protected abstract void process(
+    CiphertextHeader header,
+    boolean mode,
+    InputStream input,
+    OutputStream output);
 }

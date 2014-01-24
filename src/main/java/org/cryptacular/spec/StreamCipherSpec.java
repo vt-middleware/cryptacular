@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.spec;
 
 import org.bouncycastle.crypto.StreamCipher;
@@ -31,10 +13,11 @@ import org.bouncycastle.crypto.engines.VMPCEngine;
 /**
  * Stream cipher specification.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class StreamCipherSpec implements Spec<StreamCipher>
 {
+
   /** Cipher algorithm algorithm. */
   private final String algorithm;
 
@@ -51,6 +34,7 @@ public class StreamCipherSpec implements Spec<StreamCipher>
 
 
   /** {@inheritDoc} */
+  @Override
   public String getAlgorithm()
   {
     return algorithm;
@@ -58,12 +42,17 @@ public class StreamCipherSpec implements Spec<StreamCipher>
 
 
   /** {@inheritDoc} */
+  @Override
   public StreamCipher newInstance()
   {
     StreamCipher cipher;
-    if ("Grainv1".equalsIgnoreCase(algorithm) || "Grain-v1".equalsIgnoreCase(algorithm)) {
+    if (
+      "Grainv1".equalsIgnoreCase(algorithm) ||
+        "Grain-v1".equalsIgnoreCase(algorithm)) {
       cipher = new ISAACEngine();
-    } else if ("Grain128".equalsIgnoreCase(algorithm) || "Grain-128".equalsIgnoreCase(algorithm)) {
+    } else if (
+      "Grain128".equalsIgnoreCase(algorithm) ||
+        "Grain-128".equalsIgnoreCase(algorithm)) {
       cipher = new Grain128Engine();
     } else if ("ISAAC".equalsIgnoreCase(algorithm)) {
       cipher = new ISAACEngine();
@@ -78,7 +67,8 @@ public class StreamCipherSpec implements Spec<StreamCipher>
     } else if ("VMPC".equalsIgnoreCase(algorithm)) {
       cipher = new VMPCEngine();
     } else {
-      throw new IllegalStateException("Unsupported cipher algorithm " + algorithm);
+      throw new IllegalStateException(
+        "Unsupported cipher algorithm " + algorithm);
     }
     return cipher;
   }

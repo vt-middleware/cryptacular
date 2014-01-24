@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.codec;
 
 import java.nio.ByteBuffer;
@@ -25,15 +7,32 @@ import java.nio.CharBuffer;
 /**
  * Stateful base64 encoder with support for configurable line breaks.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class Base64Encoder implements Encoder
 {
+
   /** Base64 character encoding table. */
   private static final char[] ENCODING_TABLE = new char[64];
 
-  /** Platform-specific line terminator string, e.g. LF (Unix), CRLF (Windows). */
+  /**
+   * Platform-specific line terminator string, e.g. LF (Unix), CRLF (Windows).
+   */
   private static final String NEWLINE;
+
+
+  /**
+   * Initializes the encoding character table.
+   */
+  static {
+    NEWLINE = System.lineSeparator();
+
+    final String charset =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    for (int i = 0; i < charset.length(); i++) {
+      ENCODING_TABLE[i] = charset.charAt(i);
+    }
+  }
 
   /** Number of base64 characters per line. */
   private final int lineLength;
@@ -48,20 +47,7 @@ public class Base64Encoder implements Encoder
   private int outCount;
 
 
-  /** Initializes the encoding character table. */
-  static
-  {
-    NEWLINE = System.lineSeparator();
-    final String charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    for (int i = 0; i < charset.length(); i++) {
-      ENCODING_TABLE[i] = charset.charAt(i);
-    }
-  }
-
-
-  /**
-   * Creates a new instance that produces base64-encoded output.
-   */
+  /** Creates a new instance that produces base64-encoded output. */
   public Base64Encoder()
   {
     // Default to no line breaks.
@@ -70,9 +56,11 @@ public class Base64Encoder implements Encoder
 
 
   /**
-   * Creates a new instance that produces base64-encoded output with the given number of characters per line.
+   * Creates a new instance that produces base64-encoded output with the given
+   * number of characters per line.
    *
-   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
+   * @param  charactersPerLine  Number of characters per line. A zero or
+   * negative value disables line breaks.
    */
   public Base64Encoder(final int charactersPerLine)
   {
@@ -129,7 +117,8 @@ public class Base64Encoder implements Encoder
    * Writes bytes in the current encoding block to the output buffer.
    *
    * @param  output  Output buffer.
-   * @param  stop  Bit shift stop position where data in current encoding block ends.
+   * @param  stop  Bit shift stop position where data in current encoding block
+   * ends.
    */
   private void writeOutput(final CharBuffer output, final int stop)
   {

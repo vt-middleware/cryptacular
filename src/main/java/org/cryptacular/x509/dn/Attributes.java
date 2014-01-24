@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.x509.dn;
 
 import java.util.ArrayList;
@@ -27,10 +9,11 @@ import java.util.List;
 /**
  * Ordered list of {@link Attribute}s.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class Attributes implements Iterable<Attribute>
 {
+
   /** Underlying attributes. */
   private final List<Attribute> attributes = new ArrayList<>(20);
 
@@ -84,13 +67,13 @@ public class Attributes implements Iterable<Attribute>
 
 
   /**
-   * Gets an immutable list of all attributes of the given type. The order of the returned list reflects the ordering
-   * of the underlying attributes.
+   * Gets an immutable list of all attributes of the given type. The order of
+   * the returned list reflects the ordering of the underlying attributes.
    *
    * @param  type  Attribute type.
    *
-   * @return  Non-null list of attributes of given type. An empty list is returned if there are no attributes of the
-   * given type.
+   * @return  Non-null list of attributes of given type. An empty list is
+   * returned if there are no attributes of the given type.
    */
   public List<String> getValues(final AttributeType type)
   {
@@ -109,7 +92,8 @@ public class Attributes implements Iterable<Attribute>
    *
    * @param  type  Attribute type.
    *
-   * @return  Value of first attribute of given type or null if no attributes of given type exist.
+   * @return  Value of first attribute of given type or null if no attributes of
+   * given type exist.
    */
   public String getValue(final AttributeType type)
   {
@@ -137,8 +121,9 @@ public class Attributes implements Iterable<Attribute>
    */
   public Iterator<Attribute> backward()
   {
-    return new Iterator<Attribute>()
-    {
+    return
+      new Iterator<Attribute>() {
+
       /** Iterator position. */
       private int position = attributes.size();
 
@@ -164,10 +149,11 @@ public class Attributes implements Iterable<Attribute>
 
 
   /**
-   * Creates a comma-separated list of TYPE=VALUE tokens from the attributes in the list in order.
+   * Creates a comma-separated list of TYPE=VALUE tokens from the attributes in
+   * the list in order.
    *
-   * @return  String representation that resembles an X.509 distinguished name, e.g.
-   * <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
+   * @return  String representation that resembles an X.509 distinguished name,
+   * e.g. <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
    */
   @Override
   public String toString()
@@ -178,7 +164,8 @@ public class Attributes implements Iterable<Attribute>
       if (count++ > 0) {
         builder.append(", ");
       }
-      builder.append(attr.getType().getName()).append('=').append(attr.getValue());
+      builder.append(attr.getType().getName()).append('=').append(
+        attr.getValue());
     }
     return builder.toString();
   }

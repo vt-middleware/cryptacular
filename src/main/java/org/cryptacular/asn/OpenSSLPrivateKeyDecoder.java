@@ -1,26 +1,7 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.asn;
 
 import java.math.BigInteger;
-
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -45,10 +26,12 @@ import org.cryptacular.util.PemUtil;
 /**
  * Decrypts PEM-encoded OpenSSL "traditional" format private keys.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
-public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
+public class OpenSSLPrivateKeyDecoder
+  extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
 {
+
   /** {@inheritDoc} */
   @Override
   protected byte[] decryptKey(final byte[] encrypted, final char[] password)
@@ -60,7 +43,11 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
     final String alg = dekInfo[0];
     final byte[] iv = CodecUtil.hex(dekInfo[1]);
     final byte[] bytes = PemUtil.decode(encrypted);
-    return new OpenSSLEncryptionScheme(OpenSSLAlgorithm.fromAlgorithmId(alg), iv, password).decrypt(bytes);
+    return
+      new OpenSSLEncryptionScheme(
+        OpenSSLAlgorithm.fromAlgorithmId(alg),
+        iv,
+        password).decrypt(bytes);
   }
 
 
@@ -77,7 +64,8 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
 
     final AsymmetricKeyParameter key;
     if (o instanceof ASN1ObjectIdentifier) {
-      // EC private key with named curve in the default OpenSSL format emitted by
+      // EC private key with named curve in the default OpenSSL format emitted
+      // by
       //
       // openssl ecparam -name xxxx -genkey
       //
@@ -87,11 +75,17 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
       final int len = encoded[1];
       final byte[] privatePart = new byte[encoded.length - len - 2];
       System.arraycopy(encoded, len + 2, privatePart, 0, privatePart.length);
+
       final ASN1Sequence seq = ASN1Sequence.getInstance(privatePart);
       final X9ECParameters params = ECUtil.getNamedCurveByOid(oid);
       key = new ECPrivateKeyParameters(
         ASN1Integer.getInstance(seq.getObjectAt(0)).getValue(),
-        new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
+        new ECDomainParameters(
+          params.getCurve(),
+          params.getG(),
+          params.getN(),
+          params.getH(),
+          params.getSeed()));
     } else {
       // OpenSSL "traditional" format is an ASN.1 sequence of key parameters
 
@@ -124,10 +118,17 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
         final X9ECParameters params = X9ECParameters.getInstance(
           ASN1TaggedObject.getInstance(sequence.getObjectAt(2)).getObject());
         key = new ECPrivateKeyParameters(
-          new BigInteger(ASN1OctetString.getInstance(sequence.getObjectAt(1)).getOctets()),
-          new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
+          new BigInteger(
+            ASN1OctetString.getInstance(sequence.getObjectAt(1)).getOctets()),
+          new ECDomainParameters(
+            params.getCurve(),
+            params.getG(),
+            params.getN(),
+            params.getH(),
+            params.getSeed()));
       } else {
-        throw new IllegalArgumentException("Invalid OpenSSL traditional private key format.");
+        throw new IllegalArgumentException(
+          "Invalid OpenSSL traditional private key format.");
       }
     }
     return key;

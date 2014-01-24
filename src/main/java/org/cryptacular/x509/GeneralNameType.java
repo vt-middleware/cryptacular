@@ -1,31 +1,14 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.x509;
 
 /**
- * Representation of the options in the CHOICE element describing various categories of the <code>GeneralName</code>
- * type defined in section 4.2.1.7 of RFC 2459.
+ * Representation of the options in the CHOICE element describing various
+ * categories of the <code>GeneralName</code> type defined in section 4.2.1.7 of
+ * RFC 2459.
  *
  * @author  Middleware Services
  */
-public enum GeneralNameType
-{
+public enum GeneralNameType {
 
   /** otherName choice element. */
   OtherName,
@@ -63,13 +46,15 @@ public enum GeneralNameType
 
 
   /**
-   * Gets a name type from the value of the tag in the CHOICE element definition.
+   * Gets a name type from the value of the tag in the CHOICE element
+   * definition.
    *
    * @param  tagNo  Ordinal position of type in CHOICE definition in RFC 2459.
    *
    * @return  Type corresponding to given tag number.
    *
-   * @throws  IllegalArgumentException  If there is not general name type corresponding to the given tag number.
+   * @throws  IllegalArgumentException  If there is not general name type
+   * corresponding to the given tag number.
    */
   public static GeneralNameType fromTagNumber(final int tagNo)
   {

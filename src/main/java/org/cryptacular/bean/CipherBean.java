@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
 import java.io.InputStream;
@@ -25,10 +7,11 @@ import java.io.OutputStream;
 /**
  * Bean that performs encryption/decryption using a symmetric cipher.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public interface CipherBean
 {
+
   /**
    * Encrypts the input data using a symmetric cipher.
    *
@@ -40,12 +23,15 @@ public interface CipherBean
 
 
   /**
-   * Encrypts the data from the input stream onto the output stream using a symmetric cipher.
-   * <p>
-   * The caller is responsible for providing and managing the streams (e.g. closing them when finished).
+   * Encrypts the data from the input stream onto the output stream using a
+   * symmetric cipher.
+   *
+   * <p>The caller is responsible for providing and managing the streams (e.g.
+   * closing them when finished).</p>
    *
    * @param  input  Input stream containing plaintext data to encrypt.
-   * @param  output  Output stream containing ciphertext produced by cipher in encryption mode.
+   * @param  output  Output stream containing ciphertext produced by cipher in
+   * encryption mode.
    */
   void encrypt(InputStream input, OutputStream output);
 
@@ -61,12 +47,15 @@ public interface CipherBean
 
 
   /**
-   * Decrypts the data from the input stream onto the output stream using a symmetric cipher.
-   * <p>
-   * The caller is responsible for providing and managing the streams (e.g. closing them when finished).
+   * Decrypts the data from the input stream onto the output stream using a
+   * symmetric cipher.
+   *
+   * <p>The caller is responsible for providing and managing the streams (e.g.
+   * closing them when finished).</p>
    *
    * @param  input  Input stream containing ciphertext data to decrypt.
-   * @param  output  Output stream containing plaintext produced by cipher in decryption mode.
+   * @param  output  Output stream containing plaintext produced by cipher in
+   * decryption mode.
    */
   void decrypt(InputStream input, OutputStream output);
 }

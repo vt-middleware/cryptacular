@@ -1,22 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
 import org.bouncycastle.crypto.Digest;
@@ -26,10 +8,11 @@ import org.cryptacular.util.HashUtil;
 /**
  * Abstract base class for all hash beans.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public abstract class AbstractHashBean
 {
+
   /** Digest specification. */
   private Spec<Digest> digestSpec;
 
@@ -55,7 +38,8 @@ public abstract class AbstractHashBean
 
 
   /**
-   * @return  Digest specification that determines the instance of {@link Digest} used to compute the hash.
+   * @return  Digest specification that determines the instance of {@link
+   * Digest} used to compute the hash.
    */
   public Spec<Digest> getDigestSpec()
   {
@@ -64,7 +48,8 @@ public abstract class AbstractHashBean
 
 
   /**
-   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
+   * Sets the digest specification that determines the instance of {@link
+   * Digest} used to compute the hash.
    *
    * @param  digestSpec  Digest algorithm specification.
    */
@@ -75,7 +60,8 @@ public abstract class AbstractHashBean
 
 
   /**
-   * @return  Number of iterations the digest function is applied to the input data.
+   * @return  Number of iterations the digest function is applied to the input
+   * data.
    */
   public int getIterations()
   {
@@ -84,7 +70,8 @@ public abstract class AbstractHashBean
 
 
   /**
-   * Sets the number of iterations the digest function is applied to the input data.
+   * Sets the number of iterations the digest function is applied to the input
+   * data.
    *
    * @param  iterations  Number of hash rounds. Default value is 1.
    */
@@ -104,7 +91,7 @@ public abstract class AbstractHashBean
    *
    * @return  Digest output.
    */
-  protected byte[] hashInternal(final Object ... data)
+  protected byte[] hashInternal(final Object... data)
   {
     return HashUtil.hash(digestSpec.newInstance(), iterations, data);
   }
@@ -113,15 +100,16 @@ public abstract class AbstractHashBean
   /**
    * Compares the hash of the given data against a known hash output.
    *
-   * @param  hash  Known hash value. If the length of the array is greater than the length of the
-   *               digest output, anything beyond the digest length is considered salt data that is hashed
-   *               <strong>after</strong> the input data.
+   * @param  hash  Known hash value. If the length of the array is greater than
+   * the length of the digest output, anything beyond the digest length is
+   * considered salt data that is hashed <strong>after</strong> the input data.
    * @param  data  Data to hash.
    *
    * @return  True if hashed data equals known hash output, false otherwise.
    */
-  protected boolean compareInternal(final byte[] hash, final Object ... data)
+  protected boolean compareInternal(final byte[] hash, final Object... data)
   {
-    return HashUtil.compareHash(digestSpec.newInstance(), hash, iterations, data);
+    return
+      HashUtil.compareHash(digestSpec.newInstance(), hash, iterations, data);
   }
 }

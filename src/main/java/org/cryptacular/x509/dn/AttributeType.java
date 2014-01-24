@@ -1,21 +1,4 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.x509.dn;
 
 /**
@@ -35,8 +18,7 @@ package org.cryptacular.x509.dn;
  * @author  Middleware Services
  * @version  $Revision: 2745 $
  */
-public enum AttributeType
-{
+public enum AttributeType {
 
   /** CN - RFC 4519 section 2.3. */
   CommonName("2.5.4.3", "CN"),
@@ -142,9 +124,7 @@ public enum AttributeType
   }
 
 
-  /**
-   * @return  Attribute name.
-   */
+  /** @return  Attribute name. */
   @Override
   public String toString()
   {
@@ -179,7 +159,8 @@ public enum AttributeType
    * RFC/standard name that would be returned by {@link #getName()} for the
    * desired attribute.
    *
-   * @return  Attribute type whose {@link #getName()} property matches the given value.
+   * @return  Attribute type whose {@link #getName()} property matches the given
+   * value.
    *
    * @throws  IllegalArgumentException  On unknown name.
    */

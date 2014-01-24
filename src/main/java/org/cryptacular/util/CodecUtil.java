@@ -1,27 +1,8 @@
-/*
- * Licensed to Virginia Tech under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Virginia Tech licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
+/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-
 import org.cryptacular.codec.Base64Decoder;
 import org.cryptacular.codec.Base64Encoder;
 import org.cryptacular.codec.Decoder;
@@ -32,10 +13,11 @@ import org.cryptacular.codec.HexEncoder;
 /**
  * Utility class for common encoding conversions.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public final class CodecUtil
 {
+
   /** Private constructor of utility class. */
   private CodecUtil() {}
 
@@ -54,11 +36,12 @@ public final class CodecUtil
 
 
   /**
-   * Encodes raw bytes to the equivalent hexadecimal encoded string with optional delimiting of output.
+   * Encodes raw bytes to the equivalent hexadecimal encoded string with
+   * optional delimiting of output.
    *
    * @param  raw  Raw bytes to encode.
-   * @param  delimit  True to delimit every two characters (i.e. every byte) of output with ':' character,
-   *                  false otherwise.
+   * @param  delimit  True to delimit every two characters (i.e. every byte) of
+   * output with ':' character, false otherwise.
    *
    * @return  Hexadecimal encoded string.
    */
@@ -95,7 +78,7 @@ public final class CodecUtil
 
 
   /**
-   * Decodes a base64-encoded string into raw bytes
+   * Decodes a base64-encoded string into raw bytes.
    *
    * @param  encoded  Base64-encoded character data.
    *
@@ -131,7 +114,8 @@ public final class CodecUtil
    */
   public static String encode(final Encoder encoder, final byte[] raw)
   {
-    final CharBuffer output = CharBuffer.allocate(encoder.outputSize(raw.length));
+    final CharBuffer output = CharBuffer.allocate(
+      encoder.outputSize(raw.length));
     encoder.encode(ByteBuffer.wrap(raw), output);
     encoder.finalize(output);
     return output.flip().toString();
@@ -148,7 +132,8 @@ public final class CodecUtil
    */
   public static byte[] decode(final Decoder decoder, final CharSequence encoded)
   {
-    final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(encoded.length()));
+    final ByteBuffer output = ByteBuffer.allocate(
+      decoder.outputSize(encoded.length()));
     decoder.decode(CharBuffer.wrap(encoded), output);
     decoder.finalize(output);
     output.flip();
