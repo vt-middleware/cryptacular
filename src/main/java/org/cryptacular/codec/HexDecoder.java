@@ -38,6 +38,10 @@ public class HexDecoder implements Decoder
   @Override
   public void decode(final CharBuffer input, final ByteBuffer output)
   {
+    // Ignore leading 0x characters if present
+    if (input.get(0) == '0' && input.get(1) == 'x') {
+      input.position(input.position() + 2);
+    }
     byte hi = 0;
     byte lo;
     char current;
