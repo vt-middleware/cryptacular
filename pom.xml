@@ -4,7 +4,7 @@
   <groupId>org.cryptacular</groupId>
   <artifactId>cryptacular</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-RC2-SNAPSHOT</version>
+  <version>1.0-RC2</version>
   <name>Cryptacular Library</name>
   <description>The spectacular complement to the Bouncy Castle crypto API for Java.</description>
   <url>http://www.cryptacular.org</url>
@@ -34,7 +34,7 @@
   <scm>
     <connection>scm:git:git@github.com:vt-middleware/cryptacular.git</connection>
     <url>scm:git:git@github.com:vt-middleware/cryptacular.git</url>
-    <tag>HEAD</tag>
+    <tag>v1.0-RC2</tag>
   </scm>
   <developers>
     <developer>
