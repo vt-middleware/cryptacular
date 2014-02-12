@@ -28,6 +28,15 @@ public abstract class AbstractOTPGenerator
 
 
   /**
+   * @return  Number of digits in generated OTP.
+   */
+  public int getNumberOfDigits()
+  {
+    return numberOfDigits;
+  }
+
+
+  /**
    * Sets the numbers in the generated OTP.
    *
    * @param  digits  Number of digits in generated OTP.
