@@ -2,18 +2,18 @@
 package org.cryptacular.codec;
 
 /**
- * Base 64 encoder/decoder pair.
+ * Base 32 encoder/decoder pair.
  *
  * @author  Middleware Services
  */
-public class Base64Codec implements Codec
+public class Base32Codec implements Codec
 {
 
   /** Encoder. */
-  private final Encoder encoder = new Base64Encoder();
+  private final Encoder encoder = new Base32Encoder();
 
   /** Decoder. */
-  private final Decoder decoder = new Base64Decoder();
+  private final Decoder decoder = new Base32Decoder();
 
 
   /** {@inheritDoc} */

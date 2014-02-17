@@ -1,115 +1,80 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.codec;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.util.Arrays;
 
 /**
- * Stateful base64 decoder with support for line breaks.
+ * Stateful base 64 decoder with support for line breaks.
  *
  * @author  Middleware Services
  */
-public class Base64Decoder implements Decoder
+public class Base64Decoder extends AbstractBaseNDecoder
 {
 
-  /** Base64 character decoding table. */
-  private static final byte[] DECODING_TABLE = new byte[128];
+  /** Default base-64 character decoding table. */
+  private static final byte[] DEFAULT_DECODING_TABLE = new byte[128];
+
+  /** URL and filesystem-safe base-64 character decoding table. */
+  private static final byte[] URLSAFE_DECODING_TABLE = new byte[128];
 
 
   /**
    * Initializes the character decoding table.
    */
   static {
-    Arrays.fill(DECODING_TABLE, (byte) -1);
+    Arrays.fill(DEFAULT_DECODING_TABLE, (byte) -1);
     for (int i = 0; i < 26; i++) {
-      DECODING_TABLE[i + 65] = (byte) i;
+      DEFAULT_DECODING_TABLE[i + 65] = (byte) i;
     }
     for (int i = 0; i < 26; i++) {
-      DECODING_TABLE[i + 97] = (byte) (i + 26);
+      DEFAULT_DECODING_TABLE[i + 97] = (byte) (i + 26);
     }
     for (int i = 0; i < 10; i++) {
-      DECODING_TABLE[i + 48] = (byte) (i + 52);
+      DEFAULT_DECODING_TABLE[i + 48] = (byte) (i + 52);
     }
-    DECODING_TABLE[43] = (byte) 62;
-    DECODING_TABLE[47] = (byte) 63;
-  }
-
-  /** Block of encoded characters. */
-  private final char[] block = new char[4];
-
-  /** Current position in character block. */
-  private int blockPos;
-
-
-  /** {@inheritDoc} */
-  @Override
-  public void decode(final CharBuffer input, final ByteBuffer output)
-  {
-    char current;
-    while (input.hasRemaining()) {
-      current = input.get();
-      if (Character.isWhitespace(current)) {
-        continue;
-      }
-      block[blockPos++] = current;
-      if (blockPos == 4) {
-        writeOutput(output);
-      }
-    }
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public void finalize(final ByteBuffer output)
-  {
-    if (blockPos > 0) {
-      writeOutput(output);
-    }
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public int outputSize(final int inputSize)
-  {
-    return inputSize * 3 / 4;
+    System.arraycopy(DEFAULT_DECODING_TABLE, 0, URLSAFE_DECODING_TABLE, 0, 128);
+    DEFAULT_DECODING_TABLE[43] = (byte) 62;
+    DEFAULT_DECODING_TABLE[47] = (byte) 63;
+    URLSAFE_DECODING_TABLE[45] = (byte) 62;
+    URLSAFE_DECODING_TABLE[95] = (byte) 63;
   }
 
 
   /**
-   * Writes bytes in the current encoding block to the output buffer.
-   *
-   * @param  output  Output buffer.
+   * Creates a new instance that decodes base 64-encoded input in the default
+   * character set.
    */
-  private void writeOutput(final ByteBuffer output)
+  public Base64Decoder()
   {
-    byte b;
-    char c;
-    int value = 0;
-    int padLen = 0;
-    int shift = 18;
-    for (int i = 0; i < 4; i++) {
-      c = block[i];
-      if (c == '=') {
-        padLen++;
-        continue;
-      }
-      b = DECODING_TABLE[c & 0x7F];
-      if (b < 0) {
-        throw new IllegalArgumentException("Invalid base64 character " + c);
-      }
-      value |= b << shift;
-      shift -= 6;
-    }
-    output.put((byte) ((value & 0xff0000) >> 16));
-    if (padLen < 2) {
-      output.put((byte) ((value & 0xff00) >> 8));
-      if (padLen < 1) {
-        output.put((byte) (value & 0xff));
-      }
-    }
-    blockPos = 0;
+    this(false);
+  }
+
+
+  /**
+   * Creates a new instance that decodes base 64-encoded input in the
+   * optional URL-safe character set.
+   *
+   * @param  urlSafe  True to use URL and filesystem-safe character set,
+   * false otherwise.
+   */
+  public Base64Decoder(final boolean urlSafe)
+  {
+    super(urlSafe ? URLSAFE_DECODING_TABLE : DEFAULT_DECODING_TABLE);
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  protected int getBlockLength()
+  {
+    return 24;
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  protected int getBitsPerChar()
+  {
+    return 6;
   }
 }

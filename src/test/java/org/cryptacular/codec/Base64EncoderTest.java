@@ -20,22 +20,30 @@ import static org.testng.Assert.assertEquals;
  */
 public class Base64EncoderTest
 {
-  @DataProvider(name = "text-data")
-  public Object[][] getTextData()
+  @DataProvider(name = "byte-data")
+  public Object[][] getByteData()
   {
     return
       new Object[][] {
         new Object[] {
+          new Base64Encoder(),
           ByteUtil.toBytes("Able was I ere I saw elba"),
           "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYQ==",
         },
         new Object[] {
+          new Base64Encoder(),
           ByteUtil.toBytes("Able was I ere I saw elba."),
           "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYS4=",
         },
         new Object[] {
+          new Base64Encoder(),
           HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
           "safx/LW8+SsSy/o3PmCNy4VEm5s=",
+        },
+        new Object[] {
+          new Base64Encoder(true),
+          HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
+          "safx_LW8-SsSy_o3PmCNy4VEm5s=",
         },
       };
   }
@@ -53,12 +61,12 @@ public class Base64EncoderTest
   }
 
 
-  @Test(dataProvider = "text-data")
-  public void testEncode(final byte[] inBytes, final String expected)
+  @Test(dataProvider = "byte-data")
+  public void testEncode(
+    final Base64Encoder encoder, final byte[] inBytes, final String expected)
     throws Exception
   {
     final ByteBuffer input = ByteBuffer.wrap(inBytes);
-    final Base64Encoder encoder = new Base64Encoder();
     final CharBuffer output = CharBuffer.allocate(
       encoder.outputSize(input.limit()));
     encoder.encode(input, output);

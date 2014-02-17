@@ -1,53 +1,40 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.codec;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-
 /**
- * Stateful base64 encoder with support for configurable line breaks.
+ * Stateful base 64 encoder with support for configurable line breaks.
  *
  * @author  Middleware Services
  */
-public class Base64Encoder implements Encoder
+public class Base64Encoder extends AbstractBaseNEncoder
 {
 
-  /** Base64 character encoding table. */
-  private static final char[] ENCODING_TABLE = new char[64];
+  /** Default base 64 character encoding table. */
+  private static final char[] DEFAULT_ENCODING_TABLE = new char[64];
 
-  /**
-   * Platform-specific line terminator string, e.g. LF (Unix), CRLF (Windows).
-   */
-  private static final String NEWLINE;
+  /** Filesystem and URL-safe base 64 character encoding table. */
+  private static final char[] URLSAFE_ENCODING_TABLE = new char[64];
 
 
   /**
    * Initializes the encoding character table.
    */
   static {
-    NEWLINE = System.lineSeparator();
-
-    final String charset =
+    final String defaultCharset =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    for (int i = 0; i < charset.length(); i++) {
-      ENCODING_TABLE[i] = charset.charAt(i);
+    for (int i = 0; i < defaultCharset.length(); i++) {
+      DEFAULT_ENCODING_TABLE[i] = defaultCharset.charAt(i);
+      URLSAFE_ENCODING_TABLE[i] = defaultCharset.charAt(i);
     }
+    URLSAFE_ENCODING_TABLE[62] = '-';
+    URLSAFE_ENCODING_TABLE[63] = '_';
   }
 
-  /** Number of base64 characters per line. */
-  private final int lineLength;
 
-  /** Holds a block of bytes to encode. */
-  private int block;
-
-  /** Number of bits in encode block remaining. */
-  private int remaining = 24;
-
-  /** Number of characters written. */
-  private int outCount;
-
-
-  /** Creates a new instance that produces base64-encoded output. */
+  /**
+   * Creates a new instance that produces base 64-encoded output with no line
+   * breaks in the default character set.
+   */
   public Base64Encoder()
   {
     // Default to no line breaks.
@@ -56,82 +43,60 @@ public class Base64Encoder implements Encoder
 
 
   /**
-   * Creates a new instance that produces base64-encoded output with the given
-   * number of characters per line.
+   * Creates a new instance that produces base 64-encoded output with no line
+   * breaks and optional URL-safe character set.
+   *
+   * @param  urlSafe  True to use URL and filesystem-safe character set,
+   * false otherwise.
+   */
+  public Base64Encoder(final boolean urlSafe)
+  {
+    this(urlSafe, -1);
+  }
+
+
+  /**
+   * Creates a new instance that produces base 64-encoded output with the given
+   * number of characters per line in the default character set.
    *
    * @param  charactersPerLine  Number of characters per line. A zero or
    * negative value disables line breaks.
    */
   public Base64Encoder(final int charactersPerLine)
   {
-    lineLength = charactersPerLine;
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public void encode(final ByteBuffer input, final CharBuffer output)
-  {
-    while (input.hasRemaining()) {
-      remaining -= 8;
-      block |= (input.get() & 0xff) << remaining;
-      if (remaining == 0) {
-        writeOutput(output, 0);
-      }
-    }
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public void finalize(final CharBuffer output)
-  {
-    if (remaining == 16) {
-      writeOutput(output, 12);
-      output.put('=').put('=');
-    } else if (remaining == 8) {
-      writeOutput(output, 6);
-      output.put('=');
-    }
-    // Append trailing newline to make consistent with OpenSSL base64 output
-    if (lineLength > 0 && output.position() > 0) {
-      output.append(NEWLINE);
-    }
-    outCount = 0;
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public int outputSize(final int inputSize)
-  {
-    int len = (inputSize + 2) * 4 / 3;
-    if (lineLength > 0) {
-      len += (len / lineLength + 1) * NEWLINE.length();
-    }
-    return len;
+    this(false, charactersPerLine);
   }
 
 
   /**
-   * Writes bytes in the current encoding block to the output buffer.
+   * Creates a new instance that produces base 64-encoded output with the given
+   * number of characters per line with the option of URL-safe character set.
    *
-   * @param  output  Output buffer.
-   * @param  stop  Bit shift stop position where data in current encoding block
-   * ends.
+   * @param  urlSafe  True to use URL and filesystem-safe character set,
+   * false otherwise.
+   * @param  charactersPerLine  Number of characters per line. A zero or
+   * negative value disables line breaks.
    */
-  private void writeOutput(final CharBuffer output, final int stop)
+  public Base64Encoder(final boolean urlSafe, final int charactersPerLine)
   {
-    int mask = 0xfc0000;
-    for (int shift = 18; shift >= stop; shift -= 6) {
-      output.put(ENCODING_TABLE[(block & mask) >> shift]);
-      outCount++;
-      if (lineLength > 0 && outCount % lineLength == 0) {
-        output.put(NEWLINE);
-      }
-      mask >>= 6;
-    }
-    block = 0;
-    remaining = 24;
+    super(
+        urlSafe ? URLSAFE_ENCODING_TABLE : DEFAULT_ENCODING_TABLE,
+        charactersPerLine);
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  protected int getBlockLength()
+  {
+    return 24;
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  protected int getBitsPerChar()
+  {
+    return 6;
   }
 }

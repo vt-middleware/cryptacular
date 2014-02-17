@@ -20,21 +20,29 @@ import static org.testng.Assert.assertEquals;
 public class Base64DecoderTest
 {
 
-  @DataProvider(name = "b64-data")
-  public Object[][] getTextData()
+  @DataProvider(name = "encoded-data")
+  public Object[][] getEncodedData()
   {
     return
       new Object[][] {
         new Object[] {
+          new Base64Decoder(),
           "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYQ==",
           ByteUtil.toBytes("Able was I ere I saw elba"),
         },
         new Object[] {
+          new Base64Decoder(),
           "QWJsZSB3YXMgSSBlcmUgSSBzYXcgZWxiYS4=",
           ByteUtil.toBytes("Able was I ere I saw elba."),
         },
         new Object[] {
+          new Base64Decoder(),
           "safx/LW8+SsSy/o3PmCNy4VEm5s=",
+          HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
+        },
+        new Object[] {
+          new Base64Decoder(true),
+          "safx_LW8-SsSy_o3PmCNy4VEm5s=",
           HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
         },
       };
@@ -53,11 +61,11 @@ public class Base64DecoderTest
   }
 
 
-  @Test(dataProvider = "b64-data")
-  public void testDecode(final String data, final byte[] expected)
+  @Test(dataProvider = "encoded-data")
+  public void testDecode(
+    final Base64Decoder decoder, final String data, final byte[] expected)
     throws Exception
   {
-    final Base64Decoder decoder = new Base64Decoder();
     final CharBuffer input = CharBuffer.wrap(data);
     final ByteBuffer output = ByteBuffer.allocate(
       decoder.outputSize(input.length()));
