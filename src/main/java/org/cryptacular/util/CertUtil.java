@@ -82,10 +82,13 @@ public final class CertUtil
     final GeneralNameType... types)
   {
     final GeneralNamesBuilder builder = new GeneralNamesBuilder();
-    for (GeneralName name : subjectAltNames(cert).getNames()) {
-      for (GeneralNameType type : types) {
-        if (type.ordinal() == name.getTagNo()) {
-          builder.addName(name);
+    final GeneralNames altNames = subjectAltNames(cert);
+    if (altNames != null) {
+      for (GeneralName name : altNames.getNames()) {
+        for (GeneralNameType type : types) {
+          if (type.ordinal() == name.getTagNo()) {
+            builder.addName(name);
+          }
         }
       }
     }
