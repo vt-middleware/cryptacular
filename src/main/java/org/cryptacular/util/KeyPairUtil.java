@@ -161,9 +161,9 @@ public final class KeyPairUtil
   {
     final DSASigner signer = new DSASigner();
     final DSAParameters params = new DSAParameters(
-      pubKey.getParams().getP(),
-      pubKey.getParams().getQ(),
-      pubKey.getParams().getG());
+      privKey.getParams().getP(),
+      privKey.getParams().getQ(),
+      privKey.getParams().getG());
     signer.init(true, new DSAPrivateKeyParameters(privKey.getX(), params));
 
     final BigInteger[] sig = signer.generateSignature(SIGN_BYTES);
