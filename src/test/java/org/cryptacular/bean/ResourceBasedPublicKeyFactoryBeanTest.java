@@ -1,10 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
-import java.io.File;
 import java.security.PublicKey;
 
-import org.cryptacular.io.FileResource;
+import org.cryptacular.io.ClassPathResource;
 import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -18,7 +17,7 @@ import static org.testng.Assert.assertTrue;
  */
 public class ResourceBasedPublicKeyFactoryBeanTest
 {
-  private static final String KEY_PATH = "src/test/resources/keys/";
+  private static final String KEY_PATH = "/keys/";
 
   @DataProvider(name = "keys")
   public Object[][] getKeys()
@@ -34,7 +33,7 @@ public class ResourceBasedPublicKeyFactoryBeanTest
   @Test(dataProvider = "keys")
   public void testNewInstance(final String path) throws Exception
   {
-    final Resource resource = new FileResource(new File(path));
+    final Resource resource = new ClassPathResource(path);
     final ResourceBasedPublicKeyFactoryBean factory =
       new ResourceBasedPublicKeyFactoryBean(resource);
     assertTrue(factory.newInstance() instanceof PublicKey);
