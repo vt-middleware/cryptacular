@@ -221,6 +221,7 @@
         <version>2.4</version>
         <configuration>
           <appendAssemblyId>true</appendAssemblyId>
+          <attach>false</attach>
           <descriptors>
             <descriptor>${assembly.dir}/cryptacular.xml</descriptor>
           </descriptors>
