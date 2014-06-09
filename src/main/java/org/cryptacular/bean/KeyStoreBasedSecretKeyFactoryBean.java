@@ -1,7 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
-import java.security.Key;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
 
@@ -10,19 +9,10 @@ import javax.crypto.SecretKey;
  *
  * @author  Middleware Services
  */
-public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
+public class KeyStoreBasedSecretKeyFactoryBean
+        extends AbstractKeyStoreBasedKeyFactoryBean
+        implements FactoryBean<SecretKey>
 {
-
-  /** Keystore containing secret key. */
-  private KeyStore keyStore;
-
-  /** Alias of keystore entry containing secret key. */
-  private String alias;
-
-  /** Password required to read key entry. */
-  private String password;
-
-
   /** Creates a new instance. */
   public KeyStoreBasedSecretKeyFactoryBean() {}
 
@@ -45,70 +35,14 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
   }
 
 
-  /** @return  Keystore that contains the {@link SecretKey}. */
-  public KeyStore getKeyStore()
-  {
-    return keyStore;
-  }
-
-
-  /**
-   * Sets the keystore that contains the {@link SecretKey}.
-   *
-   * @param  keyStore  Non-null keystore.
-   */
-  public void setKeyStore(final KeyStore keyStore)
-  {
-    this.keyStore = keyStore;
-  }
-
-
-  /**
-   * @return  Alias that specifies the {@link KeyStore} entry containing the
-   * {@link SecretKey}.
-   */
-  public String getAlias()
-  {
-    return alias;
-  }
-
-
-  /**
-   * Sets the alias that specifies the {@link KeyStore} entry containing the
-   * {@link SecretKey}.
-   *
-   * @param  alias  Keystore alias of secret key entry.
-   */
-  public void setAlias(final String alias)
-  {
-    this.alias = alias;
-  }
-
-
-  /**
-   * Sets the password used to access the {@link SecretKey} entry.
-   *
-   * @param  password  Key entry password.
-   */
-  public void setPassword(final String password)
-  {
-    this.password = password;
-  }
-
-
-  /** {@inheritDoc} */
+    /** {@inheritDoc} */
   @Override
   public SecretKey newInstance()
   {
-    final Key key;
-    try {
-      key = keyStore.getKey(alias, password.toCharArray());
-    } catch (Exception e) {
-      throw new RuntimeException("Error accessing " + alias, e);
+    final KeyStore.Entry entry = getEntry();
+    if (entry instanceof KeyStore.SecretKeyEntry) {
+      return ((KeyStore.SecretKeyEntry) entry).getSecretKey();
     }
-    if (key instanceof SecretKey) {
-      return (SecretKey) key;
-    }
-    throw new RuntimeException(alias + " is not a secret key");
+    throw new RuntimeException("Unexpected entry " + entry);
   }
 }
