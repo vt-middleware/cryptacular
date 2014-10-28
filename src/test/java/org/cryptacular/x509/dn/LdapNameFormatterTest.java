@@ -55,7 +55,7 @@ public class LdapNameFormatterTest
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-2.crt")
             .getSubjectX500Principal(),
-          "DC=org,DC=ldaptive,CN=b.foo.com,CN=a.foo.com",
+          "DC=org,DC=ldaptive,CN=a.foo.com+CN=b.foo.com",
         },
       };
   }
