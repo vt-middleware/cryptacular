@@ -47,6 +47,16 @@ public class LdapNameFormatterTest
           "CN=Virginia Tech Middleware CA,O=Virginia Polytechnic Institute " +
             "and State University,C=US,DC=vt,DC=edu",
         },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-1.crt")
+            .getSubjectX500Principal(),
+          "CN=b.foo.com,CN=a.foo.com,DC=ldaptive,DC=org",
+        },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-2.crt")
+            .getSubjectX500Principal(),
+          "DC=org,DC=ldaptive,CN=b.foo.com,CN=a.foo.com",
+        },
       };
   }
 
