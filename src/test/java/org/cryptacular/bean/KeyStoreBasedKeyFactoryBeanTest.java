@@ -2,18 +2,22 @@
 package org.cryptacular.bean;
 
 import java.io.File;
+import java.security.Key;
+import java.security.interfaces.RSAPrivateKey;
+
 import javax.crypto.SecretKey;
+
 import org.cryptacular.io.FileResource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 /**
- * Unit test for {@link KeyStoreBasedSecretKeyFactoryBean}.
+ * Unit test for {@link KeyStoreBasedKeyFactoryBean}.
  *
  * @author  Middleware Services
  */
-public class KeyStoreBasedSecretKeyFactoryBeanTest
+public class KeyStoreBasedKeyFactoryBeanTest
 {
   private static final String KS_PATH = "src/test/resources/keystores/";
 
@@ -22,12 +26,19 @@ public class KeyStoreBasedSecretKeyFactoryBeanTest
   {
     return
       new Object[][] {
-        new Object[] {
+        {
           KS_PATH + "factory-bean.jceks",
           "JCEKS",
           "aes256",
           "AES",
           32,
+        },
+        {
+          KS_PATH + "factory-bean.jceks",
+          "JCEKS",
+          "rsa2048",
+          "RSA",
+          2048,
         },
       };
   }
@@ -47,14 +58,20 @@ public class KeyStoreBasedSecretKeyFactoryBeanTest
     keyStoreFactory.setPassword("vtcrypt");
     keyStoreFactory.setType(keyStoreType);
 
-    final KeyStoreBasedSecretKeyFactoryBean secretKeyFactory =
-      new KeyStoreBasedSecretKeyFactoryBean();
+    final KeyStoreBasedKeyFactoryBean secretKeyFactory =
+      new KeyStoreBasedKeyFactoryBean();
     secretKeyFactory.setKeyStore(keyStoreFactory.newInstance());
     secretKeyFactory.setAlias(alias);
     secretKeyFactory.setPassword("vtcrypt");
 
-    final SecretKey key = secretKeyFactory.newInstance();
+    final Key key = secretKeyFactory.newInstance();
     assertEquals(key.getAlgorithm(), expectedAlg);
-    assertEquals(key.getEncoded().length, expectedSize);
+    if (key instanceof SecretKey) {
+      assertEquals(key.getEncoded().length, expectedSize);
+    } else if (key instanceof RSAPrivateKey) {
+      assertEquals(
+        ((RSAPrivateKey) key).getModulus().bitLength(),
+        expectedSize);
+    }
   }
 }

@@ -133,8 +133,8 @@ public class AEADBlockCipherBeanTest
 
   private static SecretKey getTestKey()
   {
-    final KeyStoreBasedSecretKeyFactoryBean secretKeyFactoryBean =
-      new KeyStoreBasedSecretKeyFactoryBean();
+    final KeyStoreBasedKeyFactoryBean<SecretKey> secretKeyFactoryBean =
+      new KeyStoreBasedKeyFactoryBean<>();
     secretKeyFactoryBean.setKeyStore(getTestKeyStore());
     secretKeyFactoryBean.setPassword("vtcrypt");
     secretKeyFactoryBean.setAlias("vtcrypt");
