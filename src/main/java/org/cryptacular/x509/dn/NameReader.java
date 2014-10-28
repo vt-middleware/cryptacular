@@ -4,7 +4,6 @@ package org.cryptacular.x509.dn;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
-import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 
 /**
@@ -38,9 +37,9 @@ public class NameReader
   /**
    * Reads the subject field from the certificate.
    *
-   * @return  List of type/value attributes.
+   * @return  Subject DN as an RDN sequence.
    */
-  public Attributes readSubject()
+  public RDNSequence readSubject()
   {
     return readX500Principal(certificate.getSubjectX500Principal());
   }
@@ -49,30 +48,33 @@ public class NameReader
   /**
    * Reads the issuer field from the certificate.
    *
-   * @return  List of type/value attributes.
+   * @return  Issuer DN as an RDN sequence.
    */
-  public Attributes readIssuer()
+  public RDNSequence readIssuer()
   {
     return readX500Principal(certificate.getIssuerX500Principal());
   }
 
 
   /**
-   * Converts the given X.500 principal to a list of type/value attributes.
+   * Converts the given X.500 principal to a list of relative distinguished
+   * names that contains the attributes comprising the DN.
    *
    * @param  principal  Principal to convert.
    *
-   * @return  List of type/value attributes.
+   * @return  X500 principal as an RDN sequence.
    */
-  public static Attributes readX500Principal(final X500Principal principal)
+  public static RDNSequence readX500Principal(final X500Principal principal)
   {
     final X500Name name = X500Name.getInstance(principal.getEncoded());
-    final Attributes attributes = new Attributes();
-    for (RDN rdn : name.getRDNs()) {
+    final RDNSequence sequence = new RDNSequence();
+    for (org.bouncycastle.asn1.x500.RDN rdn : name.getRDNs()) {
+      final Attributes attributes = new Attributes();
       for (AttributeTypeAndValue tv : rdn.getTypesAndValues()) {
         attributes.add(tv.getType().getId(), tv.getValue().toString());
       }
+      sequence.add(new RDN(attributes));
     }
-    return attributes;
+    return sequence;
   }
 }

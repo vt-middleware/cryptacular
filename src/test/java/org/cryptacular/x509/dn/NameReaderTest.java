@@ -74,15 +74,15 @@ public class NameReaderTest
   public void testReadSubject(final X509Certificate cert, final String expected)
     throws Exception
   {
-    final Attributes attributes = new NameReader(cert).readSubject();
-    assertEquals(attributes.toString(), expected);
+    final RDNSequence sequence = new NameReader(cert).readSubject();
+    assertEquals(sequence.toString(), expected);
   }
 
   @Test(dataProvider = "issuers")
   public void testReadIssuer(final X509Certificate cert, final String expected)
     throws Exception
   {
-    final Attributes attributes = new NameReader(cert).readIssuer();
-    assertEquals(attributes.toString(), expected);
+    final RDNSequence sequence = new NameReader(cert).readIssuer();
+    assertEquals(sequence.toString(), expected);
   }
 }

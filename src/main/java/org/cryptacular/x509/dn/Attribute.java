@@ -48,12 +48,4 @@ public class Attribute
   {
     return value;
   }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public String toString()
-  {
-    return value;
-  }
 }

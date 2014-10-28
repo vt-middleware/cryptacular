@@ -15,7 +15,7 @@ public class Attributes implements Iterable<Attribute>
 {
 
   /** Underlying attributes. */
-  private final List<Attribute> attributes = new ArrayList<>(20);
+  private final List<Attribute> attributes = new ArrayList<>(5);
 
 
   /**
@@ -112,63 +112,4 @@ public class Attributes implements Iterable<Attribute>
   {
     return attributes.iterator();
   }
-
-
-  /**
-   * Gets an iterator that moves over the attribute list from last to first.
-   *
-   * @return  Iterator that moves backward over the attribute list.
-   */
-  public Iterator<Attribute> backward()
-  {
-    return
-      new Iterator<Attribute>() {
-
-      /** Iterator position. */
-      private int position = attributes.size();
-
-      @Override
-      public boolean hasNext()
-      {
-        return position > 0;
-      }
-
-      @Override
-      public Attribute next()
-      {
-        return attributes.get(--position);
-      }
-
-      @Override
-      public void remove()
-      {
-        throw new UnsupportedOperationException("Remove not supported");
-      }
-    };
-  }
-
-
-  /**
-   * Creates a comma-separated list of TYPE=VALUE tokens from the attributes in
-   * the list in order.
-   *
-   * @return  String representation that resembles an X.509 distinguished name,
-   * e.g. <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
-   */
-  @Override
-  public String toString()
-  {
-    final StringBuilder builder = new StringBuilder();
-    int count = 0;
-    for (Attribute attr : attributes) {
-      if (count++ > 0) {
-        builder.append(", ");
-      }
-      builder.append(attr.getType().getName()).append('=').append(
-        attr.getValue());
-    }
-    return builder.toString();
-  }
-
-
 }
