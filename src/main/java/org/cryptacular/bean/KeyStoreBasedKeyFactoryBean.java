@@ -3,14 +3,19 @@ package org.cryptacular.bean;
 
 import java.security.Key;
 import java.security.KeyStore;
-import javax.crypto.SecretKey;
 
 /**
- * Factory that produces a {@link SecretKey} from a {@link KeyStore}.
+ * Factory that produces either a {@link javax.crypto.SecretKey} or
+ * {@link java.security.PrivateKey}.
  *
+ * from a {@link KeyStore}.
+ *
+ * @param  <T>  Type of key, either {@link javax.crypto.SecretKey} or
+ * {@link java.security.PrivateKey}.
  * @author  Middleware Services
  */
-public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
+public class KeyStoreBasedKeyFactoryBean<T extends Key>
+  implements FactoryBean<T>
 {
 
   /** Keystore containing secret key. */
@@ -24,7 +29,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
 
   /** Creates a new instance. */
-  public KeyStoreBasedSecretKeyFactoryBean() {}
+  public KeyStoreBasedKeyFactoryBean() {}
 
 
   /**
@@ -34,7 +39,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
    * @param  alias  Name of encryption key entry in key store.
    * @param  password  Password used to decrypt key entry in keystore.
    */
-  public KeyStoreBasedSecretKeyFactoryBean(
+  public KeyStoreBasedKeyFactoryBean(
     final KeyStore keyStore,
     final String alias,
     final String password)
@@ -53,7 +58,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
 
   /**
-   * Sets the keystore that contains the {@link SecretKey}.
+   * Sets the keystore that contains the key.
    *
    * @param  keyStore  Non-null keystore.
    */
@@ -65,7 +70,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
   /**
    * @return  Alias that specifies the {@link KeyStore} entry containing the
-   * {@link SecretKey}.
+   * key.
    */
   public String getAlias()
   {
@@ -75,9 +80,9 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
   /**
    * Sets the alias that specifies the {@link KeyStore} entry containing the
-   * {@link SecretKey}.
+   * key.
    *
-   * @param  alias  Keystore alias of secret key entry.
+   * @param  alias  Keystore alias of key entry.
    */
   public void setAlias(final String alias)
   {
@@ -86,7 +91,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
 
   /**
-   * Sets the password used to access the {@link SecretKey} entry.
+   * Sets the password used to access the key entry.
    *
    * @param  password  Key entry password.
    */
@@ -98,7 +103,7 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
   /** {@inheritDoc} */
   @Override
-  public SecretKey newInstance()
+  public T newInstance()
   {
     final Key key;
     try {
@@ -106,9 +111,6 @@ public class KeyStoreBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
     } catch (Exception e) {
       throw new RuntimeException("Error accessing " + alias, e);
     }
-    if (key instanceof SecretKey) {
-      return (SecretKey) key;
-    }
-    throw new RuntimeException(alias + " is not a secret key");
+    return (T) key;
   }
 }
