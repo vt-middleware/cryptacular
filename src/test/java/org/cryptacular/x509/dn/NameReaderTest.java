@@ -32,6 +32,14 @@ public class NameReaderTest
             "OU=Middleware-Client, O=Virginia Polytechnic Institute and " +
             "State University, L=Blacksburg, ST=Virginia, DC=vt, DC=edu, C=US",
         },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-1.crt"),
+          "DC=org, DC=ldaptive, CN=a.foo.com, CN=b.foo.com",
+        },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-2.crt"),
+          "CN=a.foo.com, CN=b.foo.com, DC=ldaptive, DC=org",
+        },
       };
   }
 
@@ -50,6 +58,14 @@ public class NameReaderTest
           CertUtil.readCertificate(CRT_PATH + "glider.cc.vt.edu.crt"),
           "DC=edu, DC=vt, C=US, O=Virginia Polytechnic Institute and State " +
             "University, CN=Virginia Tech Middleware CA",
+        },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-1.crt"),
+          "DC=org, DC=ldaptive, CN=a.foo.com, CN=b.foo.com",
+        },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-2.crt"),
+          "CN=a.foo.com, CN=b.foo.com, DC=ldaptive, DC=org",
         },
       };
   }
