@@ -57,6 +57,27 @@ public class LdapNameFormatterTest
             .getSubjectX500Principal(),
           "DC=org,DC=ldaptive,CN=a.foo.com+CN=b.foo.com",
         },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "needs-escaping-1.crt")
+            .getSubjectX500Principal(),
+          "CN=DC=example\\, DC=com,O=VPI&SU,L=Blacksburg,ST=Virginia," +
+            "C=US,DC=vt,DC=edu",
+        },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "needs-escaping-2.crt")
+            .getSubjectX500Principal(),
+          "CN=\\#DEADBEEF,O=VPI&SU,L=Blacksburg,ST=Virginia,C=US,DC=vt,DC=edu",
+        },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "needs-escaping-3.crt")
+            .getSubjectX500Principal(),
+          "CN=\\ space,O=VPI&SU,L=Blacksburg,ST=Virginia,C=US,DC=vt,DC=edu",
+        },
+        new Object[]{
+          CertUtil.readCertificate(CRT_PATH + "needs-escaping-4.crt")
+            .getSubjectX500Principal(),
+          "CN=space2 \\ ,O=VPI&SU,L=Blacksburg,ST=Virginia,C=US,DC=vt,DC=edu",
+        },
       };
   }
 
