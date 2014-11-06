@@ -136,12 +136,18 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
   {
     BlockCipher cipher = getBlockCipherSpec().newInstance();
 
-    if ("CBC".equals(mode)) {
+    switch (mode) {
+    case "CBC":
       cipher = new CBCBlockCipher(cipher);
-    } else if ("OFB".equals(mode)) {
+      break;
+    case "OFB":
       cipher = new OFBBlockCipher(cipher, cipher.getBlockSize());
-    } else if ("CFB".equals(mode)) {
+      break;
+    case "CFB":
       cipher = new CFBBlockCipher(cipher, cipher.getBlockSize());
+      break;
+    default:
+      break;
     }
 
     if (padding != null) {

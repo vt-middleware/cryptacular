@@ -132,13 +132,17 @@ public final class KeyPairUtil
 
     // Dispatch onto the algorithm-specific method
     final boolean result;
-    if ("DSA".equals(alg)) {
+    switch (alg) {
+    case "DSA":
       result = isKeyPair((DSAPublicKey) pubKey, (DSAPrivateKey) privKey);
-    } else if ("RSA".equals(alg)) {
+      break;
+    case "RSA":
       result = isKeyPair((RSAPublicKey) pubKey, (RSAPrivateKey) privKey);
-    } else if ("EC".equals(alg)) {
+      break;
+    case "EC":
       result = isKeyPair((ECPublicKey) pubKey, (ECPrivateKey) privKey);
-    } else {
+      break;
+    default:
       throw new IllegalArgumentException(alg + " not supported.");
     }
     return result;

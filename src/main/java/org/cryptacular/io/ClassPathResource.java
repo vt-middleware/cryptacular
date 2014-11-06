@@ -14,7 +14,7 @@ public class ClassPathResource implements Resource
   private final String classPath;
 
   /** Class loader used to get input streams on classpath locations. */
-  private ClassLoader classLoader;
+  private final ClassLoader classLoader;
 
 
   /**

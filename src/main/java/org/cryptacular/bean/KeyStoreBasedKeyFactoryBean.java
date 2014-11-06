@@ -50,7 +50,7 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key>
   }
 
 
-  /** @return  Keystore that contains the {@link SecretKey}. */
+  /** @return  Keystore that contains the {@link #keyStore}. */
   public KeyStore getKeyStore()
   {
     return keyStore;
@@ -103,6 +103,7 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key>
 
   /** {@inheritDoc} */
   @Override
+  @SuppressWarnings("unchecked")
   public T newInstance()
   {
     final Key key;

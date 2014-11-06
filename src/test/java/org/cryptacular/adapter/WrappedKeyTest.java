@@ -78,11 +78,8 @@ public class WrappedKeyTest
   private static void writeFile(final String path, final byte[] data)
     throws IOException
   {
-    final FileOutputStream out = new FileOutputStream(path);
-    try {
+    try (FileOutputStream out = new FileOutputStream(path)) {
       out.write(data);
-    } finally {
-      out.close();
     }
   }
 
