@@ -42,6 +42,7 @@ public class HexDecoder implements Decoder
     if (input.get(0) == '0' && input.get(1) == 'x') {
       input.position(input.position() + 2);
     }
+
     byte hi = 0;
     byte lo;
     char current;

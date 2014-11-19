@@ -1,5 +1,4 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-
 package org.cryptacular.x509.dn;
 
 import java.util.ArrayList;
@@ -9,13 +8,14 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Simple implementation of the X.501 RDNSequence type described
- * in section 4.1.2.4 of RFC 2459.
+ * Simple implementation of the X.501 RDNSequence type described in section
+ * 4.1.2.4 of RFC 2459.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class RDNSequence implements Iterable<RDN>
 {
+
   /** Maintains the list/sequence of RDNs. */
   private final List<RDN> rdns = new ArrayList<>(10);
 
@@ -38,18 +38,17 @@ public class RDNSequence implements Iterable<RDN>
   }
 
 
-  /**
-   * @return  Iterable that moves backward over the RDN sequence.
-   */
+  /** @return  Iterable that moves backward over the RDN sequence. */
   public Iterable<RDN> backward()
   {
-    return new Iterable<RDN>()
-    {
+    return
+      new Iterable<RDN>() {
       @Override
       public Iterator<RDN> iterator()
       {
-        return new Iterator<RDN>()
-        {
+        return
+          new Iterator<RDN>() {
+
           /** List iterator. */
           private final ListIterator<RDN> it = rdns.listIterator(rdns.size());
 

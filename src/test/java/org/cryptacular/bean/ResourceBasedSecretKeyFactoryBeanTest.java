@@ -6,6 +6,7 @@ import org.cryptacular.io.FileResource;
 import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 
 /**

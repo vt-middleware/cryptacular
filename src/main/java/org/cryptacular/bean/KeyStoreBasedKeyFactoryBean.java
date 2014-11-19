@@ -5,13 +5,14 @@ import java.security.Key;
 import java.security.KeyStore;
 
 /**
- * Factory that produces either a {@link javax.crypto.SecretKey} or
- * {@link java.security.PrivateKey}.
+ * Factory that produces either a {@link javax.crypto.SecretKey} or {@link
+ * java.security.PrivateKey}.
  *
- * from a {@link KeyStore}.
+ * <p>from a {@link KeyStore}.</p>
  *
- * @param  <T>  Type of key, either {@link javax.crypto.SecretKey} or
- * {@link java.security.PrivateKey}.
+ * @param  <T>  Type of key, either {@link javax.crypto.SecretKey} or {@link
+ * java.security.PrivateKey}.
+ *
  * @author  Middleware Services
  */
 public class KeyStoreBasedKeyFactoryBean<T extends Key>

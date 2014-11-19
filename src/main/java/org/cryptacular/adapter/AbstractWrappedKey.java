@@ -17,6 +17,7 @@ import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
 public abstract class AbstractWrappedKey<T extends AsymmetricKeyParameter>
   implements Key
 {
+
   /** PKCS#8 format identifier used with private keys. */
   public static final String PKCS8_FORMAT = "PKCS#8";
 
@@ -65,11 +66,12 @@ public abstract class AbstractWrappedKey<T extends AsymmetricKeyParameter>
   {
     try {
       if (delegate.isPrivate()) {
-        return PrivateKeyInfoFactory.createPrivateKeyInfo(delegate)
-            .getEncoded();
+        return
+          PrivateKeyInfoFactory.createPrivateKeyInfo(delegate).getEncoded();
       }
-      return SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(delegate)
-          .getEncoded();
+      return
+        SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(
+          delegate).getEncoded();
     } catch (IOException e) {
       throw new RuntimeException("Key encoding error.", e);
     }

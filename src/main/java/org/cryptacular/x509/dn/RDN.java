@@ -1,5 +1,4 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-
 package org.cryptacular.x509.dn;
 
 /**
@@ -10,6 +9,7 @@ package org.cryptacular.x509.dn;
  */
 public class RDN
 {
+
   /** RDN attributes. */
   private final Attributes attributes;
 

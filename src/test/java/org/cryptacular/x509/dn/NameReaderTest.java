@@ -5,6 +5,7 @@ import java.security.cert.X509Certificate;
 import org.cryptacular.util.CertUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -43,7 +44,7 @@ public class NameReaderTest
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "scantor-dn-description.crt"),
           "DESCRIPTION=6MtpJS1dcC7t254v, CN=cantor.2@osu.edu, " +
-              "EMAILADDRESS=cantor.2@osu.edu",
+            "EMAILADDRESS=cantor.2@osu.edu",
         },
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "unknown-dn-attr.crt"),

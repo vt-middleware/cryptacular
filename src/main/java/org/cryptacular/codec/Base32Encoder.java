@@ -8,6 +8,7 @@ package org.cryptacular.codec;
  */
 public class Base32Encoder extends AbstractBaseNEncoder
 {
+
   /** Base 32 character encoding table. */
   private static final char[] ENCODING_TABLE = new char[32];
 

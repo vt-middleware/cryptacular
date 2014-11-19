@@ -1,5 +1,4 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-
 package org.cryptacular.generator;
 
 import org.bouncycastle.crypto.Digest;
@@ -8,28 +7,34 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.cryptacular.util.ByteUtil;
 
 /**
- * Abstract base class for
- * <a href="https://tools.ietf.org/html/rfc4226">HOTP</a>
- * and
- * <a href="https://tools.ietf.org/html/rfc6238">TOTP</a>
- * OTP generation schemes.
+ * Abstract base class for <a href="https://tools.ietf.org/html/rfc4226">
+ * HOTP</a> and <a href="https://tools.ietf.org/html/rfc6238">TOTP</a> OTP
+ * generation schemes.
  *
  * @author  Middleware Services
  */
 public abstract class AbstractOTPGenerator
 {
+
   /** Array of modulus values indexed per number of digits in OTP output. */
   private static final int[] MODULUS = new int[] {
-    1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000,
+    1,
+    10,
+    100,
+    1000,
+    10000,
+    100000,
+    1000000,
+    10000000,
+    100000000,
+    1000000000,
   };
 
   /** Number of digits in generated OTP. */
   private int numberOfDigits = 6;
 
 
-  /**
-   * @return  Number of digits in generated OTP.
-   */
+  /** @return  Number of digits in generated OTP. */
   public int getNumberOfDigits()
   {
     return numberOfDigits;
@@ -39,8 +44,8 @@ public abstract class AbstractOTPGenerator
   /**
    * Sets the numbers in the generated OTP.
    *
-   * @param  digits  Number of digits in generated OTP.
-   *                 MUST be in the range 6 - 9. Default is 6.
+   * @param  digits  Number of digits in generated OTP. MUST be in the range 6 -
+   * 9. Default is 6.
    */
   public void setNumberOfDigits(final int digits)
   {
@@ -71,9 +76,7 @@ public abstract class AbstractOTPGenerator
   }
 
 
-  /**
-   * @return  Digest algorithm used for HMAC operation.
-   */
+  /** @return  Digest algorithm used for HMAC operation. */
   protected abstract Digest getDigest();
 
 
@@ -86,11 +89,10 @@ public abstract class AbstractOTPGenerator
    */
   private int truncate(final byte[] hmac)
   {
-    final int offset =  hmac[19] & 0xf;
-    return (hmac[offset]  & 0x7f) << 24 |
-      (hmac[offset + 1] & 0xff) << 16 |
-      (hmac[offset + 2] & 0xff) <<  8 |
-      (hmac[offset + 3] & 0xff);
+    final int offset = hmac[19] & 0xf;
+    return
+      (hmac[offset] & 0x7f) << 24 | (hmac[offset + 1] & 0xff) << 16 |
+      (hmac[offset + 2] & 0xff) << 8 | (hmac[offset + 3] & 0xff);
   }
 
 }

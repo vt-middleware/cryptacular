@@ -10,6 +10,7 @@ import java.io.InputStream;
  */
 public class ClassPathResource implements Resource
 {
+
   /** Classpath location of resource. */
   private final String classPath;
 
@@ -18,10 +19,9 @@ public class ClassPathResource implements Resource
 
 
   /**
-   * Creates a new resource that reads from the given classpath location.
-   * <code>Thread.currentThread().getContextClassLoader()</code> is used to
-   * obtain the class loader used to obtain an input stream on the given
-   * classpath.
+   * Creates a new resource that reads from the given classpath location. <code>
+   * Thread.currentThread().getContextClassLoader()</code> is used to obtain the
+   * class loader used to obtain an input stream on the given classpath.
    *
    * @param  path  Classpath location.
    */
@@ -36,7 +36,7 @@ public class ClassPathResource implements Resource
    *
    * @param  path  Classpath location.
    * @param  loader  Class loader used to obtain an input stream on the given
-   *                 classpath location.
+   * classpath location.
    */
   public ClassPathResource(final String path, final ClassLoader loader)
   {

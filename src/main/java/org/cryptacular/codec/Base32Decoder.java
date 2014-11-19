@@ -10,6 +10,7 @@ import java.util.Arrays;
  */
 public class Base32Decoder extends AbstractBaseNDecoder
 {
+
   /** Base-32 character decoding table. */
   private static final byte[] DECODING_TABLE = new byte[128];
 

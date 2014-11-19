@@ -2,7 +2,6 @@
 package org.cryptacular.bean;
 
 import java.security.PublicKey;
-
 import org.cryptacular.io.ClassPathResource;
 import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
@@ -13,7 +12,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Unit test for {@link ResourceBasedPublicKeyFactoryBean}.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class ResourceBasedPublicKeyFactoryBeanTest
 {
@@ -31,7 +30,8 @@ public class ResourceBasedPublicKeyFactoryBeanTest
   }
 
   @Test(dataProvider = "keys")
-  public void testNewInstance(final String path) throws Exception
+  public void testNewInstance(final String path)
+    throws Exception
   {
     final Resource resource = new ClassPathResource(path);
     final ResourceBasedPublicKeyFactoryBean factory =

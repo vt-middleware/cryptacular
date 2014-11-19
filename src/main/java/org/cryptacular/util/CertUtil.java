@@ -49,8 +49,9 @@ public final class CertUtil
    */
   public static String subjectCN(final X509Certificate cert)
   {
-    return new NameReader(cert).readSubject().getValue(
-          StandardAttributeType.CommonName);
+    return
+      new NameReader(cert).readSubject().getValue(
+        StandardAttributeType.CommonName);
   }
 
 

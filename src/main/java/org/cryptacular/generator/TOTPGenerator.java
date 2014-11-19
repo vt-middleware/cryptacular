@@ -1,5 +1,4 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-
 package org.cryptacular.generator;
 
 import org.bouncycastle.crypto.Digest;
@@ -7,13 +6,14 @@ import org.cryptacular.spec.DigestSpec;
 import org.cryptacular.spec.Spec;
 
 /**
- * OTP generator component that implements the TOTP scheme described in
- * <a href="https://tools.ietf.org/html/rfc6238">RFC 6238</a>.
+ * OTP generator component that implements the TOTP scheme described in <a
+ * href="https://tools.ietf.org/html/rfc6238">RFC 6238</a>.
  *
  * @author  Middleware Services
  */
 public class TOTPGenerator extends AbstractOTPGenerator
 {
+
   /** Digest algorithm specification. */
   private Spec<Digest> digestSpecification = new DigestSpec("SHA1");
 
@@ -24,9 +24,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
   private int timeStep = 30;
 
 
-  /**
-   * @return  Digest algorithm used with the HMAC function.
-   */
+  /** @return  Digest algorithm used with the HMAC function. */
   public Spec<Digest> getDigestSpecification()
   {
     return digestSpecification;
@@ -40,7 +38,8 @@ public class TOTPGenerator extends AbstractOTPGenerator
    */
   public void setDigestSpecification(final Spec<Digest> specification)
   {
-    if ("SHA1".equalsIgnoreCase(specification.getAlgorithm()) ||
+    if (
+      "SHA1".equalsIgnoreCase(specification.getAlgorithm()) ||
         "SHA-1".equalsIgnoreCase(specification.getAlgorithm()) ||
         "SHA256".equalsIgnoreCase(specification.getAlgorithm()) ||
         "SHA-256".equalsIgnoreCase(specification.getAlgorithm()) ||
@@ -54,9 +53,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
   }
 
 
-  /**
-   * @return  Reference start time.
-   */
+  /** @return  Reference start time. */
   public int getStartTime()
   {
     return startTime;
@@ -74,9 +71,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
   }
 
 
-  /**
-   * @return  Time step in seconds.
-   */
+  /** @return  Time step in seconds. */
   public int getTimeStep()
   {
     return timeStep;
@@ -86,9 +81,8 @@ public class TOTPGenerator extends AbstractOTPGenerator
   /**
    * Sets the time step, X.
    *
-   * @param  seconds  Time step in seconds. Default is 30.
-   *                  This value determines the validity window of generated
-   *                  OTP values.
+   * @param  seconds  Time step in seconds. Default is 30. This value determines
+   * the validity window of generated OTP values.
    */
   public void setTimeStep(final int seconds)
   {

@@ -10,6 +10,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.cryptacular.SaltedHash;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 

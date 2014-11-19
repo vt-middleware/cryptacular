@@ -3,7 +3,6 @@ package org.cryptacular.bean;
 
 import java.io.File;
 import java.security.PrivateKey;
-
 import org.cryptacular.io.FileResource;
 import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
@@ -14,7 +13,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Unit test for {@link ResourceBasedPrivateKeyFactoryBean}.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class ResourceBasedPrivateKeyFactoryBeanTest
 {
