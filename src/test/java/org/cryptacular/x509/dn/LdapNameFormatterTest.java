@@ -78,6 +78,11 @@ public class LdapNameFormatterTest
             .getSubjectX500Principal(),
           "CN=space2 \\ ,O=VPI&SU,L=Blacksburg,ST=Virginia,C=US,DC=vt,DC=edu",
         },
+        new Object[]{
+          CertUtil.readCertificate(CRT_PATH + "unknown-dn-attr.crt")
+            .getSubjectX500Principal(),
+          "DC=org,DC=example,1.2.3.4.5=#6e6f6e73656e7365,CN=marzipan",
+        },
       };
   }
 

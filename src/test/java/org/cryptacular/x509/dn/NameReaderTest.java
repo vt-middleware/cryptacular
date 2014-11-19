@@ -40,6 +40,15 @@ public class NameReaderTest
           CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-2.crt"),
           "CN=a.foo.com, CN=b.foo.com, DC=ldaptive, DC=org",
         },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "scantor-dn-description.crt"),
+          "DESCRIPTION=6MtpJS1dcC7t254v, CN=cantor.2@osu.edu, " +
+              "EMAILADDRESS=cantor.2@osu.edu",
+        },
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "unknown-dn-attr.crt"),
+          "CN=marzipan, 1.2.3.4.5=nonsense, DC=example, DC=org",
+        },
       };
   }
 
