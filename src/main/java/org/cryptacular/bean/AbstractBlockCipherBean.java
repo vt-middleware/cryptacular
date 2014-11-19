@@ -128,7 +128,7 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
    * @param  mode  True for encryption; false for decryption.
    *
    * @return  Block cipher adapter that wraps an initialized block cipher that
-   * is ready for use in the given mode.
+   *          is ready for use in the given mode.
    */
   protected abstract BlockCipherAdapter newCipher(
     CiphertextHeader header,

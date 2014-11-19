@@ -115,7 +115,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
    * instance of this class.
    *
    * @param  specification  AEAD block cipher specification of the form <code>
-   * algorithm/mode</code>.
+   *                        algorithm/mode</code>.
    *
    * @return  Buffered block cipher specification instance.
    */

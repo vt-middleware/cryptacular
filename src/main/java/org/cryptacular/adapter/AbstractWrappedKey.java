@@ -45,7 +45,7 @@ public abstract class AbstractWrappedKey<T extends AsymmetricKeyParameter>
 
   /**
    * @return  {@value #PKCS8_FORMAT} in the case of a private key, otherwise
-   * {@link #X509_FORMAT}.
+   *          {@link #X509_FORMAT}.
    */
   @Override
   public String getFormat()
@@ -59,7 +59,7 @@ public abstract class AbstractWrappedKey<T extends AsymmetricKeyParameter>
 
   /**
    * @return  Encoded PrivateKeyInfo structure in the case of a private key,
-   * otherwise an encoded SubjectPublicKeyInfo structure.
+   *          otherwise an encoded SubjectPublicKeyInfo structure.
    */
   @Override
   public byte[] getEncoded()

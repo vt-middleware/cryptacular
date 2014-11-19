@@ -36,7 +36,7 @@ public class ClassPathResource implements Resource
    *
    * @param  path  Classpath location.
    * @param  loader  Class loader used to obtain an input stream on the given
-   * classpath location.
+   *                 classpath location.
    */
   public ClassPathResource(final String path, final ClassLoader loader)
   {

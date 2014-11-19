@@ -47,7 +47,7 @@ public class Base64Encoder extends AbstractBaseNEncoder
    * breaks and optional URL-safe character set.
    *
    * @param  urlSafe  True to use URL and filesystem-safe character set, false
-   * otherwise.
+   *                  otherwise.
    */
   public Base64Encoder(final boolean urlSafe)
   {
@@ -60,7 +60,7 @@ public class Base64Encoder extends AbstractBaseNEncoder
    * number of characters per line in the default character set.
    *
    * @param  charactersPerLine  Number of characters per line. A zero or
-   * negative value disables line breaks.
+   *                            negative value disables line breaks.
    */
   public Base64Encoder(final int charactersPerLine)
   {
@@ -73,9 +73,9 @@ public class Base64Encoder extends AbstractBaseNEncoder
    * number of characters per line with the option of URL-safe character set.
    *
    * @param  urlSafe  True to use URL and filesystem-safe character set, false
-   * otherwise.
+   *                  otherwise.
    * @param  charactersPerLine  Number of characters per line. A zero or
-   * negative value disables line breaks.
+   *                            negative value disables line breaks.
    */
   public Base64Encoder(final boolean urlSafe, final int charactersPerLine)
   {

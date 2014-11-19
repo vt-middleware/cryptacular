@@ -57,7 +57,7 @@ public class RBGNonce implements Nonce
    * the fixed field of the nonce is null.
    *
    * @param  randomLength  Number of bytes in the random part of the nonce. MUST
-   * be at least 12.
+   *                       be at least 12.
    */
   public RBGNonce(final int randomLength)
   {
@@ -70,7 +70,7 @@ public class RBGNonce implements Nonce
    *
    * @param  fixed  User-defined fixed field value.
    * @param  randomLength  Number of bytes in the random part of the nonce. MUST
-   * be at least 12.
+   *                       be at least 12.
    */
   public RBGNonce(final String fixed, final int randomLength)
   {

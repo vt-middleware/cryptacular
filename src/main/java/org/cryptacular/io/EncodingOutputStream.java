@@ -136,7 +136,7 @@ public class EncodingOutputStream extends FilterOutputStream
    *
    * @param  out  Wrapped output stream.
    * @param  lineLength  Length of each base64-encoded line in output. A zero or
-   * negative value disables line breaks.
+   *                     negative value disables line breaks.
    *
    * @return  Encoding output stream that produces base64 output.
    */

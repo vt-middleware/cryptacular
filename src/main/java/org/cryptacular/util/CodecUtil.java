@@ -44,7 +44,7 @@ public final class CodecUtil
    *
    * @param  raw  Raw bytes to encode.
    * @param  delimit  True to delimit every two characters (i.e. every byte) of
-   * output with ':' character, false otherwise.
+   *                  output with ':' character, false otherwise.
    *
    * @return  Hexadecimal encoded string.
    */

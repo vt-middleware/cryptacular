@@ -67,7 +67,7 @@ public enum ExtensionType {
    *
    * @param  oidString  Extension OID value.
    * @param  criticality  True if extension MUST or SHOULD be marked critical
-   * under general circumstances, false otherwise.
+   *                      under general circumstances, false otherwise.
    */
   ExtensionType(final String oidString, final boolean criticality)
   {
@@ -100,7 +100,7 @@ public enum ExtensionType {
    * Gets the extension by name.
    *
    * @param  name  Case-sensitive X.509v3 extension name. The acceptable case of
-   * extension names is governed by conventions in RFC 2459.
+   *               extension names is governed by conventions in RFC 2459.
    *
    * @return  Extension with given name.
    *
@@ -119,7 +119,7 @@ public enum ExtensionType {
 
   /**
    * @return  True if extension MUST or SHOULD be marked critical under general
-   * circumstances according to RFC 2459, false otherwise.
+   *          circumstances according to RFC 2459, false otherwise.
    */
   public boolean isCritical()
   {

@@ -83,7 +83,7 @@ public final class KeyPairGenerator
    *
    * @param  random  Random source required for key generation.
    * @param  namedCurve  Well-known elliptic curve name that includes domain
-   * parameters including key size.
+   *                     parameters including key size.
    *
    * @return  EC key pair according to named curve.
    */

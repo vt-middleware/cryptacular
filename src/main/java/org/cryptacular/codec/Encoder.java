@@ -39,7 +39,7 @@ public interface Encoder
    * @param  inputSize  Size of input buffer in bytes.
    *
    * @return  Minimum character buffer size required to store all encoded input
-   * bytes.
+   *          bytes.
    */
   int outputSize(int inputSize);
 }

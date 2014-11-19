@@ -55,7 +55,7 @@ public class Base64Decoder extends AbstractBaseNDecoder
    * URL-safe character set.
    *
    * @param  urlSafe  True to use URL and filesystem-safe character set, false
-   * otherwise.
+   *                  otherwise.
    */
   public Base64Decoder(final boolean urlSafe)
   {

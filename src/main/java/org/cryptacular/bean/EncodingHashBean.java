@@ -42,7 +42,7 @@ public class EncodingHashBean extends AbstractHashBean
 
   /**
    * @return  Codec specification that determines the encoding applied to the
-   * hash output bytes.
+   *          hash output bytes.
    */
   public Spec<Codec> getCodecSpec()
   {
@@ -55,8 +55,8 @@ public class EncodingHashBean extends AbstractHashBean
    * hash output bytes.
    *
    * @param  codecSpec  Codec specification, e.g. {@link
-   * org.cryptacular.spec.CodecSpec#BASE64}, {@link
-   * org.cryptacular.spec.CodecSpec#HEX}.
+   *                    org.cryptacular.spec.CodecSpec#BASE64}, {@link
+   *                    org.cryptacular.spec.CodecSpec#HEX}.
    */
   public void setCodecSpec(final Spec<Codec> codecSpec)
   {
@@ -79,9 +79,9 @@ public class EncodingHashBean extends AbstractHashBean
    * Compares a known hash value with the hash of the given data.
    *
    * @param  hash  Known encoded hash value. If the length of the hash bytes
-   * after decoding is greater than the length of the digest output, anything
-   * beyond the digest length is considered salt data that is hashed <strong>
-   * after</strong> the input data.
+   *               after decoding is greater than the length of the digest
+   *               output, anything beyond the digest length is considered salt
+   *               data that is hashed <strong>after</strong> the input data.
    * @param  data  Data to hash.
    *
    * @return  True if the hashed data matches the given hash, false otherwise.

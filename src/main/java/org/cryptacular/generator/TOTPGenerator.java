@@ -38,8 +38,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
    */
   public void setDigestSpecification(final Spec<Digest> specification)
   {
-    if (
-      "SHA1".equalsIgnoreCase(specification.getAlgorithm()) ||
+    if ("SHA1".equalsIgnoreCase(specification.getAlgorithm()) ||
         "SHA-1".equalsIgnoreCase(specification.getAlgorithm()) ||
         "SHA256".equalsIgnoreCase(specification.getAlgorithm()) ||
         "SHA-256".equalsIgnoreCase(specification.getAlgorithm()) ||
@@ -82,7 +81,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
    * Sets the time step, X.
    *
    * @param  seconds  Time step in seconds. Default is 30. This value determines
-   * the validity window of generated OTP values.
+   *                  the validity window of generated OTP values.
    */
   public void setTimeStep(final int seconds)
   {

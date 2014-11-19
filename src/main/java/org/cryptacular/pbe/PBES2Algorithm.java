@@ -117,7 +117,7 @@ public enum PBES2Algorithm {
 
   /**
    * @return  Size of derived key in bits or -1 if algorithm does not define a
-   * key size.
+   *          key size.
    */
   public int getKeySize()
   {

@@ -162,7 +162,7 @@ public class CiphertextHeader
    * prepended to the start.
    *
    * @param  input  Input stream that is positioned at the start of ciphertext
-   * header data.
+   *                header data.
    *
    * @return  Decoded header.
    */

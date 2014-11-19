@@ -11,7 +11,7 @@ import java.security.KeyStore;
  * <p>from a {@link KeyStore}.</p>
  *
  * @param  <T>  Type of key, either {@link javax.crypto.SecretKey} or {@link
- * java.security.PrivateKey}.
+ *              java.security.PrivateKey}.
  *
  * @author  Middleware Services
  */
@@ -71,7 +71,7 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key>
 
   /**
    * @return  Alias that specifies the {@link KeyStore} entry containing the
-   * key.
+   *          key.
    */
   public String getAlias()
   {

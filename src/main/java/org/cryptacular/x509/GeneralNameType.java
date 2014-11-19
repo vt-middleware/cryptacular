@@ -54,7 +54,7 @@ public enum GeneralNameType {
    * @return  Type corresponding to given tag number.
    *
    * @throws  IllegalArgumentException  If there is not general name type
-   * corresponding to the given tag number.
+   *                                    corresponding to the given tag number.
    */
   public static GeneralNameType fromTagNumber(final int tagNo)
   {

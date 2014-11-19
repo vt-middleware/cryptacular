@@ -45,7 +45,7 @@ public abstract class AbstractOTPGenerator
    * Sets the numbers in the generated OTP.
    *
    * @param  digits  Number of digits in generated OTP. MUST be in the range 6 -
-   * 9. Default is 6.
+   *                 9. Default is 6.
    */
   public void setNumberOfDigits(final int digits)
   {
@@ -91,8 +91,10 @@ public abstract class AbstractOTPGenerator
   {
     final int offset = hmac[19] & 0xf;
     return
-      (hmac[offset] & 0x7f) << 24 | (hmac[offset + 1] & 0xff) << 16 |
-      (hmac[offset + 2] & 0xff) << 8 | (hmac[offset + 3] & 0xff);
+      (hmac[offset] & 0x7f) << 24 |
+      (hmac[offset + 1] & 0xff) << 16 |
+      (hmac[offset + 2] & 0xff) << 8 |
+      (hmac[offset + 3] & 0xff);
   }
 
 }

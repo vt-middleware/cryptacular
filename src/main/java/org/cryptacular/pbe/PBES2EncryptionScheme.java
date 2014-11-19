@@ -34,7 +34,7 @@ public class PBES2EncryptionScheme extends AbstractEncryptionScheme
    * Creates a new instance with the given parameters.
    *
    * @param  params  PBES2 parameters describing the key derivation function and
-   * encryption scheme.
+   *                 encryption scheme.
    * @param  password  Password used to derive key.
    */
   public PBES2EncryptionScheme(

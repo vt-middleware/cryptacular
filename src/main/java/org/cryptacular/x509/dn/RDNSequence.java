@@ -82,7 +82,7 @@ public class RDNSequence implements Iterable<RDN>
    * @param  type  Attribute type.
    *
    * @return  Non-null list of attributes of given type. An empty list is
-   * returned if there are no attributes of the given type.
+   *          returned if there are no attributes of the given type.
    */
   public List<String> getValues(final AttributeType type)
   {
@@ -101,7 +101,7 @@ public class RDNSequence implements Iterable<RDN>
    * @param  type  Attribute type.
    *
    * @return  Value of first attribute of given type or null if no attributes of
-   * given type exist.
+   *          given type exist.
    */
   public String getValue(final AttributeType type)
   {
@@ -117,7 +117,7 @@ public class RDNSequence implements Iterable<RDN>
    * the list in order.
    *
    * @return  String representation that resembles an X.509 distinguished name,
-   * e.g. <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
+   *          e.g. <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
    */
   @Override
   public String toString()

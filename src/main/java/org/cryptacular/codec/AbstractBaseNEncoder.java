@@ -122,7 +122,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
    *
    * @param  output  Output buffer.
    * @param  stop  Bit shift stop position where data in current encoding block
-   * ends.
+   *               ends.
    */
   private void writeOutput(final CharBuffer output, final int stop)
   {
