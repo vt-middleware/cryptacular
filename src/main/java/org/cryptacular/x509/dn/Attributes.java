@@ -26,7 +26,12 @@ public class Attributes implements Iterable<Attribute>
    */
   public void add(final String typeOid, final String value)
   {
-    add(new Attribute(AttributeType.fromOid(typeOid), value));
+    final StandardAttributeType type = StandardAttributeType.fromOid(typeOid);
+    if (type != null) {
+      add(new Attribute(type, value));
+    } else {
+      add(new Attribute(new UnknownAttributeType(typeOid), value));
+    }
   }
 
 

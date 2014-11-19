@@ -22,8 +22,8 @@ import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.cryptacular.x509.ExtensionReader;
 import org.cryptacular.x509.GeneralNameType;
 import org.cryptacular.x509.KeyUsageBits;
-import org.cryptacular.x509.dn.AttributeType;
 import org.cryptacular.x509.dn.NameReader;
+import org.cryptacular.x509.dn.StandardAttributeType;
 
 /**
  * Utility class providing convenience methods for common operations on X.509
@@ -49,8 +49,8 @@ public final class CertUtil
    */
   public static String subjectCN(final X509Certificate cert)
   {
-    return
-      new NameReader(cert).readSubject().getValue(AttributeType.CommonName);
+    return new NameReader(cert).readSubject().getValue(
+          StandardAttributeType.CommonName);
   }
 
 
