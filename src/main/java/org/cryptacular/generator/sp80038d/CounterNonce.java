@@ -58,7 +58,7 @@ public class CounterNonce implements Nonce
    *
    * @param  fixed  User-defined fixed field value.
    * @param  invocations  Initial invocation count. The invocations field is
-   * incremented _before_ use in {@link #generate()}.
+   *                      incremented _before_ use in {@link #generate()}.
    */
   public CounterNonce(final String fixed, final long invocations)
   {
@@ -73,7 +73,7 @@ public class CounterNonce implements Nonce
    *
    * @param  fixed  User-defined fixed field value.
    * @param  invocations  Initial invocation count. The invocations field is
-   * incremented _before_ use in {@link #generate()}.
+   *                      incremented _before_ use in {@link #generate()}.
    */
   public CounterNonce(final int fixed, final long invocations)
   {
@@ -86,7 +86,7 @@ public class CounterNonce implements Nonce
    *
    * @param  fixed  User-defined fixed field value.
    * @param  invocations  Initial invocation count. The invocations field is
-   * incremented _before_ use in {@link #generate()}.
+   *                      incremented _before_ use in {@link #generate()}.
    */
   public CounterNonce(final long fixed, final long invocations)
   {
@@ -99,7 +99,7 @@ public class CounterNonce implements Nonce
    *
    * @param  fixed  User-defined fixed field value.
    * @param  invocations  Initial invocation count. The invocations field is
-   * incremented _before_ use in {@link #generate()}.
+   *                      incremented _before_ use in {@link #generate()}.
    */
   public CounterNonce(final byte[] fixed, final long invocations)
   {

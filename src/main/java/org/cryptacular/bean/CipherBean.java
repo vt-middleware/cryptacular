@@ -31,7 +31,7 @@ public interface CipherBean
    *
    * @param  input  Input stream containing plaintext data to encrypt.
    * @param  output  Output stream containing ciphertext produced by cipher in
-   * encryption mode.
+   *                 encryption mode.
    */
   void encrypt(InputStream input, OutputStream output);
 
@@ -55,7 +55,7 @@ public interface CipherBean
    *
    * @param  input  Input stream containing ciphertext data to decrypt.
    * @param  output  Output stream containing plaintext produced by cipher in
-   * decryption mode.
+   *                 decryption mode.
    */
   void decrypt(InputStream input, OutputStream output);
 }

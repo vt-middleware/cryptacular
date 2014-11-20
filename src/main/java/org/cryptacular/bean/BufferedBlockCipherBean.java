@@ -61,7 +61,7 @@ public class BufferedBlockCipherBean extends AbstractBlockCipherBean
    * Sets the block cipher specification.
    *
    * @param  blockCipherSpec  Describes a block cipher in terms of algorithm,
-   * mode, and padding.
+   *                          mode, and padding.
    */
   public void setBlockCipherSpec(
     final Spec<BufferedBlockCipher> blockCipherSpec)

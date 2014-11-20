@@ -106,7 +106,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
    * Gets the cipher padding scheme.
    *
    * @return  Padding scheme algorithm, e.g. PKCS5Padding. The following names
-   * are equivalent for no padding: NULL, Zero, None.
+   *          are equivalent for no padding: NULL, Zero, None.
    */
   public String getPadding()
   {
@@ -137,15 +137,19 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
     BlockCipher cipher = getBlockCipherSpec().newInstance();
 
     switch (mode) {
+
     case "CBC":
       cipher = new CBCBlockCipher(cipher);
       break;
+
     case "OFB":
       cipher = new OFBBlockCipher(cipher, cipher.getBlockSize());
       break;
+
     case "CFB":
       cipher = new CFBBlockCipher(cipher, cipher.getBlockSize());
       break;
+
     default:
       break;
     }
@@ -170,7 +174,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
    * into an instance of this class.
    *
    * @param  specification  Block cipher specification of the form <code>
-   * algorithm/mode/padding</code>.
+   *                        algorithm/mode/padding</code>.
    *
    * @return  Buffered block cipher specification instance.
    */

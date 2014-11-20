@@ -82,7 +82,7 @@ public class DigestSpec implements Spec<Digest>
 
   /**
    * @return  Size of digest output in bytes, or -1 if the digest does not
-   * support variable size output.
+   *          support variable size output.
    */
   public int getSize()
   {

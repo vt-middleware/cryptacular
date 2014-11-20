@@ -45,7 +45,7 @@ public final class CipherUtil
    * @param  data  Plaintext data to be encrypted.
    *
    * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted
-   * data that completely fills the returned byte array.
+   *          data that completely fills the returned byte array.
    */
   public static byte[] encrypt(
     final AEADBlockCipher cipher,
@@ -76,7 +76,8 @@ public final class CipherUtil
    * @param  nonce  Nonce generator.
    * @param  input  Input stream containing plaintext data.
    * @param  output  Output stream that receives a {@link CiphertextHeader}
-   * followed by ciphertext data produced by the AEAD cipher in encryption mode.
+   *                 followed by ciphertext data produced by the AEAD cipher in
+   *                 encryption mode.
    */
   public static void encrypt(
     final AEADBlockCipher cipher,
@@ -105,8 +106,8 @@ public final class CipherUtil
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
    * @param  data  Ciphertext data containing a prepended {@link
-   * CiphertextHeader}. The header is treated as AAD input to the cipher that is
-   * verified during decryption.
+   *               CiphertextHeader}. The header is treated as AAD input to the
+   *               cipher that is verified during decryption.
    *
    * @return  Decrypted data that completely fills the returned byte array.
    */
@@ -136,10 +137,10 @@ public final class CipherUtil
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
    * @param  input  Input stream containing a {@link CiphertextHeader} followed
-   * by ciphertext data. The header is treated as AAD input to the cipher that
-   * is verified during decryption.
+   *                by ciphertext data. The header is treated as AAD input to
+   *                the cipher that is verified during decryption.
    * @param  output  Output stream that receives plaintext produced by block
-   * cipher in decryption mode.
+   *                 cipher in decryption mode.
    */
   public static void decrypt(
     final AEADBlockCipher cipher,
@@ -168,11 +169,11 @@ public final class CipherUtil
    * @param  cipher  Block cipher.
    * @param  key  Encryption key.
    * @param  nonce  IV generator. Callers must take care to ensure that the
-   * length of generated IVs is equal to the cipher block size.
+   *                length of generated IVs is equal to the cipher block size.
    * @param  data  Plaintext data to be encrypted.
    *
    * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted
-   * data that completely fills the returned byte array.
+   *          data that completely fills the returned byte array.
    */
   public static byte[] encrypt(
     final BlockCipher cipher,
@@ -199,10 +200,10 @@ public final class CipherUtil
    * @param  cipher  Block cipher.
    * @param  key  Encryption key.
    * @param  nonce  IV generator. Callers must take care to ensure that the
-   * length of generated IVs is equal to the cipher block size.
+   *                length of generated IVs is equal to the cipher block size.
    * @param  input  Input stream containing plaintext data.
    * @param  output  Output stream that receives ciphertext produced by block
-   * cipher in encryption mode.
+   *                 cipher in encryption mode.
    */
   public static void encrypt(
     final BlockCipher cipher,
@@ -230,7 +231,7 @@ public final class CipherUtil
    * @param  cipher  Block cipher.
    * @param  key  Encryption key.
    * @param  data  Ciphertext data containing a prepended {@link
-   * CiphertextHeader}.
+   *               CiphertextHeader}.
    *
    * @return  Decrypted data that completely fills the returned byte array.
    */
@@ -259,9 +260,9 @@ public final class CipherUtil
    * @param  cipher  Block cipher.
    * @param  key  Encryption key.
    * @param  input  Input stream containing a {@link CiphertextHeader} followed
-   * by ciphertext data.
+   *                by ciphertext data.
    * @param  output  Output stream that receives plaintext produced by block
-   * cipher in decryption mode.
+   *                 cipher in decryption mode.
    */
   public static void decrypt(
     final BlockCipher cipher,
@@ -290,7 +291,7 @@ public final class CipherUtil
    * @param  data  Plaintext data to encrypt.
    *
    * @return  Concatenation of encoded header and encrypted data that completely
-   * fills the returned byte array.
+   *          fills the returned byte array.
    */
   private static byte[] encrypt(
     final BlockCipherAdapter cipher,
@@ -315,7 +316,7 @@ public final class CipherUtil
    * @param  cipher  Adapter for either a block or AEAD cipher.
    * @param  data  Ciphertext data containing prepended header bytes.
    * @param  inOff  Offset into ciphertext at which encrypted data starts (i.e.
-   * after header).
+   *                after header).
    *
    * @return  Decrypted data that completely fills the returned byte array.
    */
@@ -346,7 +347,7 @@ public final class CipherUtil
    * @param  cipher  Adapter for either a block or AEAD cipher.
    * @param  input  Input stream containing data to be processed by the cipher.
    * @param  output  Output stream that receives the output of the cipher acting
-   * on the input.
+   *                 on the input.
    */
   private static void process(
     final BlockCipherAdapter cipher,

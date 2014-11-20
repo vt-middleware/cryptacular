@@ -1,5 +1,4 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-
 package org.cryptacular.x509.dn;
 
 import java.util.ArrayList;
@@ -9,13 +8,14 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Simple implementation of the X.501 RDNSequence type described
- * in section 4.1.2.4 of RFC 2459.
+ * Simple implementation of the X.501 RDNSequence type described in section
+ * 4.1.2.4 of RFC 2459.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class RDNSequence implements Iterable<RDN>
 {
+
   /** Maintains the list/sequence of RDNs. */
   private final List<RDN> rdns = new ArrayList<>(10);
 
@@ -38,18 +38,17 @@ public class RDNSequence implements Iterable<RDN>
   }
 
 
-  /**
-   * @return  Iterable that moves backward over the RDN sequence.
-   */
+  /** @return  Iterable that moves backward over the RDN sequence. */
   public Iterable<RDN> backward()
   {
-    return new Iterable<RDN>()
-    {
+    return
+      new Iterable<RDN>() {
       @Override
       public Iterator<RDN> iterator()
       {
-        return new Iterator<RDN>()
-        {
+        return
+          new Iterator<RDN>() {
+
           /** List iterator. */
           private final ListIterator<RDN> it = rdns.listIterator(rdns.size());
 
@@ -83,7 +82,7 @@ public class RDNSequence implements Iterable<RDN>
    * @param  type  Attribute type.
    *
    * @return  Non-null list of attributes of given type. An empty list is
-   * returned if there are no attributes of the given type.
+   *          returned if there are no attributes of the given type.
    */
   public List<String> getValues(final AttributeType type)
   {
@@ -102,7 +101,7 @@ public class RDNSequence implements Iterable<RDN>
    * @param  type  Attribute type.
    *
    * @return  Value of first attribute of given type or null if no attributes of
-   * given type exist.
+   *          given type exist.
    */
   public String getValue(final AttributeType type)
   {
@@ -118,7 +117,7 @@ public class RDNSequence implements Iterable<RDN>
    * the list in order.
    *
    * @return  String representation that resembles an X.509 distinguished name,
-   * e.g. <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
+   *          e.g. <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
    */
   @Override
   public String toString()

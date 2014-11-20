@@ -55,7 +55,7 @@ public enum OpenSSLAlgorithm {
    *
    * @param  algId  Algorithm identifier, e.g. aes-128-cbc.
    * @param  cipherSpec  Block cipher specification that corresponds to
-   * algorithm ID.
+   *                     algorithm ID.
    */
   OpenSSLAlgorithm(final String algId, final KeyedBlockCipherSpec cipherSpec)
   {

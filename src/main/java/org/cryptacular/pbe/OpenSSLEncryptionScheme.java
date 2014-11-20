@@ -44,7 +44,7 @@ public class OpenSSLEncryptionScheme extends AbstractEncryptionScheme
    *
    * @param  algorithm  OpenSSL key encryption algorithm.
    * @param  iv  Explicit IV; first 8 bytes also used for salt in PBE key
-   * generation.
+   *             generation.
    * @param  password  Password used to derive key.
    */
   public OpenSSLEncryptionScheme(

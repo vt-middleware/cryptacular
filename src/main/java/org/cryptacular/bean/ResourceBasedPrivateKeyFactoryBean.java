@@ -3,13 +3,12 @@ package org.cryptacular.bean;
 
 import java.io.IOException;
 import java.security.PrivateKey;
-
 import org.cryptacular.io.Resource;
 import org.cryptacular.util.KeyPairUtil;
 
 /**
- * Factory for reading a private from a {@link Resource} containing data
- * in any of the formats supported by {@link
+ * Factory for reading a private from a {@link Resource} containing data in any
+ * of the formats supported by {@link
  * KeyPairUtil#readPrivateKey(java.io.InputStream, char[])}.
  *
  * @author  Middleware Services
@@ -19,6 +18,7 @@ import org.cryptacular.util.KeyPairUtil;
 public class ResourceBasedPrivateKeyFactoryBean
   implements FactoryBean<PrivateKey>
 {
+
   /** Resource containing key data. */
   private Resource resource;
 

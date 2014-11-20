@@ -59,7 +59,7 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
    * Sets the keystore type.
    *
    * @param  type  JCEKS (default), JKS, PKCS12, or BKS. <strong>NOTE:</strong>
-   * BKS type is supported only when BC provider is installed.
+   *               BKS type is supported only when BC provider is installed.
    */
   public void setType(final String type)
   {

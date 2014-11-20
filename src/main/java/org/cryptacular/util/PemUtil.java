@@ -70,9 +70,9 @@ public final class PemUtil
    * @param  b  Byte to test.
    *
    * @return  True if the byte represents an ASCII character in the set of valid
-   * characters for base64 encoding, false otherwise. The padding character '='
-   * is not considered valid since it may only appear at the end of a base64
-   * encoded value.
+   *          characters for base64 encoding, false otherwise. The padding
+   *          character '=' is not considered valid since it may only appear at
+   *          the end of a base64 encoded value.
    */
   public static boolean isBase64Char(final byte b)
   {

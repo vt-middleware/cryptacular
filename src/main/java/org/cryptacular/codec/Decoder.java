@@ -39,7 +39,7 @@ public interface Decoder
    * @param  inputSize  Size of input buffer in characters.
    *
    * @return  Minimum byte buffer size required to store all decoded characters
-   * in input buffer.
+   *          in input buffer.
    */
   int outputSize(int inputSize);
 }

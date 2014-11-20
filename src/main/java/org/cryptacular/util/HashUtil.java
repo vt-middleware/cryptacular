@@ -36,13 +36,14 @@ public final class HashUtil
    *
    * @param  digest  Hash algorithm.
    * @param  data  Data to hash. Supported types are <code>byte[]</code>, {@link
-   * CharSequence} ,{@link InputStream}, and {@link Resource}. Character data is
-   * processed in the <code>UTF-8</code> character set; if another character set
-   * is desired, the caller should convert to <code>byte[]</code> and provide
-   * the resulting bytes.
+   *               CharSequence} ,{@link InputStream}, and {@link Resource}.
+   *               Character data is processed in the <code>UTF-8</code>
+   *               character set; if another character set is desired, the
+   *               caller should convert to <code>byte[]</code> and provide the
+   *               resulting bytes.
    *
    * @return  Byte array of length {@link Digest#getDigestSize()} containing
-   * hash output.
+   *          hash output.
    */
   public static byte[] hash(final Digest digest, final Object... data)
   {
@@ -89,13 +90,14 @@ public final class HashUtil
    * @param  digest  Hash algorithm.
    * @param  iterations  Number of hash rounds. Must be positive value.
    * @param  data  Data to hash. Supported types are <code>byte[]</code>, {@link
-   * CharSequence} ,{@link InputStream}, and {@link Resource}. Character data is
-   * processed in the <code>UTF-8</code> character set; if another character set
-   * is desired, the caller should convert to <code>byte[]</code> and provide
-   * the resulting bytes.
+   *               CharSequence} ,{@link InputStream}, and {@link Resource}.
+   *               Character data is processed in the <code>UTF-8</code>
+   *               character set; if another character set is desired, the
+   *               caller should convert to <code>byte[]</code> and provide the
+   *               resulting bytes.
    *
    * @return  Byte array of length {@link Digest#getDigestSize()} containing
-   * hash output.
+   *          hash output.
    */
   public static byte[] hash(
     final Digest digest,
@@ -120,13 +122,14 @@ public final class HashUtil
    *
    * @param  digest  Hash algorithm.
    * @param  hash  Hash to compare with. If the length of the array is greater
-   * than the length of the digest output, anything beyond the digest length is
-   * considered salt data that is hashed <strong>after</strong> the input data.
+   *               than the length of the digest output, anything beyond the
+   *               digest length is considered salt data that is hashed <strong>
+   *               after</strong> the input data.
    * @param  iterations  Number of hash rounds.
    * @param  data  Data to hash.
    *
    * @return  True if the hash of the data under the given digest is equal to
-   * the hash, false otherwise.
+   *          the hash, false otherwise.
    */
   public static boolean compareHash(
     final Digest digest,
@@ -159,11 +162,11 @@ public final class HashUtil
    * @param  hash  Salted hash data.
    * @param  iterations  Number of hash rounds.
    * @param  saltAfterData  True to apply salt after data, false to apply salt
-   * before data.
+   *                        before data.
    * @param  data  Data to hash, which should NOT include the salt value.
    *
    * @return  True if the hash of the data under the given digest is equal to
-   * the hash, false otherwise.
+   *          the hash, false otherwise.
    */
   public static boolean compareHash(
     final Digest digest,
@@ -190,7 +193,7 @@ public final class HashUtil
    * Produces the SHA-1 hash of the given data.
    *
    * @param  data  Data to hash. See {@link #hash(Digest, Object...)} for
-   * supported inputs.
+   *               supported inputs.
    *
    * @return  20-byte array containing hash output.
    *
@@ -206,7 +209,7 @@ public final class HashUtil
    * Produces the SHA-256 hash of the given data.
    *
    * @param  data  Data to hash. See {@link #hash(Digest, Object...)} for
-   * supported inputs.
+   *               supported inputs.
    *
    * @return  32-byte array containing hash output.
    *
@@ -222,7 +225,7 @@ public final class HashUtil
    * Produces the SHA-512 hash of the given data.
    *
    * @param  data  Data to hash. See {@link #hash(Digest, Object...)} for
-   * supported inputs.
+   *               supported inputs.
    *
    * @return  64-byte array containing hash output.
    *
@@ -238,9 +241,9 @@ public final class HashUtil
    * Produces the SHA-3 hash of the given data.
    *
    * @param  bitLength  One of the supported SHA-3 output bit lengths: 224, 256,
-   * 384, or 512.
+   *                    384, or 512.
    * @param  data  Data to hash. See {@link #hash(Digest, Object...)} for
-   * supported inputs.
+   *               supported inputs.
    *
    * @return  Byte array of size <code>bitLength</code> containing hash output.
    *

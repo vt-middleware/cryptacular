@@ -84,7 +84,7 @@ public abstract class AbstractCipherBean implements CipherBean
 
   /**
    * @return  Alias that specifies the {@link KeyStore} entry containing the
-   * {@link SecretKey}.
+   *          {@link SecretKey}.
    */
   public String getKeyAlias()
   {

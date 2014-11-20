@@ -47,7 +47,7 @@ public class HexEncoder implements Encoder
    * string.
    *
    * @param  delimitBytes  True to delimit every two characters (i.e. every
-   * byte) with ':' character.
+   *                       byte) with ':' character.
    */
   public HexEncoder(final boolean delimitBytes)
   {

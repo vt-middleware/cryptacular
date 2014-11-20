@@ -11,6 +11,7 @@ import java.nio.CharBuffer;
  */
 public abstract class AbstractBaseNEncoder implements Encoder
 {
+
   /**
    * Platform-specific line terminator string, e.g. LF (Unix), CRLF (Windows).
    */
@@ -48,9 +49,11 @@ public abstract class AbstractBaseNEncoder implements Encoder
    * @param  charactersPerLine  Number of characters per line.
    */
   public AbstractBaseNEncoder(
-      final char[] characterSet, final int charactersPerLine)
+    final char[] characterSet,
+    final int charactersPerLine)
   {
     charset = characterSet;
+
     long mask = 0;
     for (int i = 1; i <= bitsPerChar; i++) {
       mask |= 1L << (blockLength - i);
@@ -106,15 +109,11 @@ public abstract class AbstractBaseNEncoder implements Encoder
   }
 
 
-  /**
-   * @return  Number of bits in a block of encoded characters.
-   */
+  /** @return  Number of bits in a block of encoded characters. */
   protected abstract int getBlockLength();
 
 
-  /**
-   * @return  Number of bits encoding a single character.
-   */
+  /** @return  Number of bits encoding a single character. */
   protected abstract int getBitsPerChar();
 
 
@@ -123,7 +122,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
    *
    * @param  output  Output buffer.
    * @param  stop  Bit shift stop position where data in current encoding block
-   * ends.
+   *               ends.
    */
   private void writeOutput(final CharBuffer output, final int stop)
   {

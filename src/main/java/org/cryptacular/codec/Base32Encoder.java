@@ -8,6 +8,7 @@ package org.cryptacular.codec;
  */
 public class Base32Encoder extends AbstractBaseNEncoder
 {
+
   /** Base 32 character encoding table. */
   private static final char[] ENCODING_TABLE = new char[32];
 
@@ -39,7 +40,7 @@ public class Base32Encoder extends AbstractBaseNEncoder
    * number of characters per line in the default character set.
    *
    * @param  charactersPerLine  Number of characters per line. A zero or
-   * negative value disables line breaks.
+   *                            negative value disables line breaks.
    */
   public Base32Encoder(final int charactersPerLine)
   {

@@ -25,7 +25,7 @@ public interface BlockCipherAdapter extends CipherAdapter
    *
    * @param  out  Output buffer to receive final processing output.
    * @param  outOff  Offset into output buffer where processed data should
-   * start.
+   *                 start.
    *
    * @return  Number of bytes written to output buffer.
    */

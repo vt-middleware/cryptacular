@@ -3,7 +3,6 @@ package org.cryptacular.bean;
 
 import java.io.File;
 import java.security.PublicKey;
-
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
@@ -14,7 +13,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Unit test for {@link PemBasedPublicKeyFactoryBean}.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
 public class PemBasedPublicKeyFactoryBeanTest
 {
@@ -32,7 +31,8 @@ public class PemBasedPublicKeyFactoryBeanTest
   }
 
   @Test(dataProvider = "keys")
-  public void testNewInstance(final String path) throws Exception
+  public void testNewInstance(final String path)
+    throws Exception
   {
     final String pem = ByteUtil.toString(StreamUtil.readAll(new File(path)));
     final PemBasedPublicKeyFactoryBean factory =

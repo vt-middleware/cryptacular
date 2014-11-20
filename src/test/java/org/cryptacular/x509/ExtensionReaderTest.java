@@ -20,6 +20,7 @@ import org.cryptacular.util.CertUtil;
 import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -204,15 +205,15 @@ public class ExtensionReaderTest
                 new GeneralNames(
                   uri(
                     "http://vtca-p.eprov.seti.vt.edu:8080/ejbca/publicweb/" +
-                      "webdist/certdist?cmd=crl&" +
+                    "webdist/certdist?cmd=crl&" +
                     "issuer=CN=Virginia+Tech+Middleware+CA,O=Virginia+" +
-                      "Polytechnic+Institute+and+State+University," +
-                      "DC=vt,DC=edu,C=US"))),
+                    "Polytechnic+Institute+and+State+University," +
+                    "DC=vt,DC=edu,C=US"))),
               null,
               new GeneralNames(
                 dirName(
                   "CN=Virginia Tech Middleware CA,O=Virginia Polytechnic " +
-                    "Institute and State University,DC=vt,DC=edu,C=US"))),
+                  "Institute and State University,DC=vt,DC=edu,C=US"))),
           },
         },
       };

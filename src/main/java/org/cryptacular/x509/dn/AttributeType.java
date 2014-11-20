@@ -9,6 +9,7 @@ package org.cryptacular.x509.dn;
  */
 public interface AttributeType
 {
+
   /** @return  Attribute OID. */
   String getOid();
 

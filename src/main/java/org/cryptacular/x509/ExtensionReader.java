@@ -50,8 +50,9 @@ public final class ExtensionReader
    * 4.2 of RFC 2459.
    *
    * @param  extensionOidOrName  OID or extension name, e.g. 2.5.29.14
-   * orSubjectK eyIdentifier. In the case of extension name, the name is
-   * case-sensitive and follows the conventions in RFC 2459.
+   *                             orSubjectK eyIdentifier. In the case of
+   *                             extension name, the name is case-sensitive and
+   *                             follows the conventions in RFC 2459.
    *
    * @return  Extension type containing data from requested extension field.
    */
@@ -100,10 +101,10 @@ public final class ExtensionReader
    * certificate.
    *
    * @return  Collection of subject alternative names or null if the certificate
-   * does not define this extension field. Note that an empty collection of
-   * names is different from a null return value; in the former case the field
-   * is defined but empty, whereas in the latter the field is not defined on the
-   * certificate.
+   *          does not define this extension field. Note that an empty
+   *          collection of names is different from a null return value; in the
+   *          former case the field is defined but empty, whereas in the latter
+   *          the field is not defined on the certificate.
    */
   public GeneralNames readSubjectAlternativeName()
   {
@@ -116,10 +117,10 @@ public final class ExtensionReader
    * of the certificate.
    *
    * @return  Collection of issuer alternative names or null if the certificate
-   * does not define this extension field. Note that an empty collection of
-   * names is different from a null return value; in the former case the field
-   * is defined but empty, whereas in the latter the field is not defined on the
-   * certificate.
+   *          does not define this extension field. Note that an empty
+   *          collection of names is different from a null return value; in the
+   *          former case the field is defined but empty, whereas in the latter
+   *          the field is not defined on the certificate.
    */
   public GeneralNames readIssuerAlternativeName()
   {
@@ -132,7 +133,7 @@ public final class ExtensionReader
    * certificate.
    *
    * @return  Basic constraints defined on certificate or null if the
-   * certificate does not define the field.
+   *          certificate does not define the field.
    */
   public BasicConstraints readBasicConstraints()
   {
@@ -145,7 +146,7 @@ public final class ExtensionReader
    * the certificate.
    *
    * @return  List of certificate policies defined on certificate or null if the
-   * certificate does not define the field.
+   *          certificate does not define the field.
    */
   public List<PolicyInformation> readCertificatePolicies()
   {
@@ -208,7 +209,7 @@ public final class ExtensionReader
    * certificate.
    *
    * @return  List of supported extended key usages or null if extension is not
-   * defined.
+   *          defined.
    */
   public List<KeyPurposeId> readExtendedKeyUsage()
   {
@@ -231,7 +232,7 @@ public final class ExtensionReader
    * of the certificate.
    *
    * @return  List of CRL distribution points or null if extension is not
-   * defined.
+   *          defined.
    */
   public List<DistributionPoint> readCRLDistributionPoints()
   {

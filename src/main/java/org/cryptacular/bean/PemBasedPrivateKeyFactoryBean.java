@@ -2,16 +2,15 @@
 package org.cryptacular.bean;
 
 import java.security.PrivateKey;
-
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.KeyPairUtil;
 import org.cryptacular.util.PemUtil;
 
 /**
  * Factory for creating a public key from a PEM-encoded private key in any
- * format supported by {@link KeyPairUtil#decodePrivateKey(byte[])}.
- * Note that this component does not support encrypted private keys; see
- * {@link ResourceBasedPrivateKeyFactoryBean} for encryption support.
+ * format supported by {@link KeyPairUtil#decodePrivateKey(byte[])}. Note that
+ * this component does not support encrypted private keys; see {@link
+ * ResourceBasedPrivateKeyFactoryBean} for encryption support.
  *
  * @author  Middleware Services
  * @see  org.cryptacular.util.KeyPairUtil#decodePrivateKey(byte[])

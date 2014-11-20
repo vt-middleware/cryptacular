@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import javax.security.auth.x500.X500Principal;
-
 import org.cryptacular.codec.HexEncoder;
 
 /**
@@ -44,12 +43,14 @@ public class LdapNameFormatter implements NameFormatter
       if (i++ > 0) {
         builder.append(RDN_SEPARATOR);
       }
+
       int j = 0;
       for (Attribute attr : rdn.getAttributes()) {
         if (j++ > 0) {
           builder.append(ATV_SEPARATOR);
         }
         builder.append(attr.getType()).append('=');
+
         final AttributeType type = attr.getType();
         final String value = attr.getValue();
         if (type instanceof StandardAttributeType) {
@@ -76,6 +77,7 @@ public class LdapNameFormatter implements NameFormatter
       output.append(ESCAPE_CHAR);
     }
     output.append(c);
+
     final int nmax = value.length() - 1;
     for (int n = 1; n < nmax; n++) {
       c = value.charAt(n);
@@ -102,6 +104,7 @@ public class LdapNameFormatter implements NameFormatter
   private static void encode(final String value, final StringBuilder output)
   {
     output.append('#');
+
     final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
     final CharBuffer out = CharBuffer.allocate(bytes.length * 2);
     ENCODER.encode(ByteBuffer.wrap(bytes), out);

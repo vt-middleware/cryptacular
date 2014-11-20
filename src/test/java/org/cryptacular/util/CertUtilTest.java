@@ -10,6 +10,7 @@ import org.cryptacular.x509.GeneralNameType;
 import org.cryptacular.x509.KeyUsageBits;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;

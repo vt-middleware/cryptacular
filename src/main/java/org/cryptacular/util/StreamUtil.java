@@ -120,7 +120,7 @@ public final class StreamUtil
    *
    * @param  reader  Reader over character data.
    * @param  sizeHint  Estimate of amount of data to be read in number of
-   * characters.
+   *                   characters.
    *
    * @return  Data read from reader.
    */

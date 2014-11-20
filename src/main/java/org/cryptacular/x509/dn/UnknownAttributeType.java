@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * Describes a non-standard AttributeType in dotted decimal form that may appear
  * in a RelativeDistinguishedName (RDN) as defined in section 2 of RFC 2253.
  *
- * @author Middleware Services
+ * @author  Middleware Services
  */
 public class UnknownAttributeType implements AttributeType
 {
@@ -21,6 +21,7 @@ public class UnknownAttributeType implements AttributeType
 
   /**
    * Creates a new instance from the given oid.
+   *
    * @param  attributeTypeOid  Attribute type OID.
    */
   public UnknownAttributeType(final String attributeTypeOid)

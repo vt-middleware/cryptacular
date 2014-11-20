@@ -5,6 +5,7 @@ import javax.security.auth.x500.X500Principal;
 import org.cryptacular.util.CertUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -73,12 +74,12 @@ public class LdapNameFormatterTest
             .getSubjectX500Principal(),
           "CN=\\ space,O=VPI&SU,L=Blacksburg,ST=Virginia,C=US,DC=vt,DC=edu",
         },
-        new Object[]{
+        new Object[] {
           CertUtil.readCertificate(CRT_PATH + "needs-escaping-4.crt")
             .getSubjectX500Principal(),
           "CN=space2 \\ ,O=VPI&SU,L=Blacksburg,ST=Virginia,C=US,DC=vt,DC=edu",
         },
-        new Object[]{
+        new Object[] {
           CertUtil.readCertificate(CRT_PATH + "unknown-dn-attr.crt")
             .getSubjectX500Principal(),
           "DC=org,DC=example,1.2.3.4.5=#6e6f6e73656e7365,CN=marzipan",

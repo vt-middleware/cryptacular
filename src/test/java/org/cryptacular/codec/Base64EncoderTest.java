@@ -11,6 +11,7 @@ import org.cryptacular.util.HashUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -63,7 +64,9 @@ public class Base64EncoderTest
 
   @Test(dataProvider = "byte-data")
   public void testEncode(
-    final Base64Encoder encoder, final byte[] inBytes, final String expected)
+    final Base64Encoder encoder,
+    final byte[] inBytes,
+    final String expected)
     throws Exception
   {
     final ByteBuffer input = ByteBuffer.wrap(inBytes);

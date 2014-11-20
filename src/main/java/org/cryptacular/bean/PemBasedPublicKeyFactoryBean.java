@@ -2,7 +2,6 @@
 package org.cryptacular.bean;
 
 import java.security.PublicKey;
-
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.KeyPairUtil;
 import org.cryptacular.util.PemUtil;

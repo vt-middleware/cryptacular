@@ -10,6 +10,7 @@ import org.cryptacular.util.HashUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -63,7 +64,9 @@ public class Base64DecoderTest
 
   @Test(dataProvider = "encoded-data")
   public void testDecode(
-    final Base64Decoder decoder, final String data, final byte[] expected)
+    final Base64Decoder decoder,
+    final String data,
+    final byte[] expected)
     throws Exception
   {
     final CharBuffer input = CharBuffer.wrap(data);

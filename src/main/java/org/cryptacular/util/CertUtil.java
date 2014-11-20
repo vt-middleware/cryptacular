@@ -45,12 +45,13 @@ public final class CertUtil
    * @param  cert  Certificate to examine.
    *
    * @return  Subject CN or null if no CN attribute is defined in the subject
-   * DN.
+   *          DN.
    */
   public static String subjectCN(final X509Certificate cert)
   {
-    return new NameReader(cert).readSubject().getValue(
-          StandardAttributeType.CommonName);
+    return
+      new NameReader(cert).readSubject().getValue(
+        StandardAttributeType.CommonName);
   }
 
 
@@ -60,7 +61,7 @@ public final class CertUtil
    * @param  cert  X.509 certificate to examine.
    *
    * @return  List of subject alternative names or null if no subject alt names
-   * are defined.
+   *          are defined.
    */
   public static GeneralNames subjectAltNames(final X509Certificate cert)
   {
@@ -75,7 +76,7 @@ public final class CertUtil
    * @param  types  One or more subject alternative name types to fetch.
    *
    * @return  List of subject alternative names of the matching type(s) or null
-   * if none found.
+   *          if none found.
    */
   public static GeneralNames subjectAltNames(
     final X509Certificate cert,
@@ -167,7 +168,7 @@ public final class CertUtil
    * @param  candidates  Array of candidate certificates.
    *
    * @return  Certificate whose public key forms a keypair with the private key
-   * or null if no match is found.
+   *          or null if no match is found.
    */
   public static X509Certificate findEntityCertificate(
     final PrivateKey key,
@@ -184,7 +185,7 @@ public final class CertUtil
    * @param  candidates  Collection of candidate certificates.
    *
    * @return  Certificate whose public key forms a keypair with the private key
-   * or null if no match is found.
+   *          or null if no match is found.
    */
   public static X509Certificate findEntityCertificate(
     final PrivateKey key,
@@ -204,7 +205,7 @@ public final class CertUtil
    * given location.
    *
    * @param  path  Path to file containing an DER or PEM encoded X.509
-   * certificate.
+   *               certificate.
    *
    * @return  Certificate.
    */
@@ -264,7 +265,7 @@ public final class CertUtil
    * the given location.
    *
    * @param  path  Path to file containing a sequence of PEM or DER encoded
-   * certificates or PKCS#7 certificate chain.
+   *               certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
    */
@@ -279,7 +280,7 @@ public final class CertUtil
    * file.
    *
    * @param  file  File containing a sequence of PEM or DER encoded certificates
-   * or PKCS#7 certificate chain.
+   *               or PKCS#7 certificate chain.
    *
    * @return  Certificate.
    */
@@ -294,7 +295,7 @@ public final class CertUtil
    * stream.
    *
    * @param  in  Input stream containing a sequence of PEM or DER encoded
-   * certificates or PKCS#7 certificate chain.
+   *             certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
    */
@@ -316,7 +317,7 @@ public final class CertUtil
    * Creates an X.509 certificate chain from its ASN.1 encoded form.
    *
    * @param  encoded  Sequence of PEM or DER encoded certificates or PKCS#7
-   * certificate chain.
+   *                  certificate chain.
    *
    * @return  Certificate.
    */
@@ -379,7 +380,7 @@ public final class CertUtil
    * @param  policyOidsToCheck  One or more certificate policy OIDs to check.
    *
    * @return  True if certificate defines all given policy OIDs, false
-   * otherwise.
+   *          otherwise.
    */
   public static boolean hasPolicies(
     final X509Certificate cert,

@@ -11,6 +11,7 @@ import java.nio.CharBuffer;
  */
 public abstract class AbstractBaseNDecoder implements Decoder
 {
+
   /** Block of encoded characters. */
   private final char[] block = new char[getBlockLength() / getBitsPerChar()];
 
@@ -24,8 +25,8 @@ public abstract class AbstractBaseNDecoder implements Decoder
   /**
    * Creates a new instance with given parameters.
    *
-   * @param  decodingTable  Byte array indexed by characters in the
-   *                        character set encoding.
+   * @param  decodingTable  Byte array indexed by characters in the character
+   *                        set encoding.
    */
   public AbstractBaseNDecoder(final byte[] decodingTable)
   {
@@ -69,15 +70,11 @@ public abstract class AbstractBaseNDecoder implements Decoder
   }
 
 
-  /**
-   * @return  Number of bits in a block of encoded characters.
-   */
+  /** @return  Number of bits in a block of encoded characters. */
   protected abstract int getBlockLength();
 
 
-  /**
-   * @return  Number of bits encoding a single character.
-   */
+  /** @return  Number of bits encoding a single character. */
   protected abstract int getBitsPerChar();
 
 
@@ -102,6 +99,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
       shift -= getBitsPerChar();
       value |= b << shift;
     }
+
     final int stop = shift + getBitsPerChar() - 1;
     int offset = getBlockLength();
     while (offset > stop) {

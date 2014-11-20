@@ -40,7 +40,7 @@ public class SaltedHash
    * @param  hashWithSalt  Concatenation of hash and salt.
    * @param  digestLength  Number of bytes in digest output.
    * @param  toEnd  True if salt is appended to end of hash, false if salt is
-   * prepended to hash.
+   *                prepended to hash.
    */
   public SaltedHash(
     final byte[] hashWithSalt,
@@ -77,7 +77,7 @@ public class SaltedHash
    * Gets an encoded string of the concatenation of digest output and salt.
    *
    * @param  toEnd  True to append salt to end of hash, false to prefix hash
-   * with salt.
+   *                with salt.
    * @param  encoder  Encodes concatenated bytes to a string.
    *
    * @return  Salt concatenated to hash encoded as a string.
@@ -92,7 +92,7 @@ public class SaltedHash
    * Gets a byte array containing the concatenation of digest output and salt.
    *
    * @param  toEnd  True to append salt to end of hash, false to prefix hash
-   * with salt.
+   *                with salt.
    *
    * @return  Salt concatenated to hash.
    */

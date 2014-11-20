@@ -76,20 +76,25 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
       .newInstance();
     AEADBlockCipher aeadBlockCipher;
     switch (mode) {
+
     case "GCM":
       aeadBlockCipher = new GCMBlockCipher(blockCipher);
       break;
+
     case "CCM":
       aeadBlockCipher = new CCMBlockCipher(blockCipher);
       break;
+
     case "OCB":
       aeadBlockCipher = new OCBBlockCipher(
         blockCipher,
         new BlockCipherSpec(algorithm).newInstance());
       break;
+
     case "EAX":
       aeadBlockCipher = new EAXBlockCipher(blockCipher);
       break;
+
     default:
       throw new IllegalStateException("Unsupported mode " + mode);
     }
@@ -110,7 +115,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
    * instance of this class.
    *
    * @param  specification  AEAD block cipher specification of the form <code>
-   * algorithm/mode</code>.
+   *                        algorithm/mode</code>.
    *
    * @return  Buffered block cipher specification instance.
    */

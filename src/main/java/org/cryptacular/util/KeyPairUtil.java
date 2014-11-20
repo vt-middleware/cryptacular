@@ -119,7 +119,7 @@ public final class KeyPairUtil
    * @param  privKey  DSA, RSA, or EC private key.
    *
    * @return  True if the keys form a functioning keypair, false otherwise.
-   * Errors during signature verification are treated as false.
+   *          Errors during signature verification are treated as false.
    */
   public static boolean isKeyPair(
     final PublicKey pubKey,
@@ -133,15 +133,19 @@ public final class KeyPairUtil
     // Dispatch onto the algorithm-specific method
     final boolean result;
     switch (alg) {
+
     case "DSA":
       result = isKeyPair((DSAPublicKey) pubKey, (DSAPrivateKey) privKey);
       break;
+
     case "RSA":
       result = isKeyPair((RSAPublicKey) pubKey, (RSAPrivateKey) privKey);
       break;
+
     case "EC":
       result = isKeyPair((ECPublicKey) pubKey, (ECPrivateKey) privKey);
       break;
+
     default:
       throw new IllegalArgumentException(alg + " not supported.");
     }
@@ -157,7 +161,7 @@ public final class KeyPairUtil
    * @param  privKey  DSA private key.
    *
    * @return  True if the keys form a functioning keypair, false otherwise.
-   * Errors during signature verification are treated as false.
+   *          Errors during signature verification are treated as false.
    */
   public static boolean isKeyPair(
     final DSAPublicKey pubKey,
@@ -188,7 +192,7 @@ public final class KeyPairUtil
    * @param  privKey  RSA private key.
    *
    * @return  True if the keys form a functioning keypair, false otherwise.
-   * Errors during signature verification are treated as false.
+   *          Errors during signature verification are treated as false.
    */
   public static boolean isKeyPair(
     final RSAPublicKey pubKey,
@@ -226,7 +230,7 @@ public final class KeyPairUtil
    * @param  privKey  EC private key.
    *
    * @return  True if the keys form a functioning keypair, false otherwise.
-   * Errors during signature verification are treated as false.
+   *          Errors during signature verification are treated as false.
    */
   public static boolean isKeyPair(
     final ECPublicKey pubKey,

@@ -239,7 +239,7 @@ public final class ByteUtil
    * @param  buffer  Byte buffer to convert.
    *
    * @return  Byte array corresponding to bytes of buffer from current position
-   * to limit.
+   *          to limit.
    */
   public static byte[] toArray(final ByteBuffer buffer)
   {

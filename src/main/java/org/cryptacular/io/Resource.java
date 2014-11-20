@@ -22,7 +22,7 @@ public interface Resource
    * to provide for thread-safe usage patterns on a shared resource.</p>
    *
    * @return  Input stream around underlying resource, e.g. file, remote
-   * resource (URI), etc.
+   *          resource (URI), etc.
    *
    * @throws  IOException  On IO errors.
    */
