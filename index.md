@@ -2,9 +2,9 @@
 layout: default
 title: Cryptacular
 ---
-The spectacular complement to the Bouncy Castle crypto API for Java.
+A complement to the Bouncy Castle crypto API for Java.
 
-## Spectacularly familiar
+## Familiar
 Perform common cryptographic operations using familiar APIS, JCE and lightweight Bouncy Castle API.
 
 {% highlight java %}
@@ -15,7 +15,7 @@ ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
 CipherUtil.encrypt(cipher, key, new RBGNonce(), StreamUtil.makeStream(file), tempOut);
 {% endhighlight %}
 
-## Spectacularly secure
+## Secure
 Cryptography contains a number of pitfalls in the details, and Cryptacular provides prophylaxis:
 
 * Components that do the right thing by default
@@ -39,7 +39,7 @@ assertEquals(ByteUtil.toString(cipherBean.decrypt(ciphertext)), input);
 Beyond avoiding cryptography errors, Cryptacular ships with components that encourage use of modern algorithms
 (e.g. GCM ciphers, SHA-3 digest) and current standard (e.g. NIST SP-800-63).
 
-## Spectacularly convenient
+## Convenient
 Cryptacular facilitates common use cases and provides extension points to for complex cases.
 
 {% highlight java %}
