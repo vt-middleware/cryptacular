@@ -57,7 +57,6 @@ public abstract class AbstractWrappedDSAKey<T extends DSAKeyParameters>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {

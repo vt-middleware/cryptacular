@@ -33,7 +33,6 @@ public class StreamCipherSpec implements Spec<StreamCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {
@@ -41,7 +40,6 @@ public class StreamCipherSpec implements Spec<StreamCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public StreamCipher newInstance()
   {
@@ -74,7 +72,6 @@ public class StreamCipherSpec implements Spec<StreamCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

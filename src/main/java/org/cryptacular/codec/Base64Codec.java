@@ -16,7 +16,6 @@ public class Base64Codec implements Codec
   private final Decoder decoder = new Base64Decoder();
 
 
-  /** {@inheritDoc} */
   @Override
   public Encoder getEncoder()
   {
@@ -24,7 +23,6 @@ public class Base64Codec implements Codec
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public Decoder getDecoder()
   {

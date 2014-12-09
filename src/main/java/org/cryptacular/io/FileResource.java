@@ -34,7 +34,6 @@ public class FileResource implements Resource
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public InputStream getInputStream()
     throws IOException
@@ -43,7 +42,6 @@ public class FileResource implements Resource
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

@@ -29,7 +29,6 @@ public class SimpleHashBean extends AbstractHashBean implements HashBean<byte[]>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] hash(final Object... data)
   {

@@ -41,7 +41,6 @@ public class LongCounterNonce implements Nonce
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] generate()
     throws LimitException
@@ -50,7 +49,6 @@ public class LongCounterNonce implements Nonce
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int getLength()
   {

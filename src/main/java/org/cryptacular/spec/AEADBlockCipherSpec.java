@@ -45,7 +45,6 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {
@@ -102,7 +101,6 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

@@ -32,7 +32,6 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   private CipherParameters parameters;
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] encrypt(final byte[] plaintext)
   {
@@ -41,7 +40,6 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void encrypt(final InputStream in, final OutputStream out)
     throws IOException
@@ -51,7 +49,6 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] decrypt(final byte[] ciphertext)
   {
@@ -60,7 +57,6 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void decrypt(final InputStream in, final OutputStream out)
     throws IOException

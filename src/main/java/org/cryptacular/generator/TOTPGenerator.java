@@ -104,7 +104,6 @@ public class TOTPGenerator extends AbstractOTPGenerator
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected Digest getDigest()
   {

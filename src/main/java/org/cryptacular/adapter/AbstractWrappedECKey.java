@@ -48,7 +48,6 @@ public abstract class AbstractWrappedECKey<T extends ECKeyParameters>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {

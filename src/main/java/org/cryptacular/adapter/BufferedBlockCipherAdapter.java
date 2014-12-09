@@ -28,7 +28,6 @@ public class BufferedBlockCipherAdapter implements BlockCipherAdapter
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int getOutputSize(final int len)
   {
@@ -36,7 +35,6 @@ public class BufferedBlockCipherAdapter implements BlockCipherAdapter
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void init(final boolean forEncryption, final CipherParameters params)
   {
@@ -44,7 +42,6 @@ public class BufferedBlockCipherAdapter implements BlockCipherAdapter
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int processBytes(
     final byte[] in,
@@ -57,7 +54,6 @@ public class BufferedBlockCipherAdapter implements BlockCipherAdapter
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int doFinal(final byte[] out, final int outOff)
   {
@@ -69,7 +65,6 @@ public class BufferedBlockCipherAdapter implements BlockCipherAdapter
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void reset()
   {

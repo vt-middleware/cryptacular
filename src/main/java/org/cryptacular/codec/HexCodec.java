@@ -16,7 +16,6 @@ public class HexCodec implements Codec
   private final Decoder decoder = new HexDecoder();
 
 
-  /** {@inheritDoc} */
   @Override
   public Encoder getEncoder()
   {
@@ -24,7 +23,6 @@ public class HexCodec implements Codec
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public Decoder getDecoder()
   {

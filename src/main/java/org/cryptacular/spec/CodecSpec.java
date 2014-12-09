@@ -48,7 +48,6 @@ public class CodecSpec implements Spec<Codec>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public Codec newInstance()
   {
@@ -66,7 +65,6 @@ public class CodecSpec implements Spec<Codec>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

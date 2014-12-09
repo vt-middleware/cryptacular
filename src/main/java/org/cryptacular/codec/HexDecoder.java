@@ -34,7 +34,6 @@ public class HexDecoder implements Decoder
   private int count;
 
 
-  /** {@inheritDoc} */
   @Override
   public void decode(final CharBuffer input, final ByteBuffer output)
   {
@@ -61,7 +60,6 @@ public class HexDecoder implements Decoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void finalize(final ByteBuffer output)
   {
@@ -69,7 +67,6 @@ public class HexDecoder implements Decoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int outputSize(final int inputSize)
   {

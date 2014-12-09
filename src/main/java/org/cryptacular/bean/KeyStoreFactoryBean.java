@@ -96,7 +96,6 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public KeyStore newInstance()
   {

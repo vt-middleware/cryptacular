@@ -102,7 +102,6 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   @SuppressWarnings("unchecked")
   public T newInstance()

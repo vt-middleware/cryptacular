@@ -23,7 +23,6 @@ public class PKCS8PrivateKeyDecoder
   extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
 {
 
-  /** {@inheritDoc} */
   @Override
   protected byte[] decryptKey(final byte[] encrypted, final char[] password)
   {
@@ -45,7 +44,6 @@ public class PKCS8PrivateKeyDecoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected AsymmetricKeyParameter decodeASN1(final byte[] encoded)
   {

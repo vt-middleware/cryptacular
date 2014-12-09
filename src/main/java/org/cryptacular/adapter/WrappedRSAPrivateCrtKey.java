@@ -27,7 +27,6 @@ public class WrappedRSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getPublicExponent()
   {
@@ -35,7 +34,6 @@ public class WrappedRSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getPrimeP()
   {
@@ -43,7 +41,6 @@ public class WrappedRSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getPrimeQ()
   {
@@ -51,7 +48,6 @@ public class WrappedRSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getPrimeExponentP()
   {
@@ -59,7 +55,6 @@ public class WrappedRSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getPrimeExponentQ()
   {
@@ -67,7 +62,6 @@ public class WrappedRSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getCrtCoefficient()
   {
@@ -75,7 +69,6 @@ public class WrappedRSAPrivateCrtKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getPrivateExponent()
   {

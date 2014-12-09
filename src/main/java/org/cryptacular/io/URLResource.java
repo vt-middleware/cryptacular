@@ -31,7 +31,6 @@ public class URLResource implements Resource
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public InputStream getInputStream()
     throws IOException
@@ -40,7 +39,6 @@ public class URLResource implements Resource
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

@@ -26,7 +26,6 @@ public class WrappedRSAPublicKey extends AbstractWrappedRSAKey<RSAKeyParameters>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getPublicExponent()
   {

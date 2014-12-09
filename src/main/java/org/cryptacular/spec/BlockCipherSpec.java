@@ -44,7 +44,6 @@ public class BlockCipherSpec implements Spec<BlockCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {
@@ -52,7 +51,6 @@ public class BlockCipherSpec implements Spec<BlockCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BlockCipher newInstance()
   {
@@ -105,7 +103,6 @@ public class BlockCipherSpec implements Spec<BlockCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

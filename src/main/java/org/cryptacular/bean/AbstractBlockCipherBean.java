@@ -41,7 +41,6 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected byte[] process(
     final CiphertextHeader header,
@@ -81,7 +80,6 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected void process(
     final CiphertextHeader header,

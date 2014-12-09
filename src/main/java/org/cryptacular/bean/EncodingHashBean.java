@@ -64,7 +64,6 @@ public class EncodingHashBean extends AbstractHashBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String hash(final Object... data)
   {

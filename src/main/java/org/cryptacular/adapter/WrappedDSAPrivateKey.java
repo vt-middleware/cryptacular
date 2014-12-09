@@ -27,7 +27,6 @@ public class WrappedDSAPrivateKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getX()
   {

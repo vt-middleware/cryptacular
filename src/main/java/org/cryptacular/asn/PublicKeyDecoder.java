@@ -15,7 +15,6 @@ import org.cryptacular.util.PemUtil;
 public class PublicKeyDecoder implements ASN1Decoder<AsymmetricKeyParameter>
 {
 
-  /** {@inheritDoc} */
   @Override
   public AsymmetricKeyParameter decode(
     final byte[] encoded,

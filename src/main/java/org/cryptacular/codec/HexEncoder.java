@@ -55,7 +55,6 @@ public class HexEncoder implements Encoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void encode(final ByteBuffer input, final CharBuffer output)
   {
@@ -71,12 +70,10 @@ public class HexEncoder implements Encoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void finalize(final CharBuffer output) {}
 
 
-  /** {@inheritDoc} */
   @Override
   public int outputSize(final int inputSize)
   {

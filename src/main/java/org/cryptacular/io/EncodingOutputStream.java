@@ -48,7 +48,6 @@ public class EncodingOutputStream extends FilterOutputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void write(final int b)
     throws IOException
@@ -57,7 +56,6 @@ public class EncodingOutputStream extends FilterOutputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void write(final byte[] b)
     throws IOException
@@ -66,7 +64,6 @@ public class EncodingOutputStream extends FilterOutputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void write(final byte[] b, final int off, final int len)
     throws IOException
@@ -85,7 +82,6 @@ public class EncodingOutputStream extends FilterOutputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void flush()
     throws IOException
@@ -94,7 +90,6 @@ public class EncodingOutputStream extends FilterOutputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void close()
     throws IOException

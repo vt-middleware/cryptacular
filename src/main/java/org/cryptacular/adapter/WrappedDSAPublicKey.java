@@ -26,7 +26,6 @@ public class WrappedDSAPublicKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getY()
   {

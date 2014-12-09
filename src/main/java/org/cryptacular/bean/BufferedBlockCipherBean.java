@@ -70,7 +70,6 @@ public class BufferedBlockCipherBean extends AbstractBlockCipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected BufferedBlockCipherAdapter newCipher(
     final CiphertextHeader header,

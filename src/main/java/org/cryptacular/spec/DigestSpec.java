@@ -72,7 +72,6 @@ public class DigestSpec implements Spec<Digest>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {
@@ -159,7 +158,6 @@ public class DigestSpec implements Spec<Digest>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

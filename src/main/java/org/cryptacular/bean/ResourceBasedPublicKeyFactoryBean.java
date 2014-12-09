@@ -54,7 +54,6 @@ public class ResourceBasedPublicKeyFactoryBean implements FactoryBean<PublicKey>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public PublicKey newInstance()
   {

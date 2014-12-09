@@ -111,7 +111,6 @@ public class Attributes implements Iterable<Attribute>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public Iterator<Attribute> iterator()
   {

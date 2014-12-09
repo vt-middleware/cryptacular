@@ -111,7 +111,6 @@ public class CounterNonce implements Nonce
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] generate()
     throws LimitException
@@ -131,7 +130,6 @@ public class CounterNonce implements Nonce
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int getLength()
   {

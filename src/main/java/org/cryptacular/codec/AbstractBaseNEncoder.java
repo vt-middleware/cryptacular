@@ -63,7 +63,6 @@ public abstract class AbstractBaseNEncoder implements Encoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void encode(final ByteBuffer input, final CharBuffer output)
   {
@@ -77,7 +76,6 @@ public abstract class AbstractBaseNEncoder implements Encoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void finalize(final CharBuffer output)
   {
@@ -97,7 +95,6 @@ public abstract class AbstractBaseNEncoder implements Encoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int outputSize(final int inputSize)
   {

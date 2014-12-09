@@ -37,7 +37,6 @@ public abstract class AbstractWrappedRSAKey<T extends RSAKeyParameters>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {

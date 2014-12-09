@@ -32,7 +32,6 @@ public class LdapNameFormatter implements NameFormatter
   private static final HexEncoder ENCODER = new HexEncoder();
 
 
-  /** {@inheritDoc} */
   @Override
   public String format(final X500Principal dn)
   {

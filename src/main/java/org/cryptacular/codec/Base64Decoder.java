@@ -63,7 +63,6 @@ public class Base64Decoder extends AbstractBaseNDecoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected int getBlockLength()
   {
@@ -71,7 +70,6 @@ public class Base64Decoder extends AbstractBaseNDecoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected int getBitsPerChar()
   {

@@ -34,7 +34,6 @@ public abstract class AbstractBaseNDecoder implements Decoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void decode(final CharBuffer input, final ByteBuffer output)
   {
@@ -52,7 +51,6 @@ public abstract class AbstractBaseNDecoder implements Decoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void finalize(final ByteBuffer output)
   {
@@ -62,7 +60,6 @@ public abstract class AbstractBaseNDecoder implements Decoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int outputSize(final int inputSize)
   {

@@ -51,7 +51,6 @@ public class DecodingInputStream extends FilterInputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int read()
     throws IOException
@@ -60,7 +59,6 @@ public class DecodingInputStream extends FilterInputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int read(final byte[] b)
     throws IOException
@@ -69,7 +67,6 @@ public class DecodingInputStream extends FilterInputStream
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int read(final byte[] b, final int off, final int len)
     throws IOException

@@ -26,7 +26,6 @@ public class WrappedECPublicKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public ECPoint getW()
   {

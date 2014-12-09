@@ -77,7 +77,6 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public SecretKey newInstance()
   {

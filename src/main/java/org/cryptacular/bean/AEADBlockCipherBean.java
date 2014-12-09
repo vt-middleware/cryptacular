@@ -73,7 +73,6 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void encrypt(final InputStream input, final OutputStream output)
   {
@@ -85,7 +84,6 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void decrypt(final InputStream input, final OutputStream output)
   {
@@ -97,7 +95,6 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected AEADBlockCipherAdapter newCipher(
     final CiphertextHeader header,

@@ -59,7 +59,6 @@ public class PemBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKey>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public PrivateKey newInstance()
   {

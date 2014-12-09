@@ -85,7 +85,6 @@ public class ResourceBasedPrivateKeyFactoryBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public PrivateKey newInstance()
   {

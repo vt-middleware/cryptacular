@@ -58,7 +58,6 @@ public class RandomIdGenerator implements IdGenerator
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String generate()
   {

@@ -27,7 +27,6 @@ public class HOTPGenerator extends AbstractOTPGenerator
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected Digest getDigest()
   {

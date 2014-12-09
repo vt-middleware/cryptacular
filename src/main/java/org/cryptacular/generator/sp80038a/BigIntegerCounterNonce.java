@@ -43,7 +43,6 @@ public class BigIntegerCounterNonce implements Nonce
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] generate()
     throws LimitException
@@ -72,7 +71,6 @@ public class BigIntegerCounterNonce implements Nonce
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public int getLength()
   {

@@ -51,7 +51,6 @@ public class ClassPathResource implements Resource
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public InputStream getInputStream()
   {

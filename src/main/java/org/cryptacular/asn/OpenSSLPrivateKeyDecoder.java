@@ -32,7 +32,6 @@ public class OpenSSLPrivateKeyDecoder
   extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
 {
 
-  /** {@inheritDoc} */
   @Override
   protected byte[] decryptKey(final byte[] encrypted, final char[] password)
   {
@@ -51,7 +50,6 @@ public class OpenSSLPrivateKeyDecoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected AsymmetricKeyParameter decodeASN1(final byte[] encoded)
   {

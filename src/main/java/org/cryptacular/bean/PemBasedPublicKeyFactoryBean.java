@@ -68,7 +68,6 @@ public class PemBasedPublicKeyFactoryBean implements FactoryBean<PublicKey>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public PublicKey newInstance()
   {

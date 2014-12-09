@@ -83,7 +83,6 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String getAlgorithm()
   {
@@ -161,7 +160,6 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString()
   {

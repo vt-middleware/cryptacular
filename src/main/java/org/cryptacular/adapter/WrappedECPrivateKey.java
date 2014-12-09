@@ -26,7 +26,6 @@ public class WrappedECPrivateKey
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public BigInteger getS()
   {

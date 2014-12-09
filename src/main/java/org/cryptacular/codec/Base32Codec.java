@@ -16,7 +16,6 @@ public class Base32Codec implements Codec
   private final Decoder decoder = new Base32Decoder();
 
 
-  /** {@inheritDoc} */
   @Override
   public Encoder getEncoder()
   {
@@ -24,7 +23,6 @@ public class Base32Codec implements Codec
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public Decoder getDecoder()
   {

@@ -13,7 +13,6 @@ import org.cryptacular.util.PemUtil;
 public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
 {
 
-  /** {@inheritDoc} */
   @Override
   public T decode(final byte[] encoded, final Object... args)
   {

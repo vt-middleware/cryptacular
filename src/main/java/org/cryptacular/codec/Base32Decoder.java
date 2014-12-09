@@ -36,7 +36,6 @@ public class Base32Decoder extends AbstractBaseNDecoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected int getBlockLength()
   {
@@ -44,7 +43,6 @@ public class Base32Decoder extends AbstractBaseNDecoder
   }
 
 
-  /** {@inheritDoc} */
   @Override
   protected int getBitsPerChar()
   {

@@ -132,7 +132,6 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] encrypt(final byte[] input)
   {
@@ -141,7 +140,6 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void encrypt(final InputStream input, final OutputStream output)
   {
@@ -159,7 +157,6 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public byte[] decrypt(final byte[] input)
   {
@@ -168,7 +165,6 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public void decrypt(final InputStream input, final OutputStream output)
   {
