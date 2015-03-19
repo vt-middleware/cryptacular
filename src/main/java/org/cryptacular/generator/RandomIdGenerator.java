@@ -1,7 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.generator;
 
-import org.bouncycastle.crypto.prng.drbg.SP80090DRBG;
+import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.cryptacular.util.NonceUtil;
 
 /**
@@ -21,9 +21,6 @@ public class RandomIdGenerator implements IdGenerator
 
   /** Identifier character set. */
   private final String charset;
-
-  /** Random bit generator. */
-  private final SP80090DRBG rbg;
 
 
   /**
@@ -54,7 +51,6 @@ public class RandomIdGenerator implements IdGenerator
         "Charset length must be in the range 2 - 128");
     }
     this.charset = charset;
-    this.rbg = NonceUtil.newRBG(8);
   }
 
 
@@ -62,11 +58,15 @@ public class RandomIdGenerator implements IdGenerator
   public String generate()
   {
     final StringBuilder id = new StringBuilder(length);
-    final byte[] bits = new byte[1];
+    final byte[] output = new byte[length];
+    final int outsize = NonceUtil.newRBG(
+      new SHA256Digest(), 32).generate(output, null, false);
+    if (outsize < length) {
+      throw new IllegalStateException("Insufficient entropy");
+    }
     int index;
-    for (int i = 0; i < length; i++) {
-      rbg.generate(bits, null, false);
-      index = 0x7F & bits[0];
+    for (int i = 0; i < output.length && id.length() < length; i++) {
+      index = 0x7F & output[i];
       id.append(charset.charAt(index % charset.length()));
     }
     return id.toString();
