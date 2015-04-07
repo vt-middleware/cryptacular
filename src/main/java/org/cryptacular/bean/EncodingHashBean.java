@@ -95,6 +95,15 @@ public class EncodingHashBean extends AbstractHashBean
   }
 
 
+  /**
+   * Hashes the given data. If {@link #isSalted()} is true then the last
+   * parameter must be a byte array containing the salt. The salt value will be
+   * appended to the encoded hash that is returned.
+   *
+   * @param  data  Data to hash.
+   *
+   * @return  Encoded digest output, including a salt if provided.
+   */
   @Override
   public String hash(final Object... data)
   {
