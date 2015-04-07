@@ -7,7 +7,6 @@ import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -24,24 +23,43 @@ public class EncodingHashBeanTest
     return
       new Object[][] {
         {
-          new DigestSpec("SHA1"),
-          CodecSpec.BASE64,
+          new EncodingHashBean(
+            CodecSpec.BASE64, new DigestSpec("SHA1"), 1, false),
           new Object[] {
             CodecUtil.b64("7FHsteHnm6XQsJT1TTKbxw=="),
             CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A=="),
           },
-          1,
           "Oadnuuj7QsRPUuMBiu+dmlT6qzU=",
         },
         {
-          new DigestSpec("SHA256"),
-          CodecSpec.HEX,
+          new EncodingHashBean(
+            CodecSpec.BASE64, new DigestSpec("SHA1"), 1, true),
+          new Object[] {
+            CodecUtil.b64("7FHsteHnm6XQsJT1TTKbxw=="),
+            CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A=="),
+            CodecUtil.b64("/siCJIPstwM="),
+          },
+          "uRt+VlmPzfGOPjSGoZLTxpvd1dP+yIIkg+y3Aw==",
+        },
+        {
+          new EncodingHashBean(
+            CodecSpec.HEX, new DigestSpec("SHA256"), 3, false),
           new Object[] {
             CodecUtil.b64("7FHsteHnm6XQsJT1TTKbxw=="),
             CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A=="),
           },
-          3,
           "3a1edec6aef6d1736bec63130755690c07f04d7e7139d8fd685cc2d989961b79",
+        },
+        {
+          new EncodingHashBean(
+            CodecSpec.HEX, new DigestSpec("SHA256"), 3, true),
+          new Object[] {
+            CodecUtil.b64("7FHsteHnm6XQsJT1TTKbxw=="),
+            CodecUtil.b64("ehp6PCnojSegFpRvStqQ9A=="),
+            CodecUtil.b64("DH9M1lDibNU="),
+          },
+          "79f2868e7f72ed18cd67858e8ffe589c6090d696f7ff298e021faf5855fd41a10" +
+            "c7f4cd650e26cd5",
         },
       };
   }
@@ -52,10 +70,15 @@ public class EncodingHashBeanTest
     return
       new Object[][] {
         {
-          new DigestSpec("SHA1"),
-          CodecSpec.BASE64,
+          new EncodingHashBean(
+            CodecSpec.BASE64, new DigestSpec("SHA1"), 1, false),
           "7fyOZXGp+gKMziV/2Px7RIMkxyI2O1H8",
-          1,
+          new Object[] {ByteUtil.toBytes("password"), },
+        },
+        {
+          new EncodingHashBean(
+            CodecSpec.BASE64, new DigestSpec("SHA1"), 1, true),
+          "lrb+YkKHqoGbFtxYd0B5567N6ZYwqwvWQwvoSg==",
           new Object[] {ByteUtil.toBytes("password"), },
         },
       };
@@ -64,34 +87,22 @@ public class EncodingHashBeanTest
 
   @Test(dataProvider = "hash-data")
   public void testHash(
-    final DigestSpec digest,
-    final CodecSpec codec,
+    final EncodingHashBean bean,
     final Object[] input,
-    final int iterations,
     final String expected)
     throws Exception
   {
-    final EncodingHashBean bean = new EncodingHashBean();
-    bean.setDigestSpec(digest);
-    bean.setCodecSpec(codec);
-    bean.setIterations(iterations);
     assertEquals(bean.hash(input), expected);
   }
 
 
   @Test(dataProvider = "compare-data")
   public void testCompare(
-    final DigestSpec digest,
-    final CodecSpec codec,
+    final EncodingHashBean bean,
     final String hash,
-    final int iterations,
     final Object[] input)
     throws Exception
   {
-    final EncodingHashBean bean = new EncodingHashBean();
-    bean.setDigestSpec(digest);
-    bean.setCodecSpec(codec);
-    bean.setIterations(iterations);
     assertTrue(bean.compare(hash, input));
   }
 }
