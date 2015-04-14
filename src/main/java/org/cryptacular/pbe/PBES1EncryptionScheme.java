@@ -28,21 +28,13 @@ public class PBES1EncryptionScheme extends AbstractEncryptionScheme
    * @param  params  Key generation function salt and iteration count.
    * @param  password  Password used to derive key.
    */
-  public PBES1EncryptionScheme(
-    final PBES1Algorithm alg,
-    final PBEParameter params,
-    final char[] password)
+  public PBES1EncryptionScheme(final PBES1Algorithm alg, final PBEParameter params, final char[] password)
   {
     final byte[] salt = params.getSalt();
     final int iterations = params.getIterationCount().intValue();
-    final PKCS5S1ParametersGenerator generator = new PKCS5S1ParametersGenerator(
-      alg.getDigestSpec().newInstance());
-    generator.init(
-      PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password),
-      salt,
-      iterations);
+    final PKCS5S1ParametersGenerator generator = new PKCS5S1ParametersGenerator(alg.getDigestSpec().newInstance());
+    generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password), salt, iterations);
     setCipher(alg.getCipherSpec().newInstance());
-    setCipherParameters(
-      generator.generateDerivedParameters(KEY_LENGTH, IV_LENGTH));
+    setCipherParameters(generator.generateDerivedParameters(KEY_LENGTH, IV_LENGTH));
   }
 }

@@ -26,8 +26,7 @@ import org.cryptacular.x509.dn.NameReader;
 import org.cryptacular.x509.dn.StandardAttributeType;
 
 /**
- * Utility class providing convenience methods for common operations on X.509
- * certificates.
+ * Utility class providing convenience methods for common operations on X.509 certificates.
  *
  * @author  Middleware Services
  */
@@ -39,19 +38,15 @@ public final class CertUtil
 
 
   /**
-   * Gets the common name attribute (CN) of the certificate subject
-   * distinguished name.
+   * Gets the common name attribute (CN) of the certificate subject distinguished name.
    *
    * @param  cert  Certificate to examine.
    *
-   * @return  Subject CN or null if no CN attribute is defined in the subject
-   *          DN.
+   * @return  Subject CN or null if no CN attribute is defined in the subject DN.
    */
   public static String subjectCN(final X509Certificate cert)
   {
-    return
-      new NameReader(cert).readSubject().getValue(
-        StandardAttributeType.CommonName);
+    return new NameReader(cert).readSubject().getValue(StandardAttributeType.CommonName);
   }
 
 
@@ -60,8 +55,7 @@ public final class CertUtil
    *
    * @param  cert  X.509 certificate to examine.
    *
-   * @return  List of subject alternative names or null if no subject alt names
-   *          are defined.
+   * @return  List of subject alternative names or null if no subject alt names are defined.
    */
   public static GeneralNames subjectAltNames(final X509Certificate cert)
   {
@@ -75,12 +69,9 @@ public final class CertUtil
    * @param  cert  X.509 certificate to examine.
    * @param  types  One or more subject alternative name types to fetch.
    *
-   * @return  List of subject alternative names of the matching type(s) or null
-   *          if none found.
+   * @return  List of subject alternative names of the matching type(s) or null if none found.
    */
-  public static GeneralNames subjectAltNames(
-    final X509Certificate cert,
-    final GeneralNameType... types)
+  public static GeneralNames subjectAltNames(final X509Certificate cert, final GeneralNameType... types)
   {
     final GeneralNamesBuilder builder = new GeneralNamesBuilder();
     final GeneralNames altNames = subjectAltNames(cert);
@@ -103,9 +94,8 @@ public final class CertUtil
 
 
   /**
-   * Gets a list of all subject names defined for the given certificate. The
-   * list includes the first common name (CN) specified in the subject
-   * distinguished name (if defined) and all subject alternative names.
+   * Gets a list of all subject names defined for the given certificate. The list includes the first common name (CN)
+   * specified in the subject distinguished name (if defined) and all subject alternative names.
    *
    * @param  cert  X.509 certificate to examine.
    *
@@ -131,18 +121,15 @@ public final class CertUtil
 
 
   /**
-   * Gets a list of subject names defined for the given certificate. The list
-   * includes the first common name (CN) specified in the subject distinguished
-   * name (if defined) and all subject alternative names of the given type.
+   * Gets a list of subject names defined for the given certificate. The list includes the first common name (CN)
+   * specified in the subject distinguished name (if defined) and all subject alternative names of the given type.
    *
    * @param  cert  X.509 certificate to examine.
    * @param  types  One or more subject alternative name types to fetch.
    *
    * @return  List of subject names.
    */
-  public static List<String> subjectNames(
-    final X509Certificate cert,
-    final GeneralNameType... types)
+  public static List<String> subjectNames(final X509Certificate cert, final GeneralNameType... types)
   {
     final List<String> names = new ArrayList<>();
     final String cn = subjectCN(cert);
@@ -167,12 +154,9 @@ public final class CertUtil
    * @param  key  Private key used to find matching public key.
    * @param  candidates  Array of candidate certificates.
    *
-   * @return  Certificate whose public key forms a keypair with the private key
-   *          or null if no match is found.
+   * @return  Certificate whose public key forms a keypair with the private key or null if no match is found.
    */
-  public static X509Certificate findEntityCertificate(
-    final PrivateKey key,
-    final X509Certificate... candidates)
+  public static X509Certificate findEntityCertificate(final PrivateKey key, final X509Certificate... candidates)
   {
     return findEntityCertificate(key, Arrays.asList(candidates));
   }
@@ -184,8 +168,7 @@ public final class CertUtil
    * @param  key  Private key used to find matching public key.
    * @param  candidates  Collection of candidate certificates.
    *
-   * @return  Certificate whose public key forms a keypair with the private key
-   *          or null if no match is found.
+   * @return  Certificate whose public key forms a keypair with the private key or null if no match is found.
    */
   public static X509Certificate findEntityCertificate(
     final PrivateKey key,
@@ -201,11 +184,9 @@ public final class CertUtil
 
 
   /**
-   * Reads an X.509 certificate from ASN.1 encoded format in the file at the
-   * given location.
+   * Reads an X.509 certificate from ASN.1 encoded format in the file at the given location.
    *
-   * @param  path  Path to file containing an DER or PEM encoded X.509
-   *               certificate.
+   * @param  path  Path to file containing an DER or PEM encoded X.509 certificate.
    *
    * @return  Certificate.
    */
@@ -238,8 +219,7 @@ public final class CertUtil
   public static X509Certificate readCertificate(final InputStream in)
   {
     try {
-      final CertificateFactory factory = CertificateFactory.getInstance(
-        "X.509");
+      final CertificateFactory factory = CertificateFactory.getInstance("X.509");
       return (X509Certificate) factory.generateCertificate(in);
     } catch (CertificateException e) {
       throw new IllegalArgumentException("Error reading certificate", e);
@@ -261,11 +241,9 @@ public final class CertUtil
 
 
   /**
-   * Reads an X.509 certificate chain from ASN.1 encoded format in the file at
-   * the given location.
+   * Reads an X.509 certificate chain from ASN.1 encoded format in the file at the given location.
    *
-   * @param  path  Path to file containing a sequence of PEM or DER encoded
-   *               certificates or PKCS#7 certificate chain.
+   * @param  path  Path to file containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
    */
@@ -276,11 +254,9 @@ public final class CertUtil
 
 
   /**
-   * Reads an X.509 certificate chain from ASN.1 encoded format from the given
-   * file.
+   * Reads an X.509 certificate chain from ASN.1 encoded format from the given file.
    *
-   * @param  file  File containing a sequence of PEM or DER encoded certificates
-   *               or PKCS#7 certificate chain.
+   * @param  file  File containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
    */
@@ -291,21 +267,17 @@ public final class CertUtil
 
 
   /**
-   * Reads an X.509 certificate chain from ASN.1 encoded data in the given
-   * stream.
+   * Reads an X.509 certificate chain from ASN.1 encoded data in the given stream.
    *
-   * @param  in  Input stream containing a sequence of PEM or DER encoded
-   *             certificates or PKCS#7 certificate chain.
+   * @param  in  Input stream containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
    */
   public static X509Certificate[] readCertificateChain(final InputStream in)
   {
     try {
-      final CertificateFactory factory = CertificateFactory.getInstance(
-        "X.509");
-      final Collection<? extends Certificate> certs =
-        factory.generateCertificates(in);
+      final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+      final Collection<? extends Certificate> certs = factory.generateCertificates(in);
       return certs.toArray(new X509Certificate[certs.size()]);
     } catch (CertificateException e) {
       throw new IllegalArgumentException("Error reading certificate", e);
@@ -316,8 +288,7 @@ public final class CertUtil
   /**
    * Creates an X.509 certificate chain from its ASN.1 encoded form.
    *
-   * @param  encoded  Sequence of PEM or DER encoded certificates or PKCS#7
-   *                  certificate chain.
+   * @param  encoded  Sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
    */
@@ -335,9 +306,7 @@ public final class CertUtil
    *
    * @return  True if certificate allows all given usage types, false otherwise.
    */
-  public static boolean allowsUsage(
-    final X509Certificate cert,
-    final KeyUsageBits... bits)
+  public static boolean allowsUsage(final X509Certificate cert, final KeyUsageBits... bits)
   {
     final KeyUsage usage = new ExtensionReader(cert).readKeyUsage();
     for (KeyUsageBits bit : bits) {
@@ -357,12 +326,9 @@ public final class CertUtil
    *
    * @return  True if certificate allows all given purposes, false otherwise.
    */
-  public static boolean allowsUsage(
-    final X509Certificate cert,
-    final KeyPurposeId... purposes)
+  public static boolean allowsUsage(final X509Certificate cert, final KeyPurposeId... purposes)
   {
-    final List<KeyPurposeId> allowedUses =
-      new ExtensionReader(cert).readExtendedKeyUsage();
+    final List<KeyPurposeId> allowedUses = new ExtensionReader(cert).readExtendedKeyUsage();
     for (KeyPurposeId purpose : purposes) {
       if (!allowedUses.contains(purpose)) {
         return false;
@@ -373,21 +339,16 @@ public final class CertUtil
 
 
   /**
-   * Determines whether the certificate defines all of the given certificate
-   * policies.
+   * Determines whether the certificate defines all of the given certificate policies.
    *
    * @param  cert  Certificate to check.
    * @param  policyOidsToCheck  One or more certificate policy OIDs to check.
    *
-   * @return  True if certificate defines all given policy OIDs, false
-   *          otherwise.
+   * @return  True if certificate defines all given policy OIDs, false otherwise.
    */
-  public static boolean hasPolicies(
-    final X509Certificate cert,
-    final String... policyOidsToCheck)
+  public static boolean hasPolicies(final X509Certificate cert, final String... policyOidsToCheck)
   {
-    final List<PolicyInformation> policies =
-      new ExtensionReader(cert).readCertificatePolicies();
+    final List<PolicyInformation> policies = new ExtensionReader(cert).readCertificatePolicies();
     boolean hasPolicy;
     for (String policyOid : policyOidsToCheck) {
       hasPolicy = false;
@@ -406,8 +367,7 @@ public final class CertUtil
 
 
   /**
-   * Gets the subject key identifier of the given certificate in delimited
-   * hexadecimal format, e.g. <code>
+   * Gets the subject key identifier of the given certificate in delimited hexadecimal format, e.g. <code>
    * 25:48:2f:28:ec:5d:19:bb:1d:25:ae:94:93:b1:7b:b5:35:96:24:66</code>.
    *
    * @param  cert  Certificate to process.
@@ -416,16 +376,12 @@ public final class CertUtil
    */
   public static String subjectKeyId(final X509Certificate cert)
   {
-    return
-      CodecUtil.hex(
-        new ExtensionReader(cert).readSubjectKeyIdentifier().getKeyIdentifier(),
-        true);
+    return CodecUtil.hex(new ExtensionReader(cert).readSubjectKeyIdentifier().getKeyIdentifier(), true);
   }
 
 
   /**
-   * Gets the authority key identifier of the given certificate in delimited
-   * hexadecimal format, e.g. <code>
+   * Gets the authority key identifier of the given certificate in delimited hexadecimal format, e.g. <code>
    * 25:48:2f:28:ec:5d:19:bb:1d:25:ae:94:93:b1:7b:b5:35:96:24:66</code>.
    *
    * @param  cert  Certificate to process.
@@ -434,10 +390,6 @@ public final class CertUtil
    */
   public static String authorityKeyId(final X509Certificate cert)
   {
-    return
-      CodecUtil.hex(
-        new ExtensionReader(cert).readAuthorityKeyIdentifier()
-          .getKeyIdentifier(),
-        true);
+    return CodecUtil.hex(new ExtensionReader(cert).readAuthorityKeyIdentifier().getKeyIdentifier(), true);
   }
 }

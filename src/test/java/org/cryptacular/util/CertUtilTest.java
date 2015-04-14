@@ -229,8 +229,7 @@ public class CertUtilTest
   public Object[][] getCertificateChains()
     throws Exception
   {
-    return
-      new Object[][] {
+    return new Object[][] {
         {CRT_PATH + "vtgsca_chain.pem", 4},
         {CRT_PATH + "vtuca_chain.p7b", 2},
       };
@@ -244,9 +243,7 @@ public class CertUtilTest
   }
 
   @Test(dataProvider = "subject-alt-names")
-  public void testSubjectAltNames(
-    final X509Certificate cert,
-    final String[] expected)
+  public void testSubjectAltNames(final X509Certificate cert, final String[] expected)
     throws Exception
   {
     final GeneralNames names = CertUtil.subjectAltNames(cert);
@@ -279,9 +276,7 @@ public class CertUtilTest
   }
 
   @Test(dataProvider = "subject-names")
-  public void testSubjectNames(
-    final X509Certificate cert,
-    final String[] expected)
+  public void testSubjectNames(final X509Certificate cert, final String[] expected)
     throws Exception
   {
     final List<String> names = CertUtil.subjectNames(cert);
@@ -292,10 +287,7 @@ public class CertUtilTest
   }
 
   @Test(dataProvider = "subject-names-by-type")
-  public void testSubjectNamesByType(
-    final X509Certificate cert,
-    final GeneralNameType[] types,
-    final String[] expected)
+  public void testSubjectNamesByType(final X509Certificate cert, final GeneralNameType[] types, final String[] expected)
     throws Exception
   {
     final List<String> names = CertUtil.subjectNames(cert, types);
@@ -316,45 +308,35 @@ public class CertUtilTest
   }
 
   @Test(dataProvider = "basic-usage")
-  public void testAllowsBasicUsage(
-    final X509Certificate cert,
-    final KeyUsageBits[] expectedUses)
+  public void testAllowsBasicUsage(final X509Certificate cert, final KeyUsageBits[] expectedUses)
     throws Exception
   {
     assertTrue(CertUtil.allowsUsage(cert, expectedUses));
   }
 
   @Test(dataProvider = "extended-usage")
-  public void testAllowsExtendedUsage(
-    final X509Certificate cert,
-    final KeyPurposeId[] expectedPurposes)
+  public void testAllowsExtendedUsage(final X509Certificate cert, final KeyPurposeId[] expectedPurposes)
     throws Exception
   {
     assertTrue(CertUtil.allowsUsage(cert, expectedPurposes));
   }
 
   @Test(dataProvider = "has-policies")
-  public void testHasPolicies(
-    final X509Certificate cert,
-    final String[] expectedPolicies)
+  public void testHasPolicies(final X509Certificate cert, final String[] expectedPolicies)
     throws Exception
   {
     assertTrue(CertUtil.hasPolicies(cert, expectedPolicies));
   }
 
   @Test(dataProvider = "subject-keyid")
-  public void testSubjectKeyId(
-    final X509Certificate cert,
-    final String expectedKeyId)
+  public void testSubjectKeyId(final X509Certificate cert, final String expectedKeyId)
     throws Exception
   {
     assertEquals(CertUtil.subjectKeyId(cert).toUpperCase(), expectedKeyId);
   }
 
   @Test(dataProvider = "authority-keyid")
-  public void testAuthorityKeyId(
-    final X509Certificate cert,
-    final String expectedKeyId)
+  public void testAuthorityKeyId(final X509Certificate cert, final String expectedKeyId)
     throws Exception
   {
     assertEquals(CertUtil.authorityKeyId(cert).toUpperCase(), expectedKeyId);
@@ -362,9 +344,7 @@ public class CertUtilTest
 
 
   @Test(dataProvider = "cert-chains")
-  public void testReadCertificateChains(
-    final String path,
-    final int expectedCount)
+  public void testReadCertificateChains(final String path, final int expectedCount)
     throws Exception
   {
     assertEquals(CertUtil.readCertificateChain(path).length, expectedCount);

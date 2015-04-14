@@ -2,8 +2,8 @@
 package org.cryptacular.x509.dn;
 
 /**
- * Simple implementation of the X.501 AttributeTypeAndValue that makes up the
- * RelativeDistinguishedName type described in section 4.1.2.4 of RFC 2459.
+ * Simple implementation of the X.501 AttributeTypeAndValue that makes up the RelativeDistinguishedName type described
+ * in section 4.1.2.4 of RFC 2459.
  *
  * @author  Middleware Services
  */

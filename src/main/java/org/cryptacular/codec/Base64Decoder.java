@@ -40,10 +40,7 @@ public class Base64Decoder extends AbstractBaseNDecoder
   }
 
 
-  /**
-   * Creates a new instance that decodes base 64-encoded input in the default
-   * character set.
-   */
+  /** Creates a new instance that decodes base 64-encoded input in the default character set. */
   public Base64Decoder()
   {
     this(false);
@@ -51,11 +48,9 @@ public class Base64Decoder extends AbstractBaseNDecoder
 
 
   /**
-   * Creates a new instance that decodes base 64-encoded input in the optional
-   * URL-safe character set.
+   * Creates a new instance that decodes base 64-encoded input in the optional URL-safe character set.
    *
-   * @param  urlSafe  True to use URL and filesystem-safe character set, false
-   *                  otherwise.
+   * @param  urlSafe  True to use URL and filesystem-safe character set, false otherwise.
    */
   public Base64Decoder(final boolean urlSafe)
   {

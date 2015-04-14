@@ -42,10 +42,7 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
 
 
   @Override
-  protected byte[] process(
-    final CiphertextHeader header,
-    final boolean mode,
-    final byte[] input)
+  protected byte[] process(final CiphertextHeader header, final boolean mode, final byte[] input)
   {
     final BlockCipherAdapter cipher = newCipher(header, mode);
     final byte[] headerBytes = header.encode();
@@ -54,8 +51,7 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
     final int length;
     final byte[] output;
     if (mode) {
-      final int outSize = headerBytes.length +
-        cipher.getOutputSize(input.length);
+      final int outSize = headerBytes.length + cipher.getOutputSize(input.length);
       output = new byte[outSize];
       System.arraycopy(headerBytes, 0, output, 0, headerBytes.length);
       inOff = 0;
@@ -89,19 +85,13 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
   {
     final BlockCipherAdapter cipher = newCipher(header, mode);
     final int outSize = cipher.getOutputSize(StreamUtil.CHUNK_SIZE);
-    final byte[] outBuf =
-      new byte[outSize > StreamUtil.CHUNK_SIZE ?
-        outSize : StreamUtil.CHUNK_SIZE];
+    final byte[] outBuf = new byte[outSize > StreamUtil.CHUNK_SIZE ? outSize : StreamUtil.CHUNK_SIZE];
     StreamUtil.pipeAll(
       input,
       output,
       new ChunkHandler() {
         @Override
-        public void handle(
-          final byte[] input,
-          final int offset,
-          final int count,
-          final OutputStream output)
+        public void handle(final byte[] input, final int offset, final int count, final OutputStream output)
           throws IOException
         {
           final int n = cipher.processBytes(input, offset, count, outBuf, 0);
@@ -119,16 +109,12 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
 
 
   /**
-   * Creates a new cipher adapter instance suitable for the block cipher used by
-   * this class.
+   * Creates a new cipher adapter instance suitable for the block cipher used by this class.
    *
    * @param  header  Ciphertext header.
    * @param  mode  True for encryption; false for decryption.
    *
-   * @return  Block cipher adapter that wraps an initialized block cipher that
-   *          is ready for use in the given mode.
+   * @return  Block cipher adapter that wraps an initialized block cipher that is ready for use in the given mode.
    */
-  protected abstract BlockCipherAdapter newCipher(
-    CiphertextHeader header,
-    boolean mode);
+  protected abstract BlockCipherAdapter newCipher(CiphertextHeader header, boolean mode);
 }

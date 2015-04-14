@@ -11,9 +11,8 @@ import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.modes.OCBBlockCipher;
 
 /**
- * Describes an AEAD block cipher in terms of a (algorithm, mode) tuple and
- * provides a facility to create a new instance of the cipher via the {@link
- * #newInstance()} method.
+ * Describes an AEAD block cipher in terms of a (algorithm, mode) tuple and provides a facility to create a new instance
+ * of the cipher via the {@link #newInstance()} method.
  *
  * @author  Middleware Services
  * @version  $Revision: 2744 $
@@ -22,8 +21,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
 {
 
   /** String specification format, <code>algorithm/mode</code>. */
-  public static final Pattern FORMAT = Pattern.compile(
-    "(?<alg>[A-Za-z0-9_-]+)/(?<mode>\\w+)");
+  public static final Pattern FORMAT = Pattern.compile("(?<alg>[A-Za-z0-9_-]+)/(?<mode>\\w+)");
 
   /** Cipher algorithm algorithm. */
   private final String algorithm;
@@ -71,8 +69,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
   @Override
   public AEADBlockCipher newInstance()
   {
-    final BlockCipher blockCipher = new BlockCipherSpec(algorithm)
-      .newInstance();
+    final BlockCipher blockCipher = new BlockCipherSpec(algorithm).newInstance();
     AEADBlockCipher aeadBlockCipher;
     switch (mode) {
 
@@ -85,9 +82,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
       break;
 
     case "OCB":
-      aeadBlockCipher = new OCBBlockCipher(
-        blockCipher,
-        new BlockCipherSpec(algorithm).newInstance());
+      aeadBlockCipher = new OCBBlockCipher(blockCipher, new BlockCipherSpec(algorithm).newInstance());
       break;
 
     case "EAX":
@@ -109,11 +104,9 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
 
 
   /**
-   * Parses a string representation of a AEAD block cipher specification into an
-   * instance of this class.
+   * Parses a string representation of a AEAD block cipher specification into an instance of this class.
    *
-   * @param  specification  AEAD block cipher specification of the form <code>
-   *                        algorithm/mode</code>.
+   * @param  specification  AEAD block cipher specification of the form <code>algorithm/mode</code>.
    *
    * @return  Buffered block cipher specification instance.
    */
@@ -121,8 +114,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
   {
     final Matcher m = FORMAT.matcher(specification);
     if (!m.matches()) {
-      throw new IllegalArgumentException(
-        "Invalid specification " + specification);
+      throw new IllegalArgumentException("Invalid specification " + specification);
     }
     return new AEADBlockCipherSpec(m.group("alg"), m.group("mode"));
   }

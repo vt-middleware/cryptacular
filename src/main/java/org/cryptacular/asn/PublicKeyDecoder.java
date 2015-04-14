@@ -7,8 +7,7 @@ import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.cryptacular.util.PemUtil;
 
 /**
- * Decodes public keys formatted in an X.509 SubjectPublicKeyInfo structure in
- * either PEM or DER encoding.
+ * Decodes public keys formatted in an X.509 SubjectPublicKeyInfo structure in either PEM or DER encoding.
  *
  * @author  Middleware Services
  */
@@ -16,9 +15,7 @@ public class PublicKeyDecoder implements ASN1Decoder<AsymmetricKeyParameter>
 {
 
   @Override
-  public AsymmetricKeyParameter decode(
-    final byte[] encoded,
-    final Object... args)
+  public AsymmetricKeyParameter decode(final byte[] encoded, final Object... args)
   {
     try {
       if (PemUtil.isPem(encoded)) {

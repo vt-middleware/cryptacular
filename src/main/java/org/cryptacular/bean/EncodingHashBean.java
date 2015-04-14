@@ -12,8 +12,7 @@ import org.cryptacular.util.CodecUtil;
  *
  * @author  Middleware Services
  */
-public class EncodingHashBean extends AbstractHashBean
-  implements HashBean<String>
+public class EncodingHashBean extends AbstractHashBean implements HashBean<String>
 {
 
   /** Determines kind of encoding. */
@@ -47,10 +46,7 @@ public class EncodingHashBean extends AbstractHashBean
   }
 
 
-  /**
-   * @return  Codec specification that determines the encoding applied to the
-   *          hash output bytes.
-   */
+  /** @return  Codec specification that determines the encoding applied to the hash output bytes. */
   public Spec<Codec> getCodecSpec()
   {
     return codecSpec;
@@ -58,11 +54,9 @@ public class EncodingHashBean extends AbstractHashBean
 
 
   /**
-   * Sets the codec specification that determines the encoding applied to the
-   * hash output bytes.
+   * Sets the codec specification that determines the encoding applied to the hash output bytes.
    *
-   * @param  codecSpec  Codec specification, e.g. {@link
-   *                    org.cryptacular.spec.CodecSpec#BASE64}, {@link
+   * @param  codecSpec  Codec specification, e.g. {@link org.cryptacular.spec.CodecSpec#BASE64}, {@link
    *                    org.cryptacular.spec.CodecSpec#HEX}.
    */
   public void setCodecSpec(final Spec<Codec> codecSpec)
@@ -72,8 +66,7 @@ public class EncodingHashBean extends AbstractHashBean
 
 
   /**
-   * Whether data provided to {@link #hash(Object...)} includes a salt as the
-   * last parameter.
+   * Whether data provided to {@link #hash(Object...)} includes a salt as the last parameter.
    *
    * @return  whether hash data includes a salt
    */
@@ -84,8 +77,7 @@ public class EncodingHashBean extends AbstractHashBean
 
 
   /**
-   * Sets whether {@link #hash(Object...)} should expect a salt as the last
-   * parameter.
+   * Sets whether {@link #hash(Object...)} should expect a salt as the last parameter.
    *
    * @param  salted  whether hash data includes a salt
    */
@@ -96,9 +88,8 @@ public class EncodingHashBean extends AbstractHashBean
 
 
   /**
-   * Hashes the given data. If {@link #isSalted()} is true then the last
-   * parameter must be a byte array containing the salt. The salt value will be
-   * appended to the encoded hash that is returned.
+   * Hashes the given data. If {@link #isSalted()} is true then the last parameter must be a byte array containing the
+   * salt. The salt value will be appended to the encoded hash that is returned.
    *
    * @param  data  Data to hash.
    *
@@ -109,29 +100,22 @@ public class EncodingHashBean extends AbstractHashBean
   {
     if (salted) {
       if (data.length < 2 || !(data[data.length - 1] instanceof byte[])) {
-        throw new IllegalArgumentException(
-          "Last parameter must be a salt of type byte[]");
+        throw new IllegalArgumentException("Last parameter must be a salt of type byte[]");
       }
+
       final byte[] hashSalt = (byte[]) data[data.length - 1];
-      return
-        CodecUtil.encode(
-          codecSpec.newInstance().getEncoder(),
-          Arrays.concatenate(hashInternal(data), hashSalt));
+      return CodecUtil.encode(codecSpec.newInstance().getEncoder(), Arrays.concatenate(hashInternal(data), hashSalt));
     }
-    return
-      CodecUtil.encode(
-        codecSpec.newInstance().getEncoder(),
-        hashInternal(data));
+    return CodecUtil.encode(codecSpec.newInstance().getEncoder(), hashInternal(data));
   }
 
 
   /**
    * Compares a known hash value with the hash of the given data.
    *
-   * @param  hash  Known encoded hash value. If the length of the hash bytes
-   *               after decoding is greater than the length of the digest
-   *               output, anything beyond the digest length is considered salt
-   *               data that is hashed <strong>after</strong> the input data.
+   * @param  hash  Known encoded hash value. If the length of the hash bytes after decoding is greater than the length
+   *               of the digest output, anything beyond the digest length is considered salt data that is hashed
+   *               <strong>after</strong> the input data.
    * @param  data  Data to hash.
    *
    * @return  True if the hashed data matches the given hash, false otherwise.
@@ -139,9 +123,6 @@ public class EncodingHashBean extends AbstractHashBean
   @Override
   public boolean compare(final String hash, final Object... data)
   {
-    return
-      compareInternal(
-        CodecUtil.decode(codecSpec.newInstance().getDecoder(), hash),
-        data);
+    return compareInternal(CodecUtil.decode(codecSpec.newInstance().getDecoder(), hash), data);
   }
 }

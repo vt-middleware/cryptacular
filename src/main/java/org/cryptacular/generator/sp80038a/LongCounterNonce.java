@@ -7,9 +7,8 @@ import org.cryptacular.generator.Nonce;
 import org.cryptacular.util.ByteUtil;
 
 /**
- * Simple counter nonce that uses a long integer counter internally and produces
- * 8-byte nonces. Note that this component is suitable exclusively for ciphers
- * with block length 8, e.g. Blowfish.
+ * Simple counter nonce that uses a long integer counter internally and produces 8-byte nonces. Note that this component
+ * is suitable exclusively for ciphers with block length 8, e.g. Blowfish.
  *
  * <p>Instances of this class are thread safe.</p>
  *

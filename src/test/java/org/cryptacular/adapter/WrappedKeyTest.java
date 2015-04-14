@@ -43,35 +43,21 @@ public class WrappedKeyTest
 
 
   @Test(dataProvider = "keypairs")
-  public void testKeyEquivalence(
-    final String algorithm,
-    final String pubKeyPath,
-    final String privKeyPath)
+  public void testKeyEquivalence(final String algorithm, final String pubKeyPath, final String privKeyPath)
     throws Exception
   {
     final KeyPair wrappedPair = new KeyPair(
       KeyPairUtil.readPublicKey(pubKeyPath),
       KeyPairUtil.readPrivateKey(privKeyPath));
-    final String bcPubKeyPath = String.format(
-      "target/%s-%s.key",
-      algorithm,
-      "pub");
-    final String bcPrivKeyPath = String.format(
-      "target/%s-%s.key",
-      algorithm,
-      "priv");
+    final String bcPubKeyPath = String.format("target/%s-%s.key", algorithm, "pub");
+    final String bcPrivKeyPath = String.format("target/%s-%s.key", algorithm, "priv");
     writeFile(bcPubKeyPath, wrappedPair.getPublic().getEncoded());
     writeFile(bcPrivKeyPath, wrappedPair.getPrivate().getEncoded());
 
-    final KeyPair jcePair = readJCEKeyPair(
-      algorithm,
-      bcPubKeyPath,
-      bcPrivKeyPath);
+    final KeyPair jcePair = readJCEKeyPair(algorithm, bcPubKeyPath, bcPrivKeyPath);
 
-    assertTrue(
-      KeyPairUtil.isKeyPair(wrappedPair.getPublic(), jcePair.getPrivate()));
-    assertTrue(
-      KeyPairUtil.isKeyPair(jcePair.getPublic(), wrappedPair.getPrivate()));
+    assertTrue(KeyPairUtil.isKeyPair(wrappedPair.getPublic(), jcePair.getPrivate()));
+    assertTrue(KeyPairUtil.isKeyPair(jcePair.getPublic(), wrappedPair.getPrivate()));
   }
 
 
@@ -83,20 +69,12 @@ public class WrappedKeyTest
     }
   }
 
-  private static KeyPair readJCEKeyPair(
-    final String algorithm,
-    final String pubKeyPath,
-    final String privKeyPath)
+  private static KeyPair readJCEKeyPair(final String algorithm, final String pubKeyPath, final String privKeyPath)
     throws Exception
   {
-    final PKCS8EncodedKeySpec privSpec = new PKCS8EncodedKeySpec(
-      StreamUtil.readAll(privKeyPath));
-    final X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(
-      StreamUtil.readAll(pubKeyPath));
+    final PKCS8EncodedKeySpec privSpec = new PKCS8EncodedKeySpec(StreamUtil.readAll(privKeyPath));
+    final X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(StreamUtil.readAll(pubKeyPath));
     final KeyFactory factory = KeyFactory.getInstance(algorithm);
-    return
-      new KeyPair(
-        factory.generatePublic(pubSpec),
-        factory.generatePrivate(privSpec));
+    return new KeyPair(factory.generatePublic(pubSpec), factory.generatePrivate(privSpec));
   }
 }

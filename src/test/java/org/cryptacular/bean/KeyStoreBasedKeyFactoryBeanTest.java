@@ -57,8 +57,7 @@ public class KeyStoreBasedKeyFactoryBeanTest
     keyStoreFactory.setPassword("vtcrypt");
     keyStoreFactory.setType(keyStoreType);
 
-    final KeyStoreBasedKeyFactoryBean secretKeyFactory =
-      new KeyStoreBasedKeyFactoryBean();
+    final KeyStoreBasedKeyFactoryBean secretKeyFactory = new KeyStoreBasedKeyFactoryBean();
     secretKeyFactory.setKeyStore(keyStoreFactory.newInstance());
     secretKeyFactory.setAlias(alias);
     secretKeyFactory.setPassword("vtcrypt");
@@ -68,9 +67,7 @@ public class KeyStoreBasedKeyFactoryBeanTest
     if (key instanceof SecretKey) {
       assertEquals(key.getEncoded().length, expectedSize);
     } else if (key instanceof RSAPrivateKey) {
-      assertEquals(
-        ((RSAPrivateKey) key).getModulus().bitLength(),
-        expectedSize);
+      assertEquals(((RSAPrivateKey) key).getModulus().bitLength(), expectedSize);
     }
   }
 }

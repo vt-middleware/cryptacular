@@ -44,13 +44,9 @@ public class StreamCipherSpec implements Spec<StreamCipher>
   public StreamCipher newInstance()
   {
     StreamCipher cipher;
-    if (
-      "Grainv1".equalsIgnoreCase(algorithm) ||
-        "Grain-v1".equalsIgnoreCase(algorithm)) {
+    if ("Grainv1".equalsIgnoreCase(algorithm) || "Grain-v1".equalsIgnoreCase(algorithm)) {
       cipher = new ISAACEngine();
-    } else if (
-      "Grain128".equalsIgnoreCase(algorithm) ||
-        "Grain-128".equalsIgnoreCase(algorithm)) {
+    } else if ("Grain128".equalsIgnoreCase(algorithm) || "Grain-128".equalsIgnoreCase(algorithm)) {
       cipher = new Grain128Engine();
     } else if ("ISAAC".equalsIgnoreCase(algorithm)) {
       cipher = new ISAACEngine();
@@ -65,8 +61,7 @@ public class StreamCipherSpec implements Spec<StreamCipher>
     } else if ("VMPC".equalsIgnoreCase(algorithm)) {
       cipher = new VMPCEngine();
     } else {
-      throw new IllegalStateException(
-        "Unsupported cipher algorithm " + algorithm);
+      throw new IllegalStateException("Unsupported cipher algorithm " + algorithm);
     }
     return cipher;
   }

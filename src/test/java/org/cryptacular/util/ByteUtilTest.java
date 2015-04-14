@@ -26,12 +26,11 @@ public class ByteUtilTest
   @DataProvider(name = "longs")
   public Object[][] getLongs()
   {
-    return
-      new Object[][] {
-        new Object[] {128},
-        new Object[] {110374187198L},
-        new Object[] {-8987189751341L},
-      };
+    return new Object[][] {
+      new Object[] {128},
+      new Object[] {110374187198L},
+      new Object[] {-8987189751341L},
+    };
   }
 
   @Test(dataProvider = "integers")

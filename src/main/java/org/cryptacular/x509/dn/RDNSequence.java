@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Simple implementation of the X.501 RDNSequence type described in section
- * 4.1.2.4 of RFC 2459.
+ * Simple implementation of the X.501 RDNSequence type described in section 4.1.2.4 of RFC 2459.
  *
  * @author  Middleware Services
  */
@@ -76,13 +75,13 @@ public class RDNSequence implements Iterable<RDN>
 
 
   /**
-   * Gets an immutable list of all attributes of the given type. The order of
-   * the returned list reflects the ordering of the RDNs and their attributes.
+   * Gets an immutable list of all attributes of the given type. The order of the returned list reflects the ordering of
+   * the RDNs and their attributes.
    *
    * @param  type  Attribute type.
    *
-   * @return  Non-null list of attributes of given type. An empty list is
-   *          returned if there are no attributes of the given type.
+   * @return  Non-null list of attributes of given type. An empty list is returned if there are no attributes of the
+   *          given type.
    */
   public List<String> getValues(final AttributeType type)
   {
@@ -95,13 +94,11 @@ public class RDNSequence implements Iterable<RDN>
 
 
   /**
-   * Gets the first value of the given type that appears in the attribute list
-   * of any RDN in the sequence.
+   * Gets the first value of the given type that appears in the attribute list of any RDN in the sequence.
    *
    * @param  type  Attribute type.
    *
-   * @return  Value of first attribute of given type or null if no attributes of
-   *          given type exist.
+   * @return  Value of first attribute of given type or null if no attributes of given type exist.
    */
   public String getValue(final AttributeType type)
   {
@@ -113,11 +110,10 @@ public class RDNSequence implements Iterable<RDN>
   }
 
   /**
-   * Creates a comma-separated list of TYPE=VALUE tokens from the attributes in
-   * the list in order.
+   * Creates a comma-separated list of TYPE=VALUE tokens from the attributes in the list in order.
    *
-   * @return  String representation that resembles an X.509 distinguished name,
-   *          e.g. <code>CN=foo, OU=Bar, dc=example, dc=com</code>.
+   * @return  String representation that resembles an X.509 distinguished name, e.g. <code>CN=foo, OU=Bar, dc=example,
+   *          dc=com</code>.
    */
   @Override
   public String toString()

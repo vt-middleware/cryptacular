@@ -6,13 +6,11 @@ import java.security.interfaces.ECPrivateKey;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 
 /**
- * JCE/JDK EC private key that wraps the corresponding BC EC private key type,
- * {@link ECPrivateKeyParameters}.
+ * JCE/JDK EC private key that wraps the corresponding BC EC private key type, {@link ECPrivateKeyParameters}.
  *
  * @author  Middleware Services
  */
-public class WrappedECPrivateKey
-  extends AbstractWrappedECKey<ECPrivateKeyParameters> implements ECPrivateKey
+public class WrappedECPrivateKey extends AbstractWrappedECKey<ECPrivateKeyParameters> implements ECPrivateKey
 {
 
   /**

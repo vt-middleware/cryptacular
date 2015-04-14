@@ -26,28 +26,20 @@ public class HexEncoder implements Encoder
     }
   }
 
-  /**
-   * Flag indicating whether to delimit every two characters with ':' as in key
-   * fingerprints, etc.
-   */
+  /** Flag indicating whether to delimit every two characters with ':' as in key fingerprints, etc. */
   private final boolean delimit;
 
 
-  /**
-   * Creates a new instance that does not delimit bytes in the output hex
-   * string.
-   */
+  /** Creates a new instance that does not delimit bytes in the output hex string. */
   public HexEncoder()
   {
     this(false);
   }
 
   /**
-   * Creates a new instance with optional delimiting of bytes in the output hex
-   * string.
+   * Creates a new instance with optional delimiting of bytes in the output hex string.
    *
-   * @param  delimitBytes  True to delimit every two characters (i.e. every
-   *                       byte) with ':' character.
+   * @param  delimitBytes  True to delimit every two characters (i.e. every byte) with ':' character.
    */
   public HexEncoder(final boolean delimitBytes)
   {

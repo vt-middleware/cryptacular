@@ -12,8 +12,7 @@ import org.bouncycastle.crypto.params.DSAKeyParameters;
  *
  * @author  Middleware Services
  */
-public abstract class AbstractWrappedDSAKey<T extends DSAKeyParameters>
-  extends AbstractWrappedKey<T>
+public abstract class AbstractWrappedDSAKey<T extends DSAKeyParameters> extends AbstractWrappedKey<T>
 {
 
   /** DSA algorithm name. */

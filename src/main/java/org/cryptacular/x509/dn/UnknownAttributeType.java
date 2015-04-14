@@ -4,8 +4,8 @@ package org.cryptacular.x509.dn;
 import java.util.regex.Pattern;
 
 /**
- * Describes a non-standard AttributeType in dotted decimal form that may appear
- * in a RelativeDistinguishedName (RDN) as defined in section 2 of RFC 2253.
+ * Describes a non-standard AttributeType in dotted decimal form that may appear in a RelativeDistinguishedName (RDN) as
+ * defined in section 2 of RFC 2253.
  *
  * @author  Middleware Services
  */

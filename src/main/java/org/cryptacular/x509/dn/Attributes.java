@@ -72,13 +72,13 @@ public class Attributes implements Iterable<Attribute>
 
 
   /**
-   * Gets an immutable list of all attributes of the given type. The order of
-   * the returned list reflects the ordering of the underlying attributes.
+   * Gets an immutable list of all attributes of the given type. The order of the returned list reflects the ordering of
+   * the underlying attributes.
    *
    * @param  type  Attribute type.
    *
-   * @return  Non-null list of attributes of given type. An empty list is
-   *          returned if there are no attributes of the given type.
+   * @return  Non-null list of attributes of given type. An empty list is returned if there are no attributes of the
+   *          given type.
    */
   public List<String> getValues(final AttributeType type)
   {
@@ -97,8 +97,7 @@ public class Attributes implements Iterable<Attribute>
    *
    * @param  type  Attribute type.
    *
-   * @return  Value of first attribute of given type or null if no attributes of
-   *          given type exist.
+   * @return  Value of first attribute of given type or null if no attributes of given type exist.
    */
   public String getValue(final AttributeType type)
   {

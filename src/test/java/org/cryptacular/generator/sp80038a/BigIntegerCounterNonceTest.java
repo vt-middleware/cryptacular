@@ -18,11 +18,10 @@ public class BigIntegerCounterNonceTest
   @DataProvider(name = "test-data")
   public Object[][] getTestData()
   {
-    return
-      new Object[][] {
-        new Object[] {1, 8},
-        new Object[] {2199023255552L, 16},
-      };
+    return new Object[][] {
+      new Object[] {1, 8},
+      new Object[] {2199023255552L, 16},
+    };
   }
 
   @Test(dataProvider = "test-data")
@@ -34,8 +33,6 @@ public class BigIntegerCounterNonceTest
       expectedLength);
     final byte[] value = nonce.generate();
     assertEquals(value.length, expectedLength);
-    assertEquals(
-      new BigInteger(value),
-      new BigInteger(ByteUtil.toBytes(start + 1)));
+    assertEquals(new BigInteger(value), new BigInteger(ByteUtil.toBytes(start + 1)));
   }
 }

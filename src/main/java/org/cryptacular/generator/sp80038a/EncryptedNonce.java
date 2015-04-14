@@ -10,9 +10,8 @@ import org.cryptacular.spec.Spec;
 import org.cryptacular.util.NonceUtil;
 
 /**
- * Nonce generation strategy that produces a random value according to NIST <a
- * href="http://goo.gl/S9z8qF">SP-800-38a</a>, appendix C, method 1 (encrypted
- * nonce), suitable for use with any block cipher mode described in that
+ * Nonce generation strategy that produces a random value according to NIST <a href="http://goo.gl/S9z8qF">
+ * SP-800-38a</a>, appendix C, method 1 (encrypted nonce), suitable for use with any block cipher mode described in that
  * standard except OFB.
  *
  * <p>Instances of this class are thread safe.</p>

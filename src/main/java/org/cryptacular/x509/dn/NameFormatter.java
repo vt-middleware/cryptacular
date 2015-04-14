@@ -4,8 +4,7 @@ package org.cryptacular.x509.dn;
 import javax.security.auth.x500.X500Principal;
 
 /**
- * Strategy pattern interface for producing a string representation of an X.500
- * distinguished name.
+ * Strategy pattern interface for producing a string representation of an X.500 distinguished name.
  *
  * @author  Middleware Services
  */

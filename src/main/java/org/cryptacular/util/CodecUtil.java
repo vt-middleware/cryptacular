@@ -39,12 +39,11 @@ public final class CodecUtil
 
 
   /**
-   * Encodes raw bytes to the equivalent hexadecimal encoded string with
-   * optional delimiting of output.
+   * Encodes raw bytes to the equivalent hexadecimal encoded string with optional delimiting of output.
    *
    * @param  raw  Raw bytes to encode.
-   * @param  delimit  True to delimit every two characters (i.e. every byte) of
-   *                  output with ':' character, false otherwise.
+   * @param  delimit  True to delimit every two characters (i.e. every byte) of output with ':' character, false
+   *                  otherwise.
    *
    * @return  Hexadecimal encoded string.
    */
@@ -157,8 +156,7 @@ public final class CodecUtil
    */
   public static String encode(final Encoder encoder, final byte[] raw)
   {
-    final CharBuffer output = CharBuffer.allocate(
-      encoder.outputSize(raw.length));
+    final CharBuffer output = CharBuffer.allocate(encoder.outputSize(raw.length));
     encoder.encode(ByteBuffer.wrap(raw), output);
     encoder.finalize(output);
     return output.flip().toString();
@@ -175,8 +173,7 @@ public final class CodecUtil
    */
   public static byte[] decode(final Decoder decoder, final CharSequence encoded)
   {
-    final ByteBuffer output = ByteBuffer.allocate(
-      decoder.outputSize(encoded.length()));
+    final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(encoded.length()));
     decoder.decode(CharBuffer.wrap(encoded), output);
     decoder.finalize(output);
     output.flip();

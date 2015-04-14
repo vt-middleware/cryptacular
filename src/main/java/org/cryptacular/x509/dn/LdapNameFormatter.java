@@ -8,8 +8,8 @@ import javax.security.auth.x500.X500Principal;
 import org.cryptacular.codec.HexEncoder;
 
 /**
- * Produces a string representation of an X.500 distinguished name using the
- * process described in section 2 of RFC 2253, LADPv3 Distinguished Names.
+ * Produces a string representation of an X.500 distinguished name using the process described in section 2 of RFC 2253,
+ * LADPv3 Distinguished Names.
  *
  * @author  Middleware Services
  */
@@ -94,8 +94,7 @@ public class LdapNameFormatter implements NameFormatter
 
 
   /**
-   * Appends the given value to the output using the HEX encoding method
-   * described in section 2.4.
+   * Appends the given value to the output using the HEX encoding method described in section 2.4.
    *
    * @param  value  Value to encode.
    * @param  output  String builder where encoded value is written.

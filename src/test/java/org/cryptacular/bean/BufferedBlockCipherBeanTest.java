@@ -51,8 +51,7 @@ public class BufferedBlockCipherBeanTest
         },
         // CFB
         new Object[] {
-          "I went to the woods because I wished to live deliberately, to " +
-            "front only the essential facts of life",
+          "I went to the woods because I wished to live deliberately, to front only the essential facts of life",
           "AES/CFB/PKCS5Padding",
           new RBGNonce(16),
         },
@@ -89,15 +88,11 @@ public class BufferedBlockCipherBeanTest
 
 
   @Test(dataProvider = "test-arrays")
-  public void testEncryptDecryptArray(
-    final String input,
-    final String cipherSpecString,
-    final Nonce nonce)
+  public void testEncryptDecryptArray(final String input, final String cipherSpecString, final Nonce nonce)
     throws Exception
   {
     final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
-    final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(
-      cipherSpecString);
+    final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
     cipherBean.setNonce(nonce);
     cipherBean.setKeyAlias("vtcrypt");
     cipherBean.setKeyPassword("vtcrypt");
@@ -110,15 +105,11 @@ public class BufferedBlockCipherBeanTest
 
 
   @Test(dataProvider = "test-streams")
-  public void testEncryptDecryptStream(
-    final String path,
-    final String cipherSpecString,
-    final Nonce nonce)
+  public void testEncryptDecryptStream(final String path, final String cipherSpecString, final Nonce nonce)
     throws Exception
   {
     final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
-    final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(
-      cipherSpecString);
+    final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
     cipherBean.setNonce(nonce);
     cipherBean.setKeyAlias("vtcrypt");
     cipherBean.setKeyPassword("vtcrypt");
@@ -128,22 +119,17 @@ public class BufferedBlockCipherBeanTest
     final ByteArrayOutputStream tempOut = new ByteArrayOutputStream(8192);
     cipherBean.encrypt(StreamUtil.makeStream(new File(path)), tempOut);
 
-    final ByteArrayInputStream tempIn = new ByteArrayInputStream(
-      tempOut.toByteArray());
+    final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream finalOut = new ByteArrayOutputStream(8192);
     cipherBean.decrypt(tempIn, finalOut);
-    assertEquals(
-      ByteUtil.toString(finalOut.toByteArray()),
-      ByteUtil.toString(StreamUtil.readAll(path)));
+    assertEquals(ByteUtil.toString(finalOut.toByteArray()), ByteUtil.toString(StreamUtil.readAll(path)));
   }
 
   private static KeyStore getTestKeyStore()
   {
     final KeyStoreFactoryBean bean = new KeyStoreFactoryBean();
     bean.setPassword("vtcrypt");
-    bean.setResource(
-      new FileResource(
-        new File("src/test/resources/keystores/cipher-bean.jceks")));
+    bean.setResource(new FileResource(new File("src/test/resources/keystores/cipher-bean.jceks")));
     bean.setType("JCEKS");
     return bean.newInstance();
   }

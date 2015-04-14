@@ -66,10 +66,7 @@ public enum PBES1Algorithm {
    * @param  cipherSpec  Cipher algorithm specification.
    * @param  digestSpec  Digest specification used for pseudorandom function.
    */
-  PBES1Algorithm(
-    final String id,
-    final BufferedBlockCipherSpec cipherSpec,
-    final DigestSpec digestSpec)
+  PBES1Algorithm(final String id, final BufferedBlockCipherSpec cipherSpec, final DigestSpec digestSpec)
   {
     this.oid = id;
     this.cipherSpec = cipherSpec;

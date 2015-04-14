@@ -11,19 +11,14 @@ import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.NonceUtil;
 
 /**
- * RBG-based nonce generation strategy that uses a RBG component to produce
- * values for the invocation field as described in NIST <a
- * href="http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf">
- * SP-800-38D</a>, section 8.2.2.
+ * RBG-based nonce generation strategy that uses a RBG component to produce values for the invocation field as described
+ * in NIST <a href="http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf">SP-800-38D</a>, section 8.2.2.
  *
- * <p><strong>NOTE:</strong> users of this class are responsible for counting
- * number of invocations and enforcing the constraints described in section 8.3;
- * namely the following:</p>
+ * <p><strong>NOTE:</strong> users of this class are responsible for counting number of invocations and enforcing the
+ * constraints described in section 8.3; namely the following:</p>
  *
- * <blockquote>The total number of invocations of the authenticated encryption
- * function shall not exceed 2<sup>32</sup>, including all IV lengths and all
- * instances of the authenticated encryption function with the given key.
- * </blockquote>
+ * <blockquote>The total number of invocations of the authenticated encryption function shall not exceed 2<sup>32</sup>,
+ * including all IV lengths and all instances of the authenticated encryption function with the given key.</blockquote>
  *
  * <p>Instances of this class are thread safe.</p>
  *
@@ -43,8 +38,8 @@ public class RBGNonce implements Nonce
 
 
   /**
-   * Creates a new instance that produces 12-bytes (96-bits) of random data;
-   * that is, the fixed field of the nonce is null.
+   * Creates a new instance that produces 12-bytes (96-bits) of random data; that is, the fixed field of the nonce is
+   * null.
    */
   public RBGNonce()
   {
@@ -53,11 +48,9 @@ public class RBGNonce implements Nonce
 
 
   /**
-   * Creates a new instance that produces length bytes of random data; that is,
-   * the fixed field of the nonce is null.
+   * Creates a new instance that produces length bytes of random data; that is, the fixed field of the nonce is null.
    *
-   * @param  randomLength  Number of bytes in the random part of the nonce. MUST
-   *                       be at least 12.
+   * @param  randomLength  Number of bytes in the random part of the nonce. MUST be at least 12.
    */
   public RBGNonce(final int randomLength)
   {
@@ -69,14 +62,12 @@ public class RBGNonce implements Nonce
    * Creates a new instance using the given fixed field value.
    *
    * @param  fixed  User-defined fixed field value.
-   * @param  randomLength  Number of bytes in the random part of the nonce. MUST
-   *                       be at least 12.
+   * @param  randomLength  Number of bytes in the random part of the nonce. MUST be at least 12.
    */
   public RBGNonce(final String fixed, final int randomLength)
   {
     if (randomLength < 12) {
-      throw new IllegalArgumentException(
-        "Must specify at least 12 bytes (96 bits) for random part.");
+      throw new IllegalArgumentException("Must specify at least 12 bytes (96 bits) for random part.");
     }
     this.randomLength = randomLength;
     if (fixed != null) {

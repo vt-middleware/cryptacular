@@ -2,15 +2,14 @@
 package org.cryptacular.x509.dn;
 
 /**
- * Describes the registered values of AttributeType that may appear in a
- * RelativeDistinguishedName (RDN) as defined in section 2 of RFC 2253.
+ * Describes the registered values of AttributeType that may appear in a RelativeDistinguishedName (RDN) as defined in
+ * section 2 of RFC 2253.
  *
- * <p>Enumeration values include attributes likely to appear in an X.509 RDN,
- * which were obtained from the following sources:</p>
+ * <p>Enumeration values include attributes likely to appear in an X.509 RDN, which were obtained from the following
+ * sources:</p>
  *
  * <ul>
- *   <li>RFC 4519 Lightweight Directory Access Protocol (LDAP): Schema for User
- *     Applications</li>
+ *   <li>RFC 4519 Lightweight Directory Access Protocol (LDAP): Schema for User Applications</li>
  *   <li>RFC 4524 COSINE LDAP/X.500 Schema</li>
  *   <li>PKCS #9 v2.0: Selected Object Classes and Attribute Types</li>
  * </ul>
@@ -145,8 +144,8 @@ public enum StandardAttributeType implements AttributeType {
    *
    * @param  oid  OID of attribute type to get.
    *
-   * @return  Attribute type whose OID matches given value or none if there is
-   *          no standard attribute type matching the given OID.
+   * @return  Attribute type whose OID matches given value or none if there is no standard attribute type matching the
+   *          given OID.
    */
   public static StandardAttributeType fromOid(final String oid)
   {
@@ -162,13 +161,11 @@ public enum StandardAttributeType implements AttributeType {
   /**
    * Gets the attribute type whose name is the given string.
    *
-   * @param  name  Name of attribute to get, where the name is the all-caps
-   *               RFC/standard name that would be returned by {@link
-   *               #getName()} for the desired attribute.
+   * @param  name  Name of attribute to get, where the name is the all-caps RFC/standard name that would be returned by
+   *               {@link #getName()} for the desired attribute.
    *
-   * @return  Attribute type whose {@link #getName()} property matches the given
-   *          value or null if there is no standard attribute with the given
-   *          name.
+   * @return  Attribute type whose {@link #getName()} property matches the given value or null if there is no standard
+   *          attribute with the given name.
    */
   public static AttributeType fromName(final String name)
   {

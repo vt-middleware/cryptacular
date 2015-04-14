@@ -21,26 +21,21 @@ public class ResourceBasedSecretKeyFactoryBeanTest
   @DataProvider(name = "keys")
   public Object[][] getKeys()
   {
-    return
-      new Object[][] {
-        new Object[] {
-          "AES",
-          new FileResource(new File(KEY_PATH + "aes-128.key")),
-          16,
-        },
-      };
+    return new Object[][] {
+      new Object[] {
+        "AES",
+        new FileResource(new File(KEY_PATH + "aes-128.key")),
+        16,
+      },
+    };
   }
 
 
   @Test(dataProvider = "keys")
-  public void testNewInstance(
-    final String algorithm,
-    final Resource resource,
-    final int expectedSize)
+  public void testNewInstance(final String algorithm, final Resource resource, final int expectedSize)
     throws Exception
   {
-    final ResourceBasedSecretKeyFactoryBean factory =
-      new ResourceBasedSecretKeyFactoryBean();
+    final ResourceBasedSecretKeyFactoryBean factory = new ResourceBasedSecretKeyFactoryBean();
     factory.setAlgorithm(algorithm);
     factory.setResource(resource);
     assertEquals(factory.newInstance().getEncoded().length, expectedSize);

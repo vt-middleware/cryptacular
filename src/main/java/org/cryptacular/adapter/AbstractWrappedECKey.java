@@ -14,8 +14,7 @@ import org.bouncycastle.jcajce.provider.asymmetric.util.EC5Util;
  *
  * @author  Middleware Services
  */
-public abstract class AbstractWrappedECKey<T extends ECKeyParameters>
-  extends AbstractWrappedKey<T>
+public abstract class AbstractWrappedECKey<T extends ECKeyParameters> extends AbstractWrappedKey<T>
 {
 
   /** Elliptic curve algorithm name. */

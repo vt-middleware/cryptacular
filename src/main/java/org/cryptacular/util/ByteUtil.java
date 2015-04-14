@@ -26,8 +26,7 @@ public final class ByteUtil
 
 
   /**
-   * Converts the big-endian representation of a 32-bit integer to the
-   * equivalent integer value.
+   * Converts the big-endian representation of a 32-bit integer to the equivalent integer value.
    *
    * @param  data  4-byte array in big-endian format.
    *
@@ -35,9 +34,7 @@ public final class ByteUtil
    */
   public static int toInt(final byte[] data)
   {
-    return
-      (data[0] << 24) | ((data[1] & 0xff) << 16) | ((data[2] & 0xff) << 8) |
-      (data[3] & 0xff);
+    return (data[0] << 24) | ((data[1] & 0xff) << 16) | ((data[2] & 0xff) << 8) | (data[3] & 0xff);
   }
 
 
@@ -51,9 +48,7 @@ public final class ByteUtil
   public static int readInt(final InputStream in)
   {
     try {
-      return
-        (in.read() << 24) | ((in.read() & 0xff) << 16) |
-        ((in.read() & 0xff) << 8) | (in.read() & 0xff);
+      return (in.read() << 24) | ((in.read() & 0xff) << 16) | ((in.read() & 0xff) << 8) | (in.read() & 0xff);
     } catch (IOException e) {
       throw new RuntimeException("Error reading from stream.", e);
     }
@@ -61,8 +56,7 @@ public final class ByteUtil
 
 
   /**
-   * Converts the big-endian representation of a 64-bit integer to the
-   * equivalent long value.
+   * Converts the big-endian representation of a 64-bit integer to the equivalent long value.
    *
    * @param  data  8-byte array in big-endian format.
    *
@@ -121,10 +115,7 @@ public final class ByteUtil
    * @param  output  Array into which bytes are placed.
    * @param  offset  Offset into output array at which output bytes start.
    */
-  public static void toBytes(
-    final int value,
-    final byte[] output,
-    final int offset)
+  public static void toBytes(final int value, final byte[] output, final int offset)
   {
     int shift = 24;
     for (int i = 0; i < 4; i++) {
@@ -156,10 +147,7 @@ public final class ByteUtil
    * @param  output  Array into which bytes are placed.
    * @param  offset  Offset into output array at which output bytes start.
    */
-  public static void toBytes(
-    final long value,
-    final byte[] output,
-    final int offset)
+  public static void toBytes(final long value, final byte[] output, final int offset)
   {
     int shift = 56;
     for (int i = 0; i < 8; i++) {
@@ -238,8 +226,7 @@ public final class ByteUtil
    *
    * @param  buffer  Byte buffer to convert.
    *
-   * @return  Byte array corresponding to bytes of buffer from current position
-   *          to limit.
+   * @return  Byte array corresponding to bytes of buffer from current position to limit.
    */
   public static byte[] toArray(final ByteBuffer buffer)
   {

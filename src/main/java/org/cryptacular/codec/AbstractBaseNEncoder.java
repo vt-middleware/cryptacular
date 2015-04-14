@@ -12,9 +12,7 @@ import java.nio.CharBuffer;
 public abstract class AbstractBaseNEncoder implements Encoder
 {
 
-  /**
-   * Platform-specific line terminator string, e.g. LF (Unix), CRLF (Windows).
-   */
+  /** Platform-specific line terminator string, e.g. LF (Unix), CRLF (Windows). */
   private static final String NEWLINE = System.lineSeparator();
 
   /** Number of base64 characters per line. */
@@ -48,9 +46,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
    * @param  characterSet  Encoding character set.
    * @param  charactersPerLine  Number of characters per line.
    */
-  public AbstractBaseNEncoder(
-    final char[] characterSet,
-    final int charactersPerLine)
+  public AbstractBaseNEncoder(final char[] characterSet, final int charactersPerLine)
   {
     charset = characterSet;
 
@@ -118,8 +114,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
    * Writes bytes in the current encoding block to the output buffer.
    *
    * @param  output  Output buffer.
-   * @param  stop  Bit shift stop position where data in current encoding block
-   *               ends.
+   * @param  stop  Bit shift stop position where data in current encoding block ends.
    */
   private void writeOutput(final CharBuffer output, final int stop)
   {

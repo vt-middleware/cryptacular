@@ -37,10 +37,7 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
    * @param  type  Keystore type, e.g. JCEKS.
    * @param  password  Password used to decrypt key entry in keystore.
    */
-  public KeyStoreFactoryBean(
-    final Resource resource,
-    final String type,
-    final String password)
+  public KeyStoreFactoryBean(final Resource resource, final String type, final String password)
   {
     setResource(resource);
     setType(type);
@@ -58,8 +55,8 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
   /**
    * Sets the keystore type.
    *
-   * @param  type  JCEKS (default), JKS, PKCS12, or BKS. <strong>NOTE:</strong>
-   *               BKS type is supported only when BC provider is installed.
+   * @param  type  JCEKS (default), JKS, PKCS12, or BKS. <strong>NOTE:</strong> BKS type is supported only when BC
+   *               provider is installed.
    */
   public void setType(final String type)
   {

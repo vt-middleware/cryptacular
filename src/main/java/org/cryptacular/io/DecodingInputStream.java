@@ -12,8 +12,7 @@ import org.cryptacular.codec.Decoder;
 import org.cryptacular.codec.HexDecoder;
 
 /**
- * Filters read bytes through a {@link Decoder} such that consumers obtain raw
- * (decoded) bytes from read operations.
+ * Filters read bytes through a {@link Decoder} such that consumers obtain raw (decoded) bytes from read operations.
  *
  * @author  Middleware Services
  */
@@ -34,8 +33,7 @@ public class DecodingInputStream extends FilterInputStream
 
 
   /**
-   * Creates a new instance that wraps the given stream and performs decoding
-   * using the given encoder component.
+   * Creates a new instance that wraps the given stream and performs decoding using the given encoder component.
    *
    * @param  in  Input stream to wrap.
    * @param  d  Decoder that provides on-the-fly decoding.
@@ -102,8 +100,7 @@ public class DecodingInputStream extends FilterInputStream
 
 
   /**
-   * Creates a new instance that decodes hexadecimal input from the given
-   * stream.
+   * Creates a new instance that decodes hexadecimal input from the given stream.
    *
    * @param  in  Wrapped input stream.
    *

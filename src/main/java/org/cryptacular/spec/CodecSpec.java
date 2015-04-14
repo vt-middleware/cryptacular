@@ -7,8 +7,8 @@ import org.cryptacular.codec.Codec;
 import org.cryptacular.codec.HexCodec;
 
 /**
- * Describes a string-to-byte encoding provides a means to create a new instance
- * of the coed via the {@link #newInstance()} method.
+ * Describes a string-to-byte encoding provides a means to create a new instance of the coed via the {@link
+ * #newInstance()} method.
  *
  * @author  Middleware Services
  */
@@ -54,9 +54,7 @@ public class CodecSpec implements Spec<Codec>
     final Codec codec;
     if ("Hex".equalsIgnoreCase(encoding)) {
       codec = new HexCodec();
-    } else if (
-      "Base64".equalsIgnoreCase(encoding) ||
-        "Base-64".equalsIgnoreCase(encoding)) {
+    } else if ("Base64".equalsIgnoreCase(encoding) || "Base-64".equalsIgnoreCase(encoding)) {
       codec = new Base64Codec();
     } else {
       throw new IllegalArgumentException("Invalid encoding.");

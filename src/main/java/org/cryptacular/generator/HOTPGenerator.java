@@ -5,8 +5,8 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 
 /**
- * OTP generator component that implements the HOTP scheme described in <a
- * href="https://tools.ietf.org/html/rfc4226">RFC 4226</a>.
+ * OTP generator component that implements the HOTP scheme described in <a href="https://tools.ietf.org/html/rfc4226">
+ * RFC 4226</a>.
  *
  * @author  Middleware Services
  */

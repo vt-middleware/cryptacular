@@ -67,13 +67,9 @@ public class BlockCipherSpec implements Spec<BlockCipher>
       cipher = new CAST6Engine();
     } else if ("DES".equalsIgnoreCase(algorithm)) {
       cipher = new DESEngine();
-    } else if (
-      "DESede".equalsIgnoreCase(algorithm) ||
-        "DES3".equalsIgnoreCase(algorithm)) {
+    } else if ("DESede".equalsIgnoreCase(algorithm) || "DES3".equalsIgnoreCase(algorithm)) {
       cipher = new DESedeEngine();
-    } else if (
-      "GOST".equalsIgnoreCase(algorithm) ||
-        "GOST28147".equals(algorithm)) {
+    } else if ("GOST".equalsIgnoreCase(algorithm) || "GOST28147".equals(algorithm)) {
       cipher = new GOST28147Engine();
     } else if ("Noekeon".equalsIgnoreCase(algorithm)) {
       cipher = new NoekeonEngine();
@@ -96,8 +92,7 @@ public class BlockCipherSpec implements Spec<BlockCipher>
     } else if ("XTEA".equalsIgnoreCase(algorithm)) {
       cipher = new XTEAEngine();
     } else {
-      throw new IllegalStateException(
-        "Unsupported cipher algorithm " + algorithm);
+      throw new IllegalStateException("Unsupported cipher algorithm " + algorithm);
     }
     return cipher;
   }

@@ -37,10 +37,7 @@ public abstract class AbstractHashBean
   }
 
 
-  /**
-   * @return  Digest specification that determines the instance of {@link
-   *          Digest} used to compute the hash.
-   */
+  /** @return  Digest specification that determines the instance of {@link Digest} used to compute the hash. */
   public Spec<Digest> getDigestSpec()
   {
     return digestSpec;
@@ -48,8 +45,7 @@ public abstract class AbstractHashBean
 
 
   /**
-   * Sets the digest specification that determines the instance of {@link
-   * Digest} used to compute the hash.
+   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
    *
    * @param  digestSpec  Digest algorithm specification.
    */
@@ -59,10 +55,7 @@ public abstract class AbstractHashBean
   }
 
 
-  /**
-   * @return  Number of iterations the digest function is applied to the input
-   *          data.
-   */
+  /** @return  Number of iterations the digest function is applied to the input data. */
   public int getIterations()
   {
     return iterations;
@@ -70,8 +63,7 @@ public abstract class AbstractHashBean
 
 
   /**
-   * Sets the number of iterations the digest function is applied to the input
-   * data.
+   * Sets the number of iterations the digest function is applied to the input data.
    *
    * @param  iterations  Number of hash rounds. Default value is 1.
    */
@@ -100,17 +92,15 @@ public abstract class AbstractHashBean
   /**
    * Compares the hash of the given data against a known hash output.
    *
-   * @param  hash  Known hash value. If the length of the array is greater than
-   *               the length of the digest output, anything beyond the digest
-   *               length is considered salt data that is hashed <strong>
-   *               after</strong> the input data.
+   * @param  hash  Known hash value. If the length of the array is greater than the length of the digest output,
+   *               anything beyond the digest length is considered salt data that is hashed <strong>after</strong> the
+   *               input data.
    * @param  data  Data to hash.
    *
    * @return  True if hashed data equals known hash output, false otherwise.
    */
   protected boolean compareInternal(final byte[] hash, final Object... data)
   {
-    return
-      HashUtil.compareHash(digestSpec.newInstance(), hash, iterations, data);
+    return HashUtil.compareHash(digestSpec.newInstance(), hash, iterations, data);
   }
 }

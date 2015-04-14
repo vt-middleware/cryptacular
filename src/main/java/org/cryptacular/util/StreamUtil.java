@@ -25,8 +25,7 @@ public final class StreamUtil
 {
 
   /**
-   * Buffer size of chunked operations, e.g. {@link
-   * #pipeAll(java.io.InputStream, java.io.OutputStream,
+   * Buffer size of chunked operations, e.g. {@link #pipeAll(java.io.InputStream, java.io.OutputStream,
    * org.cryptacular.io.ChunkHandler)}.
    */
   public static final int CHUNK_SIZE = 1024;
@@ -119,8 +118,7 @@ public final class StreamUtil
    * Reads all data from the given reader.
    *
    * @param  reader  Reader over character data.
-   * @param  sizeHint  Estimate of amount of data to be read in number of
-   *                   characters.
+   * @param  sizeHint  Estimate of amount of data to be read in number of characters.
    *
    * @return  Data read from reader.
    */
@@ -150,10 +148,7 @@ public final class StreamUtil
    * @param  out  Output stream holding processed data.
    * @param  handler  Arbitrary handler for processing input stream.
    */
-  public static void pipeAll(
-    final InputStream in,
-    final OutputStream out,
-    final ChunkHandler handler)
+  public static void pipeAll(final InputStream in, final OutputStream out, final ChunkHandler handler)
   {
     final byte[] buffer = new byte[CHUNK_SIZE];
     int count;
@@ -185,8 +180,7 @@ public final class StreamUtil
 
 
   /**
-   * Creates a reader around the given file that presumably contains character
-   * data.
+   * Creates a reader around the given file that presumably contains character data.
    *
    * @param  file  Reader source.
    *
@@ -195,9 +189,7 @@ public final class StreamUtil
   public static Reader makeReader(final File file)
   {
     try {
-      return
-        new InputStreamReader(
-          new BufferedInputStream(new FileInputStream(file)));
+      return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)));
     } catch (FileNotFoundException e) {
       throw new RuntimeException(file + " does not exist");
     }
@@ -205,8 +197,7 @@ public final class StreamUtil
 
 
   /**
-   * Closes the given stream and swallows exceptions that may arise during the
-   * process.
+   * Closes the given stream and swallows exceptions that may arise during the process.
    *
    * @param  in  Input stream to close.
    */
@@ -221,8 +212,7 @@ public final class StreamUtil
 
 
   /**
-   * Closes the given stream and swallows exceptions that may arise during the
-   * process.
+   * Closes the given stream and swallows exceptions that may arise during the process.
    *
    * @param  out  Output stream to close.
    */
@@ -237,8 +227,7 @@ public final class StreamUtil
 
 
   /**
-   * Closes the given reader and swallows exceptions that may arise during the
-   * process.
+   * Closes the given reader and swallows exceptions that may arise during the process.
    *
    * @param  reader  Reader to close.
    */
@@ -253,8 +242,7 @@ public final class StreamUtil
 
 
   /**
-   * Closes the given writer and swallows exceptions that may arise during the
-   * process.
+   * Closes the given writer and swallows exceptions that may arise during the process.
    *
    * @param  writer  Writer to close.
    */

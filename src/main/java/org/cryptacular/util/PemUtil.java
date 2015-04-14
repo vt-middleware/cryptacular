@@ -32,9 +32,8 @@ public final class PemUtil
 
 
   /**
-   * Determines whether the data in the given byte array is base64-encoded data
-   * of PEM encoding. The determination is made using as little data from the
-   * given array as necessary to make a reasonable determination about encoding.
+   * Determines whether the data in the given byte array is base64-encoded data of PEM encoding. The determination is
+   * made using as little data from the given array as necessary to make a reasonable determination about encoding.
    *
    * @param  data  Data to test for PEM encoding
    *
@@ -64,27 +63,23 @@ public final class PemUtil
 
 
   /**
-   * Determines whether the given byte represents an ASCII character in the
-   * character set for base64 encoding.
+   * Determines whether the given byte represents an ASCII character in the character set for base64 encoding.
    *
    * @param  b  Byte to test.
    *
-   * @return  True if the byte represents an ASCII character in the set of valid
-   *          characters for base64 encoding, false otherwise. The padding
-   *          character '=' is not considered valid since it may only appear at
-   *          the end of a base64 encoded value.
+   * @return  True if the byte represents an ASCII character in the set of valid characters for base64 encoding, false
+   *          otherwise. The padding character '=' is not considered valid since it may only appear at the end of a
+   *          base64 encoded value.
    */
   public static boolean isBase64Char(final byte b)
   {
-    return
-      !(b < 47 || b > 122 || b > 57 && b < 65 || b > 90 && b < 97) || b == 43;
+    return !(b < 47 || b > 122 || b > 57 && b < 65 || b > 90 && b < 97) || b == 43;
   }
 
 
   /**
-   * Decodes a PEM-encoded cryptographic object into the raw bytes of its ASN.1
-   * encoding. Header/footer data and metadata info, e.g. Proc-Type, are
-   * ignored.
+   * Decodes a PEM-encoded cryptographic object into the raw bytes of its ASN.1 encoding. Header/footer data and
+   * metadata info, e.g. Proc-Type, are ignored.
    *
    * @param  pem  Bytes of PEM-encoded data to decode.
    *
@@ -97,9 +92,8 @@ public final class PemUtil
 
 
   /**
-   * Decodes a PEM-encoded cryptographic object into the raw bytes of its ASN.1
-   * encoding. Header/footer data and metadata info, e.g. Proc-Type, are
-   * ignored.
+   * Decodes a PEM-encoded cryptographic object into the raw bytes of its ASN.1 encoding. Header/footer data and
+   * metadata info, e.g. Proc-Type, are ignored.
    *
    * @param  pem  PEM-encoded data to decode.
    *
@@ -141,8 +135,7 @@ public final class PemUtil
   {
     final String s = line.flip().toString();
     if (
-      !(s.startsWith(HEADER_BEGIN) || s.startsWith(FOOTER_END) ||
-          s.startsWith(PROC_TYPE) || s.startsWith(DEK_INFO) ||
+      !(s.startsWith(HEADER_BEGIN) || s.startsWith(FOOTER_END) || s.startsWith(PROC_TYPE) || s.startsWith(DEK_INFO) ||
           s.trim().length() == 0)) {
       output.put(line);
     }

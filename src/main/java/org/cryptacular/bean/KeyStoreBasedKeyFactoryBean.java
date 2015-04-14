@@ -5,18 +5,15 @@ import java.security.Key;
 import java.security.KeyStore;
 
 /**
- * Factory that produces either a {@link javax.crypto.SecretKey} or {@link
- * java.security.PrivateKey}.
+ * Factory that produces either a {@link javax.crypto.SecretKey} or {@link java.security.PrivateKey}.
  *
  * <p>from a {@link KeyStore}.</p>
  *
- * @param  <T>  Type of key, either {@link javax.crypto.SecretKey} or {@link
- *              java.security.PrivateKey}.
+ * @param  <T>  Type of key, either {@link javax.crypto.SecretKey} or {@link java.security.PrivateKey}.
  *
  * @author  Middleware Services
  */
-public class KeyStoreBasedKeyFactoryBean<T extends Key>
-  implements FactoryBean<T>
+public class KeyStoreBasedKeyFactoryBean<T extends Key> implements FactoryBean<T>
 {
 
   /** Keystore containing secret key. */
@@ -40,10 +37,7 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key>
    * @param  alias  Name of encryption key entry in key store.
    * @param  password  Password used to decrypt key entry in keystore.
    */
-  public KeyStoreBasedKeyFactoryBean(
-    final KeyStore keyStore,
-    final String alias,
-    final String password)
+  public KeyStoreBasedKeyFactoryBean(final KeyStore keyStore, final String alias, final String password)
   {
     setKeyStore(keyStore);
     setAlias(alias);
@@ -69,10 +63,7 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key>
   }
 
 
-  /**
-   * @return  Alias that specifies the {@link KeyStore} entry containing the
-   *          key.
-   */
+  /** @return  Alias that specifies the {@link KeyStore} entry containing the key. */
   public String getAlias()
   {
     return alias;
@@ -80,8 +71,7 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key>
 
 
   /**
-   * Sets the alias that specifies the {@link KeyStore} entry containing the
-   * key.
+   * Sets the alias that specifies the {@link KeyStore} entry containing the key.
    *
    * @param  alias  Keystore alias of key entry.
    */

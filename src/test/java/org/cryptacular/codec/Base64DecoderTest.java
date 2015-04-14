@@ -63,15 +63,11 @@ public class Base64DecoderTest
 
 
   @Test(dataProvider = "encoded-data")
-  public void testDecode(
-    final Base64Decoder decoder,
-    final String data,
-    final byte[] expected)
+  public void testDecode(final Base64Decoder decoder, final String data, final byte[] expected)
     throws Exception
   {
     final CharBuffer input = CharBuffer.wrap(data);
-    final ByteBuffer output = ByteBuffer.allocate(
-      decoder.outputSize(input.length()));
+    final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(input.length()));
     decoder.decode(input, output);
     decoder.finalize(output);
     output.flip();
@@ -83,16 +79,14 @@ public class Base64DecoderTest
   public void testDecodeFile(final String path)
     throws Exception
   {
-    final String expected = StreamUtil.readAll(
-      StreamUtil.makeReader(new File(path)));
+    final String expected = StreamUtil.readAll(StreamUtil.makeReader(new File(path)));
     final File file = new File(path + ".b64");
     final StringBuilder actual = new StringBuilder(expected.length());
     final Reader reader = StreamUtil.makeReader(file);
     final Base64Decoder decoder = new Base64Decoder();
     try {
       final CharBuffer bufIn = CharBuffer.allocate(1024);
-      final ByteBuffer bufOut = ByteBuffer.allocate(
-        decoder.outputSize(bufIn.capacity()));
+      final ByteBuffer bufOut = ByteBuffer.allocate(decoder.outputSize(bufIn.capacity()));
       while (reader.read(bufIn) > 0) {
         bufIn.flip();
         decoder.decode(bufIn, bufOut);

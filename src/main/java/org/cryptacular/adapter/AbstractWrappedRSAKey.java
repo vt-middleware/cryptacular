@@ -11,8 +11,7 @@ import org.bouncycastle.crypto.params.RSAKeyParameters;
  *
  * @author  Middleware Services
  */
-public abstract class AbstractWrappedRSAKey<T extends RSAKeyParameters>
-  extends AbstractWrappedKey<T>
+public abstract class AbstractWrappedRSAKey<T extends RSAKeyParameters> extends AbstractWrappedKey<T>
 {
 
   /** RSA algorithm name. */

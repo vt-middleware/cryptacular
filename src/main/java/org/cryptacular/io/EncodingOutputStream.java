@@ -12,8 +12,7 @@ import org.cryptacular.codec.Encoder;
 import org.cryptacular.codec.HexEncoder;
 
 /**
- * Filters written bytes through an {@link Encoder} such that encoded data is
- * written to the underlying output stream.
+ * Filters written bytes through an {@link Encoder} such that encoded data is written to the underlying output stream.
  *
  * @author  Middleware Services
  */
@@ -31,8 +30,7 @@ public class EncodingOutputStream extends FilterOutputStream
 
 
   /**
-   * Creates a new instance that wraps the given stream and performs encoding
-   * using the given encoder component.
+   * Creates a new instance that wraps the given stream and performs encoding using the given encoder component.
    *
    * @param  out  Output stream to wrap.
    * @param  e  Encoder that provides on-the-fly encoding.
@@ -110,8 +108,7 @@ public class EncodingOutputStream extends FilterOutputStream
   /**
    * Creates a new instance that produces base64 output in the given stream.
    *
-   * <p><strong>NOTE:</strong> there are no line breaks in the output with this
-   * version.</p>
+   * <p><strong>NOTE:</strong> there are no line breaks in the output with this version.</p>
    *
    * @param  out  Wrapped output stream.
    *
@@ -126,26 +123,21 @@ public class EncodingOutputStream extends FilterOutputStream
   /**
    * Creates a new instance that produces base64 output in the given stream.
    *
-   * <p><strong>NOTE:</strong> this version supports output with configurable
-   * line breaks.</p>
+   * <p><strong>NOTE:</strong> this version supports output with configurable line breaks.</p>
    *
    * @param  out  Wrapped output stream.
-   * @param  lineLength  Length of each base64-encoded line in output. A zero or
-   *                     negative value disables line breaks.
+   * @param  lineLength  Length of each base64-encoded line in output. A zero or negative value disables line breaks.
    *
    * @return  Encoding output stream that produces base64 output.
    */
-  public static EncodingOutputStream base64(
-    final OutputStream out,
-    final int lineLength)
+  public static EncodingOutputStream base64(final OutputStream out, final int lineLength)
   {
     return new EncodingOutputStream(out, new Base64Encoder(lineLength));
   }
 
 
   /**
-   * Creates a new instance that produces hexadecimal output in the given
-   * stream.
+   * Creates a new instance that produces hexadecimal output in the given stream.
    *
    * <p><strong>NOTE:</strong> there are no line breaks in the output.</p>
    *

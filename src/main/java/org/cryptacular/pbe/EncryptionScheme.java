@@ -15,8 +15,7 @@ public interface EncryptionScheme
 {
 
   /**
-   * Encrypts the given plaintext bytes into a byte array of ciphertext using
-   * the derived key.
+   * Encrypts the given plaintext bytes into a byte array of ciphertext using the derived key.
    *
    * @param  plaintext  Input plaintext bytes.
    *
@@ -26,9 +25,8 @@ public interface EncryptionScheme
 
 
   /**
-   * Encrypts the data in the given plaintext input stream into ciphertext in
-   * the output stream. Use {@link org.cryptacular.io.EncodingOutputStream} to
-   * produce ciphertext bytes that encoded as a string data in the output
+   * Encrypts the data in the given plaintext input stream into ciphertext in the output stream. Use {@link
+   * org.cryptacular.io.EncodingOutputStream} to produce ciphertext bytes that encoded as a string data in the output
    * stream.
    *
    * @param  in  Input stream of plaintext.
@@ -51,9 +49,8 @@ public interface EncryptionScheme
 
 
   /**
-   * Decrypts ciphertext from an input stream into plaintext in the output
-   * stream. Use {@link org.cryptacular.io.DecodingInputStream} to handle input
-   * ciphertext encoded as string data.
+   * Decrypts ciphertext from an input stream into plaintext in the output stream. Use {@link
+   * org.cryptacular.io.DecodingInputStream} to handle input ciphertext encoded as string data.
    *
    * @param  in  Input stream of ciphertext.
    * @param  out  Output stream of plaintext.

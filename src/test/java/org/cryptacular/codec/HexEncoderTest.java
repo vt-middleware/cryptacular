@@ -34,8 +34,7 @@ public class HexEncoderTest
         new Object[] {
           new HexEncoder(true),
           ByteUtil.toBytes("Able was I ere I saw elba"),
-          "41:62:6c:65:20:77:61:73:20:49:20:65:72:65:20:49:20:73:61:77:20:65:" +
-            "6c:62:61",
+          "41:62:6c:65:20:77:61:73:20:49:20:65:72:65:20:49:20:73:61:77:20:65:6c:62:61",
         },
         new Object[] {
           new HexEncoder(),
@@ -57,14 +56,10 @@ public class HexEncoderTest
   }
 
   @Test(dataProvider = "text-data")
-  public void testEncode(
-    final HexEncoder encoder,
-    final byte[] data,
-    final String expected)
+  public void testEncode(final HexEncoder encoder, final byte[] data, final String expected)
     throws Exception
   {
-    final CharBuffer output = CharBuffer.allocate(
-      encoder.outputSize(data.length));
+    final CharBuffer output = CharBuffer.allocate(encoder.outputSize(data.length));
     encoder.encode(ByteBuffer.wrap(data), output);
     encoder.finalize(output);
     assertEquals(output.flip().toString(), expected);

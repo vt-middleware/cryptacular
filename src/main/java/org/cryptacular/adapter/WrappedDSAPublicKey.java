@@ -6,13 +6,11 @@ import java.security.interfaces.DSAPublicKey;
 import org.bouncycastle.crypto.params.DSAPublicKeyParameters;
 
 /**
- * JCE/JDK DSA public key that wraps the corresponding BC DSA public key type,
- * {@link DSAPublicKeyParameters}.
+ * JCE/JDK DSA public key that wraps the corresponding BC DSA public key type, {@link DSAPublicKeyParameters}.
  *
  * @author  Middleware Services
  */
-public class WrappedDSAPublicKey
-  extends AbstractWrappedDSAKey<DSAPublicKeyParameters> implements DSAPublicKey
+public class WrappedDSAPublicKey extends AbstractWrappedDSAKey<DSAPublicKeyParameters> implements DSAPublicKey
 {
 
   /**

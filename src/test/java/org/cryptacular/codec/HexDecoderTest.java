@@ -34,8 +34,7 @@ public class HexDecoderTest
           "Able was I ere I saw elb",
         },
         new Object[] {
-          "41:62:6c:65:20:77:61:73:20:49:20:65:72:65:20:49:20:73:61:77:20:65:" +
-            "6c:62:61",
+          "41:62:6c:65:20:77:61:73:20:49:20:65:72:65:20:49:20:73:61:77:20:65:6c:62:61",
           "Able was I ere I saw elba",
         },
         new Object[] {
@@ -62,8 +61,7 @@ public class HexDecoderTest
     throws Exception
   {
     final HexDecoder decoder = new HexDecoder();
-    final ByteBuffer output = ByteBuffer.allocate(
-      decoder.outputSize(encoded.length()));
+    final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(encoded.length()));
     decoder.decode(CharBuffer.wrap(encoded), output);
     decoder.finalize(output);
     output.flip();

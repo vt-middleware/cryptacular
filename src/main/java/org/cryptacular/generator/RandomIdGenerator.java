@@ -13,8 +13,7 @@ public class RandomIdGenerator implements IdGenerator
 {
 
   /** Default character set. */
-  public static final String DEFAULT_CHARSET =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  public static final String DEFAULT_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
   /** Size of generated identifiers. */
   private final int length;
@@ -47,8 +46,7 @@ public class RandomIdGenerator implements IdGenerator
     }
     this.length = length;
     if (charset == null || charset.length() < 2 || charset.length() > 128) {
-      throw new IllegalArgumentException(
-        "Charset length must be in the range 2 - 128");
+      throw new IllegalArgumentException("Charset length must be in the range 2 - 128");
     }
     this.charset = charset;
   }
@@ -59,11 +57,11 @@ public class RandomIdGenerator implements IdGenerator
   {
     final StringBuilder id = new StringBuilder(length);
     final byte[] output = new byte[length];
-    final int outsize = NonceUtil.newRBG(
-      new SHA256Digest(), 32).generate(output, null, false);
+    final int outsize = NonceUtil.newRBG(new SHA256Digest(), 32).generate(output, null, false);
     if (outsize < length) {
       throw new IllegalStateException("Insufficient entropy");
     }
+
     int index;
     for (int i = 0; i < output.length && id.length() < length; i++) {
       index = 0x7F & output[i];

@@ -24,10 +24,7 @@ public class Base32Encoder extends AbstractBaseNEncoder
   }
 
 
-  /**
-   * Creates a new instance that produces base 32-encoded output with no line
-   * breaks.
-   */
+  /** Creates a new instance that produces base 32-encoded output with no line breaks. */
   public Base32Encoder()
   {
     // Default to no line breaks.
@@ -36,11 +33,10 @@ public class Base32Encoder extends AbstractBaseNEncoder
 
 
   /**
-   * Creates a new instance that produces base 32-encoded output with the given
-   * number of characters per line in the default character set.
+   * Creates a new instance that produces base 32-encoded output with the given number of characters per line in the
+   * default character set.
    *
-   * @param  charactersPerLine  Number of characters per line. A zero or
-   *                            negative value disables line breaks.
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
    */
   public Base32Encoder(final int charactersPerLine)
   {

@@ -63,15 +63,11 @@ public class Base64EncoderTest
 
 
   @Test(dataProvider = "byte-data")
-  public void testEncode(
-    final Base64Encoder encoder,
-    final byte[] inBytes,
-    final String expected)
+  public void testEncode(final Base64Encoder encoder, final byte[] inBytes, final String expected)
     throws Exception
   {
     final ByteBuffer input = ByteBuffer.wrap(inBytes);
-    final CharBuffer output = CharBuffer.allocate(
-      encoder.outputSize(input.limit()));
+    final CharBuffer output = CharBuffer.allocate(encoder.outputSize(input.limit()));
     encoder.encode(input, output);
     encoder.finalize(output);
     assertEquals(output.flip().toString(), expected);

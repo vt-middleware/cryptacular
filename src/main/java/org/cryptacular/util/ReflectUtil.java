@@ -21,8 +21,7 @@ public final class ReflectUtil
 
 
   /**
-   * Gets the method defined on the target class. The method is cached to speed
-   * up subsequent lookups.
+   * Gets the method defined on the target class. The method is cached to speed up subsequent lookups.
    *
    * @param  target  Target class that contains method.
    * @param  name  Method name.
@@ -30,10 +29,7 @@ public final class ReflectUtil
    *
    * @return  Method if found, otherwise null.
    */
-  public static Method getMethod(
-    final Class<?> target,
-    final String name,
-    final Class<?>... parameters)
+  public static Method getMethod(final Class<?> target, final String name, final Class<?>... parameters)
   {
     final String key = target.getName() + '.' + name;
     Method method = METHOD_CACHE.get(key);
@@ -59,10 +55,7 @@ public final class ReflectUtil
    *
    * @return  Method return value. A void method returns null.
    */
-  public static Object invoke(
-    final Object target,
-    final Method method,
-    final Object... parameters)
+  public static Object invoke(final Object target, final Method method, final Object... parameters)
   {
     try {
       return method.invoke(target, parameters);

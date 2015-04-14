@@ -20,8 +20,7 @@ public class Base64Encoder extends AbstractBaseNEncoder
    * Initializes the encoding character table.
    */
   static {
-    final String defaultCharset =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    final String defaultCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     for (int i = 0; i < defaultCharset.length(); i++) {
       DEFAULT_ENCODING_TABLE[i] = defaultCharset.charAt(i);
       URLSAFE_ENCODING_TABLE[i] = defaultCharset.charAt(i);
@@ -31,10 +30,7 @@ public class Base64Encoder extends AbstractBaseNEncoder
   }
 
 
-  /**
-   * Creates a new instance that produces base 64-encoded output with no line
-   * breaks in the default character set.
-   */
+  /** Creates a new instance that produces base 64-encoded output with no line breaks in the default character set. */
   public Base64Encoder()
   {
     // Default to no line breaks.
@@ -43,11 +39,10 @@ public class Base64Encoder extends AbstractBaseNEncoder
 
 
   /**
-   * Creates a new instance that produces base 64-encoded output with no line
-   * breaks and optional URL-safe character set.
+   * Creates a new instance that produces base 64-encoded output with no line breaks and optional URL-safe character
+   * set.
    *
-   * @param  urlSafe  True to use URL and filesystem-safe character set, false
-   *                  otherwise.
+   * @param  urlSafe  True to use URL and filesystem-safe character set, false otherwise.
    */
   public Base64Encoder(final boolean urlSafe)
   {
@@ -56,11 +51,10 @@ public class Base64Encoder extends AbstractBaseNEncoder
 
 
   /**
-   * Creates a new instance that produces base 64-encoded output with the given
-   * number of characters per line in the default character set.
+   * Creates a new instance that produces base 64-encoded output with the given number of characters per line in the
+   * default character set.
    *
-   * @param  charactersPerLine  Number of characters per line. A zero or
-   *                            negative value disables line breaks.
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
    */
   public Base64Encoder(final int charactersPerLine)
   {
@@ -69,19 +63,15 @@ public class Base64Encoder extends AbstractBaseNEncoder
 
 
   /**
-   * Creates a new instance that produces base 64-encoded output with the given
-   * number of characters per line with the option of URL-safe character set.
+   * Creates a new instance that produces base 64-encoded output with the given number of characters per line with the
+   * option of URL-safe character set.
    *
-   * @param  urlSafe  True to use URL and filesystem-safe character set, false
-   *                  otherwise.
-   * @param  charactersPerLine  Number of characters per line. A zero or
-   *                            negative value disables line breaks.
+   * @param  urlSafe  True to use URL and filesystem-safe character set, false otherwise.
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
    */
   public Base64Encoder(final boolean urlSafe, final int charactersPerLine)
   {
-    super(
-      urlSafe ? URLSAFE_ENCODING_TABLE : DEFAULT_ENCODING_TABLE,
-      charactersPerLine);
+    super(urlSafe ? URLSAFE_ENCODING_TABLE : DEFAULT_ENCODING_TABLE, charactersPerLine);
   }
 
 

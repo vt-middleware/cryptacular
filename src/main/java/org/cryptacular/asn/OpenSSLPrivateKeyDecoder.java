@@ -28,8 +28,7 @@ import org.cryptacular.util.PemUtil;
  *
  * @author  Middleware Services
  */
-public class OpenSSLPrivateKeyDecoder
-  extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
+public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
 {
 
   @Override
@@ -42,11 +41,7 @@ public class OpenSSLPrivateKeyDecoder
     final String alg = dekInfo[0];
     final byte[] iv = CodecUtil.hex(dekInfo[1]);
     final byte[] bytes = PemUtil.decode(encrypted);
-    return
-      new OpenSSLEncryptionScheme(
-        OpenSSLAlgorithm.fromAlgorithmId(alg),
-        iv,
-        password).decrypt(bytes);
+    return new OpenSSLEncryptionScheme(OpenSSLAlgorithm.fromAlgorithmId(alg), iv, password).decrypt(bytes);
   }
 
 
@@ -78,12 +73,7 @@ public class OpenSSLPrivateKeyDecoder
       final X9ECParameters params = ECUtil.getNamedCurveByOid(oid);
       key = new ECPrivateKeyParameters(
         ASN1Integer.getInstance(seq.getObjectAt(0)).getValue(),
-        new ECDomainParameters(
-          params.getCurve(),
-          params.getG(),
-          params.getN(),
-          params.getH(),
-          params.getSeed()));
+        new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
     } else {
       // OpenSSL "traditional" format is an ASN.1 sequence of key parameters
 
@@ -116,17 +106,10 @@ public class OpenSSLPrivateKeyDecoder
         final X9ECParameters params = X9ECParameters.getInstance(
           ASN1TaggedObject.getInstance(sequence.getObjectAt(2)).getObject());
         key = new ECPrivateKeyParameters(
-          new BigInteger(
-            ASN1OctetString.getInstance(sequence.getObjectAt(1)).getOctets()),
-          new ECDomainParameters(
-            params.getCurve(),
-            params.getG(),
-            params.getN(),
-            params.getH(),
-            params.getSeed()));
+          new BigInteger(ASN1OctetString.getInstance(sequence.getObjectAt(1)).getOctets()),
+          new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
       } else {
-        throw new IllegalArgumentException(
-          "Invalid OpenSSL traditional private key format.");
+        throw new IllegalArgumentException("Invalid OpenSSL traditional private key format.");
       }
     }
     return key;

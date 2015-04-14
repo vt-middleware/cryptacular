@@ -90,17 +90,12 @@ public class ExtensionReaderTest
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "serac-dev-test.crt"),
           new PolicyInformation[] {
-            new PolicyInformation(
-              new ASN1ObjectIdentifier("1.3.6.1.4.1.6760.5.2.2.2.1")),
-            new PolicyInformation(
-              new ASN1ObjectIdentifier("1.3.6.1.4.1.6760.5.2.2.1.1")),
+            new PolicyInformation(new ASN1ObjectIdentifier("1.3.6.1.4.1.6760.5.2.2.2.1")),
+            new PolicyInformation(new ASN1ObjectIdentifier("1.3.6.1.4.1.6760.5.2.2.1.1")),
             new PolicyInformation(
               new ASN1ObjectIdentifier("1.3.6.1.4.1.6760.5.2.2.4.1"),
-              new DERSequence(
-                new PolicyQualifierInfo(
-                  "http://www.pki.vt.edu/vtuca/cps/index.html"))),
-            new PolicyInformation(
-              new ASN1ObjectIdentifier("1.3.6.1.4.1.6760.5.2.2.3.1")),
+              new DERSequence(new PolicyQualifierInfo("http://www.pki.vt.edu/vtuca/cps/index.html"))),
+            new PolicyInformation(new ASN1ObjectIdentifier("1.3.6.1.4.1.6760.5.2.2.3.1")),
           },
         },
       };
@@ -145,15 +140,11 @@ public class ExtensionReaderTest
       new Object[][] {
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "serac-dev-test.crt"),
-          KeyUsageBits.usage(
-            KeyUsageBits.DigitalSignature,
-            KeyUsageBits.NonRepudiation),
+          KeyUsageBits.usage(KeyUsageBits.DigitalSignature, KeyUsageBits.NonRepudiation),
         },
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "login.live.com.crt"),
-          KeyUsageBits.usage(
-            KeyUsageBits.DigitalSignature,
-            KeyUsageBits.KeyEncipherment),
+          KeyUsageBits.usage(KeyUsageBits.DigitalSignature, KeyUsageBits.KeyEncipherment),
         },
       };
   }
@@ -190,9 +181,7 @@ public class ExtensionReaderTest
           CertUtil.readCertificate(CRT_PATH + "login.live.com.crt"),
           new DistributionPoint[] {
             new DistributionPoint(
-              new DistributionPointName(
-                new GeneralNames(
-                  uri("http://EVSecure-crl.verisign.com/EVSecure2006.crl"))),
+              new DistributionPointName(new GeneralNames(uri("http://EVSecure-crl.verisign.com/EVSecure2006.crl"))),
               null,
               null),
           },
@@ -227,9 +216,7 @@ public class ExtensionReaderTest
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "login.live.com.crt"),
           new AccessDescription[] {
-            new AccessDescription(
-              AccessDescription.id_ad_ocsp,
-              uri("http://EVSecure-ocsp.verisign.com")),
+            new AccessDescription(AccessDescription.id_ad_ocsp, uri("http://EVSecure-ocsp.verisign.com")),
             new AccessDescription(
               AccessDescription.id_ad_caIssuers,
               uri("http://EVSecure-aia.verisign.com/EVSecure2006.cer")),
@@ -240,13 +227,10 @@ public class ExtensionReaderTest
 
 
   @Test(dataProvider = "subject-alt-name")
-  public void testReadSubjectAlternativeName(
-    final X509Certificate cert,
-    final String[] expected)
+  public void testReadSubjectAlternativeName(final X509Certificate cert, final String[] expected)
     throws Exception
   {
-    final GeneralNames names =
-      new ExtensionReader(cert).readSubjectAlternativeName();
+    final GeneralNames names = new ExtensionReader(cert).readSubjectAlternativeName();
     assertEquals(names.getNames().length, expected.length);
     for (int i = 0; i < expected.length; i++) {
       assertEquals(names.getNames()[i].getName().toString(), expected[i]);
@@ -254,13 +238,10 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "issuer-alt-name")
-  public void testReadIssuerAlternativeName(
-    final X509Certificate cert,
-    final String[] expected)
+  public void testReadIssuerAlternativeName(final X509Certificate cert, final String[] expected)
     throws Exception
   {
-    final GeneralNames names = new ExtensionReader(cert)
-      .readIssuerAlternativeName();
+    final GeneralNames names = new ExtensionReader(cert).readIssuerAlternativeName();
     assertEquals(names.getNames().length, expected.length);
     for (int i = 0; i < expected.length; i++) {
       assertEquals(names.getNames()[i].getName().toString(), expected[i]);
@@ -268,66 +249,45 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "basic-constraints")
-  public void testReadBasicConstraints(
-    final X509Certificate cert,
-    final boolean expected)
+  public void testReadBasicConstraints(final X509Certificate cert, final boolean expected)
     throws Exception
   {
-    assertEquals(
-      new ExtensionReader(cert).readBasicConstraints().isCA(),
-      expected);
+    assertEquals(new ExtensionReader(cert).readBasicConstraints().isCA(), expected);
   }
 
   @Test(dataProvider = "certificate-policies")
-  public void testReadCertificatePolicies(
-    final X509Certificate cert,
-    final PolicyInformation[] expected)
+  public void testReadCertificatePolicies(final X509Certificate cert, final PolicyInformation[] expected)
     throws Exception
   {
-    final List<PolicyInformation> policies =
-      new ExtensionReader(cert).readCertificatePolicies();
+    final List<PolicyInformation> policies = new ExtensionReader(cert).readCertificatePolicies();
     assertEquals(policies.size(), expected.length);
 
     PolicyInformation current;
     for (int i = 0; i < expected.length; i++) {
       current = policies.get(i);
-      assertEquals(
-        current.getPolicyIdentifier(),
-        expected[i].getPolicyIdentifier());
+      assertEquals(current.getPolicyIdentifier(), expected[i].getPolicyIdentifier());
       if (expected[i].getPolicyQualifiers() != null) {
         for (int j = 0; j < expected[i].getPolicyQualifiers().size(); j++) {
-          assertEquals(
-            current.getPolicyQualifiers().getObjectAt(j),
-            expected[i].getPolicyQualifiers().getObjectAt(j));
+          assertEquals(current.getPolicyQualifiers().getObjectAt(j), expected[i].getPolicyQualifiers().getObjectAt(j));
         }
       }
     }
   }
 
   @Test(dataProvider = "subject-key-id")
-  public void testReadSubjectKeyIdentifier(
-    final X509Certificate cert,
-    final String expected)
+  public void testReadSubjectKeyIdentifier(final X509Certificate cert, final String expected)
     throws Exception
   {
-    final SubjectKeyIdentifier keyId =
-      new ExtensionReader(cert).readSubjectKeyIdentifier();
-    assertEquals(
-      CodecUtil.hex(keyId.getKeyIdentifier(), true).toUpperCase(),
-      expected);
+    final SubjectKeyIdentifier keyId = new ExtensionReader(cert).readSubjectKeyIdentifier();
+    assertEquals(CodecUtil.hex(keyId.getKeyIdentifier(), true).toUpperCase(), expected);
   }
 
   @Test(dataProvider = "authority-key-id")
-  public void testReadAuthorityKeyIdentifier(
-    final X509Certificate cert,
-    final String expected)
+  public void testReadAuthorityKeyIdentifier(final X509Certificate cert, final String expected)
     throws Exception
   {
-    final AuthorityKeyIdentifier keyId =
-      new ExtensionReader(cert).readAuthorityKeyIdentifier();
-    assertEquals(
-      CodecUtil.hex(keyId.getKeyIdentifier(), true).toUpperCase(),
-      expected);
+    final AuthorityKeyIdentifier keyId = new ExtensionReader(cert).readAuthorityKeyIdentifier();
+    assertEquals(CodecUtil.hex(keyId.getKeyIdentifier(), true).toUpperCase(), expected);
   }
 
   @Test(dataProvider = "key-usage")
@@ -346,13 +306,10 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "extended-key-usage")
-  public void testReadExtendedKeyUsage(
-    final X509Certificate cert,
-    final KeyPurposeId[] expected)
+  public void testReadExtendedKeyUsage(final X509Certificate cert, final KeyPurposeId[] expected)
     throws Exception
   {
-    final List<KeyPurposeId> purposes =
-      new ExtensionReader(cert).readExtendedKeyUsage();
+    final List<KeyPurposeId> purposes = new ExtensionReader(cert).readExtendedKeyUsage();
     assertEquals(purposes.size(), expected.length);
     for (int i = 0; i < expected.length; i++) {
       assertEquals(purposes.get(i), expected[i]);
@@ -360,13 +317,10 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "crl-distribution-points")
-  public void testReadCRLDistributionPoints(
-    final X509Certificate cert,
-    final DistributionPoint[] expected)
+  public void testReadCRLDistributionPoints(final X509Certificate cert, final DistributionPoint[] expected)
     throws Exception
   {
-    final List<DistributionPoint> points =
-      new ExtensionReader(cert).readCRLDistributionPoints();
+    final List<DistributionPoint> points = new ExtensionReader(cert).readCRLDistributionPoints();
     assertEquals(points.size(), expected.length);
     for (int i = 0; i < expected.length; i++) {
       assertEquals(points.get(i), expected[i]);
@@ -374,13 +328,10 @@ public class ExtensionReaderTest
   }
 
   @Test(dataProvider = "authority-information-access")
-  public void testReadAuthorityInformationAccess(
-    final X509Certificate cert,
-    final AccessDescription[] expected)
+  public void testReadAuthorityInformationAccess(final X509Certificate cert, final AccessDescription[] expected)
     throws Exception
   {
-    final List<AccessDescription> descriptions =
-      new ExtensionReader(cert).readAuthorityInformationAccess();
+    final List<AccessDescription> descriptions = new ExtensionReader(cert).readAuthorityInformationAccess();
     assertEquals(descriptions.size(), expected.length);
     for (int i = 0; i < expected.length; i++) {
       assertEquals(descriptions.get(i), expected[i]);

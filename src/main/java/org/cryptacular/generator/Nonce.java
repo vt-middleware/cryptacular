@@ -14,8 +14,7 @@ public interface Nonce
    *
    * @return  Nonce bytes.
    *
-   * @throws  LimitException  When a limit imposed by the nonce generation
-   *                          strategy, if any, is exceeded.
+   * @throws  LimitException  When a limit imposed by the nonce generation strategy, if any, is exceeded.
    */
   byte[] generate()
     throws LimitException;

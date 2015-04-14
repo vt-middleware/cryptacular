@@ -7,11 +7,9 @@ import org.cryptacular.generator.LimitException;
 import org.cryptacular.generator.Nonce;
 
 /**
- * Uses a {@link BigInteger} to back a counter in order to produce nonces of
- * arbitrary length.
+ * Uses a {@link BigInteger} to back a counter in order to produce nonces of arbitrary length.
  *
- * <p>A common use case for this component is creation of IVs for ciphers with
- * 16-byte block size, e.g. AES.</p>
+ * <p>A common use case for this component is creation of IVs for ciphers with 16-byte block size, e.g. AES.</p>
  *
  * <p>Instances of this class are thread safe.</p>
  *
@@ -53,18 +51,12 @@ public class BigIntegerCounterNonce implements Nonce
       value = counter.toByteArray();
     }
     if (value.length > length) {
-      throw new LimitException(
-        "Counter value exceeded max byte length " + length);
+      throw new LimitException("Counter value exceeded max byte length " + length);
     }
     if (value.length < length) {
       final byte[] temp = new byte[length];
       Arrays.fill(temp, (byte) 0);
-      System.arraycopy(
-        value,
-        0,
-        temp,
-        temp.length - value.length,
-        value.length);
+      System.arraycopy(value, 0, temp, temp.length - value.length, value.length);
       return temp;
     }
     return value;

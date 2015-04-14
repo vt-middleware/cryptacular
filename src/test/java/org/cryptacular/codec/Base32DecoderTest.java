@@ -57,15 +57,11 @@ public class Base32DecoderTest
 
 
   @Test(dataProvider = "encoded-data")
-  public void testDecode(
-    final Base32Decoder decoder,
-    final String data,
-    final byte[] expected)
+  public void testDecode(final Base32Decoder decoder, final String data, final byte[] expected)
     throws Exception
   {
     final CharBuffer input = CharBuffer.wrap(data);
-    final ByteBuffer output = ByteBuffer.allocate(
-      decoder.outputSize(input.length()));
+    final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(input.length()));
     decoder.decode(input, output);
     decoder.finalize(output);
     output.flip();

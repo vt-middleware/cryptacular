@@ -2,8 +2,7 @@
 package org.cryptacular.spec;
 
 /**
- * Specification for a cryptographic primitive, e.g. block cipher, message
- * digest, etc.
+ * Specification for a cryptographic primitive, e.g. block cipher, message digest, etc.
  *
  * @param  <T>  Type of specification.
  *
@@ -17,8 +16,7 @@ public interface Spec<T>
 
 
   /**
-   * Creates a new instance of the cryptographic primitive described by this
-   * specification.
+   * Creates a new instance of the cryptographic primitive described by this specification.
    *
    * @return  New instance of cryptographic primitive.
    */

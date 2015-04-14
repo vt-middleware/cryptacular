@@ -5,8 +5,8 @@ import java.util.BitSet;
 import org.bouncycastle.asn1.x509.KeyUsage;
 
 /**
- * Representation of the bit meanings in the <code>KeyUsage</code> BIT STRING
- * type defined in section 4.2.1.3 of RFC 2459.
+ * Representation of the bit meanings in the <code>KeyUsage</code> BIT STRING type defined in section 4.2.1.3 of RFC
+ * 2459.
  *
  * @author  Middleware Services
  * @version  $Revision: 2745 $
@@ -77,8 +77,7 @@ public enum KeyUsageBits {
 
 
   /**
-   * Determines whether this key usage bit is set in the given key usage bit
-   * string.
+   * Determines whether this key usage bit is set in the given key usage bit string.
    *
    * @param  bitString  Key usage bit string as a byte array.
    *
@@ -91,8 +90,7 @@ public enum KeyUsageBits {
 
 
   /**
-   * Determines whether this key usage bit is set in the given key usage bit
-   * string.
+   * Determines whether this key usage bit is set in the given key usage bit string.
    *
    * @param  bitString  Key usage bit string as a big endian integer.
    *

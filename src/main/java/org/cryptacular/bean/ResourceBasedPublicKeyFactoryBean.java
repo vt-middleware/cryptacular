@@ -7,8 +7,7 @@ import org.cryptacular.io.Resource;
 import org.cryptacular.util.KeyPairUtil;
 
 /**
- * Factory for creating a public key from a {@link Resource} containing data in
- * any of the formats supported by {@link
+ * Factory for creating a public key from a {@link Resource} containing data in any of the formats supported by {@link
  * KeyPairUtil#readPublicKey(java.io.InputStream)}.
  *
  * @author  Middleware Services

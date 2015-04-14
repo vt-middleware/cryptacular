@@ -5,8 +5,7 @@ import org.cryptacular.codec.Encoder;
 import org.cryptacular.util.CodecUtil;
 
 /**
- * Container for the output of a salted hash operation that includes both the
- * digest output and salt value.
+ * Container for the output of a salted hash operation that includes both the digest output and salt value.
  *
  * @author  Middleware Services
  */
@@ -34,18 +33,13 @@ public class SaltedHash
 
 
   /**
-   * Creates a new instance from byte input that contains the concatenation of
-   * digest output and salt.
+   * Creates a new instance from byte input that contains the concatenation of digest output and salt.
    *
    * @param  hashWithSalt  Concatenation of hash and salt.
    * @param  digestLength  Number of bytes in digest output.
-   * @param  toEnd  True if salt is appended to end of hash, false if salt is
-   *                prepended to hash.
+   * @param  toEnd  True if salt is appended to end of hash, false if salt is prepended to hash.
    */
-  public SaltedHash(
-    final byte[] hashWithSalt,
-    final int digestLength,
-    final boolean toEnd)
+  public SaltedHash(final byte[] hashWithSalt, final int digestLength, final boolean toEnd)
   {
     this.hash = new byte[digestLength];
     this.salt = new byte[hashWithSalt.length - digestLength];
@@ -76,8 +70,7 @@ public class SaltedHash
   /**
    * Gets an encoded string of the concatenation of digest output and salt.
    *
-   * @param  toEnd  True to append salt to end of hash, false to prefix hash
-   *                with salt.
+   * @param  toEnd  True to append salt to end of hash, false to prefix hash with salt.
    * @param  encoder  Encodes concatenated bytes to a string.
    *
    * @return  Salt concatenated to hash encoded as a string.
@@ -91,8 +84,7 @@ public class SaltedHash
   /**
    * Gets a byte array containing the concatenation of digest output and salt.
    *
-   * @param  toEnd  True to append salt to end of hash, false to prefix hash
-   *                with salt.
+   * @param  toEnd  True to append salt to end of hash, false to prefix hash with salt.
    *
    * @return  Salt concatenated to hash.
    */

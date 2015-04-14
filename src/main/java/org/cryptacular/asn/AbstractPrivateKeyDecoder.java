@@ -27,8 +27,8 @@ public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
 
 
   /**
-   * Tests the given encoded input and converts it to PEM if it is detected,
-   * stripping out any header/footer data in the process.
+   * Tests the given encoded input and converts it to PEM if it is detected, stripping out any header/footer data in the
+   * process.
    *
    * @param  input  Encoded data that may be PEM encoded.
    *
@@ -44,8 +44,8 @@ public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
 
 
   /**
-   * Decrypts an encrypted key in either PKCS#8 or OpenSSL "traditional" format.
-   * Both PEM and DER encodings are supported.
+   * Decrypts an encrypted key in either PKCS#8 or OpenSSL "traditional" format. Both PEM and DER encodings are
+   * supported.
    *
    * @param  encrypted  Encoded encrypted key data.
    * @param  password  Password to decrypt key.
@@ -56,8 +56,7 @@ public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
 
 
   /**
-   * Decodes the given raw ASN.1 encoded data into a private key of the type
-   * supported by this class.
+   * Decodes the given raw ASN.1 encoded data into a private key of the type supported by this class.
    *
    * @param  encoded  Encoded ASN.1 data.
    *

@@ -45,9 +45,7 @@ public class RandomIdGeneratorTest
   }
 
   @Test(dataProvider = "generators")
-  public void testGenerate(
-    final RandomIdGenerator generator,
-    final Pattern expected)
+  public void testGenerate(final RandomIdGenerator generator, final Pattern expected)
     throws Exception
   {
     for (int i = 0; i < 100; i++) {
@@ -57,20 +55,23 @@ public class RandomIdGeneratorTest
   }
 
   @Test
-  public void testConcurrentGeneration() throws Exception
+  public void testConcurrentGeneration()
+    throws Exception
   {
     final ExecutorService executor = Executors.newFixedThreadPool(20);
     final RandomIdGenerator generator = new RandomIdGenerator(50);
     final Collection<Callable<String>> tasks = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
       tasks.add(new Callable<String>() {
-        @Override
-        public String call() throws Exception
-        {
-          return generator.generate();
-        }
-      });
+          @Override
+          public String call()
+            throws Exception
+          {
+            return generator.generate();
+          }
+        });
     }
+
     final List<Future<String>> results = executor.invokeAll(tasks);
     for (Future<String> result : results) {
       assertNotNull(result.get(1, TimeUnit.SECONDS));

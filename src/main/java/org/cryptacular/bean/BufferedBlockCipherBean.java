@@ -12,9 +12,8 @@ import org.cryptacular.generator.Nonce;
 import org.cryptacular.spec.Spec;
 
 /**
- * Cipher bean that performs symmetric encryption/decryption using a standard
- * block cipher in a standard mode (e.g. CBC, OFB) with padding to support
- * processing inputs of arbitrary length.
+ * Cipher bean that performs symmetric encryption/decryption using a standard block cipher in a standard mode (e.g. CBC,
+ * OFB) with padding to support processing inputs of arbitrary length.
  *
  * @author  Middleware Services
  */
@@ -60,29 +59,21 @@ public class BufferedBlockCipherBean extends AbstractBlockCipherBean
   /**
    * Sets the block cipher specification.
    *
-   * @param  blockCipherSpec  Describes a block cipher in terms of algorithm,
-   *                          mode, and padding.
+   * @param  blockCipherSpec  Describes a block cipher in terms of algorithm, mode, and padding.
    */
-  public void setBlockCipherSpec(
-    final Spec<BufferedBlockCipher> blockCipherSpec)
+  public void setBlockCipherSpec(final Spec<BufferedBlockCipher> blockCipherSpec)
   {
     this.blockCipherSpec = blockCipherSpec;
   }
 
 
   @Override
-  protected BufferedBlockCipherAdapter newCipher(
-    final CiphertextHeader header,
-    final boolean mode)
+  protected BufferedBlockCipherAdapter newCipher(final CiphertextHeader header, final boolean mode)
   {
     final BufferedBlockCipher cipher = blockCipherSpec.newInstance();
-    CipherParameters params = new KeyParameter(
-      lookupKey(header.getKeyName()).getEncoded());
+    CipherParameters params = new KeyParameter(lookupKey(header.getKeyName()).getEncoded());
     final String algName = cipher.getUnderlyingCipher().getAlgorithmName();
-    if (
-      algName.endsWith("CBC") ||
-        algName.endsWith("OFB") ||
-        algName.endsWith("CFB")) {
+    if (algName.endsWith("CBC") || algName.endsWith("OFB") || algName.endsWith("CFB")) {
       params = new ParametersWithIV(params, header.getNonce());
     }
     cipher.init(mode, params);

@@ -2,9 +2,8 @@
 package org.cryptacular.x509;
 
 /**
- * Representation of the options in the CHOICE element describing various
- * categories of the <code>GeneralName</code> type defined in section 4.2.1.7 of
- * RFC 2459.
+ * Representation of the options in the CHOICE element describing various categories of the <code>GeneralName</code>
+ * type defined in section 4.2.1.7 of RFC 2459.
  *
  * @author  Middleware Services
  */
@@ -46,15 +45,13 @@ public enum GeneralNameType {
 
 
   /**
-   * Gets a name type from the value of the tag in the CHOICE element
-   * definition.
+   * Gets a name type from the value of the tag in the CHOICE element definition.
    *
    * @param  tagNo  Ordinal position of type in CHOICE definition in RFC 2459.
    *
    * @return  Type corresponding to given tag number.
    *
-   * @throws  IllegalArgumentException  If there is not general name type
-   *                                    corresponding to the given tag number.
+   * @throws  IllegalArgumentException  If there is not general name type corresponding to the given tag number.
    */
   public static GeneralNameType fromTagNumber(final int tagNo)
   {

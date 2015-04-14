@@ -6,8 +6,8 @@ import org.cryptacular.spec.DigestSpec;
 import org.cryptacular.spec.Spec;
 
 /**
- * OTP generator component that implements the TOTP scheme described in <a
- * href="https://tools.ietf.org/html/rfc6238">RFC 6238</a>.
+ * OTP generator component that implements the TOTP scheme described in <a href="https://tools.ietf.org/html/rfc6238">
+ * RFC 6238</a>.
  *
  * @author  Middleware Services
  */
@@ -47,8 +47,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
       this.digestSpecification = specification;
       return;
     }
-    throw new IllegalArgumentException(
-      "Unsupported digest algorithm " + specification);
+    throw new IllegalArgumentException("Unsupported digest algorithm " + specification);
   }
 
 
@@ -80,8 +79,8 @@ public class TOTPGenerator extends AbstractOTPGenerator
   /**
    * Sets the time step, X.
    *
-   * @param  seconds  Time step in seconds. Default is 30. This value determines
-   *                  the validity window of generated OTP values.
+   * @param  seconds  Time step in seconds. Default is 30. This value determines the validity window of generated OTP
+   *                  values.
    */
   public void setTimeStep(final int seconds)
   {

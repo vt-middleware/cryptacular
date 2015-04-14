@@ -22,8 +22,7 @@ public final class SecretKeyGenerator
 
 
   /**
-   * Generates a symmetric encryption key whose size is equal to the cipher
-   * block size.
+   * Generates a symmetric encryption key whose size is equal to the cipher block size.
    *
    * @param  cipher  Cipher with with key will be used.
    *
@@ -43,20 +42,11 @@ public final class SecretKeyGenerator
    *
    * @return  Symmetric encryption key.
    */
-  public static SecretKey generate(
-    final int bitLength,
-    final BlockCipher cipher)
+  public static SecretKey generate(final int bitLength, final BlockCipher cipher)
   {
     // Want as much nonce data as key bits
     final byte[] nonce = NonceUtil.timestampNonce((bitLength + 7) / 8);
-    return
-      generate(
-        bitLength,
-        cipher,
-        new SP800SecureRandomBuilder().buildHash(
-          new SHA256Digest(),
-          nonce,
-          false));
+    return generate(bitLength, cipher, new SP800SecureRandomBuilder().buildHash(new SHA256Digest(), nonce, false));
   }
 
 
@@ -69,10 +59,7 @@ public final class SecretKeyGenerator
    *
    * @return  Symmetric encryption key.
    */
-  public static SecretKey generate(
-    final int bitLength,
-    final BlockCipher cipher,
-    final SecureRandom random)
+  public static SecretKey generate(final int bitLength, final BlockCipher cipher, final SecureRandom random)
   {
     // Round up for bit lengths that are not a multiple of 8
     final byte[] key = new byte[(bitLength + 7) / 8];

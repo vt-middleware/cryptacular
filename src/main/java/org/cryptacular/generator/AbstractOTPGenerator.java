@@ -7,9 +7,8 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.cryptacular.util.ByteUtil;
 
 /**
- * Abstract base class for <a href="https://tools.ietf.org/html/rfc4226">
- * HOTP</a> and <a href="https://tools.ietf.org/html/rfc6238">TOTP</a> OTP
- * generation schemes.
+ * Abstract base class for <a href="https://tools.ietf.org/html/rfc4226">HOTP</a> and <a
+ * href="https://tools.ietf.org/html/rfc6238">TOTP</a> OTP generation schemes.
  *
  * @author  Middleware Services
  */
@@ -44,14 +43,12 @@ public abstract class AbstractOTPGenerator
   /**
    * Sets the numbers in the generated OTP.
    *
-   * @param  digits  Number of digits in generated OTP. MUST be in the range 6 -
-   *                 9. Default is 6.
+   * @param  digits  Number of digits in generated OTP. MUST be in the range 6 - 9. Default is 6.
    */
   public void setNumberOfDigits(final int digits)
   {
     if (digits < 6 || digits > 9) {
-      throw new IllegalArgumentException(
-        "Number of generated digits must be in range 6-9.");
+      throw new IllegalArgumentException("Number of generated digits must be in range 6-9.");
     }
     this.numberOfDigits = digits;
   }

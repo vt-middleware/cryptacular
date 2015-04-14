@@ -275,19 +275,14 @@ public class KeyPairUtilTest
   }
 
   @Test(dataProvider = "private-keys")
-  public void testLengthPrivateKey(
-    final PrivateKey key,
-    final int expectedLength)
+  public void testLengthPrivateKey(final PrivateKey key, final int expectedLength)
     throws Exception
   {
     assertEquals(KeyPairUtil.length(key), expectedLength);
   }
 
   @Test(dataProvider = "key-pairs")
-  public void testIsKeyPair(
-    final PublicKey pubKey,
-    final PrivateKey privKey,
-    final boolean expected)
+  public void testIsKeyPair(final PublicKey pubKey, final PrivateKey privKey, final boolean expected)
     throws Exception
   {
     assertEquals(KeyPairUtil.isKeyPair(pubKey, privKey), expected);
@@ -303,15 +298,10 @@ public class KeyPairUtilTest
   }
 
   @Test(dataProvider = "encrypted-private-key-files")
-  public void testReadEncryptedPrivateKey(
-    final String path,
-    final String password,
-    final Class<?> expectedType)
+  public void testReadEncryptedPrivateKey(final String path, final String password, final Class<?> expectedType)
     throws Exception
   {
-    final PrivateKey key = KeyPairUtil.readPrivateKey(
-      path,
-      password.toCharArray());
+    final PrivateKey key = KeyPairUtil.readPrivateKey(path, password.toCharArray());
     assertNotNull(key);
     assertTrue(expectedType.isAssignableFrom(key.getClass()));
   }

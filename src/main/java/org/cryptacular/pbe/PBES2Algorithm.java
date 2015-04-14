@@ -4,9 +4,8 @@ package org.cryptacular.pbe;
 import org.cryptacular.spec.BufferedBlockCipherSpec;
 
 /**
- * Supported password-based encryption algorithms for PKCS#5 PBES2 encryption
- * scheme. The ciphers mentioned in PKCS#5 are supported as well as others in
- * common use or of presumed value.
+ * Supported password-based encryption algorithms for PKCS#5 PBES2 encryption scheme. The ciphers mentioned in PKCS#5
+ * are supported as well as others in common use or of presumed value.
  *
  * @author  Middleware Services
  * @version  $Revision: 2745 $
@@ -17,40 +16,22 @@ public enum PBES2Algorithm {
   DES("1.3.14.3.2.7", new BufferedBlockCipherSpec("DES", "CBC", "PKCS5"), 64),
 
   /** 3-DES CBC cipher. */
-  DESede(
-    "1.2.840.113549.3.7",
-    new BufferedBlockCipherSpec("DESede", "CBC", "PKCS5"),
-    192),
+  DESede("1.2.840.113549.3.7", new BufferedBlockCipherSpec("DESede", "CBC", "PKCS5"), 192),
 
   /** RC2 CBC cipher. */
-  RC2(
-    "1.2.840.113549.3.2",
-    new BufferedBlockCipherSpec("RC2", "CBC", "PKCS5"),
-    64),
+  RC2("1.2.840.113549.3.2", new BufferedBlockCipherSpec("RC2", "CBC", "PKCS5"), 64),
 
   /** RC5 CBC cipher. */
-  RC5(
-    "1.2.840.113549.3.9",
-    new BufferedBlockCipherSpec("RC5", "CBC", "PKCS5"),
-    128),
+  RC5("1.2.840.113549.3.9", new BufferedBlockCipherSpec("RC5", "CBC", "PKCS5"), 128),
 
   /** AES-128 CBC cipher. */
-  AES128(
-    "2.16.840.1.101.3.4.1.2",
-    new BufferedBlockCipherSpec("AES", "CBC", "PKCS5"),
-    128),
+  AES128("2.16.840.1.101.3.4.1.2", new BufferedBlockCipherSpec("AES", "CBC", "PKCS5"), 128),
 
   /** AES-192 CBC cipher. */
-  AES192(
-    "2.16.840.1.101.3.4.1.22",
-    new BufferedBlockCipherSpec("AES", "CBC", "PKCS5"),
-    192),
+  AES192("2.16.840.1.101.3.4.1.22", new BufferedBlockCipherSpec("AES", "CBC", "PKCS5"), 192),
 
   /** AES-256 CBC cipher. */
-  AES256(
-    "2.16.840.1.101.3.4.1.42",
-    new BufferedBlockCipherSpec("AES", "CBC", "PKCS5"),
-    256);
+  AES256("2.16.840.1.101.3.4.1.42", new BufferedBlockCipherSpec("AES", "CBC", "PKCS5"), 256);
 
 
   /** Algorithm identifier OID. */
@@ -70,10 +51,7 @@ public enum PBES2Algorithm {
    * @param  cipherSpec  Cipher algorithm specification.
    * @param  keySizeBits  Size of derived key in bits to be used with cipher.
    */
-  PBES2Algorithm(
-    final String id,
-    final BufferedBlockCipherSpec cipherSpec,
-    final int keySizeBits)
+  PBES2Algorithm(final String id, final BufferedBlockCipherSpec cipherSpec, final int keySizeBits)
   {
     this.oid = id;
     this.cipherSpec = cipherSpec;
@@ -115,10 +93,7 @@ public enum PBES2Algorithm {
   }
 
 
-  /**
-   * @return  Size of derived key in bits or -1 if algorithm does not define a
-   *          key size.
-   */
+  /** @return  Size of derived key in bits or -1 if algorithm does not define a key size. */
   public int getKeySize()
   {
     return keySize;

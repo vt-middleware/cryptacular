@@ -6,13 +6,11 @@ import java.security.interfaces.RSAPrivateCrtKey;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 
 /**
- * JCE/JDK RSA private key that wraps the corresponding BC RSA private key type,
- * {@link RSAPrivateCrtKeyParameters}.
+ * JCE/JDK RSA private key that wraps the corresponding BC RSA private key type, {@link RSAPrivateCrtKeyParameters}.
  *
  * @author  Middleware Services
  */
-public class WrappedRSAPrivateCrtKey
-  extends AbstractWrappedRSAKey<RSAPrivateCrtKeyParameters>
+public class WrappedRSAPrivateCrtKey extends AbstractWrappedRSAKey<RSAPrivateCrtKeyParameters>
   implements RSAPrivateCrtKey
 {
 

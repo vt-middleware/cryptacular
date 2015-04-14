@@ -58,8 +58,7 @@ public class CipherUtilTest
         },
         // CFB
         new Object[] {
-          "I went to the woods because I wished to live deliberately, to " +
-            "front only the essential facts of life",
+          "I went to the woods because I wished to live deliberately, to front only the essential facts of life",
           new CFBBlockCipher(new AESEngine(), 128),
           new RBGNonce(16),
         },
@@ -84,14 +83,13 @@ public class CipherUtilTest
         },
         // CCM
         new Object[] {
-          "Thousands of candles can be lit from a single candle and the life " +
-            "of the candle will not be shortened.",
+          "Thousands of candles can be lit from a single candle and the life of the candle will not be shortened.",
           new CCMBlockCipher(new TwofishEngine()),
         },
         // OCB
         new Object[] {
-          "I slept and dreamt life was joy. I awoke and saw that life was " +
-            "service. I acted and behold: service was joy.",
+          "I slept and dreamt life was joy. I awoke and saw that life was service. " +
+            "I acted and behold: service was joy.",
           new OCBBlockCipher(new AESEngine(), new AESEngine()),
         },
       };
@@ -110,34 +108,21 @@ public class CipherUtilTest
 
 
   @Test(dataProvider = "block-cipher")
-  public void testBlockCipherEncryptDecrypt(
-    final String plaintext,
-    final BlockCipher cipher,
-    final Nonce nonce)
+  public void testBlockCipherEncryptDecrypt(final String plaintext, final BlockCipher cipher, final Nonce nonce)
   {
     final SecretKey key = SecretKeyGenerator.generate(cipher);
-    final byte[] ciphertext = CipherUtil.encrypt(
-      cipher,
-      key,
-      nonce,
-      plaintext.getBytes());
+    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, nonce, plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
     assertEquals(new String(result), plaintext);
   }
 
 
   @Test(dataProvider = "aead-block-cipher")
-  public void testAeadBlockCipherEncryptDecrypt(
-    final String plaintext,
-    final AEADBlockCipher cipher)
+  public void testAeadBlockCipherEncryptDecrypt(final String plaintext, final AEADBlockCipher cipher)
   {
     final BlockCipher under = cipher.getUnderlyingCipher();
     final SecretKey key = SecretKeyGenerator.generate(under);
-    final byte[] ciphertext = CipherUtil.encrypt(
-      cipher,
-      key,
-      new RBGNonce(12),
-      plaintext.getBytes());
+    final byte[] ciphertext = CipherUtil.encrypt(cipher, key, new RBGNonce(12), plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
     assertEquals(new String(result), plaintext);
   }
@@ -153,15 +138,9 @@ public class CipherUtilTest
     final File file = new File(path);
     final String expected = new String(StreamUtil.readAll(file));
     final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-    CipherUtil.encrypt(
-      cipher,
-      key,
-      nonce,
-      StreamUtil.makeStream(file),
-      tempOut);
+    CipherUtil.encrypt(cipher, key, nonce, StreamUtil.makeStream(file), tempOut);
 
-    final ByteArrayInputStream tempIn = new ByteArrayInputStream(
-      tempOut.toByteArray());
+    final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);
     assertEquals(new String(actual.toByteArray()), expected);
@@ -173,20 +152,13 @@ public class CipherUtilTest
     throws Exception
   {
     final AEADBlockCipher cipher = new GCMBlockCipher(new AESEngine());
-    final SecretKey key = SecretKeyGenerator.generate(
-      cipher.getUnderlyingCipher());
+    final SecretKey key = SecretKeyGenerator.generate(cipher.getUnderlyingCipher());
     final File file = new File(path);
     final String expected = new String(StreamUtil.readAll(file));
     final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-    CipherUtil.encrypt(
-      cipher,
-      key,
-      new RBGNonce(),
-      StreamUtil.makeStream(file),
-      tempOut);
+    CipherUtil.encrypt(cipher, key, new RBGNonce(), StreamUtil.makeStream(file), tempOut);
 
-    final ByteArrayInputStream tempIn = new ByteArrayInputStream(
-      tempOut.toByteArray());
+    final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);
     assertEquals(new String(actual.toByteArray()), expected);

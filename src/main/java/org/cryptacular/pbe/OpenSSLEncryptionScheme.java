@@ -29,11 +29,8 @@ public class OpenSSLEncryptionScheme extends AbstractEncryptionScheme
     final int keyBitLength,
     final char[] password)
   {
-    final OpenSSLPBEParametersGenerator generator =
-      new OpenSSLPBEParametersGenerator();
-    generator.init(
-      PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password),
-      salt);
+    final OpenSSLPBEParametersGenerator generator = new OpenSSLPBEParametersGenerator();
+    generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password), salt);
     setCipher(cipher);
     setCipherParameters(generator.generateDerivedParameters(keyBitLength));
   }
@@ -43,14 +40,10 @@ public class OpenSSLEncryptionScheme extends AbstractEncryptionScheme
    * Creates a new instance from an algorithm and salt data.
    *
    * @param  algorithm  OpenSSL key encryption algorithm.
-   * @param  iv  Explicit IV; first 8 bytes also used for salt in PBE key
-   *             generation.
+   * @param  iv  Explicit IV; first 8 bytes also used for salt in PBE key generation.
    * @param  password  Password used to derive key.
    */
-  public OpenSSLEncryptionScheme(
-    final OpenSSLAlgorithm algorithm,
-    final byte[] iv,
-    final char[] password)
+  public OpenSSLEncryptionScheme(final OpenSSLAlgorithm algorithm, final byte[] iv, final char[] password)
   {
     byte[] salt = iv;
     if (iv.length > 8) {
@@ -58,16 +51,10 @@ public class OpenSSLEncryptionScheme extends AbstractEncryptionScheme
       System.arraycopy(iv, 0, salt, 0, 8);
     }
 
-    final OpenSSLPBEParametersGenerator generator =
-      new OpenSSLPBEParametersGenerator();
-    generator.init(
-      PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password),
-      salt);
+    final OpenSSLPBEParametersGenerator generator = new OpenSSLPBEParametersGenerator();
+    generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password), salt);
     setCipher(algorithm.getCipherSpec().newInstance());
     setCipherParameters(
-      new ParametersWithIV(
-        generator.generateDerivedParameters(
-          algorithm.getCipherSpec().getKeyLength()),
-        iv));
+      new ParametersWithIV(generator.generateDerivedParameters(algorithm.getCipherSpec().getKeyLength()), iv));
   }
 }

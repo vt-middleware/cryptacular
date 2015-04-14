@@ -39,8 +39,7 @@ public class EncodingOutputStreamTest
     }
 
     final String expected = new String(StreamUtil.readAll(expectedPath));
-    final ByteArrayOutputStream bufOut = new ByteArrayOutputStream(
-      (int) file.length() * 4 / 3);
+    final ByteArrayOutputStream bufOut = new ByteArrayOutputStream((int) file.length() * 4 / 3);
     final EncodingOutputStream output = EncodingOutputStream.base64(bufOut, 64);
     try {
       Streams.pipeAll(StreamUtil.makeStream(file), output);

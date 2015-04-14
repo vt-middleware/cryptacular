@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Callback interface that supports arbitrary processing of data chunks read
- * from an input stream.
+ * Callback interface that supports arbitrary processing of data chunks read from an input stream.
  *
  * @author  Middleware Services
  */

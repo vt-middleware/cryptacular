@@ -25,8 +25,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
   /**
    * Creates a new instance with given parameters.
    *
-   * @param  decodingTable  Byte array indexed by characters in the character
-   *                        set encoding.
+   * @param  decodingTable  Byte array indexed by characters in the character set encoding.
    */
   public AbstractBaseNDecoder(final byte[] decodingTable)
   {

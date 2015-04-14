@@ -4,8 +4,7 @@ package org.cryptacular.io;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Extends {@link ByteArrayOutputStream} by allowing direct access to the
- * internal byte buffer.
+ * Extends {@link ByteArrayOutputStream} by allowing direct access to the internal byte buffer.
  *
  * @author  Middleware Services
  */

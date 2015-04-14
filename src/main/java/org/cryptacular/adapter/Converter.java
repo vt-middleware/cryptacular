@@ -12,8 +12,7 @@ import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 
 /**
- * Static factory with methods to convert from BC type to the corresponding JCE
- * type.
+ * Static factory with methods to convert from BC type to the corresponding JCE type.
  *
  * @author  Middleware Services
  */
@@ -34,8 +33,7 @@ public final class Converter
   public static PrivateKey convertPrivateKey(final AsymmetricKeyParameter bcKey)
   {
     if (!bcKey.isPrivate()) {
-      throw new IllegalArgumentException(
-        "AsymmetricKeyParameter is not a private key: " + bcKey);
+      throw new IllegalArgumentException("AsymmetricKeyParameter is not a private key: " + bcKey);
     }
 
     final PrivateKey key;
@@ -62,8 +60,7 @@ public final class Converter
   public static PublicKey convertPublicKey(final AsymmetricKeyParameter bcKey)
   {
     if (bcKey.isPrivate()) {
-      throw new IllegalArgumentException(
-        "AsymmetricKeyParameter is not a public key: " + bcKey);
+      throw new IllegalArgumentException("AsymmetricKeyParameter is not a public key: " + bcKey);
     }
 
     final PublicKey key;

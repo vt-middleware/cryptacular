@@ -19,21 +19,17 @@ import org.cryptacular.pbe.PBES2EncryptionScheme;
  *
  * @author  Middleware Services
  */
-public class PKCS8PrivateKeyDecoder
-  extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
+public class PKCS8PrivateKeyDecoder extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
 {
 
   @Override
   protected byte[] decryptKey(final byte[] encrypted, final char[] password)
   {
     final EncryptionScheme scheme;
-    final EncryptedPrivateKeyInfo ki = EncryptedPrivateKeyInfo.getInstance(
-      tryConvertPem(encrypted));
+    final EncryptedPrivateKeyInfo ki = EncryptedPrivateKeyInfo.getInstance(tryConvertPem(encrypted));
     final AlgorithmIdentifier alg = ki.getEncryptionAlgorithm();
     if (PKCSObjectIdentifiers.id_PBES2.equals(alg.getAlgorithm())) {
-      scheme = new PBES2EncryptionScheme(
-        PBES2Parameters.getInstance(alg.getParameters()),
-        password);
+      scheme = new PBES2EncryptionScheme(PBES2Parameters.getInstance(alg.getParameters()), password);
     } else {
       scheme = new PBES1EncryptionScheme(
         PBES1Algorithm.fromOid(alg.getAlgorithm().getId()),

@@ -52,8 +52,7 @@ public class ResourceBasedPrivateKeyFactoryBeanTest
     throws Exception
   {
     final Resource resource = new FileResource(new File(path));
-    final ResourceBasedPrivateKeyFactoryBean factory =
-      new ResourceBasedPrivateKeyFactoryBean(resource, password);
+    final ResourceBasedPrivateKeyFactoryBean factory = new ResourceBasedPrivateKeyFactoryBean(resource, password);
     assertTrue(factory.newInstance() instanceof PrivateKey);
   }
 }

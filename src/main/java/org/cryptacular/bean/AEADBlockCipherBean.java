@@ -14,8 +14,7 @@ import org.cryptacular.generator.Nonce;
 import org.cryptacular.spec.Spec;
 
 /**
- * Cipher bean that performs encryption with a block cipher in AEAD mode (e.g.
- * GCM, CCM).
+ * Cipher bean that performs encryption with a block cipher in AEAD mode (e.g. GCM, CCM).
  *
  * @author  Middleware Services
  */
@@ -64,8 +63,7 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   /**
    * Sets the AEAD block cipher specification.
    *
-   * @param  blockCipherSpec  Describes a block cipher in terms of algorithm,
-   *                          mode, and padding.
+   * @param  blockCipherSpec  Describes a block cipher in terms of algorithm, mode, and padding.
    */
   public void setBlockCipherSpec(final Spec<AEADBlockCipher> blockCipherSpec)
   {
@@ -77,8 +75,7 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   public void encrypt(final InputStream input, final OutputStream output)
   {
     if (blockCipherSpec.toString().endsWith("CCM")) {
-      throw new UnsupportedOperationException(
-        "CCM mode ciphers do not support chunked encryption.");
+      throw new UnsupportedOperationException("CCM mode ciphers do not support chunked encryption.");
     }
     super.encrypt(input, output);
   }
@@ -88,17 +85,14 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   public void decrypt(final InputStream input, final OutputStream output)
   {
     if (blockCipherSpec.toString().endsWith("CCM")) {
-      throw new UnsupportedOperationException(
-        "CCM mode ciphers do not support chunked decryption.");
+      throw new UnsupportedOperationException("CCM mode ciphers do not support chunked decryption.");
     }
     super.decrypt(input, output);
   }
 
 
   @Override
-  protected AEADBlockCipherAdapter newCipher(
-    final CiphertextHeader header,
-    final boolean mode)
+  protected AEADBlockCipherAdapter newCipher(final CiphertextHeader header, final boolean mode)
   {
     final AEADBlockCipher cipher = blockCipherSpec.newInstance();
     final SecretKey key = lookupKey(header.getKeyName());

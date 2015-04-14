@@ -43,12 +43,7 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
 
 
   @Override
-  public int processBytes(
-    final byte[] in,
-    final int inOff,
-    final int len,
-    final byte[] out,
-    final int outOff)
+  public int processBytes(final byte[] in, final int inOff, final int len, final byte[] out, final int outOff)
   {
     return cipherDelegate.processBytes(in, inOff, len, out, outOff);
   }

@@ -35,8 +35,7 @@ public class PemBasedPublicKeyFactoryBeanTest
     throws Exception
   {
     final String pem = ByteUtil.toString(StreamUtil.readAll(new File(path)));
-    final PemBasedPublicKeyFactoryBean factory =
-      new PemBasedPublicKeyFactoryBean(pem);
+    final PemBasedPublicKeyFactoryBean factory = new PemBasedPublicKeyFactoryBean(pem);
     assertTrue(factory.newInstance() instanceof PublicKey);
   }
 }

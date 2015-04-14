@@ -7,8 +7,7 @@ import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.X500Name;
 
 /**
- * Reads X.509 subject and issuer DNs as a raw sequence of attributes to
- * facilitate precise handling of name parsing.
+ * Reads X.509 subject and issuer DNs as a raw sequence of attributes to facilitate precise handling of name parsing.
  *
  * @author  Middleware Services
  */
@@ -20,8 +19,7 @@ public class NameReader
 
 
   /**
-   * Creates a new instance to support reading subject and issuer information on
-   * the given certificate.
+   * Creates a new instance to support reading subject and issuer information on the given certificate.
    *
    * @param  cert  Certificate to read.
    */
@@ -57,8 +55,8 @@ public class NameReader
 
 
   /**
-   * Converts the given X.500 principal to a list of relative distinguished
-   * names that contains the attributes comprising the DN.
+   * Converts the given X.500 principal to a list of relative distinguished names that contains the attributes
+   * comprising the DN.
    *
    * @param  principal  Principal to convert.
    *

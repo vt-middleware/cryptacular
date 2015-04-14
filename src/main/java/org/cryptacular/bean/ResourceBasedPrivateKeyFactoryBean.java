@@ -7,16 +7,14 @@ import org.cryptacular.io.Resource;
 import org.cryptacular.util.KeyPairUtil;
 
 /**
- * Factory for reading a private from a {@link Resource} containing data in any
- * of the formats supported by {@link
+ * Factory for reading a private from a {@link Resource} containing data in any of the formats supported by {@link
  * KeyPairUtil#readPrivateKey(java.io.InputStream, char[])}.
  *
  * @author  Middleware Services
  * @see  KeyPairUtil#readPrivateKey(java.io.InputStream, char[])
  * @see  KeyPairUtil#readPrivateKey(java.io.InputStream)
  */
-public class ResourceBasedPrivateKeyFactoryBean
-  implements FactoryBean<PrivateKey>
+public class ResourceBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKey>
 {
 
   /** Resource containing key data. */
@@ -47,9 +45,7 @@ public class ResourceBasedPrivateKeyFactoryBean
    * @param  resource  Resource containing encoded key data.
    * @param  decryptionPassword  Password-based encryption key.
    */
-  public ResourceBasedPrivateKeyFactoryBean(
-    final Resource resource,
-    final String decryptionPassword)
+  public ResourceBasedPrivateKeyFactoryBean(final Resource resource, final String decryptionPassword)
   {
     setResource(resource);
     setPassword(decryptionPassword);
@@ -90,10 +86,7 @@ public class ResourceBasedPrivateKeyFactoryBean
   {
     try {
       if (password != null) {
-        return
-          KeyPairUtil.readPrivateKey(
-            resource.getInputStream(),
-            password.toCharArray());
+        return KeyPairUtil.readPrivateKey(resource.getInputStream(), password.toCharArray());
       }
       return KeyPairUtil.readPrivateKey(resource.getInputStream());
     } catch (IOException e) {

@@ -32,13 +32,10 @@ public class DecodingInputStreamTest
   public void testDecode(final String path)
     throws Exception
   {
-    final String expected = StreamUtil.readAll(
-      StreamUtil.makeReader(new File(path)));
+    final String expected = StreamUtil.readAll(StreamUtil.makeReader(new File(path)));
     final File file = new File(path + ".b64");
-    final DecodingInputStream input = DecodingInputStream.base64(
-      StreamUtil.makeStream(file));
-    final ByteArrayOutputStream output = new ByteArrayOutputStream(
-      expected.length());
+    final DecodingInputStream input = DecodingInputStream.base64(StreamUtil.makeStream(file));
+    final ByteArrayOutputStream output = new ByteArrayOutputStream(expected.length());
     try {
       Streams.pipeAll(input, output);
     } finally {

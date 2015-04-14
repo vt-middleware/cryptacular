@@ -11,9 +11,8 @@ import org.cryptacular.CiphertextHeader;
 import org.cryptacular.generator.Nonce;
 
 /**
- * Base class for all cipher beans. The base class assumes all ciphertext output
- * will contain a prepended {@link CiphertextHeader} containing metadata that
- * facilitates decryption.
+ * Base class for all cipher beans. The base class assumes all ciphertext output will contain a prepended {@link
+ * CiphertextHeader} containing metadata that facilitates decryption.
  *
  * @author  Middleware Services
  */
@@ -45,11 +44,7 @@ public abstract class AbstractCipherBean implements CipherBean
    * @param  keyPassword  Password used to decrypt key entry in keystore.
    * @param  nonce  Nonce/IV generator.
    */
-  public AbstractCipherBean(
-    final KeyStore keyStore,
-    final String keyAlias,
-    final String keyPassword,
-    final Nonce nonce)
+  public AbstractCipherBean(final KeyStore keyStore, final String keyAlias, final String keyPassword, final Nonce nonce)
   {
     setKeyStore(keyStore);
     setKeyAlias(keyAlias);
@@ -66,13 +61,11 @@ public abstract class AbstractCipherBean implements CipherBean
 
 
   /**
-   * Sets the keystore containing encryption/decryption key(s). The keystore
-   * must contain a {@link SecretKey} entry whose alias is given by {@link
-   * #setKeyAlias(String)}, which will be used at the encryption key. It may
-   * contain additional symmetric keys to support, for example, key rollover
-   * where some existing ciphertexts have headers specifying a different key. In
-   * general all keys used for outstanding ciphertexts should be contained in
-   * the keystore.
+   * Sets the keystore containing encryption/decryption key(s). The keystore must contain a {@link SecretKey} entry
+   * whose alias is given by {@link #setKeyAlias(String)}, which will be used at the encryption key. It may contain
+   * additional symmetric keys to support, for example, key rollover where some existing ciphertexts have headers
+   * specifying a different key. In general all keys used for outstanding ciphertexts should be contained in the
+   * keystore.
    *
    * @param  keyStore  Keystore containing encryption key(s).
    */
@@ -82,10 +75,7 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /**
-   * @return  Alias that specifies the {@link KeyStore} entry containing the
-   *          {@link SecretKey}.
-   */
+  /** @return  Alias that specifies the {@link KeyStore} entry containing the {@link SecretKey}. */
   public String getKeyAlias()
   {
     return keyAlias;
@@ -135,23 +125,18 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public byte[] encrypt(final byte[] input)
   {
-    return
-      process(new CiphertextHeader(nonce.generate(), keyAlias), true, input);
+    return process(new CiphertextHeader(nonce.generate(), keyAlias), true, input);
   }
 
 
   @Override
   public void encrypt(final InputStream input, final OutputStream output)
   {
-    final CiphertextHeader header = new CiphertextHeader(
-      nonce.generate(),
-      keyAlias);
+    final CiphertextHeader header = new CiphertextHeader(nonce.generate(), keyAlias);
     try {
       output.write(header.encode());
     } catch (IOException e) {
-      throw new RuntimeException(
-        "Error writing ciphertext header to output stream",
-        e);
+      throw new RuntimeException("Error writing ciphertext header to output stream", e);
     }
     process(header, true, input, output);
   }
@@ -204,10 +189,7 @@ public abstract class AbstractCipherBean implements CipherBean
    *
    * @return  Ciphertext data under encryption, plaintext data under decryption.
    */
-  protected abstract byte[] process(
-    CiphertextHeader header,
-    boolean mode,
-    byte[] input);
+  protected abstract byte[] process(CiphertextHeader header, boolean mode, byte[] input);
 
 
   /**
@@ -218,9 +200,5 @@ public abstract class AbstractCipherBean implements CipherBean
    * @param  input  Stream containing input data.
    * @param  output  Stream that receives output of cipher.
    */
-  protected abstract void process(
-    CiphertextHeader header,
-    boolean mode,
-    InputStream input,
-    OutputStream output);
+  protected abstract void process(CiphertextHeader header, boolean mode, InputStream input, OutputStream output);
 }

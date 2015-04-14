@@ -32,9 +32,7 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
    * @param  resource  Resource containing encoded key data.
    * @param  algorithm  Algorithm name of cipher with which key will be used.
    */
-  public ResourceBasedSecretKeyFactoryBean(
-    final Resource resource,
-    final String algorithm)
+  public ResourceBasedSecretKeyFactoryBean(final Resource resource, final String algorithm)
   {
     setResource(resource);
     setAlgorithm(algorithm);
@@ -81,10 +79,7 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
   public SecretKey newInstance()
   {
     try {
-      return
-        new SecretKeySpec(
-          StreamUtil.readAll(resource.getInputStream()),
-          algorithm);
+      return new SecretKeySpec(StreamUtil.readAll(resource.getInputStream()), algorithm);
     } catch (IOException e) {
       throw new RuntimeException("Error getting input stream from " + resource);
     }

@@ -4,8 +4,7 @@ package org.cryptacular.adapter;
 import org.bouncycastle.crypto.CipherParameters;
 
 /**
- * Provides a consistent interface for cipher operations against dissimilar BC
- * cipher types.
+ * Provides a consistent interface for cipher operations against dissimilar BC cipher types.
  *
  * @author  Middleware Services
  */
@@ -36,8 +35,7 @@ public interface CipherAdapter
 
 
   /**
-   * Reset the cipher. After resetting the cipher is in the same state as it was
-   * after the last init (if there was one).
+   * Reset the cipher. After resetting the cipher is in the same state as it was after the last init (if there was one).
    */
   void reset();
 }

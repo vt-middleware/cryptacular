@@ -43,8 +43,7 @@ public class NameReaderTest
         },
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "scantor-dn-description.crt"),
-          "DESCRIPTION=6MtpJS1dcC7t254v, CN=cantor.2@osu.edu, " +
-            "EMAILADDRESS=cantor.2@osu.edu",
+          "DESCRIPTION=6MtpJS1dcC7t254v, CN=cantor.2@osu.edu, EMAILADDRESS=cantor.2@osu.edu",
         },
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "unknown-dn-attr.crt"),
@@ -61,13 +60,11 @@ public class NameReaderTest
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "serac-dev-test.crt"),
           "DC=edu, DC=vt, C=US, O=Virginia Polytechnic Institute and State " +
-            "University, CN=DEV Virginia Tech Class 1 Server CA, " +
-            "SERIALNUMBER=12",
+            "University, CN=DEV Virginia Tech Class 1 Server CA, SERIALNUMBER=12",
         },
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "glider.cc.vt.edu.crt"),
-          "DC=edu, DC=vt, C=US, O=Virginia Polytechnic Institute and State " +
-            "University, CN=Virginia Tech Middleware CA",
+          "DC=edu, DC=vt, C=US, O=Virginia Polytechnic Institute and State University, CN=Virginia Tech Middleware CA",
         },
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "multi-value-rdn-1.crt"),

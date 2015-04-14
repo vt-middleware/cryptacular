@@ -34,10 +34,7 @@ public class HOTPGeneratorTest
 
 
   @Test(dataProvider = "test-data")
-  public void testGenerate(
-    final String hexKey,
-    final int count,
-    final int expected)
+  public void testGenerate(final String hexKey, final int count, final int expected)
     throws Exception
   {
     final HOTPGenerator generator = new HOTPGenerator();

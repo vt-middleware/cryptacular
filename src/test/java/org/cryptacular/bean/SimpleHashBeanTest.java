@@ -42,11 +42,7 @@ public class SimpleHashBeanTest
   }
 
   @Test(dataProvider = "test-data")
-  public void testHash(
-    final DigestSpec digest,
-    final Object[] input,
-    final int iterations,
-    final String expectedBase64)
+  public void testHash(final DigestSpec digest, final Object[] input, final int iterations, final String expectedBase64)
     throws Exception
   {
     final SimpleHashBean bean = new SimpleHashBean();

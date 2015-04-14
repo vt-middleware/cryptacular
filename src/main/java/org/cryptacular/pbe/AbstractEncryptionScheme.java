@@ -12,12 +12,11 @@ import org.bouncycastle.crypto.io.CipherOutputStream;
 import org.bouncycastle.util.io.Streams;
 
 /**
- * Abstract base class for password-based encryption schemes based on salt data
- * and iterated hashing as the basis of the key derivation function.
+ * Abstract base class for password-based encryption schemes based on salt data and iterated hashing as the basis of the
+ * key derivation function.
  *
- * <p>NOTE: Classes derived from this class are not thread safe. In particular,
- * care should be take to prevent multiple threads from performing encryption
- * and/or decryption concurrently.</p>
+ * <p>NOTE: Classes derived from this class are not thread safe. In particular, care should be take to prevent multiple
+ * threads from performing encryption and/or decryption concurrently.</p>
  *
  * @author  Middleware Services
  * @version  $Revision: 2744 $
@@ -95,8 +94,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
 
 
   /**
-   * Run the given data through the initialized underlying cipher and return the
-   * result.
+   * Run the given data through the initialized underlying cipher and return the result.
    *
    * @param  input  Input data.
    *
@@ -106,9 +104,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   {
     final byte[] output = new byte[cipher.getOutputSize(input.length)];
     try {
-      cipher.doFinal(
-        output,
-        cipher.processBytes(input, 0, input.length, output, 0));
+      cipher.doFinal(output, cipher.processBytes(input, 0, input.length, output, 0));
     } catch (InvalidCipherTextException e) {
       throw new RuntimeException("Encryption failed", e);
     }

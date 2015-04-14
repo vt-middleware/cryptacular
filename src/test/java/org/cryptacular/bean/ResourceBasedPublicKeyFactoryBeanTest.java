@@ -34,8 +34,7 @@ public class ResourceBasedPublicKeyFactoryBeanTest
     throws Exception
   {
     final Resource resource = new ClassPathResource(path);
-    final ResourceBasedPublicKeyFactoryBean factory =
-      new ResourceBasedPublicKeyFactoryBean(resource);
+    final ResourceBasedPublicKeyFactoryBean factory = new ResourceBasedPublicKeyFactoryBean(resource);
     assertTrue(factory.newInstance() instanceof PublicKey);
   }
 }

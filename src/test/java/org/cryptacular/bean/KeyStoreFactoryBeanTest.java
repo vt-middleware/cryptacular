@@ -43,10 +43,7 @@ public class KeyStoreFactoryBeanTest
 
 
   @Test(dataProvider = "keystore-data")
-  public void testNewInstance(
-    final String type,
-    final Resource resource,
-    final int expectedSize)
+  public void testNewInstance(final String type, final Resource resource, final int expectedSize)
     throws Exception
   {
     final KeyStoreFactoryBean factory = new KeyStoreFactoryBean();

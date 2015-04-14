@@ -23,15 +23,12 @@ public interface CipherBean
 
 
   /**
-   * Encrypts the data from the input stream onto the output stream using a
-   * symmetric cipher.
+   * Encrypts the data from the input stream onto the output stream using a symmetric cipher.
    *
-   * <p>The caller is responsible for providing and managing the streams (e.g.
-   * closing them when finished).</p>
+   * <p>The caller is responsible for providing and managing the streams (e.g. closing them when finished).</p>
    *
    * @param  input  Input stream containing plaintext data to encrypt.
-   * @param  output  Output stream containing ciphertext produced by cipher in
-   *                 encryption mode.
+   * @param  output  Output stream containing ciphertext produced by cipher in encryption mode.
    */
   void encrypt(InputStream input, OutputStream output);
 
@@ -47,15 +44,12 @@ public interface CipherBean
 
 
   /**
-   * Decrypts the data from the input stream onto the output stream using a
-   * symmetric cipher.
+   * Decrypts the data from the input stream onto the output stream using a symmetric cipher.
    *
-   * <p>The caller is responsible for providing and managing the streams (e.g.
-   * closing them when finished).</p>
+   * <p>The caller is responsible for providing and managing the streams (e.g. closing them when finished).</p>
    *
    * @param  input  Input stream containing ciphertext data to decrypt.
-   * @param  output  Output stream containing plaintext produced by cipher in
-   *                 decryption mode.
+   * @param  output  Output stream containing plaintext produced by cipher in decryption mode.
    */
   void decrypt(InputStream input, OutputStream output);
 }

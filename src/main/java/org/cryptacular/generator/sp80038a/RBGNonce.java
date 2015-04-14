@@ -7,10 +7,9 @@ import org.cryptacular.generator.Nonce;
 import org.cryptacular.util.NonceUtil;
 
 /**
- * Nonce generation strategy that produces a random value according to NIST <a
- * href="http://goo.gl/S9z8qF">SP-800-38a</a>, appendix C, method 2 (random
- * number generator), suitable for use with any block cipher mode described in
- * that standard except OFB.
+ * Nonce generation strategy that produces a random value according to NIST <a href="http://goo.gl/S9z8qF">
+ * SP-800-38a</a>, appendix C, method 2 (random number generator), suitable for use with any block cipher mode described
+ * in that standard except OFB.
  *
  * <p>Instances of this class are thread safe.</p>
  *
@@ -26,9 +25,7 @@ public class RBGNonce implements Nonce
   private final SP80090DRBG rbg;
 
 
-  /**
-   * Creates a new instance that produces 16-bytes (128-bits) of random data.
-   */
+  /** Creates a new instance that produces 16-bytes (128-bits) of random data. */
   public RBGNonce()
   {
     this(16);

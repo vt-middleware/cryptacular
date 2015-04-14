@@ -26,13 +26,10 @@ public final class KeyPairGenerator
    *
    * @return  DSA key pair of desired size.
    */
-  public static KeyPair generateDSA(
-    final SecureRandom random,
-    final int bitLength)
+  public static KeyPair generateDSA(final SecureRandom random, final int bitLength)
   {
-    final org.bouncycastle.jcajce.provider.asymmetric.dsa.KeyPairGeneratorSpi
-      generator = new
-        org.bouncycastle.jcajce.provider.asymmetric.dsa.KeyPairGeneratorSpi();
+    final org.bouncycastle.jcajce.provider.asymmetric.dsa.KeyPairGeneratorSpi generator =
+      new org.bouncycastle.jcajce.provider.asymmetric.dsa.KeyPairGeneratorSpi();
     generator.initialize(bitLength, random);
     return generator.generateKeyPair();
   }
@@ -46,13 +43,10 @@ public final class KeyPairGenerator
    *
    * @return  RSA key pair of desired size.
    */
-  public static KeyPair generateRSA(
-    final SecureRandom random,
-    final int bitLength)
+  public static KeyPair generateRSA(final SecureRandom random, final int bitLength)
   {
-    final org.bouncycastle.jcajce.provider.asymmetric.rsa.KeyPairGeneratorSpi
-      generator = new
-        org.bouncycastle.jcajce.provider.asymmetric.rsa.KeyPairGeneratorSpi();
+    final org.bouncycastle.jcajce.provider.asymmetric.rsa.KeyPairGeneratorSpi generator =
+      new org.bouncycastle.jcajce.provider.asymmetric.rsa.KeyPairGeneratorSpi();
     generator.initialize(bitLength, random);
     return generator.generateKeyPair();
   }
@@ -66,13 +60,10 @@ public final class KeyPairGenerator
    *
    * @return  EC key pair of desired size.
    */
-  public static KeyPair generateEC(
-    final SecureRandom random,
-    final int bitLength)
+  public static KeyPair generateEC(final SecureRandom random, final int bitLength)
   {
-    final org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC
-      generator = new
-        org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC();
+    final org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC generator =
+      new org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC();
     generator.initialize(bitLength, random);
     return generator.generateKeyPair();
   }
@@ -82,22 +73,16 @@ public final class KeyPairGenerator
    * Generates a EC key pair.
    *
    * @param  random  Random source required for key generation.
-   * @param  namedCurve  Well-known elliptic curve name that includes domain
-   *                     parameters including key size.
+   * @param  namedCurve  Well-known elliptic curve name that includes domain parameters including key size.
    *
    * @return  EC key pair according to named curve.
    */
-  public static KeyPair generateEC(
-    final SecureRandom random,
-    final String namedCurve)
+  public static KeyPair generateEC(final SecureRandom random, final String namedCurve)
   {
-    final org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC
-      generator = new
-        org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC();
+    final org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC generator =
+      new org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC();
     try {
-      generator.initialize(
-        new ECNamedCurveGenParameterSpec(namedCurve),
-        random);
+      generator.initialize(new ECNamedCurveGenParameterSpec(namedCurve), random);
     } catch (InvalidAlgorithmParameterException e) {
       throw new IllegalArgumentException("Invalid EC curve " + namedCurve, e);
     }

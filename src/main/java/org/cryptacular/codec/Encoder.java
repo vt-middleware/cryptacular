@@ -13,9 +13,8 @@ public interface Encoder
 {
 
   /**
-   * Encodes bytes in input buffer into characters placed in the output buffer.
-   * This method may be called multiple times, followed by {@link
-   * #finalize(java.nio.CharBuffer)} after all input bytes have been provided.
+   * Encodes bytes in input buffer into characters placed in the output buffer. This method may be called multiple
+   * times, followed by {@link #finalize(java.nio.CharBuffer)} after all input bytes have been provided.
    *
    * @param  input  Input byte buffer.
    * @param  output  Output character buffer.
@@ -24,8 +23,7 @@ public interface Encoder
 
 
   /**
-   * Performs final output encoding (e.g. padding) after all input bytes have
-   * been provided.
+   * Performs final output encoding (e.g. padding) after all input bytes have been provided.
    *
    * @param  output  Output character buffer.
    */
@@ -33,13 +31,11 @@ public interface Encoder
 
 
   /**
-   * Expected number of characters in the output buffer for an input buffer of
-   * the given size.
+   * Expected number of characters in the output buffer for an input buffer of the given size.
    *
    * @param  inputSize  Size of input buffer in bytes.
    *
-   * @return  Minimum character buffer size required to store all encoded input
-   *          bytes.
+   * @return  Minimum character buffer size required to store all encoded input bytes.
    */
   int outputSize(int inputSize);
 }

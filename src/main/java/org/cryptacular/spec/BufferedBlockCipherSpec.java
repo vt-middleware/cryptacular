@@ -18,9 +18,8 @@ import org.bouncycastle.crypto.paddings.X923Padding;
 import org.bouncycastle.crypto.paddings.ZeroBytePadding;
 
 /**
- * Describes a block cipher in terms of a (algorithm, mode, padding) tuple and
- * provides a facility to create a new instance of the cipher via the {@link
- * #newInstance()} method.
+ * Describes a block cipher in terms of a (algorithm, mode, padding) tuple and provides a facility to create a new
+ * instance of the cipher via the {@link #newInstance()} method.
  *
  * @author  Middleware Services
  * @version  $Revision: 2744 $
@@ -29,8 +28,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
 {
 
   /** String specification format, <code>algorithm/mode/padding</code>. */
-  public static final Pattern FORMAT = Pattern.compile(
-    "(?<alg>[A-Za-z0-9_-]+)/(?<mode>\\w+)/(?<padding>\\w+)");
+  public static final Pattern FORMAT = Pattern.compile("(?<alg>[A-Za-z0-9_-]+)/(?<mode>\\w+)/(?<padding>\\w+)");
 
   /** Cipher algorithm algorithm. */
   private final String algorithm;
@@ -72,10 +70,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
    * @param  cipherMode  Cipher mode.
    * @param  cipherPadding  Cipher padding scheme algorithm.
    */
-  public BufferedBlockCipherSpec(
-    final String algName,
-    final String cipherMode,
-    final String cipherPadding)
+  public BufferedBlockCipherSpec(final String algName, final String cipherMode, final String cipherPadding)
   {
     this.algorithm = algName;
     this.mode = cipherMode;
@@ -104,8 +99,8 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
   /**
    * Gets the cipher padding scheme.
    *
-   * @return  Padding scheme algorithm, e.g. PKCS5Padding. The following names
-   *          are equivalent for no padding: NULL, Zero, None.
+   * @return  Padding scheme algorithm, e.g. PKCS5Padding. The following names are equivalent for no padding: NULL,
+   *          Zero, None.
    */
   public String getPadding()
   {
@@ -125,8 +120,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
 
 
   /**
-   * Creates a new buffered block cipher from the specification in this
-   * instance.
+   * Creates a new buffered block cipher from the specification in this instance.
    *
    * @return  New buffered block cipher instance.
    */
@@ -168,11 +162,9 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
 
 
   /**
-   * Parses a string representation of a buffered block cipher specification
-   * into an instance of this class.
+   * Parses a string representation of a buffered block cipher specification into an instance of this class.
    *
-   * @param  specification  Block cipher specification of the form <code>
-   *                        algorithm/mode/padding</code>.
+   * @param  specification  Block cipher specification of the form <code>algorithm/mode/padding</code>.
    *
    * @return  Buffered block cipher specification instance.
    */
@@ -180,14 +172,9 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
   {
     final Matcher m = FORMAT.matcher(specification);
     if (!m.matches()) {
-      throw new IllegalArgumentException(
-        "Invalid specification " + specification);
+      throw new IllegalArgumentException("Invalid specification " + specification);
     }
-    return
-      new BufferedBlockCipherSpec(
-        m.group("alg"),
-        m.group("mode"),
-        m.group("padding"));
+    return new BufferedBlockCipherSpec(m.group("alg"), m.group("mode"), m.group("padding"));
   }
 
 
@@ -211,22 +198,15 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
     BlockCipherPadding blockCipherPadding;
     if ("ISO7816d4".equalsIgnoreCase(name) | "ISO7816".equalsIgnoreCase(name)) {
       blockCipherPadding = new ISO7816d4Padding();
-    } else if (
-      "ISO10126".equalsIgnoreCase(name) ||
-        "ISO10126-2".equalsIgnoreCase(name)) {
+    } else if ("ISO10126".equalsIgnoreCase(name) || "ISO10126-2".equalsIgnoreCase(name)) {
       blockCipherPadding = new ISO10126d2Padding();
-    } else if (
-      "PKCS7".equalsIgnoreCase(name) ||
-        "PKCS5".equalsIgnoreCase(name)) {
+    } else if ("PKCS7".equalsIgnoreCase(name) || "PKCS5".equalsIgnoreCase(name)) {
       blockCipherPadding = new PKCS7Padding();
     } else if ("TBC".equalsIgnoreCase(name)) {
       blockCipherPadding = new TBCPadding();
     } else if ("X923".equalsIgnoreCase(name)) {
       blockCipherPadding = new X923Padding();
-    } else if (
-      "NULL".equalsIgnoreCase(name) ||
-        "Zero".equalsIgnoreCase(name) ||
-        "None".equalsIgnoreCase(name)) {
+    } else if ("NULL".equalsIgnoreCase(name) || "Zero".equalsIgnoreCase(name) || "None".equalsIgnoreCase(name)) {
       blockCipherPadding = new ZeroBytePadding();
     } else {
       throw new IllegalArgumentException("Invalid padding " + padding);

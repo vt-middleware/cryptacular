@@ -8,8 +8,7 @@ import java.nio.ByteOrder;
 import org.cryptacular.util.ByteUtil;
 
 /**
- * Cleartext header prepended to ciphertext providing data required for
- * decryption.
+ * Cleartext header prepended to ciphertext providing data required for decryption.
  *
  * <p>Data format:</p>
  *
@@ -26,15 +25,12 @@ import org.cryptacular.util.ByteUtil;
  *   <li>NonceLen - Nonce length in bytes (4-byte integer)</li>
  *   <li>Nonce - Nonce bytes (variable length)</li>
  *   <li>KeyNameLen (OPTIONAL) - Key name length in bytes (4-byte integer)</li>
- *   <li>KeyName (OPTIONAL) - Key name encoded as bytes in platform-specific
- *     encoding (variable length)</li>
+ *   <li>KeyName (OPTIONAL) - Key name encoded as bytes in platform-specific encoding (variable length)</li>
  * </ul>
  *
- * <p>The last two fields are optional and provide support for multiple keys at
- * the encryption provider. A common case for multiple keys is key rotation; by
- * tagging encrypted data with a key name, an old key may be retrieved by name
- * to decrypt outstanding data which will be subsequently re-encrypted with a
- * new key.</p>
+ * <p>The last two fields are optional and provide support for multiple keys at the encryption provider. A common case
+ * for multiple keys is key rotation; by tagging encrypted data with a key name, an old key may be retrieved by name to
+ * decrypt outstanding data which will be subsequently re-encrypted with a new key.</p>
  *
  * @author  Middleware Services
  */
@@ -131,8 +127,7 @@ public class CiphertextHeader
 
 
   /**
-   * Creates a header from encrypted data containing a cleartext header
-   * prepended to the start.
+   * Creates a header from encrypted data containing a cleartext header prepended to the start.
    *
    * @param  data  Encrypted data with prepended header data.
    *
@@ -158,11 +153,9 @@ public class CiphertextHeader
 
 
   /**
-   * Creates a header from encrypted data containing a cleartext header
-   * prepended to the start.
+   * Creates a header from encrypted data containing a cleartext header prepended to the start.
    *
-   * @param  input  Input stream that is positioned at the start of ciphertext
-   *                header data.
+   * @param  input  Input stream that is positioned at the start of ciphertext header data.
    *
    * @return  Decoded header.
    */

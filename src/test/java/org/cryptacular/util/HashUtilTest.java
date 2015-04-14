@@ -82,10 +82,7 @@ public class HashUtilTest
       new Object[][] {
         {
           new SHA1Digest(),
-          new SaltedHash(
-            CodecUtil.b64("7fyOZXGp+gKMziV/2Px7RIMkxyI2O1H8"),
-            20,
-            true),
+          new SaltedHash(CodecUtil.b64("7fyOZXGp+gKMziV/2Px7RIMkxyI2O1H8"), 20, true),
           1,
           true,
           ByteUtil.toBytes("password"),
@@ -112,25 +109,15 @@ public class HashUtilTest
 
 
   @Test(dataProvider = "salted-hashes")
-  public void testSaltedHash(
-    final Digest digest,
-    final Object[] data,
-    final int iterations,
-    final String expected)
+  public void testSaltedHash(final Digest digest, final Object[] data, final int iterations, final String expected)
     throws Exception
   {
-    assertEquals(
-      CodecUtil.b64(HashUtil.hash(digest, iterations, data)),
-      expected);
+    assertEquals(CodecUtil.b64(HashUtil.hash(digest, iterations, data)), expected);
   }
 
 
   @Test(dataProvider = "hash-compare")
-  public void testCompareHash(
-    final Digest digest,
-    final byte[] hash,
-    final int iterations,
-    final byte[] data)
+  public void testCompareHash(final Digest digest, final byte[] hash, final int iterations, final byte[] data)
     throws Exception
   {
     assertTrue(HashUtil.compareHash(digest, hash, iterations, data));
@@ -146,13 +133,7 @@ public class HashUtilTest
     final byte[] data)
     throws Exception
   {
-    assertTrue(
-      HashUtil.compareHash(
-        digest,
-        saltedHash,
-        iterations,
-        saltAfterData,
-        data));
+    assertTrue(HashUtil.compareHash(digest, saltedHash, iterations, saltAfterData, data));
   }
 
 
