@@ -3,8 +3,11 @@ package org.cryptacular.codec;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.util.ByteUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -14,6 +17,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class HexDecoderTest
 {
   @DataProvider(name = "hex-data")

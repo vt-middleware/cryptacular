@@ -7,9 +7,12 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.util.KeyPairUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.AssertJUnit.assertTrue;
@@ -19,6 +22,7 @@ import static org.testng.AssertJUnit.assertTrue;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class WrappedKeyTest
 {
   private static final String KEY_PATH = "src/test/resources/keys/";

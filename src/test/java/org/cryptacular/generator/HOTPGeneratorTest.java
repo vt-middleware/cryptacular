@@ -1,8 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.generator;
 
+import org.cryptacular.FailListener;
 import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -12,6 +14,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class HOTPGeneratorTest
 {
   @DataProvider(name = "test-data")

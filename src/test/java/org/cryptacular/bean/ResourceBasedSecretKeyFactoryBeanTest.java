@@ -2,9 +2,12 @@
 package org.cryptacular.bean;
 
 import java.io.File;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.io.FileResource;
 import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -14,6 +17,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class ResourceBasedSecretKeyFactoryBeanTest
 {
   private static final String KEY_PATH = "src/test/resources/keys/";

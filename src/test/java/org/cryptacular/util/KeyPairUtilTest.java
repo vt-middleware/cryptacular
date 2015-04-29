@@ -11,8 +11,11 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPublicKey;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.generator.KeyPairGenerator;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -24,6 +27,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class KeyPairUtilTest
 {
   private static final String KEY_PATH = "src/test/resources/keys/";

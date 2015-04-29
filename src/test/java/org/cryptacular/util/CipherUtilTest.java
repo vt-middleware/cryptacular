@@ -16,12 +16,14 @@ import org.bouncycastle.crypto.modes.CFBBlockCipher;
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.modes.OCBBlockCipher;
 import org.bouncycastle.crypto.modes.OFBBlockCipher;
+import org.cryptacular.FailListener;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.generator.SecretKeyGenerator;
 import org.cryptacular.generator.sp80038a.LongCounterNonce;
 import org.cryptacular.generator.sp80038a.RBGNonce;
 import org.cryptacular.generator.sp80038d.CounterNonce;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -31,6 +33,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class CipherUtilTest
 {
   @DataProvider(name = "block-cipher")

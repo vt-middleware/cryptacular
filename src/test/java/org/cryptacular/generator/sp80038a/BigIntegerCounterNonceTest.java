@@ -2,8 +2,11 @@
 package org.cryptacular.generator.sp80038a;
 
 import java.math.BigInteger;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.util.ByteUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -13,6 +16,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class BigIntegerCounterNonceTest
 {
   @DataProvider(name = "test-data")

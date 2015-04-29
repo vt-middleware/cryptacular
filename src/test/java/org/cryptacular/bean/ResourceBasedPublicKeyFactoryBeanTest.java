@@ -2,9 +2,12 @@
 package org.cryptacular.bean;
 
 import java.security.PublicKey;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.io.ClassPathResource;
 import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertTrue;
@@ -14,6 +17,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class ResourceBasedPublicKeyFactoryBeanTest
 {
   private static final String KEY_PATH = "/keys/";

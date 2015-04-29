@@ -2,8 +2,11 @@
 package org.cryptacular.x509.dn;
 
 import javax.security.auth.x500.X500Principal;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.util.CertUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -13,6 +16,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class LdapNameFormatterTest
 {
   private static final String CRT_PATH = "src/test/resources/certs/";

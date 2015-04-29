@@ -1,11 +1,13 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
+import org.cryptacular.FailListener;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -16,6 +18,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class EncodingHashBeanTest
 {
   @DataProvider(name = "hash-data")

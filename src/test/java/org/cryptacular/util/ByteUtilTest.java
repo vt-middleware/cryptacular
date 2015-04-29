@@ -1,12 +1,15 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
+import org.cryptacular.FailListener;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
 /** @author  Middleware Services */
+@Listeners(FailListener.class)
 public class ByteUtilTest
 {
   @DataProvider(name = "integers")

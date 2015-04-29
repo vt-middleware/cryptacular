@@ -11,7 +11,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.cryptacular.FailListener;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertNotNull;
@@ -22,6 +25,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class RandomIdGeneratorTest
 {
   @DataProvider(name = "generators")

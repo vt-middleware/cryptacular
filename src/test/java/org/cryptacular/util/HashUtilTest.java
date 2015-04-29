@@ -7,8 +7,10 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.util.encoders.Hex;
+import org.cryptacular.FailListener;
 import org.cryptacular.SaltedHash;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -19,6 +21,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class HashUtilTest
 {
   private static final byte[] SALT = new byte[] {0, 1, 2, 3, 4, 5, 6, 7};

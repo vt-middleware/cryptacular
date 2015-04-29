@@ -6,9 +6,11 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.cryptacular.FailListener;
 import org.cryptacular.x509.GeneralNameType;
 import org.cryptacular.x509.KeyUsageBits;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -20,6 +22,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class CertUtilTest
 {
   private static final String CRT_PATH = "src/test/resources/certs/";

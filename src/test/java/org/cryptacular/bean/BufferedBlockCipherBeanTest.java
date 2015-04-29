@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.KeyStore;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.generator.sp80038a.BigIntegerCounterNonce;
 import org.cryptacular.generator.sp80038a.LongCounterNonce;
@@ -15,6 +17,7 @@ import org.cryptacular.spec.BufferedBlockCipherSpec;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -24,6 +27,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class BufferedBlockCipherBeanTest
 {
   @DataProvider(name = "test-arrays")

@@ -4,9 +4,11 @@ package org.cryptacular.io;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import org.bouncycastle.util.io.Streams;
+import org.cryptacular.FailListener;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -16,6 +18,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class DecodingInputStreamTest
 {
   @DataProvider(name = "plaintext-files")

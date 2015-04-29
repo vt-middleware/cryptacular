@@ -5,10 +5,13 @@ import java.io.File;
 import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+
+import org.cryptacular.FailListener;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.HashUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -18,6 +21,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author  Middleware Services
  */
+@Listeners(FailListener.class)
 public class Base64DecoderTest
 {
 
