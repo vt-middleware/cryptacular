@@ -17,6 +17,7 @@ import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
+import org.cryptacular.EncodingException;
 import org.cryptacular.pbe.OpenSSLAlgorithm;
 import org.cryptacular.pbe.OpenSSLEncryptionScheme;
 import org.cryptacular.util.ByteUtil;
@@ -52,7 +53,7 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
     try {
       o = ASN1Primitive.fromByteArray(encoded);
     } catch (Exception e) {
-      throw new IllegalArgumentException("Invalid encoded key");
+      throw new EncodingException("Invalid encoded key");
     }
 
     final AsymmetricKeyParameter key;
@@ -109,7 +110,7 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
           new BigInteger(ASN1OctetString.getInstance(sequence.getObjectAt(1)).getOctets()),
           new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
       } else {
-        throw new IllegalArgumentException("Invalid OpenSSL traditional private key format.");
+        throw new EncodingException("Invalid OpenSSL traditional private key format.");
       }
     }
     return key;

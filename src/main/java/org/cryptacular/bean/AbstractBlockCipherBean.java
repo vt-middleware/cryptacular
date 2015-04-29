@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.KeyStore;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.StreamException;
 import org.cryptacular.adapter.BlockCipherAdapter;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.io.ChunkHandler;
@@ -103,7 +104,7 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
     try {
       output.write(outBuf, 0, n);
     } catch (IOException e) {
-      throw new RuntimeException("IO error writing final output", e);
+      throw new StreamException(e);
     }
   }
 

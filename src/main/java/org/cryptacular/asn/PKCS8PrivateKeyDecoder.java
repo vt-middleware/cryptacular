@@ -9,6 +9,7 @@ import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.cryptacular.EncodingException;
 import org.cryptacular.pbe.EncryptionScheme;
 import org.cryptacular.pbe.PBES1Algorithm;
 import org.cryptacular.pbe.PBES1EncryptionScheme;
@@ -46,7 +47,7 @@ public class PKCS8PrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetric
     try {
       return PrivateKeyFactory.createKey(encoded);
     } catch (IOException e) {
-      throw new RuntimeException("ASN.1 decoding error", e);
+      throw new EncodingException("ASN.1 decoding error", e);
     }
   }
 }

@@ -153,9 +153,6 @@
     </module>
     <module name="InnerAssignment"/>
     <module name="MissingSwitchDefault"/>
-    <module name="RedundantThrows">
-      <property name="allowUnchecked" value="true"/>
-    </module>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
     <module name="StringLiteralEquality"/>
@@ -200,7 +197,7 @@
     <module name="HideUtilityClassConstructor"/>
     <module name="MutableException"/>
     <module name="ThrowsCount">
-      <property name="max" value="2"/>
+      <property name="max" value="4"/>
     </module>
 
     <!-- prevent trailing whitespace -->

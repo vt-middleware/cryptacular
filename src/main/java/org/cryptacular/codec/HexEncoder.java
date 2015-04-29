@@ -4,6 +4,8 @@ package org.cryptacular.codec;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
+import org.cryptacular.EncodingException;
+
 /**
  * Stateless hexadecimal byte-to-character encoder.
  *
@@ -48,7 +50,7 @@ public class HexEncoder implements Encoder
 
 
   @Override
-  public void encode(final ByteBuffer input, final CharBuffer output)
+  public void encode(final ByteBuffer input, final CharBuffer output) throws EncodingException
   {
     byte current;
     while (input.hasRemaining()) {
@@ -63,7 +65,7 @@ public class HexEncoder implements Encoder
 
 
   @Override
-  public void finalize(final CharBuffer output) {}
+  public void finalize(final CharBuffer output) throws EncodingException {}
 
 
   @Override

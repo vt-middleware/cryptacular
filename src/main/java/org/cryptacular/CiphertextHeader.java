@@ -132,21 +132,28 @@ public class CiphertextHeader
    * @param  data  Encrypted data with prepended header data.
    *
    * @return  Decoded header.
+   *
+   * @throws  EncodingException  when ciphertext header cannot be decoded.
    */
-  public static CiphertextHeader decode(final byte[] data)
+  public static CiphertextHeader decode(final byte[] data) throws EncodingException
   {
     final ByteBuffer bb = ByteBuffer.wrap(data);
     bb.order(ByteOrder.BIG_ENDIAN);
 
-    final int length = bb.getInt();
-    final byte[] nonce = new byte[bb.getInt()];
-    bb.get(nonce);
-
+    final byte[] nonce;
     String keyName = null;
-    if (length > nonce.length + 8) {
-      final byte[] b = new byte[bb.getInt()];
-      bb.get(b);
-      keyName = new String(b);
+    try {
+      final int length = bb.getInt();
+      nonce = new byte[bb.getInt()];
+      bb.get(nonce);
+
+      if (length > nonce.length + 8) {
+        final byte[] b = new byte[bb.getInt()];
+        bb.get(b);
+        keyName = new String(b);
+      }
+    } catch (RuntimeException e) {
+      throw new EncodingException("Error parsing ciphertext header", e);
     }
     return new CiphertextHeader(nonce, keyName);
   }
@@ -158,15 +165,17 @@ public class CiphertextHeader
    * @param  input  Input stream that is positioned at the start of ciphertext header data.
    *
    * @return  Decoded header.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static CiphertextHeader decode(final InputStream input)
+  public static CiphertextHeader decode(final InputStream input) throws StreamException
   {
     final int length = ByteUtil.readInt(input);
     final byte[] nonce = new byte[ByteUtil.readInt(input)];
     try {
       input.read(nonce);
     } catch (IOException e) {
-      throw new RuntimeException("Error reading from stream", e);
+      throw new StreamException(e);
     }
 
     String keyName = null;
@@ -175,7 +184,7 @@ public class CiphertextHeader
       try {
         input.read(b);
       } catch (IOException e) {
-        throw new RuntimeException("Error reading from stream", e);
+        throw new StreamException(e);
       }
       keyName = new String(b);
     }

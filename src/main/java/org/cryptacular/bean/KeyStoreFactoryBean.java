@@ -1,8 +1,14 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
+import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
+import org.cryptacular.CryptoException;
+import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
 
 /**
@@ -108,12 +114,14 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
       if ("BKS".equalsIgnoreCase(type)) {
         message += ". Is BC provider installed?";
       }
-      throw new IllegalArgumentException(message, e);
+      throw new CryptoException(message, e);
     }
     try {
       store.load(resource.getInputStream(), password.toCharArray());
-    } catch (Exception e) {
-      throw new RuntimeException("Error loading keystore", e);
+    } catch (CertificateException | NoSuchAlgorithmException e) {
+      throw new CryptoException("Error loading keystore", e);
+    } catch (IOException e) {
+      throw new StreamException(e);
     }
     return store;
   }

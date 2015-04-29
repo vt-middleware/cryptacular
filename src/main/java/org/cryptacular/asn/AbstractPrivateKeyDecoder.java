@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.asn;
 
+import org.cryptacular.EncodingException;
 import org.cryptacular.util.PemUtil;
 
 /**
@@ -14,15 +15,21 @@ public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
 {
 
   @Override
-  public T decode(final byte[] encoded, final Object... args)
+  public T decode(final byte[] encoded, final Object... args) throws EncodingException
   {
-    final byte[] asn1Bytes;
-    if (args != null && args.length > 0 && args[0] instanceof char[]) {
-      asn1Bytes = decryptKey(encoded, (char[]) args[0]);
-    } else {
-      asn1Bytes = tryConvertPem(encoded);
+    try {
+      final byte[] asn1Bytes;
+      if (args != null && args.length > 0 && args[0] instanceof char[]) {
+        asn1Bytes = decryptKey(encoded, (char[]) args[0]);
+      } else {
+        asn1Bytes = tryConvertPem(encoded);
+      }
+      return decodeASN1(asn1Bytes);
+    } catch (EncodingException e) {
+      throw e;
+    } catch (RuntimeException e) {
+      throw new EncodingException("Key encoding error", e);
     }
-    return decodeASN1(asn1Bytes);
   }
 
 

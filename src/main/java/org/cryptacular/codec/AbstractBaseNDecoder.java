@@ -4,6 +4,8 @@ package org.cryptacular.codec;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
+import org.cryptacular.EncodingException;
+
 /**
  * Base decoder class for encoding schemes described in RFC 3548.
  *
@@ -34,7 +36,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
 
 
   @Override
-  public void decode(final CharBuffer input, final ByteBuffer output)
+  public void decode(final CharBuffer input, final ByteBuffer output) throws EncodingException
   {
     char current;
     while (input.hasRemaining()) {
@@ -51,7 +53,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
 
 
   @Override
-  public void finalize(final ByteBuffer output)
+  public void finalize(final ByteBuffer output) throws EncodingException
   {
     if (blockPos > 0) {
       writeOutput(output);
@@ -90,7 +92,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
       }
       b = table[c & 0x7F];
       if (b < 0) {
-        throw new IllegalArgumentException("Invalid character " + c);
+        throw new EncodingException("Invalid character " + c);
       }
       shift -= getBitsPerChar();
       value |= b << shift;

@@ -4,6 +4,8 @@ package org.cryptacular.codec;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
+import org.cryptacular.EncodingException;
+
 /**
  * Base encoder class for encoding schemes described in RFC 3548.
  *
@@ -60,7 +62,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
 
 
   @Override
-  public void encode(final ByteBuffer input, final CharBuffer output)
+  public void encode(final ByteBuffer input, final CharBuffer output) throws EncodingException
   {
     while (input.hasRemaining()) {
       remaining -= 8;
@@ -73,7 +75,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
 
 
   @Override
-  public void finalize(final CharBuffer output)
+  public void finalize(final CharBuffer output) throws EncodingException
   {
     if (remaining < blockLength) {
       // Floor division

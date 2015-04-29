@@ -4,6 +4,9 @@ package org.cryptacular.bean;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.cryptacular.CryptoException;
+import org.cryptacular.StreamException;
+
 /**
  * Bean that performs encryption/decryption using a symmetric cipher.
  *
@@ -18,8 +21,10 @@ public interface CipherBean
    * @param  input  Plaintext data to encrypt.
    *
    * @return  Ciphertext output.
+   *
+   * @throws  CryptoException  on underlying cipher data handling errors.
    */
-  byte[] encrypt(byte[] input);
+  byte[] encrypt(byte[] input) throws CryptoException;
 
 
   /**
@@ -29,8 +34,11 @@ public interface CipherBean
    *
    * @param  input  Input stream containing plaintext data to encrypt.
    * @param  output  Output stream containing ciphertext produced by cipher in encryption mode.
+   *
+   * @throws  CryptoException  on underlying cipher data handling errors.
+   * @throws  StreamException  on stream IO errors.
    */
-  void encrypt(InputStream input, OutputStream output);
+  void encrypt(InputStream input, OutputStream output) throws CryptoException, StreamException;
 
 
   /**
@@ -39,8 +47,10 @@ public interface CipherBean
    * @param  input  Ciphertext data to encrypt.
    *
    * @return  Plaintext output.
+   *
+   * @throws  CryptoException  on underlying cipher data handling errors.
    */
-  byte[] decrypt(byte[] input);
+  byte[] decrypt(byte[] input) throws CryptoException;
 
 
   /**
@@ -50,6 +60,9 @@ public interface CipherBean
    *
    * @param  input  Input stream containing ciphertext data to decrypt.
    * @param  output  Output stream containing plaintext produced by cipher in decryption mode.
+   *
+   * @throws  CryptoException  on underlying cipher data handling errors.
+   * @throws  StreamException  on stream IO errors.
    */
-  void decrypt(InputStream input, OutputStream output);
+  void decrypt(InputStream input, OutputStream output) throws CryptoException, StreamException;
 }

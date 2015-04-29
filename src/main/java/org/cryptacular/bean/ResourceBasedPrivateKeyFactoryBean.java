@@ -3,6 +3,9 @@ package org.cryptacular.bean;
 
 import java.io.IOException;
 import java.security.PrivateKey;
+
+import org.cryptacular.EncodingException;
+import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
 import org.cryptacular.util.KeyPairUtil;
 
@@ -82,7 +85,7 @@ public class ResourceBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKe
 
 
   @Override
-  public PrivateKey newInstance()
+  public PrivateKey newInstance() throws EncodingException, StreamException
   {
     try {
       if (password != null) {
@@ -90,7 +93,7 @@ public class ResourceBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKe
       }
       return KeyPairUtil.readPrivateKey(resource.getInputStream());
     } catch (IOException e) {
-      throw new RuntimeException("Error getting input stream from " + resource);
+      throw new StreamException(e);
     }
   }
 }

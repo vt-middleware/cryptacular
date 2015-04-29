@@ -13,6 +13,9 @@ import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.CryptoException;
+import org.cryptacular.EncodingException;
+import org.cryptacular.StreamException;
 import org.cryptacular.adapter.AEADBlockCipherAdapter;
 import org.cryptacular.adapter.BlockCipherAdapter;
 import org.cryptacular.adapter.BufferedBlockCipherAdapter;
@@ -44,8 +47,11 @@ public final class CipherUtil
    *
    * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
    *          byte array.
+   *
+   * @throws  CryptoException  on encryption errors.
    */
   public static byte[] encrypt(final AEADBlockCipher cipher, final SecretKey key, final Nonce nonce, final byte[] data)
+    throws CryptoException
   {
     final byte[] iv = nonce.generate();
     final byte[] header = new CiphertextHeader(iv).encode();
@@ -64,6 +70,9 @@ public final class CipherUtil
    * @param  input  Input stream containing plaintext data.
    * @param  output  Output stream that receives a {@link CiphertextHeader} followed by ciphertext data produced by the
    *                 AEAD cipher in encryption mode.
+   *
+   * @throws  CryptoException  on encryption errors.
+   * @throws  StreamException  on IO errors.
    */
   public static void encrypt(
     final AEADBlockCipher cipher,
@@ -71,6 +80,7 @@ public final class CipherUtil
     final Nonce nonce,
     final InputStream input,
     final OutputStream output)
+    throws CryptoException, StreamException
   {
     final byte[] iv = nonce.generate();
     final byte[] header = new CiphertextHeader(iv).encode();
@@ -89,8 +99,12 @@ public final class CipherUtil
    *               to the cipher that is verified during decryption.
    *
    * @return  Decrypted data that completely fills the returned byte array.
+   *
+   * @throws  CryptoException  on encryption errors.
+   * @throws  EncodingException  on decoding cyphertext header.
    */
   public static byte[] decrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)
+      throws CryptoException, EncodingException
   {
     final CiphertextHeader header = CiphertextHeader.decode(data);
     final byte[] nonce = header.getNonce();
@@ -108,12 +122,17 @@ public final class CipherUtil
    * @param  input  Input stream containing a {@link CiphertextHeader} followed by ciphertext data. The header is
    *                treated as AAD input to the cipher that is verified during decryption.
    * @param  output  Output stream that receives plaintext produced by block cipher in decryption mode.
+   *
+   * @throws  CryptoException  on encryption errors.
+   * @throws  EncodingException  on decoding cyphertext header.
+   * @throws  StreamException  on IO errors.
    */
   public static void decrypt(
     final AEADBlockCipher cipher,
     final SecretKey key,
     final InputStream input,
     final OutputStream output)
+    throws CryptoException, EncodingException, StreamException
   {
     final CiphertextHeader header = CiphertextHeader.decode(input);
     final byte[] nonce = header.getNonce();
@@ -135,8 +154,11 @@ public final class CipherUtil
    *
    * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
    *          byte array.
+   *
+   * @throws  CryptoException  on encryption errors.
    */
   public static byte[] encrypt(final BlockCipher cipher, final SecretKey key, final Nonce nonce, final byte[] data)
+    throws CryptoException
   {
     final byte[] iv = nonce.generate();
     final byte[] header = new CiphertextHeader(iv).encode();
@@ -156,6 +178,9 @@ public final class CipherUtil
    *                cipher block size.
    * @param  input  Input stream containing plaintext data.
    * @param  output  Output stream that receives ciphertext produced by block cipher in encryption mode.
+   *
+   * @throws  CryptoException  on encryption errors.
+   * @throws  StreamException  on IO errors.
    */
   public static void encrypt(
     final BlockCipher cipher,
@@ -163,6 +188,7 @@ public final class CipherUtil
     final Nonce nonce,
     final InputStream input,
     final OutputStream output)
+    throws CryptoException, StreamException
   {
     final byte[] iv = nonce.generate();
     final byte[] header = new CiphertextHeader(iv).encode();
@@ -181,8 +207,12 @@ public final class CipherUtil
    * @param  data  Ciphertext data containing a prepended {@link CiphertextHeader}.
    *
    * @return  Decrypted data that completely fills the returned byte array.
+   *
+   * @throws  CryptoException  on encryption errors.
+   * @throws  EncodingException  on decoding cyphertext header.
    */
   public static byte[] decrypt(final BlockCipher cipher, final SecretKey key, final byte[] data)
+    throws CryptoException, EncodingException
   {
     final CiphertextHeader header = CiphertextHeader.decode(data);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
@@ -198,12 +228,17 @@ public final class CipherUtil
    * @param  key  Encryption key.
    * @param  input  Input stream containing a {@link CiphertextHeader} followed by ciphertext data.
    * @param  output  Output stream that receives plaintext produced by block cipher in decryption mode.
+   *
+   * @throws  CryptoException  on encryption errors.
+   * @throws  EncodingException  on decoding cyphertext header.
+   * @throws  StreamException  on IO errors.
    */
   public static void decrypt(
     final BlockCipher cipher,
     final SecretKey key,
     final InputStream input,
     final OutputStream output)
+    throws CryptoException, EncodingException, StreamException
   {
     final CiphertextHeader header = CiphertextHeader.decode(input);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
@@ -285,7 +320,7 @@ public final class CipherUtil
       writeLen = cipher.doFinal(outBuf, 0);
       output.write(outBuf, 0, writeLen);
     } catch (IOException e) {
-      throw new RuntimeException("Cipher stream processing failed due to IO error", e);
+      throw new StreamException(e);
     }
   }
 
@@ -301,7 +336,7 @@ public final class CipherUtil
     try {
       output.write(header, 0, header.length);
     } catch (IOException e) {
-      throw new RuntimeException("Failed writing ciphertext header to output stream", e);
+      throw new StreamException(e);
     }
   }
 

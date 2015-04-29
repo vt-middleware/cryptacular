@@ -9,7 +9,9 @@ import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.digests.SHA3Digest;
 import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.cryptacular.CryptoException;
 import org.cryptacular.SaltedHash;
+import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
 
 /**
@@ -40,8 +42,11 @@ public final class HashUtil
    *               bytes.
    *
    * @return  Byte array of length {@link Digest#getDigestSize()} containing hash output.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  StreamException  on stream IO errors.
    */
-  public static byte[] hash(final Digest digest, final Object... data)
+  public static byte[] hash(final Digest digest, final Object... data) throws CryptoException, StreamException
   {
     for (Object o : data) {
       if (o instanceof byte[]) {
@@ -57,7 +62,7 @@ public final class HashUtil
         try {
           in = ((Resource) o).getInputStream();
         } catch (IOException e) {
-          throw new IllegalArgumentException("Error getting input stream from " + o);
+          throw new StreamException(e);
         }
         hashStream(digest, in);
       } else {
@@ -66,7 +71,11 @@ public final class HashUtil
     }
 
     final byte[] output = new byte[digest.getDigestSize()];
-    digest.doFinal(output, 0);
+    try {
+      digest.doFinal(output, 0);
+    } catch (RuntimeException e) {
+      throw new CryptoException("Hash computation error", e);
+    }
     return output;
   }
 
@@ -89,17 +98,25 @@ public final class HashUtil
    *               bytes.
    *
    * @return  Byte array of length {@link Digest#getDigestSize()} containing hash output.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  StreamException  on stream IO errors.
    */
   public static byte[] hash(final Digest digest, final int iterations, final Object... data)
+      throws CryptoException, StreamException
   {
     if (iterations < 1) {
       throw new IllegalArgumentException("Iterations must be positive");
     }
 
     final byte[] output = hash(digest, data);
-    for (int i = 1; i < iterations; i++) {
-      digest.update(output, 0, output.length);
-      digest.doFinal(output, 0);
+    try {
+      for (int i = 1; i < iterations; i++) {
+        digest.update(output, 0, output.length);
+        digest.doFinal(output, 0);
+      }
+    } catch (RuntimeException e) {
+      throw new CryptoException("Hash computation error", e);
     }
     return output;
   }
@@ -116,8 +133,12 @@ public final class HashUtil
    * @param  data  Data to hash.
    *
    * @return  True if the hash of the data under the given digest is equal to the hash, false otherwise.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  StreamException  on stream IO errors.
    */
   public static boolean compareHash(final Digest digest, final byte[] hash, final int iterations, final Object... data)
+      throws CryptoException, StreamException
   {
     if (hash.length > digest.getDigestSize()) {
       final byte[] hashPart = Arrays.copyOfRange(hash, 0, digest.getDigestSize());
@@ -140,6 +161,9 @@ public final class HashUtil
    * @param  data  Data to hash, which should NOT include the salt value.
    *
    * @return  True if the hash of the data under the given digest is equal to the hash, false otherwise.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  StreamException  on stream IO errors.
    */
   public static boolean compareHash(
     final Digest digest,
@@ -147,6 +171,7 @@ public final class HashUtil
     final int iterations,
     final boolean saltAfterData,
     final Object... data)
+    throws CryptoException, StreamException
   {
     final Object[] dataWithSalt;
     if (saltAfterData) {
@@ -238,7 +263,7 @@ public final class HashUtil
         digest.update(buffer, 0, length);
       }
     } catch (IOException e) {
-      throw new RuntimeException("Error reading stream", e);
+      throw new StreamException(e);
     }
   }
 }

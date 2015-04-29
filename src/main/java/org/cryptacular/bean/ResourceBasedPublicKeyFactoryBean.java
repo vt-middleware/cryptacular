@@ -3,6 +3,9 @@ package org.cryptacular.bean;
 
 import java.io.IOException;
 import java.security.PublicKey;
+
+import org.cryptacular.EncodingException;
+import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
 import org.cryptacular.util.KeyPairUtil;
 
@@ -54,12 +57,12 @@ public class ResourceBasedPublicKeyFactoryBean implements FactoryBean<PublicKey>
 
 
   @Override
-  public PublicKey newInstance()
+  public PublicKey newInstance() throws EncodingException, StreamException
   {
     try {
       return KeyPairUtil.readPublicKey(resource.getInputStream());
     } catch (IOException e) {
-      throw new RuntimeException("Error getting input stream from " + resource);
+      throw new StreamException(e);
     }
   }
 }

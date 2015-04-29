@@ -3,6 +3,7 @@ package org.cryptacular.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
@@ -19,6 +20,8 @@ import org.bouncycastle.asn1.x509.GeneralNamesBuilder;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.PolicyInformation;
+import org.cryptacular.EncodingException;
+import org.cryptacular.StreamException;
 import org.cryptacular.x509.ExtensionReader;
 import org.cryptacular.x509.GeneralNameType;
 import org.cryptacular.x509.KeyUsageBits;
@@ -43,8 +46,10 @@ public final class CertUtil
    * @param  cert  Certificate to examine.
    *
    * @return  Subject CN or null if no CN attribute is defined in the subject DN.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
-  public static String subjectCN(final X509Certificate cert)
+  public static String subjectCN(final X509Certificate cert) throws EncodingException
   {
     return new NameReader(cert).readSubject().getValue(StandardAttributeType.CommonName);
   }
@@ -56,8 +61,10 @@ public final class CertUtil
    * @param  cert  X.509 certificate to examine.
    *
    * @return  List of subject alternative names or null if no subject alt names are defined.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
-  public static GeneralNames subjectAltNames(final X509Certificate cert)
+  public static GeneralNames subjectAltNames(final X509Certificate cert) throws EncodingException
   {
     return new ExtensionReader(cert).readSubjectAlternativeName();
   }
@@ -70,8 +77,11 @@ public final class CertUtil
    * @param  types  One or more subject alternative name types to fetch.
    *
    * @return  List of subject alternative names of the matching type(s) or null if none found.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
   public static GeneralNames subjectAltNames(final X509Certificate cert, final GeneralNameType... types)
+    throws EncodingException
   {
     final GeneralNamesBuilder builder = new GeneralNamesBuilder();
     final GeneralNames altNames = subjectAltNames(cert);
@@ -100,8 +110,10 @@ public final class CertUtil
    * @param  cert  X.509 certificate to examine.
    *
    * @return  List of subject names.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
-  public static List<String> subjectNames(final X509Certificate cert)
+  public static List<String> subjectNames(final X509Certificate cert) throws EncodingException
   {
     final List<String> names = new ArrayList<>();
     final String cn = subjectCN(cert);
@@ -128,8 +140,11 @@ public final class CertUtil
    * @param  types  One or more subject alternative name types to fetch.
    *
    * @return  List of subject names.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
   public static List<String> subjectNames(final X509Certificate cert, final GeneralNameType... types)
+    throws EncodingException
   {
     final List<String> names = new ArrayList<>();
     final String cn = subjectCN(cert);
@@ -155,8 +170,11 @@ public final class CertUtil
    * @param  candidates  Array of candidate certificates.
    *
    * @return  Certificate whose public key forms a keypair with the private key or null if no match is found.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
   public static X509Certificate findEntityCertificate(final PrivateKey key, final X509Certificate... candidates)
+    throws EncodingException
   {
     return findEntityCertificate(key, Arrays.asList(candidates));
   }
@@ -169,10 +187,13 @@ public final class CertUtil
    * @param  candidates  Collection of candidate certificates.
    *
    * @return  Certificate whose public key forms a keypair with the private key or null if no match is found.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
   public static X509Certificate findEntityCertificate(
     final PrivateKey key,
     final Collection<X509Certificate> candidates)
+    throws EncodingException
   {
     for (X509Certificate candidate : candidates) {
       if (KeyPairUtil.isKeyPair(candidate.getPublicKey(), key)) {
@@ -189,8 +210,11 @@ public final class CertUtil
    * @param  path  Path to file containing an DER or PEM encoded X.509 certificate.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static X509Certificate readCertificate(final String path)
+  public static X509Certificate readCertificate(final String path) throws EncodingException, StreamException
   {
     return readCertificate(StreamUtil.makeStream(new File(path)));
   }
@@ -202,8 +226,11 @@ public final class CertUtil
    * @param  file  File containing an DER or PEM encoded X.509 certificate.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static X509Certificate readCertificate(final File file)
+  public static X509Certificate readCertificate(final File file) throws EncodingException, StreamException
   {
     return readCertificate(StreamUtil.makeStream(file));
   }
@@ -215,14 +242,20 @@ public final class CertUtil
    * @param  in  Input stream containing PEM or DER encoded X.509 certificate.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static X509Certificate readCertificate(final InputStream in)
+  public static X509Certificate readCertificate(final InputStream in) throws EncodingException, StreamException
   {
     try {
       final CertificateFactory factory = CertificateFactory.getInstance("X.509");
       return (X509Certificate) factory.generateCertificate(in);
     } catch (CertificateException e) {
-      throw new IllegalArgumentException("Error reading certificate", e);
+      if (e.getCause() instanceof IOException) {
+        throw new StreamException((IOException) e.getCause());
+      }
+      throw new EncodingException("Cannot decode certificate", e);
     }
   }
 
@@ -233,8 +266,10 @@ public final class CertUtil
    * @param  encoded  PEM or DER encoded ASN.1 data.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
    */
-  public static X509Certificate decodeCertificate(final byte[] encoded)
+  public static X509Certificate decodeCertificate(final byte[] encoded) throws EncodingException
   {
     return readCertificate(new ByteArrayInputStream(encoded));
   }
@@ -246,8 +281,11 @@ public final class CertUtil
    * @param  path  Path to file containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static X509Certificate[] readCertificateChain(final String path)
+  public static X509Certificate[] readCertificateChain(final String path) throws EncodingException, StreamException
   {
     return readCertificateChain(StreamUtil.makeStream(new File(path)));
   }
@@ -259,8 +297,11 @@ public final class CertUtil
    * @param  file  File containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static X509Certificate[] readCertificateChain(final File file)
+  public static X509Certificate[] readCertificateChain(final File file) throws EncodingException, StreamException
   {
     return readCertificateChain(StreamUtil.makeStream(file));
   }
@@ -272,15 +313,21 @@ public final class CertUtil
    * @param  in  Input stream containing a sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static X509Certificate[] readCertificateChain(final InputStream in)
+  public static X509Certificate[] readCertificateChain(final InputStream in) throws EncodingException, StreamException
   {
     try {
       final CertificateFactory factory = CertificateFactory.getInstance("X.509");
       final Collection<? extends Certificate> certs = factory.generateCertificates(in);
       return certs.toArray(new X509Certificate[certs.size()]);
     } catch (CertificateException e) {
-      throw new IllegalArgumentException("Error reading certificate", e);
+      if (e.getCause() instanceof IOException) {
+        throw new StreamException((IOException) e.getCause());
+      }
+      throw new EncodingException("Cannot decode certificate", e);
     }
   }
 
@@ -291,8 +338,10 @@ public final class CertUtil
    * @param  encoded  Sequence of PEM or DER encoded certificates or PKCS#7 certificate chain.
    *
    * @return  Certificate.
+   *
+   * @throws  EncodingException  on cert parsing errors.
    */
-  public static X509Certificate[] decodeCertificateChain(final byte[] encoded)
+  public static X509Certificate[] decodeCertificateChain(final byte[] encoded) throws EncodingException
   {
     return readCertificateChain(new ByteArrayInputStream(encoded));
   }
@@ -305,8 +354,10 @@ public final class CertUtil
    * @param  bits  One or more basic key usage types to check.
    *
    * @return  True if certificate allows all given usage types, false otherwise.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
-  public static boolean allowsUsage(final X509Certificate cert, final KeyUsageBits... bits)
+  public static boolean allowsUsage(final X509Certificate cert, final KeyUsageBits... bits) throws EncodingException
   {
     final KeyUsage usage = new ExtensionReader(cert).readKeyUsage();
     for (KeyUsageBits bit : bits) {
@@ -325,8 +376,10 @@ public final class CertUtil
    * @param  purposes  One ore more extended key usage purposes to check.
    *
    * @return  True if certificate allows all given purposes, false otherwise.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
-  public static boolean allowsUsage(final X509Certificate cert, final KeyPurposeId... purposes)
+  public static boolean allowsUsage(final X509Certificate cert, final KeyPurposeId... purposes) throws EncodingException
   {
     final List<KeyPurposeId> allowedUses = new ExtensionReader(cert).readExtendedKeyUsage();
     for (KeyPurposeId purpose : purposes) {
@@ -345,8 +398,11 @@ public final class CertUtil
    * @param  policyOidsToCheck  One or more certificate policy OIDs to check.
    *
    * @return  True if certificate defines all given policy OIDs, false otherwise.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
   public static boolean hasPolicies(final X509Certificate cert, final String... policyOidsToCheck)
+    throws EncodingException
   {
     final List<PolicyInformation> policies = new ExtensionReader(cert).readCertificatePolicies();
     boolean hasPolicy;
@@ -373,8 +429,10 @@ public final class CertUtil
    * @param  cert  Certificate to process.
    *
    * @return  Subject key identifier in colon-delimited hex format.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
-  public static String subjectKeyId(final X509Certificate cert)
+  public static String subjectKeyId(final X509Certificate cert) throws EncodingException
   {
     return CodecUtil.hex(new ExtensionReader(cert).readSubjectKeyIdentifier().getKeyIdentifier(), true);
   }
@@ -387,8 +445,10 @@ public final class CertUtil
    * @param  cert  Certificate to process.
    *
    * @return  Authority key identifier in colon-delimited hex format.
+   *
+   * @throws  EncodingException  on cert field extraction.
    */
-  public static String authorityKeyId(final X509Certificate cert)
+  public static String authorityKeyId(final X509Certificate cert) throws EncodingException
   {
     return CodecUtil.hex(new ExtensionReader(cert).readAuthorityKeyIdentifier().getKeyIdentifier(), true);
   }

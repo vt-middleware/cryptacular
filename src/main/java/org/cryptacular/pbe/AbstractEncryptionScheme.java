@@ -10,6 +10,7 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.io.CipherInputStream;
 import org.bouncycastle.crypto.io.CipherOutputStream;
 import org.bouncycastle.util.io.Streams;
+import org.cryptacular.CryptoException;
 
 /**
  * Abstract base class for password-based encryption schemes based on salt data and iterated hashing as the basis of the
@@ -106,7 +107,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
     try {
       cipher.doFinal(output, cipher.processBytes(input, 0, input.length, output, 0));
     } catch (InvalidCipherTextException e) {
-      throw new RuntimeException("Encryption failed", e);
+      throw new CryptoException("Cipher error", e);
     }
     return output;
   }

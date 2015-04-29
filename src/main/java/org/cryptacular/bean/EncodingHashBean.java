@@ -3,6 +3,9 @@ package org.cryptacular.bean;
 
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.util.Arrays;
+import org.cryptacular.CryptoException;
+import org.cryptacular.EncodingException;
+import org.cryptacular.StreamException;
 import org.cryptacular.codec.Codec;
 import org.cryptacular.spec.Spec;
 import org.cryptacular.util.CodecUtil;
@@ -88,15 +91,19 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
 
 
   /**
-   * Hashes the given data. If {@link #isSalted()} is true then the last parameter must be a byte array containing the
+   * Hashes the given data. If {@link #isSalted()} is true then the last parameter MUST be a byte array containing the
    * salt. The salt value will be appended to the encoded hash that is returned.
    *
    * @param  data  Data to hash.
    *
    * @return  Encoded digest output, including a salt if provided.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  EncodingException  on encoding errors.
+   * @throws  StreamException  on stream IO errors.
    */
   @Override
-  public String hash(final Object... data)
+  public String hash(final Object... data) throws CryptoException, EncodingException, StreamException
   {
     if (salted) {
       if (data.length < 2 || !(data[data.length - 1] instanceof byte[])) {
@@ -119,9 +126,14 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
    * @param  data  Data to hash.
    *
    * @return  True if the hashed data matches the given hash, false otherwise.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  EncodingException  on encoding errors.
+   * @throws  StreamException  on stream IO errors.
    */
   @Override
   public boolean compare(final String hash, final Object... data)
+      throws CryptoException, EncodingException, StreamException
   {
     return compareInternal(CodecUtil.decode(codecSpec.newInstance().getDecoder(), hash), data);
   }
