@@ -3,6 +3,7 @@ package org.cryptacular;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import org.cryptacular.util.ByteUtil;
@@ -140,21 +141,35 @@ public class CiphertextHeader
     final ByteBuffer bb = ByteBuffer.wrap(data);
     bb.order(ByteOrder.BIG_ENDIAN);
 
-    final byte[] nonce;
-    String keyName = null;
-    try {
-      final int length = bb.getInt();
-      nonce = new byte[bb.getInt()];
-      bb.get(nonce);
+    final int length = bb.getInt();
+    if (length < 0) {
+      throw new EncodingException("Invalid ciphertext header length: " + length);
+    }
 
-      if (length > nonce.length + 8) {
-        final byte[] b = new byte[bb.getInt()];
+    final byte[] nonce;
+    int nonceLen = 0;
+    try {
+      nonceLen = bb.getInt();
+      nonce = new byte[nonceLen];
+      bb.get(nonce);
+    } catch (IndexOutOfBoundsException | BufferUnderflowException e) {
+      throw new EncodingException("Invalid nonce length: " + nonceLen);
+    }
+
+    String keyName = null;
+    if (length > nonce.length + 8) {
+      final byte[] b;
+      int keyLen = 0;
+      try {
+        keyLen = bb.getInt();
+        b = new byte[keyLen];
         bb.get(b);
         keyName = new String(b);
+      } catch (IndexOutOfBoundsException | BufferUnderflowException e) {
+        throw new EncodingException("Invalid key length: " + keyLen);
       }
-    } catch (RuntimeException e) {
-      throw new EncodingException("Error parsing ciphertext header", e);
     }
+
     return new CiphertextHeader(nonce, keyName);
   }
 
@@ -166,28 +181,44 @@ public class CiphertextHeader
    *
    * @return  Decoded header.
    *
+   * @throws  EncodingException  when ciphertext header cannot be decoded.
    * @throws  StreamException  on stream IO errors.
    */
-  public static CiphertextHeader decode(final InputStream input) throws StreamException
+  public static CiphertextHeader decode(final InputStream input) throws EncodingException, StreamException
   {
     final int length = ByteUtil.readInt(input);
-    final byte[] nonce = new byte[ByteUtil.readInt(input)];
+    if (length < 0) {
+      throw new EncodingException("Invalid ciphertext header length: " + length);
+    }
+
+    final byte[] nonce;
+    int nonceLen = 0;
     try {
+      nonceLen = ByteUtil.readInt(input);
+      nonce = new byte[nonceLen];
       input.read(nonce);
+    } catch (ArrayIndexOutOfBoundsException e) {
+      throw new EncodingException("Invalid nonce length: " + nonceLen);
     } catch (IOException e) {
       throw new StreamException(e);
     }
 
     String keyName = null;
     if (length > nonce.length + 8) {
-      final byte[] b = new byte[ByteUtil.readInt(input)];
+      final byte[] b;
+      int keyLen = 0;
       try {
+        keyLen = ByteUtil.readInt(input);
+        b = new byte[keyLen];
         input.read(b);
+      } catch (ArrayIndexOutOfBoundsException e) {
+        throw new EncodingException("Invalid key length: " + keyLen);
       } catch (IOException e) {
         throw new StreamException(e);
       }
       keyName = new String(b);
     }
+
     return new CiphertextHeader(nonce, keyName);
   }
 }

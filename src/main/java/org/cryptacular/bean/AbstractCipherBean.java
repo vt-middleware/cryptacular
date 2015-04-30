@@ -149,6 +149,9 @@ public abstract class AbstractCipherBean implements CipherBean
   public byte[] decrypt(final byte[] input) throws CryptoException, EncodingException
   {
     final CiphertextHeader header = CiphertextHeader.decode(input);
+    if (header.getKeyName() == null) {
+      throw new CryptoException("Ciphertext header does not contain required key");
+    }
     return process(header, false, input);
   }
 
@@ -158,6 +161,9 @@ public abstract class AbstractCipherBean implements CipherBean
       throws CryptoException, EncodingException, StreamException
   {
     final CiphertextHeader header = CiphertextHeader.decode(input);
+    if (header.getKeyName() == null) {
+      throw new CryptoException("Ciphertext header does not contain required key");
+    }
     process(header, false, input, output);
   }
 
