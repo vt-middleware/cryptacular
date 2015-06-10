@@ -383,7 +383,7 @@ public final class CertUtil
   {
     final List<KeyPurposeId> allowedUses = new ExtensionReader(cert).readExtendedKeyUsage();
     for (KeyPurposeId purpose : purposes) {
-      if (!allowedUses.contains(purpose)) {
+      if (allowedUses == null || !allowedUses.contains(purpose)) {
         return false;
       }
     }
@@ -408,10 +408,12 @@ public final class CertUtil
     boolean hasPolicy;
     for (String policyOid : policyOidsToCheck) {
       hasPolicy = false;
-      for (PolicyInformation policy : policies) {
-        if (policy.getPolicyIdentifier().getId().equals(policyOid)) {
-          hasPolicy = true;
-          break;
+      if (policies != null) {
+        for (PolicyInformation policy : policies) {
+          if (policy.getPolicyIdentifier().getId().equals(policyOid)) {
+            hasPolicy = true;
+            break;
+          }
         }
       }
       if (!hasPolicy) {

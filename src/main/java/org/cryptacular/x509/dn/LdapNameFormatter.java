@@ -51,7 +51,6 @@ public class LdapNameFormatter implements NameFormatter
         builder.append(attr.getType()).append('=');
 
         final AttributeType type = attr.getType();
-        final String value = attr.getValue();
         if (type instanceof StandardAttributeType) {
           escape(attr.getValue(), builder);
         } else {
