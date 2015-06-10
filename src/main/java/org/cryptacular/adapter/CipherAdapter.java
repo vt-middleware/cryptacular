@@ -2,6 +2,7 @@
 package org.cryptacular.adapter;
 
 import org.bouncycastle.crypto.CipherParameters;
+import org.cryptacular.CryptoException;
 
 /**
  * Provides a consistent interface for cipher operations against dissimilar BC cipher types.
@@ -16,8 +17,10 @@ public interface CipherAdapter
    *
    * @param  forEncryption  True for encryption mode, false for decryption mode.
    * @param  params  Cipher initialization parameters.
+   *
+   * @throws  CryptoException  on underlying cipher initialization errors.
    */
-  void init(boolean forEncryption, CipherParameters params);
+  void init(boolean forEncryption, CipherParameters params) throws CryptoException;
 
 
   /**
@@ -30,8 +33,10 @@ public interface CipherAdapter
    * @param  outOff  Offset into output array.
    *
    * @return  The number of bytes produced by the cipher.
+   *
+   * @throws  CryptoException  on underlying cipher data handling errors.
    */
-  int processBytes(byte[] in, int inOff, int len, byte[] out, int outOff);
+  int processBytes(byte[] in, int inOff, int len, byte[] out, int outOff) throws CryptoException;
 
 
   /**

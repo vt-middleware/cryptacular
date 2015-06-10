@@ -3,10 +3,9 @@ package org.cryptacular.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.DSAPrivateKey;
@@ -15,7 +14,6 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.DSAParameters;
@@ -26,7 +24,8 @@ import org.bouncycastle.crypto.signers.DSASigner;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
 import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
-import org.bouncycastle.util.io.Streams;
+import org.cryptacular.EncodingException;
+import org.cryptacular.StreamException;
 import org.cryptacular.adapter.Converter;
 import org.cryptacular.asn.OpenSSLPrivateKeyDecoder;
 import org.cryptacular.asn.PKCS8PrivateKeyDecoder;
@@ -115,8 +114,11 @@ public final class KeyPairUtil
    *
    * @return  True if the keys form a functioning keypair, false otherwise. Errors during signature verification are
    *          treated as false.
+   *
+   * @throws  org.cryptacular.CryptoException  on key validation errors.
    */
   public static boolean isKeyPair(final PublicKey pubKey, final PrivateKey privKey)
+      throws org.cryptacular.CryptoException
   {
     final String alg = pubKey.getAlgorithm();
     if (!alg.equals(privKey.getAlgorithm())) {
@@ -155,22 +157,25 @@ public final class KeyPairUtil
    *
    * @return  True if the keys form a functioning keypair, false otherwise. Errors during signature verification are
    *          treated as false.
+   *
+   * @throws  org.cryptacular.CryptoException  on key validation errors.
    */
   public static boolean isKeyPair(final DSAPublicKey pubKey, final DSAPrivateKey privKey)
+      throws org.cryptacular.CryptoException
   {
     final DSASigner signer = new DSASigner();
     final DSAParameters params = new DSAParameters(
       privKey.getParams().getP(),
       privKey.getParams().getQ(),
       privKey.getParams().getG());
-    signer.init(true, new DSAPrivateKeyParameters(privKey.getX(), params));
 
-    final BigInteger[] sig = signer.generateSignature(SIGN_BYTES);
-    signer.init(false, new DSAPublicKeyParameters(pubKey.getY(), params));
     try {
+      signer.init(true, new DSAPrivateKeyParameters(privKey.getX(), params));
+      final BigInteger[] sig = signer.generateSignature(SIGN_BYTES);
+      signer.init(false, new DSAPublicKeyParameters(pubKey.getY(), params));
       return signer.verifySignature(SIGN_BYTES, sig[0], sig[1]);
-    } catch (Exception e) {
-      return false;
+    } catch (RuntimeException e) {
+      throw new org.cryptacular.CryptoException("Signature computation error", e);
     }
   }
 
@@ -184,19 +189,22 @@ public final class KeyPairUtil
    *
    * @return  True if the keys form a functioning keypair, false otherwise. Errors during signature verification are
    *          treated as false.
+   *
+   * @throws  org.cryptacular.CryptoException  on key validation errors.
    */
   public static boolean isKeyPair(final RSAPublicKey pubKey, final RSAPrivateKey privKey)
+      throws org.cryptacular.CryptoException
   {
     final RSADigestSigner signer = new RSADigestSigner(new SHA256Digest());
-    signer.init(true, new RSAKeyParameters(true, privKey.getModulus(), privKey.getPrivateExponent()));
-    signer.update(SIGN_BYTES, 0, SIGN_BYTES.length);
     try {
+      signer.init(true, new RSAKeyParameters(true, privKey.getModulus(), privKey.getPrivateExponent()));
+      signer.update(SIGN_BYTES, 0, SIGN_BYTES.length);
       final byte[] sig = signer.generateSignature();
       signer.init(false, new RSAKeyParameters(false, pubKey.getModulus(), pubKey.getPublicExponent()));
       signer.update(SIGN_BYTES, 0, SIGN_BYTES.length);
       return signer.verifySignature(sig);
-    } catch (CryptoException e) {
-      return false;
+    } catch (Exception e) {
+      throw new org.cryptacular.CryptoException("Signature computation error", e);
     }
   }
 
@@ -210,8 +218,11 @@ public final class KeyPairUtil
    *
    * @return  True if the keys form a functioning keypair, false otherwise. Errors during signature verification are
    *          treated as false.
+   *
+   * @throws  org.cryptacular.CryptoException  on key validation errors.
    */
   public static boolean isKeyPair(final ECPublicKey pubKey, final ECPrivateKey privKey)
+      throws org.cryptacular.CryptoException
   {
     final ECDSASigner signer = new ECDSASigner();
     try {
@@ -220,10 +231,8 @@ public final class KeyPairUtil
       final BigInteger[] sig = signer.generateSignature(SIGN_BYTES);
       signer.init(false, ECUtil.generatePublicKeyParameter(pubKey));
       return signer.verifySignature(SIGN_BYTES, sig[0], sig[1]);
-    } catch (InvalidKeyException e) {
-      throw new IllegalArgumentException("Unsupported EC key", e);
     } catch (Exception e) {
-      return false;
+      throw new org.cryptacular.CryptoException("Signature computation error", e);
     }
   }
 
@@ -236,10 +245,10 @@ public final class KeyPairUtil
    *
    * @return  Private key.
    *
-   * @throws  IOException  On IO errors reading data from file.
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors reading data from file.
    */
-  public static PrivateKey readPrivateKey(final String path)
-    throws IOException
+  public static PrivateKey readPrivateKey(final String path) throws EncodingException, StreamException
   {
     return readPrivateKey(new File(path));
   }
@@ -253,12 +262,16 @@ public final class KeyPairUtil
    *
    * @return  Private key.
    *
-   * @throws  IOException  On IO errors reading data from file.
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors reading data from file.
    */
-  public static PrivateKey readPrivateKey(final File file)
-    throws IOException
+  public static PrivateKey readPrivateKey(final File file) throws EncodingException, StreamException
   {
-    return readPrivateKey(new FileInputStream(file));
+    try {
+      return readPrivateKey(new FileInputStream(file));
+    } catch (FileNotFoundException e) {
+      throw new StreamException("File not found: " + file);
+    }
   }
 
 
@@ -270,12 +283,12 @@ public final class KeyPairUtil
    *
    * @return  Private key.
    *
-   * @throws  IOException  On IO errors reading data from file.
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors reading data from file.
    */
-  public static PrivateKey readPrivateKey(final InputStream in)
-    throws IOException
+  public static PrivateKey readPrivateKey(final InputStream in) throws EncodingException, StreamException
   {
-    return decodePrivateKey(Streams.readAll(in));
+    return decodePrivateKey(StreamUtil.readAll(in));
   }
 
 
@@ -288,10 +301,11 @@ public final class KeyPairUtil
    *
    * @return  Private key.
    *
-   * @throws  IOException  On IO errors reading data from file.
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors.
    */
   public static PrivateKey readPrivateKey(final String path, final char[] password)
-    throws IOException
+      throws EncodingException, StreamException
   {
     return readPrivateKey(new File(path), password);
   }
@@ -306,12 +320,17 @@ public final class KeyPairUtil
    *
    * @return  Private key.
    *
-   * @throws  IOException  On IO errors reading data from file.
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors.
    */
   public static PrivateKey readPrivateKey(final File file, final char[] password)
-    throws IOException
+    throws EncodingException, StreamException
   {
-    return readPrivateKey(new FileInputStream(file), password);
+    try {
+      return readPrivateKey(new FileInputStream(file), password);
+    } catch (FileNotFoundException e) {
+      throw new StreamException("File not found: " + file);
+    }
   }
 
 
@@ -324,12 +343,13 @@ public final class KeyPairUtil
    *
    * @return  Private key.
    *
-   * @throws  IOException  On IO errors reading data from file.
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors.
    */
   public static PrivateKey readPrivateKey(final InputStream in, final char[] password)
-    throws IOException
+    throws EncodingException, StreamException
   {
-    return decodePrivateKey(Streams.readAll(in), password);
+    return decodePrivateKey(StreamUtil.readAll(in), password);
   }
 
 
@@ -346,8 +366,10 @@ public final class KeyPairUtil
    * @param  encodedKey  Encoded private key data.
    *
    * @return  Private key.
+   *
+   * @throws  EncodingException  on key encoding errors.
    */
-  public static PrivateKey decodePrivateKey(final byte[] encodedKey)
+  public static PrivateKey decodePrivateKey(final byte[] encodedKey) throws EncodingException
   {
     return decodePrivateKey(encodedKey, null);
   }
@@ -373,14 +395,16 @@ public final class KeyPairUtil
    * @param  password  Password used to encrypt private key.
    *
    * @return  Private key.
+   *
+   * @throws  EncodingException  on key encoding errors.
    */
-  public static PrivateKey decodePrivateKey(final byte[] encryptedKey, final char[] password)
+  public static PrivateKey decodePrivateKey(final byte[] encryptedKey, final char[] password) throws EncodingException
   {
     AsymmetricKeyParameter key;
     try {
       final PKCS8PrivateKeyDecoder decoder = new PKCS8PrivateKeyDecoder();
       key = decoder.decode(encryptedKey, password);
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       final OpenSSLPrivateKeyDecoder decoder = new OpenSSLPrivateKeyDecoder();
       key = decoder.decode(encryptedKey, password);
     }
@@ -395,10 +419,10 @@ public final class KeyPairUtil
    *
    * @return  Public key.
    *
-   * @throws  IOException  On IO errors
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static PublicKey readPublicKey(final String path)
-    throws IOException
+  public static PublicKey readPublicKey(final String path) throws EncodingException, StreamException
   {
     return readPublicKey(new File(path));
   }
@@ -411,12 +435,16 @@ public final class KeyPairUtil
    *
    * @return  Public key.
    *
-   * @throws  IOException  On IO errors
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static PublicKey readPublicKey(final File file)
-    throws IOException
+  public static PublicKey readPublicKey(final File file) throws EncodingException, StreamException
   {
-    return readPublicKey(new FileInputStream(file));
+    try {
+      return readPublicKey(new FileInputStream(file));
+    } catch (FileNotFoundException e) {
+      throw new StreamException("File not found: " + file);
+    }
   }
 
 
@@ -427,12 +455,12 @@ public final class KeyPairUtil
    *
    * @return  Public key.
    *
-   * @throws  IOException  On IO errors
+   * @throws  EncodingException  on key encoding errors.
+   * @throws  StreamException  on IO errors.
    */
-  public static PublicKey readPublicKey(final InputStream in)
-    throws IOException
+  public static PublicKey readPublicKey(final InputStream in) throws EncodingException, StreamException
   {
-    return decodePublicKey(Streams.readAll(in));
+    return decodePublicKey(StreamUtil.readAll(in));
   }
 
 
@@ -442,8 +470,10 @@ public final class KeyPairUtil
    * @param  encoded  Encoded public key bytes.
    *
    * @return  Public key.
+   *
+   * @throws  EncodingException  on key encoding errors.
    */
-  public static PublicKey decodePublicKey(final byte[] encoded)
+  public static PublicKey decodePublicKey(final byte[] encoded) throws EncodingException
   {
     return Converter.convertPublicKey(new PublicKeyDecoder().decode(encoded));
   }

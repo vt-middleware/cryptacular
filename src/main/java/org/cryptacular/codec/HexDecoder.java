@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 
+import org.cryptacular.EncodingException;
+
 /**
  * Stateful hexadecimal character-to-byte decoder.
  *
@@ -35,7 +37,7 @@ public class HexDecoder implements Decoder
 
 
   @Override
-  public void decode(final CharBuffer input, final ByteBuffer output)
+  public void decode(final CharBuffer input, final ByteBuffer output) throws EncodingException
   {
     // Ignore leading 0x characters if present
     if (input.get(0) == '0' && input.get(1) == 'x') {
@@ -61,7 +63,7 @@ public class HexDecoder implements Decoder
 
 
   @Override
-  public void finalize(final ByteBuffer output)
+  public void finalize(final ByteBuffer output) throws EncodingException
   {
     count = 0;
   }
@@ -85,7 +87,7 @@ public class HexDecoder implements Decoder
   {
     final byte b = DECODING_TABLE[c & 0x7F];
     if (b < 0) {
-      throw new IllegalArgumentException("Invalid hex character " + c);
+      throw new EncodingException("Invalid hex character " + c);
     }
     return b;
   }

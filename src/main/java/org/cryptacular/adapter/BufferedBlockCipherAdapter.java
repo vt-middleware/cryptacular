@@ -4,6 +4,7 @@ package org.cryptacular.adapter;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.cryptacular.CryptoException;
 
 /**
  * Adapts a {@link BufferedBlockCipher}.
@@ -36,26 +37,35 @@ public class BufferedBlockCipherAdapter implements BlockCipherAdapter
 
 
   @Override
-  public void init(final boolean forEncryption, final CipherParameters params)
+  public void init(final boolean forEncryption, final CipherParameters params) throws CryptoException
   {
-    cipherDelegate.init(forEncryption, params);
+    try {
+      cipherDelegate.init(forEncryption, params);
+    } catch (RuntimeException e) {
+      throw new CryptoException("Cipher initialization error", e);
+    }
   }
 
 
   @Override
   public int processBytes(final byte[] in, final int inOff, final int len, final byte[] out, final int outOff)
+      throws CryptoException
   {
-    return cipherDelegate.processBytes(in, inOff, len, out, outOff);
+    try {
+      return cipherDelegate.processBytes(in, inOff, len, out, outOff);
+    } catch (RuntimeException e) {
+      throw new CryptoException("Cipher processing error", e);
+    }
   }
 
 
   @Override
-  public int doFinal(final byte[] out, final int outOff)
+  public int doFinal(final byte[] out, final int outOff) throws CryptoException
   {
     try {
       return cipherDelegate.doFinal(out, outOff);
     } catch (InvalidCipherTextException e) {
-      throw new RuntimeException("Error finalizing cipher", e);
+      throw new CryptoException("Error finalizing cipher", e);
     }
   }
 

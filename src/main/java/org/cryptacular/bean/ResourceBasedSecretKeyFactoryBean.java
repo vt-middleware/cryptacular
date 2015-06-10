@@ -4,6 +4,8 @@ package org.cryptacular.bean;
 import java.io.IOException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
 import org.cryptacular.util.StreamUtil;
 
@@ -76,12 +78,12 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 
 
   @Override
-  public SecretKey newInstance()
+  public SecretKey newInstance() throws StreamException
   {
     try {
       return new SecretKeySpec(StreamUtil.readAll(resource.getInputStream()), algorithm);
     } catch (IOException e) {
-      throw new RuntimeException("Error getting input stream from " + resource);
+      throw new StreamException(e);
     }
   }
 }

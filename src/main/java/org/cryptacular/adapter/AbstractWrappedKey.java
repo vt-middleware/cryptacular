@@ -6,6 +6,7 @@ import java.security.Key;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.util.PrivateKeyInfoFactory;
 import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
+import org.cryptacular.EncodingException;
 
 /**
  * JCE/JDK key base class that wraps a BC native private key.
@@ -66,7 +67,7 @@ public abstract class AbstractWrappedKey<T extends AsymmetricKeyParameter> imple
       }
       return SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(delegate).getEncoded();
     } catch (IOException e) {
-      throw new RuntimeException("Key encoding error.", e);
+      throw new EncodingException("Key encoding error", e);
     }
   }
 }

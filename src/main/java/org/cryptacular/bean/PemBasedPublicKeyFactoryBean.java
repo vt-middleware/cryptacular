@@ -2,6 +2,8 @@
 package org.cryptacular.bean;
 
 import java.security.PublicKey;
+
+import org.cryptacular.EncodingException;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.KeyPairUtil;
 import org.cryptacular.util.PemUtil;
@@ -69,7 +71,7 @@ public class PemBasedPublicKeyFactoryBean implements FactoryBean<PublicKey>
 
 
   @Override
-  public PublicKey newInstance()
+  public PublicKey newInstance() throws EncodingException
   {
     return KeyPairUtil.decodePublicKey(PemUtil.decode(encodedKey));
   }

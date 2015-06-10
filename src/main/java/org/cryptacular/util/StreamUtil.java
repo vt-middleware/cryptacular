@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import org.bouncycastle.util.io.Streams;
+import org.cryptacular.StreamException;
 import org.cryptacular.io.ChunkHandler;
 
 /**
@@ -40,8 +41,10 @@ public final class StreamUtil
    * @param  path  Path to file.
    *
    * @return  Byte array of data read from file.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static byte[] readAll(final String path)
+  public static byte[] readAll(final String path) throws StreamException
   {
     return readAll(new File(path));
   }
@@ -53,8 +56,10 @@ public final class StreamUtil
    * @param  file  File to read.
    *
    * @return  Byte array of data read from file.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static byte[] readAll(final File file)
+  public static byte[] readAll(final File file) throws StreamException
   {
     final InputStream input = makeStream(file);
     try {
@@ -71,8 +76,10 @@ public final class StreamUtil
    * @param  input  Input stream to read.
    *
    * @return  Byte array of data read from stream.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static byte[] readAll(final InputStream input)
+  public static byte[] readAll(final InputStream input) throws StreamException
   {
     return readAll(input, 1024);
   }
@@ -85,14 +92,16 @@ public final class StreamUtil
    * @param  sizeHint  Estimate of amount of data to be read in bytes.
    *
    * @return  Byte array of data read from stream.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static byte[] readAll(final InputStream input, final int sizeHint)
+  public static byte[] readAll(final InputStream input, final int sizeHint) throws StreamException
   {
     final ByteArrayOutputStream output = new ByteArrayOutputStream(sizeHint);
     try {
       Streams.pipeAll(input, output);
     } catch (IOException e) {
-      throw new RuntimeException("IO error reading/writing stream", e);
+      throw new StreamException(e);
     } finally {
       closeStream(input);
       closeStream(output);
@@ -107,8 +116,10 @@ public final class StreamUtil
    * @param  reader  Reader over character data.
    *
    * @return  Data read from reader.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static String readAll(final Reader reader)
+  public static String readAll(final Reader reader) throws StreamException
   {
     return readAll(reader, 1024);
   }
@@ -121,8 +132,10 @@ public final class StreamUtil
    * @param  sizeHint  Estimate of amount of data to be read in number of characters.
    *
    * @return  Data read from reader.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static String readAll(final Reader reader, final int sizeHint)
+  public static String readAll(final Reader reader, final int sizeHint) throws StreamException
   {
     final CharArrayWriter writer = new CharArrayWriter(sizeHint);
     final char[] buffer = new char[CHUNK_SIZE];
@@ -132,7 +145,7 @@ public final class StreamUtil
         writer.write(buffer, 0, len);
       }
     } catch (IOException e) {
-      throw new RuntimeException("IO error reading/writing stream", e);
+      throw new StreamException(e);
     } finally {
       closeReader(reader);
       closeWriter(writer);
@@ -147,8 +160,11 @@ public final class StreamUtil
    * @param  in  Input stream providing data to process.
    * @param  out  Output stream holding processed data.
    * @param  handler  Arbitrary handler for processing input stream.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
   public static void pipeAll(final InputStream in, final OutputStream out, final ChunkHandler handler)
+      throws StreamException
   {
     final byte[] buffer = new byte[CHUNK_SIZE];
     int count;
@@ -157,7 +173,7 @@ public final class StreamUtil
         handler.handle(buffer, 0, count, out);
       }
     } catch (IOException e) {
-      throw new RuntimeException("IO error reading/writing stream", e);
+      throw new StreamException(e);
     }
   }
 
@@ -168,13 +184,15 @@ public final class StreamUtil
    * @param  file  Input stream source.
    *
    * @return  Input stream around file.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static InputStream makeStream(final File file)
+  public static InputStream makeStream(final File file) throws StreamException
   {
     try {
       return new BufferedInputStream(new FileInputStream(file));
     } catch (FileNotFoundException e) {
-      throw new RuntimeException(file + " does not exist");
+      throw new StreamException(file + " does not exist");
     }
   }
 
@@ -185,13 +203,15 @@ public final class StreamUtil
    * @param  file  Reader source.
    *
    * @return  Reader around file.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static Reader makeReader(final File file)
+  public static Reader makeReader(final File file) throws StreamException
   {
     try {
       return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)));
     } catch (FileNotFoundException e) {
-      throw new RuntimeException(file + " does not exist");
+      throw new StreamException(file + " does not exist");
     }
   }
 

@@ -8,6 +8,9 @@ import java.security.Key;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.CryptoException;
+import org.cryptacular.EncodingException;
+import org.cryptacular.StreamException;
 import org.cryptacular.generator.Nonce;
 
 /**
@@ -123,37 +126,44 @@ public abstract class AbstractCipherBean implements CipherBean
 
 
   @Override
-  public byte[] encrypt(final byte[] input)
+  public byte[] encrypt(final byte[] input) throws CryptoException
   {
     return process(new CiphertextHeader(nonce.generate(), keyAlias), true, input);
   }
 
 
   @Override
-  public void encrypt(final InputStream input, final OutputStream output)
+  public void encrypt(final InputStream input, final OutputStream output) throws CryptoException, StreamException
   {
     final CiphertextHeader header = new CiphertextHeader(nonce.generate(), keyAlias);
     try {
       output.write(header.encode());
     } catch (IOException e) {
-      throw new RuntimeException("Error writing ciphertext header to output stream", e);
+      throw new StreamException(e);
     }
     process(header, true, input, output);
   }
 
 
   @Override
-  public byte[] decrypt(final byte[] input)
+  public byte[] decrypt(final byte[] input) throws CryptoException, EncodingException
   {
     final CiphertextHeader header = CiphertextHeader.decode(input);
+    if (header.getKeyName() == null) {
+      throw new CryptoException("Ciphertext header does not contain required key");
+    }
     return process(header, false, input);
   }
 
 
   @Override
   public void decrypt(final InputStream input, final OutputStream output)
+      throws CryptoException, EncodingException, StreamException
   {
     final CiphertextHeader header = CiphertextHeader.decode(input);
+    if (header.getKeyName() == null) {
+      throw new CryptoException("Ciphertext header does not contain required key");
+    }
     process(header, false, input, output);
   }
 
@@ -171,12 +181,12 @@ public abstract class AbstractCipherBean implements CipherBean
     try {
       key = keyStore.getKey(alias, keyPassword.toCharArray());
     } catch (Exception e) {
-      throw new RuntimeException("Error accessing " + alias, e);
+      throw new CryptoException("Error accessing keystore entry " + alias, e);
     }
     if (key instanceof SecretKey) {
       return (SecretKey) key;
     }
-    throw new IllegalArgumentException(alias + " is not a secret key");
+    throw new CryptoException(alias + " is not a secret key");
   }
 
 

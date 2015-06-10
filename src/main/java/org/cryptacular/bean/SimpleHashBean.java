@@ -2,6 +2,8 @@
 package org.cryptacular.bean;
 
 import org.bouncycastle.crypto.Digest;
+import org.cryptacular.CryptoException;
+import org.cryptacular.StreamException;
 import org.cryptacular.spec.Spec;
 
 /**
@@ -29,7 +31,7 @@ public class SimpleHashBean extends AbstractHashBean implements HashBean<byte[]>
 
 
   @Override
-  public byte[] hash(final Object... data)
+  public byte[] hash(final Object... data) throws CryptoException, StreamException
   {
     return hashInternal(data);
   }
@@ -44,9 +46,12 @@ public class SimpleHashBean extends AbstractHashBean implements HashBean<byte[]>
    * @param  data  Data to hash.
    *
    * @return  True if the hashed data matches the given hash, false otherwise.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  StreamException  on stream IO errors.
    */
   @Override
-  public boolean compare(final byte[] hash, final Object... data)
+  public boolean compare(final byte[] hash, final Object... data) throws CryptoException, StreamException
   {
     return compareInternal(hash, data);
   }

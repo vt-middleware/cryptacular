@@ -197,7 +197,7 @@
     <module name="HideUtilityClassConstructor"/>
     <module name="MutableException"/>
     <module name="ThrowsCount">
-      <property name="max" value="2"/>
+      <property name="max" value="4"/>
     </module>
 
     <!-- prevent trailing whitespace -->

@@ -3,6 +3,11 @@ package org.cryptacular.bean;
 
 import java.security.Key;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+
+import org.cryptacular.CryptoException;
 
 /**
  * Factory that produces either a {@link javax.crypto.SecretKey} or {@link java.security.PrivateKey}.
@@ -99,8 +104,8 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key> implements FactoryBean<T
     final Key key;
     try {
       key = keyStore.getKey(alias, password.toCharArray());
-    } catch (Exception e) {
-      throw new RuntimeException("Error accessing " + alias, e);
+    } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+      throw new CryptoException("Error accessing keystore entry " + alias, e);
     }
     return (T) key;
   }

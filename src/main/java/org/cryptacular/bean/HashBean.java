@@ -1,6 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.bean;
 
+import org.cryptacular.CryptoException;
+import org.cryptacular.StreamException;
+
 /**
  * Strategy interface to support beans that produce hash outputs in various formats, e.g. raw bytes, hex output, etc.
  *
@@ -21,8 +24,11 @@ public interface HashBean<T>
    *               bytes.
    *
    * @return  Digest output.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  StreamException  on stream IO errors.
    */
-  T hash(Object... data);
+  T hash(Object... data) throws CryptoException, StreamException;
 
 
   /**
@@ -32,6 +38,9 @@ public interface HashBean<T>
    * @param  data  Data to hash.
    *
    * @return  True if the hashed data matches the given hash, false otherwise.
+   *
+   * @throws  CryptoException  on hash computation errors.
+   * @throws  StreamException  on stream IO errors.
    */
-  boolean compare(final T hash, Object... data);
+  boolean compare(final T hash, Object... data) throws CryptoException, StreamException;
 }

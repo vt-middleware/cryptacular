@@ -4,6 +4,8 @@ package org.cryptacular.codec;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
+import org.cryptacular.EncodingException;
+
 /**
  * Describes a potentially stateful character-to-byte decoder.
  *
@@ -18,16 +20,20 @@ public interface Decoder
    *
    * @param  input  Input character buffer.
    * @param  output  Output byte buffer.
+   *
+   * @throws  EncodingException  on decoding errors.
    */
-  void decode(CharBuffer input, ByteBuffer output);
+  void decode(CharBuffer input, ByteBuffer output) throws EncodingException;
 
 
   /**
    * Performs final output decoding (e.g. padding) after all input characters have been provided.
    *
    * @param  output  Output byte buffer.
+   *
+   * @throws  EncodingException  on decoding errors.
    */
-  void finalize(ByteBuffer output);
+  void finalize(ByteBuffer output) throws EncodingException;
 
 
   /**

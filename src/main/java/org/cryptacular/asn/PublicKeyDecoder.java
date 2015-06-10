@@ -4,6 +4,7 @@ package org.cryptacular.asn;
 import java.io.IOException;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.util.PublicKeyFactory;
+import org.cryptacular.EncodingException;
 import org.cryptacular.util.PemUtil;
 
 /**
@@ -23,7 +24,7 @@ public class PublicKeyDecoder implements ASN1Decoder<AsymmetricKeyParameter>
       }
       return PublicKeyFactory.createKey(encoded);
     } catch (IOException e) {
-      throw new RuntimeException("ASN.1 decoding error", e);
+      throw new EncodingException("ASN.1 decoding error", e);
     }
   }
 }

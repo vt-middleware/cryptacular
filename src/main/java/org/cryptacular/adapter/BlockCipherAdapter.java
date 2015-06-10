@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.adapter;
 
+import org.cryptacular.CryptoException;
+
 /**
  * Adapter for all block cipher types.
  *
@@ -26,6 +28,8 @@ public interface BlockCipherAdapter extends CipherAdapter
    * @param  outOff  Offset into output buffer where processed data should start.
    *
    * @return  Number of bytes written to output buffer.
+   *
+   * @throws  CryptoException  on underlying cipher finalization errors.
    */
-  int doFinal(byte[] out, int outOff);
+  int doFinal(byte[] out, int outOff) throws CryptoException;
 }

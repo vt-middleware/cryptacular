@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
+import org.cryptacular.StreamException;
+
 /**
  * Utilities for working with bytes.
  *
@@ -44,13 +46,15 @@ public final class ByteUtil
    * @param  in  Stream from which to read 4 bytes.
    *
    * @return  Integer value.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static int readInt(final InputStream in)
+  public static int readInt(final InputStream in) throws StreamException
   {
     try {
       return (in.read() << 24) | ((in.read() & 0xff) << 16) | ((in.read() & 0xff) << 8) | (in.read() & 0xff);
     } catch (IOException e) {
-      throw new RuntimeException("Error reading from stream.", e);
+      throw new StreamException(e);
     }
   }
 
@@ -78,8 +82,10 @@ public final class ByteUtil
    * @param  in  Stream from which to read 8 bytes.
    *
    * @return  Long integer value.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  public static long readLong(final InputStream in)
+  public static long readLong(final InputStream in) throws StreamException
   {
     try {
       return
@@ -88,7 +94,7 @@ public final class ByteUtil
         (((long) in.read() & 0xff) << 24) | (((long) in.read() & 0xff) << 16) |
         (((long) in.read() & 0xff) << 8) | ((long) in.read() & 0xff);
     } catch (IOException e) {
-      throw new RuntimeException("Error reading from stream.", e);
+      throw new StreamException(e);
     }
   }
 

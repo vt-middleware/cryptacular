@@ -3,6 +3,8 @@ package org.cryptacular.util;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+
+import org.cryptacular.EncodingException;
 import org.cryptacular.codec.Base32Decoder;
 import org.cryptacular.codec.Base32Encoder;
 import org.cryptacular.codec.Base64Decoder;
@@ -31,8 +33,10 @@ public final class CodecUtil
    * @param  raw  Raw bytes to encode.
    *
    * @return  Hexadecimal encoded string.
+   *
+   * @throws  EncodingException  on encoding errors.
    */
-  public static String hex(final byte[] raw)
+  public static String hex(final byte[] raw) throws EncodingException
   {
     return encode(new HexEncoder(), raw);
   }
@@ -46,8 +50,10 @@ public final class CodecUtil
    *                  otherwise.
    *
    * @return  Hexadecimal encoded string.
+   *
+   * @throws  EncodingException  on encoding errors.
    */
-  public static String hex(final byte[] raw, final boolean delimit)
+  public static String hex(final byte[] raw, final boolean delimit) throws EncodingException
   {
     return encode(new HexEncoder(delimit), raw);
   }
@@ -59,8 +65,10 @@ public final class CodecUtil
    * @param  encoded  Hex encoded character data.
    *
    * @return  Raw bytes of hex string.
+   *
+   * @throws  EncodingException  on decoding errors.
    */
-  public static byte[] hex(final CharSequence encoded)
+  public static byte[] hex(final CharSequence encoded) throws EncodingException
   {
     return decode(new HexDecoder(), encoded);
   }
@@ -72,8 +80,10 @@ public final class CodecUtil
    * @param  raw  Raw bytes to encode.
    *
    * @return  Base64-encoded string.
+   *
+   * @throws  EncodingException  on encoding errors.
    */
-  public static String b64(final byte[] raw)
+  public static String b64(final byte[] raw) throws EncodingException
   {
     return encode(new Base64Encoder(), raw);
   }
@@ -85,8 +95,10 @@ public final class CodecUtil
    * @param  encoded  Base64-encoded character data.
    *
    * @return  Base64-decoded bytes.
+   *
+   * @throws  EncodingException  on decoding errors.
    */
-  public static byte[] b64(final CharSequence encoded)
+  public static byte[] b64(final CharSequence encoded) throws EncodingException
   {
     return decode(new Base64Decoder(), encoded);
   }
@@ -99,8 +111,10 @@ public final class CodecUtil
    * @param  lineLength  Length of each base64-encoded line in output.
    *
    * @return  Base64-encoded string.
+   *
+   * @throws  EncodingException  on encoding errors.
    */
-  public static String b64(final byte[] raw, final int lineLength)
+  public static String b64(final byte[] raw, final int lineLength) throws EncodingException
   {
     return encode(new Base64Encoder(lineLength), raw);
   }
@@ -112,8 +126,10 @@ public final class CodecUtil
    * @param  raw  Raw bytes to encode.
    *
    * @return  Base32-encoded string.
+   *
+   * @throws  EncodingException  on encoding errors.
    */
-  public static String b32(final byte[] raw)
+  public static String b32(final byte[] raw) throws EncodingException
   {
     return encode(new Base32Encoder(), raw);
   }
@@ -125,8 +141,10 @@ public final class CodecUtil
    * @param  encoded  Base32-encoded character data.
    *
    * @return  Base64-decoded bytes.
+   *
+   * @throws  EncodingException  on decoding errors.
    */
-  public static byte[] b32(final CharSequence encoded)
+  public static byte[] b32(final CharSequence encoded) throws EncodingException
   {
     return decode(new Base32Decoder(), encoded);
   }
@@ -139,8 +157,10 @@ public final class CodecUtil
    * @param  lineLength  Length of each base32-encoded line in output.
    *
    * @return  Base32-encoded string.
+   *
+   * @throws  EncodingException  on encoding errors.
    */
-  public static String b32(final byte[] raw, final int lineLength)
+  public static String b32(final byte[] raw, final int lineLength) throws EncodingException
   {
     return encode(new Base32Encoder(lineLength), raw);
   }
@@ -153,8 +173,10 @@ public final class CodecUtil
    * @param  raw  Raw bytes to encode.
    *
    * @return  Encoded data as a string.
+   *
+   * @throws  EncodingException  on encoding errors.
    */
-  public static String encode(final Encoder encoder, final byte[] raw)
+  public static String encode(final Encoder encoder, final byte[] raw) throws EncodingException
   {
     final CharBuffer output = CharBuffer.allocate(encoder.outputSize(raw.length));
     encoder.encode(ByteBuffer.wrap(raw), output);
@@ -170,8 +192,10 @@ public final class CodecUtil
    * @param  encoded  Encoded character data.
    *
    * @return  Decoded data as raw bytes.
+   *
+   * @throws  EncodingException  on decoding errors.
    */
-  public static byte[] decode(final Decoder decoder, final CharSequence encoded)
+  public static byte[] decode(final Decoder decoder, final CharSequence encoded) throws EncodingException
   {
     final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(encoded.length()));
     decoder.decode(CharBuffer.wrap(encoded), output);
