@@ -26,17 +26,17 @@ a straightforward convention that identifies whether a component is safe.
 A Cryptacular component is thread safe if any of the following is true:
 
 1. Name ends with `Util` (e.g.
-[`CipherUtil`](/cryptacular/javadocs/org/cryptacular/util/CipherUtil.html),
-[`HashUtil`](/cryptacular/javadocs/org/cryptacular/util/HashUtil.html))
+[`CipherUtil`](/javadocs/org/cryptacular/util/CipherUtil.html),
+[`HashUtil`](/javadocs/org/cryptacular/util/HashUtil.html))
 2. Name ends with `Bean` (e.g.
-[`SimpleHashBean`](/cryptacular/javadocs/org/cryptacular/bean/SimpleHashBean.html),
-[`AEADBlockCipherBean`](/cryptacular/javadocs/org/cryptacular/bean/AEADBlockCipherBean.html))
+[`SimpleHashBean`](/javadocs/org/cryptacular/bean/SimpleHashBean.html),
+[`AEADBlockCipherBean`](/javadocs/org/cryptacular/bean/AEADBlockCipherBean.html))
 3. Class is in `generator` package (e.g.
-[`RandomIdGenerator`](/cryptacular/javadocs/org/cryptacular/generator/RandomIdGenerator.html),
-[`RBGNonce`](/cryptacular/javadocs/org/cryptacular/generator/sp80038a/RBGNonce.html))
+[`RandomIdGenerator`](/javadocs/org/cryptacular/generator/RandomIdGenerator.html),
+[`RBGNonce`](/javadocs/org/cryptacular/generator/sp80038a/RBGNonce.html))
 4. Class is in `spec` package (e.g.
-[`DigestSpec`](/cryptacular/javadocs/org/cryptacular/spec/DigestSpec.html),
-[`BufferedBlockCipherSpec`](/cryptacular/javadocs/org/cryptacular/spec/BufferedBlockCipherSpec.html))
+[`DigestSpec`](/javadocs/org/cryptacular/spec/DigestSpec.html),
+[`BufferedBlockCipherSpec`](/javadocs/org/cryptacular/spec/BufferedBlockCipherSpec.html))
 
 Otherwise the component should be considered not thread safe unless explicity noted in the JavaDocs.
 
@@ -44,7 +44,7 @@ Otherwise the component should be considered not thread safe unless explicity no
 
 The remainder of the reference is organized by broad categories of either cryptographic operation or component type.
 We cover only the most common components, component classes, and usage scenarios, but that ought to be a complete
-introduction to library usage. The [JavaDocs](/cryptacular/javadocs/) and [source](
+introduction to library usage. The [JavaDocs](/javadocs/) and [source](
 http://github.com/vt-middleware/cryptacular) are intended to complement and complete the reference guide.
 
 ## Hashing
@@ -94,7 +94,7 @@ boolean areEqual = HashUtil.compareHash(
 Cryptacular provides a novel feature in its encryption routines that addresses a common pitfall in cryptographic coding, failing to provide a unique initialization vector (IV, nonce) on every encryption. Cryptography standards such as
 [NIST 800-38d](http://goo.gl/kE1IT9) are clear that unique nonces are required for every encryption under the same key
 in order to provide any meaningful security. Cryptacular cipher routines force adherence to this practice by requiring
-a [Nonce](/cryptacular/javadocs/org/cryptacular/generator/Nonce.html) object, a kind of generator,
+a [Nonce](/javadocs/org/cryptacular/generator/Nonce.html) object, a kind of generator,
 that produces a unique nonce for every encryption. The nonce and an optional symbolic key name are 
 prepended to the beginning of the output where they become effectively a cleartext superblock containing information
 about the following ciphertext. The superblock is subsequently used in decryption routines; since the nonce is stored
