@@ -14,8 +14,8 @@ source itself.
 
 There are some notable conventions used in the following examples:
 
-1. All unqualified class names are either well-known classes in the JSE (e.g. FileInputStream) or Cryptacular components
-2. We make copious use of comments to clarify operations and the purpose of method parameters
+1. All unqualified class names are either well-known classes in the JSE or Cryptacular components.
+2. We make copious use of comments to clarify operations and the purpose of method parameters.
 
 ### Thread safety
 
