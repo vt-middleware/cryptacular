@@ -2,7 +2,8 @@
 layout: default
 title: Cryptacular
 ---
-A complement to the Bouncy Castle crypto API for Java.
+Cryptacular is a complement to the [Bouncy Castle Crypto APIs for Java](https://www.bouncycastle.org/java.html)
+that is...
 
 ## Familiar
 Perform common cryptographic operations using familiar APIS, JCE and lightweight Bouncy Castle API.
