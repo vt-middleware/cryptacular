@@ -155,7 +155,7 @@ public final class StreamUtil
 
 
   /**
-   * Pipes an input stream into an output stream with chuncked processing.
+   * Pipes an input stream into an output stream with chunked processing.
    *
    * @param  in  Input stream providing data to process.
    * @param  out  Output stream holding processed data.
