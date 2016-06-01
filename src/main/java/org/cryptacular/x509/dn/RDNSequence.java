@@ -41,36 +41,29 @@ public class RDNSequence implements Iterable<RDN>
   public Iterable<RDN> backward()
   {
     return
-      new Iterable<RDN>() {
-      @Override
-      public Iterator<RDN> iterator()
-      {
-        return
-          new Iterator<RDN>() {
+      () -> new Iterator<RDN>() {
 
-          /** List iterator. */
-          private final ListIterator<RDN> it = rdns.listIterator(rdns.size());
+        /** List iterator. */
+        private final ListIterator<RDN> it = rdns.listIterator(rdns.size());
 
-          @Override
-          public boolean hasNext()
-          {
-            return it.hasPrevious();
-          }
+        @Override
+        public boolean hasNext()
+        {
+          return it.hasPrevious();
+        }
 
-          @Override
-          public RDN next()
-          {
-            return it.previous();
-          }
+        @Override
+        public RDN next()
+        {
+          return it.previous();
+        }
 
-          @Override
-          public void remove()
-          {
-            throw new UnsupportedOperationException("Remove not supported");
-          }
-        };
-      }
-    };
+        @Override
+        public void remove()
+        {
+          throw new UnsupportedOperationException("Remove not supported");
+        }
+      };
   }
 
 

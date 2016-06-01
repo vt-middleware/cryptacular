@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Ordered list of {@link Attribute}s.
@@ -83,11 +84,9 @@ public class Attributes implements Iterable<Attribute>
   public List<String> getValues(final AttributeType type)
   {
     final List<String> values = new ArrayList<>(attributes.size());
-    for (Attribute attr : attributes) {
-      if (attr.getType().equals(type)) {
-        values.add(attr.getValue());
-      }
-    }
+    values.addAll(
+      attributes.stream().filter(
+        attr -> attr.getType().equals(type)).map(Attribute::getValue).collect(Collectors.toList()));
     return Collections.unmodifiableList(values);
   }
 

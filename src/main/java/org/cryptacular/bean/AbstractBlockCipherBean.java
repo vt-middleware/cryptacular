@@ -9,7 +9,6 @@ import org.cryptacular.CiphertextHeader;
 import org.cryptacular.StreamException;
 import org.cryptacular.adapter.BlockCipherAdapter;
 import org.cryptacular.generator.Nonce;
-import org.cryptacular.io.ChunkHandler;
 import org.cryptacular.util.StreamUtil;
 
 /**
@@ -90,14 +89,9 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
     StreamUtil.pipeAll(
       input,
       output,
-      new ChunkHandler() {
-        @Override
-        public void handle(final byte[] input, final int offset, final int count, final OutputStream output)
-          throws IOException
-        {
-          final int n = cipher.processBytes(input, offset, count, outBuf, 0);
-          output.write(outBuf, 0, n);
-        }
+      (in, inOff, len, out) -> {
+        final int n = cipher.processBytes(in, inOff, len, outBuf, 0);
+        out.write(outBuf, 0, n);
       });
 
     final int n = cipher.doFinal(outBuf, 0);
