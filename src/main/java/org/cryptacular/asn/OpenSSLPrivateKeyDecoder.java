@@ -53,7 +53,7 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
     try {
       o = ASN1Primitive.fromByteArray(encoded);
     } catch (Exception e) {
-      throw new EncodingException("Invalid encoded key");
+      throw new EncodingException("Invalid encoded key", e);
     }
 
     final AsymmetricKeyParameter key;
