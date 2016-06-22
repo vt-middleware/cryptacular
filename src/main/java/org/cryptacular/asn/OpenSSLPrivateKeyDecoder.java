@@ -2,11 +2,11 @@
 package org.cryptacular.asn;
 
 import java.math.BigInteger;
+import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.x9.X9ECParameters;
@@ -51,7 +51,7 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
   {
     final ASN1Object o;
     try {
-      o = ASN1Primitive.fromByteArray(encoded);
+      o = new ASN1InputStream(encoded).readObject();
     } catch (Exception e) {
       throw new EncodingException("Invalid encoded key", e);
     }
