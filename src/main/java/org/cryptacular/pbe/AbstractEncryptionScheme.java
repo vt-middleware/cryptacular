@@ -4,6 +4,7 @@ package org.cryptacular.pbe;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
@@ -104,11 +105,12 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   private byte[] process(final byte[] input)
   {
     final byte[] output = new byte[cipher.getOutputSize(input.length)];
+    int processed = cipher.processBytes(input, 0, input.length, output, 0);
     try {
-      cipher.doFinal(output, cipher.processBytes(input, 0, input.length, output, 0));
+      processed += cipher.doFinal(output, processed);
     } catch (InvalidCipherTextException e) {
       throw new CryptoException("Cipher error", e);
     }
-    return output;
+    return Arrays.copyOfRange(output, 0, processed);
   }
 }
