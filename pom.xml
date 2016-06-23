@@ -68,7 +68,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
-    <verbosity>0</verbosity>            
+    <testng.verbosity>0</testng.verbosity>
   </properties>
 
   <dependencies>
@@ -179,7 +179,7 @@
           <properties>
             <property>
               <name>surefire.testng.verbose</name>
-              <value>${verbosity}</value>
+              <value>${testng.verbosity}</value>
             </property>
           </properties>
         </configuration>
