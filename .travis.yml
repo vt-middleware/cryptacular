@@ -1,11 +1,12 @@
-language: java
-jdk:
-- oraclejdk8
+language: bash
+sudo: required
+services:
+  - docker
+script:
+  - .travis/docker-run
 branches:
   only:
   - master
-after_success:
-- bash .travis/deploy-snapshot
 env:
   global:
     secure: i19geQWcIjUpe3hYDb1X+oPmPTBf8lZAssTVJDEEAUzPgiDOU/ptENNFa4ym6N7Zp0jOPoRDf0Z/A3wy5pnrOEyLBke3iIiCtP2oK6O+VkVP57hs53Jwahk+OJdrHYG+xvfjwL2WAf2QusB2mx/LfX8ibreKszoBTAKLNyAZKcM6UvC5P5SvduKdKr1SIiNg/8JencV83Jpk6cwFRfbGg21aXdH1fyMhSUrPCrLtxTwSLjm2W10ZRF+Kh/1T1IBebKKjx1fxsTOkFuNq4i84N/O7bFjbY6FmfQel0TEmeDkSQZttbnig/kdkLCssrAKkZiVfDQ5yXY5MU/nRTIgpi+aj2jjHiPW9k66rLq+Bf/Rm7j9Fdxl8zZvsIQB9b0oC0yqNqAzLp9Mz/uNlw7Yg//6QiJHJzd7U+gSKeGgqeg3aFRPhu5BAji5yau3zL1WTNMdymhNNbqNJUj23eiNAcJm+1rmutSC+/8Nk9w3Iy8cK12Y4Hf8VqzQ19aaWbzRkxcULPab2em011EiUESa0ZvK8B07a4SdY0HmYmi5gz8KYBag/F3CRDG6Yzw7LRxosd+5e2Kl6BCLScAuoeLhS7DUeZqhfUWXFyYccQ78VGw+PryZvHWyJbs9hJqrw1ixygNjghudGlogB77miD5ZoGzeQ5EXIcGFf8figrHFSIes=
