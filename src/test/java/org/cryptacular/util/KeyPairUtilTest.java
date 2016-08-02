@@ -1,6 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -317,5 +320,67 @@ public class KeyPairUtilTest
     final PublicKey key = KeyPairUtil.readPublicKey(path);
     assertNotNull(key);
     assertTrue(expectedType.isAssignableFrom(key.getClass()));
+  }
+
+  @Test(dataProvider = "private-key-files")
+  public void testClosePrivateKey(final String path, final Class<?> expectedType)
+    throws Exception
+  {
+    final TestableFileInputStream is = new TestableFileInputStream(path);
+    final PrivateKey key = KeyPairUtil.readPrivateKey(is);
+    assertNotNull(key);
+    assertTrue(is.isClosed());
+  }
+
+  @Test(dataProvider = "public-key-files")
+  public void testClosePublicKey(final String path, final Class<?> expectedType)
+    throws Exception
+  {
+    final TestableFileInputStream is = new TestableFileInputStream(path);
+    final PublicKey key = KeyPairUtil.readPublicKey(is);
+    assertNotNull(key);
+    assertTrue(is.isClosed());
+  }
+
+
+  /**
+   * Class for testing usage of {@link FileInputStream}.
+   */
+  private class TestableFileInputStream extends FileInputStream
+  {
+
+    /** Whether {@link #close()} has been invoked. */
+    private boolean isClosed;
+
+    /**
+     * Default constructor.
+     *
+     * @param  name  of the file to open
+     *
+     * @throws  FileNotFoundException  if an error occurs
+     */
+    TestableFileInputStream(final String name)
+      throws FileNotFoundException
+    {
+      super(name);
+    }
+
+    @Override
+    public void close()
+      throws IOException
+    {
+      super.close();
+      isClosed = true;
+    }
+
+    /**
+     * Returns whether {@link #close()} has been invoked.
+     *
+     * @return  whether {@link #close()} has been invoked
+     */
+    public boolean isClosed()
+    {
+      return isClosed;
+    }
   }
 }
