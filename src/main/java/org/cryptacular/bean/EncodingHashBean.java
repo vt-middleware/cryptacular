@@ -30,6 +30,22 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
 
 
   /**
+   * Creates a new instance that will not be salted. Delegates to {@link #EncodingHashBean(Spec, Spec, int, boolean)}.
+   *
+   * @param  codecSpec  Digest specification.
+   * @param  digestSpec  Digest specification.
+   * @param  iterations  Number of hash rounds.
+   */
+  public EncodingHashBean(
+    final Spec<Codec> codecSpec,
+    final Spec<Digest> digestSpec,
+    final int iterations)
+  {
+    this(codecSpec, digestSpec, iterations, false);
+  }
+
+
+  /**
    * Creates a new instance by specifying all properties.
    *
    * @param  codecSpec  Digest specification.
