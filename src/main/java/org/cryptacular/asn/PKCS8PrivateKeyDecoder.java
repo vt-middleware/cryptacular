@@ -2,6 +2,7 @@
 package org.cryptacular.asn;
 
 import java.io.IOException;
+import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.pkcs.EncryptedPrivateKeyInfo;
 import org.bouncycastle.asn1.pkcs.PBEParameter;
 import org.bouncycastle.asn1.pkcs.PBES2Parameters;
@@ -45,7 +46,7 @@ public class PKCS8PrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetric
   protected AsymmetricKeyParameter decodeASN1(final byte[] encoded)
   {
     try {
-      return PrivateKeyFactory.createKey(encoded);
+      return PrivateKeyFactory.createKey(new ASN1InputStream(encoded).readObject().getEncoded());
     } catch (IOException e) {
       throw new EncodingException("ASN.1 decoding error", e);
     }
