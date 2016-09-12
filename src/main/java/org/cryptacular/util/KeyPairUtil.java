@@ -277,7 +277,8 @@ public final class KeyPairUtil
 
   /**
    * Reads an encoded private key from an input stream. Both PKCS#8 and OpenSSL "traditional" formats are supported in
-   * DER or PEM encoding. See {@link #decodePrivateKey(byte[])} for supported asymmetric algorithms.
+   * DER or PEM encoding. See {@link #decodePrivateKey(byte[])} for supported asymmetric algorithms. The {@link
+   * InputStream} parameter is closed by this method.
    *
    * @param  in  Input stream containing private key data.
    *
@@ -336,7 +337,8 @@ public final class KeyPairUtil
 
   /**
    * Reads an encrypted private key from an input stream. Both PKCS#8 and OpenSSL "traditional" formats are supported in
-   * DER or PEM encoding. See {@link #decodePrivateKey(byte[])} for supported asymmetric algorithms.
+   * DER or PEM encoding. See {@link #decodePrivateKey(byte[])} for supported asymmetric algorithms. The {@link
+   * InputStream} parameter is closed by this method.
    *
    * @param  in  Input stream containing private key data.
    * @param  password  Password used to encrypt private key.
@@ -449,7 +451,8 @@ public final class KeyPairUtil
 
 
   /**
-   * Reads a DER or PEM-encoded public key from data in the given stream.
+   * Reads a DER or PEM-encoded public key from data in the given stream. The {@link InputStream} parameter is closed by
+   * this method.
    *
    * @param  in  Input stream containing an encoded key.
    *

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # execute maven in docker
-mvn install -Dmaven.javadoc.skip=true -B -V -X
+mvn install -DskipTests -Dmaven.javadoc.skip=true -B -V
 ret_code=$?
 if [ $ret_code != 0 ]; then
   echo "Maven install failed with error code ${ret_code}"
