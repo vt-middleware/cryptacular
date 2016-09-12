@@ -1,17 +1,17 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.cryptacular.asn;
+package org.cryptacular.decoder;
 
 import org.cryptacular.EncodingException;
 import org.cryptacular.util.PemUtil;
 
 /**
- * Base class for all private key decoders.
+ * Base class for all ASN.1 private key decoders.
  *
  * @param  <T>  Type produced by decode operation.
  *
  * @author  Middleware Services
  */
-public abstract class AbstractPrivateKeyDecoder<T> implements ASN1Decoder<T>
+public abstract class AbstractASN1PrivateKeyDecoder<T> implements KeyDecoder<T>
 {
 
   @Override

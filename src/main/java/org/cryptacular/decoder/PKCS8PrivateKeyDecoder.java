@@ -1,5 +1,5 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.cryptacular.asn;
+package org.cryptacular.decoder;
 
 import java.io.IOException;
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -21,7 +21,7 @@ import org.cryptacular.pbe.PBES2EncryptionScheme;
  *
  * @author  Middleware Services
  */
-public class PKCS8PrivateKeyDecoder extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
+public class PKCS8PrivateKeyDecoder extends AbstractASN1PrivateKeyDecoder<AsymmetricKeyParameter>
 {
 
   @Override

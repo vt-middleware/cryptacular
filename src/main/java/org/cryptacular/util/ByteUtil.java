@@ -20,7 +20,7 @@ public final class ByteUtil
   /** Default character set for bytes is UTF-8. */
   public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
-  /** ASCII charactr set. */
+  /** ASCII character set. */
   public static final Charset ASCII_CHARSET = Charset.forName("ASCII");
 
   /** Private constructor of utilty class. */

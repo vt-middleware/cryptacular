@@ -267,6 +267,12 @@ public class KeyPairUtilTest
         },
         new Object[] {KEY_PATH + "rsa-pub.der", RSAPublicKey.class},
         new Object[] {KEY_PATH + "rsa-pub.pem", RSAPublicKey.class},
+        new Object[] {KEY_PATH + "ssh2-rsa-pub.pem", RSAPublicKey.class},
+        new Object[] {KEY_PATH + "ssh2-rsa-pub.pub", RSAPublicKey.class},
+        new Object[] {KEY_PATH + "ssh2-dsa-pub.pem", DSAPublicKey.class},
+        new Object[] {KEY_PATH + "ssh2-dsa-pub.pub", DSAPublicKey.class},
+        new Object[] {KEY_PATH + "dsa-pub-rfc1421.pem", DSAPublicKey.class},
+        new Object[] {KEY_PATH + "dsa-pub-rfc7468.pem", DSAPublicKey.class},
       };
   }
 

@@ -2,6 +2,7 @@
 package org.cryptacular.util;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
 import java.io.File;
@@ -215,6 +216,17 @@ public final class StreamUtil
     }
   }
 
+  /**
+   * Creates a reader around the given byte array data.
+   *
+   * @param  buffer  Byte array data
+   *
+   * @return  Reader around file.
+   */
+  public static Reader makeReader(final byte[] buffer)
+  {
+    return new InputStreamReader(new ByteArrayInputStream(buffer));
+  }
 
   /**
    * Closes the given stream and swallows exceptions that may arise during the process.

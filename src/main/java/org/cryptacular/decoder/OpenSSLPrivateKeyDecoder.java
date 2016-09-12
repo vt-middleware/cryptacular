@@ -1,5 +1,5 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.cryptacular.asn;
+package org.cryptacular.decoder;
 
 import java.math.BigInteger;
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -18,6 +18,7 @@ import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
 import org.cryptacular.EncodingException;
+import org.cryptacular.io.pem.Pem;
 import org.cryptacular.pbe.OpenSSLAlgorithm;
 import org.cryptacular.pbe.OpenSSLEncryptionScheme;
 import org.cryptacular.util.ByteUtil;
@@ -29,14 +30,14 @@ import org.cryptacular.util.PemUtil;
  *
  * @author  Middleware Services
  */
-public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
+public class OpenSSLPrivateKeyDecoder extends AbstractASN1PrivateKeyDecoder<AsymmetricKeyParameter>
 {
 
   @Override
   protected byte[] decryptKey(final byte[] encrypted, final char[] password)
   {
     final String pem = new String(encrypted, ByteUtil.ASCII_CHARSET);
-    final int start = pem.indexOf(PemUtil.DEK_INFO);
+    final int start = pem.indexOf(Pem.RFC1421_HEADER_TAG_DEK_INFO);
     final int eol = pem.indexOf('\n', start);
     final String[] dekInfo = pem.substring(start + 10, eol).split(",");
     final String alg = dekInfo[0];
