@@ -1,5 +1,5 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.cryptacular.decoder;
+package org.cryptacular.asn;
 
 import java.math.BigInteger;
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -28,9 +28,11 @@ import org.cryptacular.util.PemUtil;
 /**
  * Decrypts PEM-encoded OpenSSL "traditional" format private keys.
  *
+ * @deprecated Use {@link org.cryptacular.decoder.OpenSSLPrivateKeyDecoder}
  * @author  Middleware Services
  */
-public class OpenSSLPrivateKeyDecoder extends AbstractASN1PrivateKeyDecoder<AsymmetricKeyParameter>
+@Deprecated
+public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<AsymmetricKeyParameter>
 {
 
   @Override

@@ -36,9 +36,22 @@ public final class ByteUtil
    */
   public static int toInt(final byte[] data)
   {
-    return (data[0] << 24) | ((data[1] & 0xff) << 16) | ((data[2] & 0xff) << 8) | (data[3] & 0xff);
+    return toInt(data, 0);
   }
 
+  /**
+   * Converts the big-endian representation of a 32-bit integer to the equivalent integer value.
+   *
+   * @param  data  4-byte array in big-endian format.
+   * @param  offset Offset within data to start from.
+   *
+   * @return  Long integer value.
+   */
+  public static int toInt(final byte[] data, final int offset)
+  {
+    return (data[offset] << 24) | ((data[offset + 1] & 0xff) << 16) | ((data[offset + 2] & 0xff) << 8) |
+            (data[offset + 3] & 0xff);
+  }
 
   /**
    * Reads 4-bytes from the input stream and converts to a 32-bit integer.

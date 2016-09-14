@@ -15,7 +15,7 @@ import org.bouncycastle.util.io.pem.PemObject;
  *
  * @author Middleware Services
  */
-public final class Pem extends PemObject
+public final class EncapsulatedPemObject extends PemObject
 {
 
   /**
@@ -225,7 +225,7 @@ public final class Pem extends PemObject
    * @param content Byte array holding the encoded data of this PEM format
    * @param pemFormat RFC format governing the PEM structure
    */
-  public Pem(final String type, final byte[] content, final Format pemFormat)
+  public EncapsulatedPemObject(final String type, final byte[] content, final Format pemFormat)
   {
     super(type, content);
     this.headers = Collections.unmodifiableList(Collections.emptyList());
@@ -239,7 +239,8 @@ public final class Pem extends PemObject
    * @param content Byte array holding the encoded data of this PEM format
    * @param pemFormat RFC format governing the PEM structure
    */
-  public Pem(final String type, final List<PemHeader> headersParameter, final byte[] content, final Format pemFormat)
+  public EncapsulatedPemObject(final String type, final List<PemHeader> headersParameter, final byte[] content,
+          final Format pemFormat)
   {
     super(type, content);
     this.headers = Collections.unmodifiableList(headersParameter);
@@ -252,7 +253,7 @@ public final class Pem extends PemObject
    * @param explanatoryTextParameter Explanatory Text as per RFC 7468
    * @param content Byte array holding the encoded data of this PEM format
    */
-  public Pem(final String type,
+  public EncapsulatedPemObject(final String type,
           final byte[] content,
           final String explanatoryTextParameter)
   {

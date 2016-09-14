@@ -4,7 +4,7 @@ package org.cryptacular.util;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import org.cryptacular.codec.Base64Codec;
-import org.cryptacular.io.pem.Pem;
+import org.cryptacular.io.pem.EncapsulatedPemObject;
 import org.cryptacular.io.pem.PemReader;
 
 /**
@@ -14,6 +14,41 @@ import org.cryptacular.io.pem.PemReader;
  */
 public final class PemUtil
 {
+
+  /**
+   * Line length.
+   * @deprecated Use {@link EncapsulatedPemObject#RFC1421_MAX_LINE_LENGTH}.
+   */
+  @Deprecated
+  public static final int LINE_LENGTH = EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH;
+
+  /**
+   * PEM encoding header start string.
+   * @deprecated Use {@link EncapsulatedPemObject#ENCAPSULATION_BEGIN_MARKER}.
+   */
+  @Deprecated
+  public static final String HEADER_BEGIN = EncapsulatedPemObject.ENCAPSULATION_BEGIN_MARKER;
+
+  /**
+   * PEM encoding footer start string.
+   * @deprecated Use {@link EncapsulatedPemObject#ENCAPSULATION_END_MARKER}.
+   */
+  @Deprecated
+  public static final String FOOTER_END = EncapsulatedPemObject.ENCAPSULATION_END_MARKER;
+
+  /**
+   * Procedure type tag for PEM-encoded private key in OpenSSL format.
+   * @deprecated Use {@link EncapsulatedPemObject#RFC1421_HEADER_TAG_PROC_TYPE}.
+   */
+  @Deprecated
+  public static final String PROC_TYPE = EncapsulatedPemObject.RFC1421_HEADER_TAG_PROC_TYPE + ":";
+
+  /**
+   * Decryption information tag for PEM-encoded private key in OpenSSL format.
+   * @deprecated Use {@link EncapsulatedPemObject#RFC1421_HEADER_TAG_DEK_INFO}.
+   */
+  @Deprecated
+  public static final String DEK_INFO = EncapsulatedPemObject.RFC1421_HEADER_TAG_DEK_INFO + ":";
 
   /** Private constructor of utility class. */
   private PemUtil() {}
@@ -29,14 +64,14 @@ public final class PemUtil
   public static boolean isPem(final byte[] data)
   {
     final String start = new String(data, 0, 10, ByteUtil.ASCII_CHARSET).trim();
-    if (!start.startsWith(Pem.ENCAPSULATION_BEGIN_MARKER) &&
-            !start.startsWith(Pem.RFC1421_HEADER_TAG_PROC_TYPE)) {
+    if (!start.startsWith(EncapsulatedPemObject.ENCAPSULATION_BEGIN_MARKER) &&
+            !start.startsWith(EncapsulatedPemObject.RFC1421_HEADER_TAG_PROC_TYPE)) {
       // Check all bytes in first line to make sure they are in the range
       // of base64 character set encoding
-      for (int i = 0; i < Pem.RFC7468_MAX_LINE_LENGTH; i++) {
+      for (int i = 0; i < EncapsulatedPemObject.RFC7468_MAX_LINE_LENGTH; i++) {
         if (!Base64Codec.isBase64Char(data[i])) {
           // Last two bytes may be padding character '=' (61)
-          if (i > Pem.RFC7468_MAX_LINE_LENGTH - 3) {
+          if (i > EncapsulatedPemObject.RFC7468_MAX_LINE_LENGTH - 3) {
             if (data[i] != 61) {
               return false;
             }
@@ -75,20 +110,36 @@ public final class PemUtil
    */
   public static boolean isRFC4716Pem(final byte[] data)
   {
-    final String start = new String(data, 0, Pem.RFC4716_ENCAPSULATION_BEGIN_MARKER.length() + 5,
+    final String start = new String(data, 0, EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER.length() + 5,
             ByteUtil.ASCII_CHARSET).trim();
-    return start.startsWith(Pem.RFC4716_ENCAPSULATION_BEGIN_MARKER);
+    return start.startsWith(EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER);
+  }
+
+ /**
+   * Determines whether the given byte represents an ASCII character in the character set for base64 encoding.
+   *
+   * @param  b  Byte to test.
+   *
+   * @deprecated Use {@link Base64Codec#isBase64Char(byte)}
+   * @return  True if the byte represents an ASCII character in the set of valid characters for base64 encoding, false
+   *          otherwise. The padding character '=' is not considered valid since it may only appear at the end of a
+   *          base64 encoded value.
+   */
+  @Deprecated
+  public static boolean isBase64Char(final byte b)
+  {
+    return Base64Codec.isBase64Char(b);
   }
 
   /**
-   * Decodes a PEM-encoded cryptographic object into {@link Pem} instance.
+   * Decodes a PEM-encoded cryptographic object into {@link EncapsulatedPemObject} instance.
    *
    * @param  pem  Bytes of PEM-encoded data to decode.
    *
-   * @return  {@link Pem} instance
+   * @return  {@link EncapsulatedPemObject} instance
    * @throws java.io.IOException If there are errors reading the PEM file data
    */
-  public static Pem decodeToPem(final byte[] pem) throws IOException
+  public static EncapsulatedPemObject decodeToPem(final byte[] pem) throws IOException
   {
     return new PemReader(StreamUtil.makeReader(pem)).readPemObject();
   }
@@ -151,9 +202,9 @@ public final class PemUtil
   {
     final String s = line.flip().toString();
     if (
-      !(s.startsWith(Pem.ENCAPSULATION_BEGIN_MARKER) ||
-            s.startsWith(Pem.ENCAPSULATION_END_MARKER) ||
-            Pem.RFC1421_HEADERS.stream().anyMatch(predicate-> s.startsWith(predicate)) ||
+      !(s.startsWith(EncapsulatedPemObject.ENCAPSULATION_BEGIN_MARKER) ||
+            s.startsWith(EncapsulatedPemObject.ENCAPSULATION_END_MARKER) ||
+            EncapsulatedPemObject.RFC1421_HEADERS.stream().anyMatch(predicate-> s.startsWith(predicate)) ||
           s.trim().length() == 0)) {
       output.put(line);
     }

@@ -6,12 +6,13 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.util.io.pem.PemHeader;
-import org.cryptacular.io.pem.Pem.Format;
+import org.cryptacular.io.pem.EncapsulatedPemObject.Format;
+import org.cryptacular.util.CodecUtil;
 
 /**
- * A {@link BufferedReader} extension which populates PEM data ({@link Pem}) governed by multiple RFCs.
+ * A {@link BufferedReader} extension which populates PEM data ({@link EncapsulatedPemObject}) governed by multiple
+ * RFCs.
  *
  * @author Middleware Services
  */
@@ -35,15 +36,15 @@ public class PemReader
    * @return Populated ExtendedPemObject instance
    * @throws IOException In case of exceptions reading the buffer, or malformed PEM data
    */
-  public Pem readPemObject()
+  public EncapsulatedPemObject readPemObject()
           throws IOException
   {
     final Format foundFormat;
     final StringBuilder explanatoryTextBuilder = new StringBuilder(256);
     final List<PemHeader> headers = new ArrayList<>();
     String line = readLine();
-    while (line != null && !(line.startsWith(Pem.ENCAPSULATION_BEGIN_MARKER) ||
-            line.startsWith(Pem.RFC4716_ENCAPSULATION_BEGIN_MARKER))) {
+    while (line != null && !(line.startsWith(EncapsulatedPemObject.ENCAPSULATION_BEGIN_MARKER) ||
+            line.startsWith(EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER))) {
       //Read "explanatory text" as defined by RFC 7468
       if (line.length() > 0) {
         explanatoryTextBuilder.append(line).append("\n");
@@ -51,10 +52,10 @@ public class PemReader
       line = readLine();
     }
     if (line != null) {
-      final boolean isRFC4716 = line.startsWith(Pem.RFC4716_ENCAPSULATION_BEGIN_MARKER);
+      final boolean isRFC4716 = line.startsWith(EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER);
       line = line.substring(isRFC4716 ?
-                      Pem.RFC4716_ENCAPSULATION_BEGIN_MARKER.length() :
-                      Pem.ENCAPSULATION_BEGIN_MARKER.length());
+                      EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER.length() :
+                      EncapsulatedPemObject.ENCAPSULATION_BEGIN_MARKER.length());
       final int index = line.indexOf('-');
       final String type = line.substring(0, index).trim();
       if (isRFC4716) {
@@ -80,7 +81,7 @@ public class PemReader
    * @return ExtendedPemObject instance with the data read
    * @throws IOException In case of exceptions reading the buffer, or malformed PEM data
    */
-  private Pem loadObject(final String type,
+  private EncapsulatedPemObject loadObject(final String type,
           final Format rfcFormat,
           final List<PemHeader> headers,
           final String explanatoryText)
@@ -89,8 +90,8 @@ public class PemReader
     int lineLength = -1;
     String line;
     final String endMarker = (rfcFormat == Format.RFC4716 ?
-            Pem.RFC4716_ENCAPSULATION_END_MARKER :
-            Pem.ENCAPSULATION_END_MARKER) + " " + type;
+            EncapsulatedPemObject.RFC4716_ENCAPSULATION_END_MARKER :
+            EncapsulatedPemObject.ENCAPSULATION_END_MARKER) + " " + type;
     final StringBuilder base64DataBuilder = new StringBuilder();
     while ((line = readLine()) != null) {
       final PemHeader headerLine = readPemHeader(line, rfcFormat);
@@ -109,10 +110,10 @@ public class PemReader
       throw new IOException(endMarker + " not found");
     }
     enforceLineLengthRestrictions(rfcFormat, lineLength);
-    if (rfcFormat.equals(Pem.Format.RFC7468)) {
-      return new Pem(type, Base64.decode(b64buffer), explanatoryText);
+    if (rfcFormat.equals(EncapsulatedPemObject.Format.RFC7468)) {
+      return new EncapsulatedPemObject(type, CodecUtil.b64(b64buffer), explanatoryText);
     } else {
-      return new Pem(type, headers, Base64.decode(b64buffer), rfcFormat);
+      return new EncapsulatedPemObject(type, headers, CodecUtil.b64(b64buffer), rfcFormat);
     }
   }
 
@@ -139,10 +140,10 @@ public class PemReader
           //Chomp X- as per RFC 1421 Section 4.6
           hdr = hdr.substring(2);
         }
-        String nextLine = peekNextLine(Pem.RFC1421_MAX_LINE_LENGTH);
+        String nextLine = peekNextLine(EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH);
         while (nextLine.startsWith(" ")) {
           value += readLine().trim();
-          nextLine = peekNextLine(Pem.RFC1421_MAX_LINE_LENGTH);
+          nextLine = peekNextLine(EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH);
         }
       }
       value = value.trim();
@@ -183,19 +184,19 @@ public class PemReader
   {
     switch (rfcFormat) {
     case RFC4716:
-      if (maxLineLength > Pem.RFC4716_MAX_LINE_LENGTH) {
+      if (maxLineLength > EncapsulatedPemObject.RFC4716_MAX_LINE_LENGTH) {
         throw new IllegalArgumentException(
                 "Malformed RFC 4716 type PEM data (b64 lines longer than maximum allowed length)");
       }
       break;
     case RFC7468:
-      if (maxLineLength > Pem.RFC7468_MAX_LINE_LENGTH) {
+      if (maxLineLength > EncapsulatedPemObject.RFC7468_MAX_LINE_LENGTH) {
         throw new IllegalArgumentException(
                 "Malformed RFC 7468 type PEM data (b64 lines longer than maximum allowed length)");
       }
       break;
     case RFC1421:
-      if (maxLineLength > Pem.RFC1421_MAX_LINE_LENGTH) {
+      if (maxLineLength > EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH) {
         throw new IllegalArgumentException(
                 "Malformed RFC 1421 type PEM data (b64 lines longer than maximum allowed length)");
       }

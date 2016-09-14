@@ -12,7 +12,8 @@ import org.cryptacular.util.PemUtil;
 
 /**
  * Decodes public keys formatted in an X.509 SubjectPublicKeyInfo structure in either PEM or DER encoding.
- * SSH2 public keys are also supported in PEM encoded format.
+ * SSH2 public keys are also supported in PEM encoded format as well as the standard SSH2 public key
+ * format using RSA and DSA public keys.
  *
  * @author Middleware Services
  */
@@ -24,23 +25,27 @@ public class PublicKeyDecoder implements KeyDecoder<AsymmetricKeyParameter>
   {
     final AsymmetricKeyParameter returnValue;
     try {
-      String encodedString = new String(encoded, 0, 10, ByteUtil.ASCII_CHARSET).trim();
+      final String encodedString = new String(encoded, 0, 10, ByteUtil.ASCII_CHARSET).trim();
       if (PemUtil.isRFC4716Pem(encoded)) {
-        returnValue =  new SSH2PublicKeyDecoder().decode(PemUtil.decodeToPem(encoded).getContent());
+        returnValue = new SSH2PublicKeyDecoder().decode(PemUtil.decodeToPem(encoded).getContent());
       } else if (encodedString.startsWith("ssh-")) {
-        encodedString = new String(encoded, 0, encoded.length, ByteUtil.ASCII_CHARSET).trim();
-        returnValue =  new SSH2PublicKeyDecoder().decode(
-                CodecUtil.b64(encodedString.substring(
-                        encodedString.indexOf(" ") + 1, encodedString.lastIndexOf(" ") + 1)
-                )
-        );
+        final String[] tokenized = new String(encoded, 0, encoded.length, ByteUtil.ASCII_CHARSET).trim().split("\\s+");
+        if (tokenized.length < 2) {
+          throw new EncodingException("Unsupported SSH2 public key type");
+        }
+        for (int i = 1; i < tokenized.length; i++) {
+          if (CodecUtil.isB64(tokenized[i])) {
+            return new SSH2PublicKeyDecoder().decode(CodecUtil.b64(tokenized[i]));
+          }
+        }
+        throw new EncodingException("Could not find Base64 encoded public key data in encoded buffer");
       } else if (PemUtil.isValidPem(encoded)) {
         returnValue = PublicKeyFactory.createKey(PemUtil.decodeToPem(encoded).getContent());
       } else {
         returnValue = PublicKeyFactory.createKey(new ASN1InputStream(encoded).readObject().getEncoded());
       }
     } catch (IOException e) {
-      throw new EncodingException("ASN.1 decoding error", e);
+      throw new EncodingException("Decoding error", e);
     }
     return returnValue;
   }

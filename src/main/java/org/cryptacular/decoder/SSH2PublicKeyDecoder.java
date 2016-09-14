@@ -7,6 +7,7 @@ import org.bouncycastle.crypto.params.DSAParameters;
 import org.bouncycastle.crypto.params.DSAPublicKeyParameters;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.cryptacular.EncodingException;
+import org.cryptacular.util.ByteUtil;
 
 /**
  * Decodes public keys formatted in SSH2 Public Key format RFC 4253 Section 6.6. Public Key Algorithms.
@@ -67,8 +68,9 @@ public class SSH2PublicKeyDecoder implements KeyDecoder<AsymmetricKeyParameter>
    */
   private int decodeUInt32(final byte[] bytes)
   {
-    return ((bytes[position++] & 0xFF) << 24) | ((bytes[position++] & 0xFF) << 16) |
-            ((bytes[position++] & 0xFF) << 8) | (bytes[position++] & 0xFF);
+    final int decoded = ByteUtil.toInt(bytes, position);
+    position += 4;
+    return decoded;
   }
 
   /**

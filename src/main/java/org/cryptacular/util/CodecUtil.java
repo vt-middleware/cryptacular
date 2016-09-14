@@ -7,6 +7,7 @@ import java.nio.CharBuffer;
 import org.cryptacular.EncodingException;
 import org.cryptacular.codec.Base32Decoder;
 import org.cryptacular.codec.Base32Encoder;
+import org.cryptacular.codec.Base64Codec;
 import org.cryptacular.codec.Base64Decoder;
 import org.cryptacular.codec.Base64Encoder;
 import org.cryptacular.codec.Decoder;
@@ -41,6 +42,35 @@ public final class CodecUtil
     return encode(new HexEncoder(), raw);
   }
 
+  /**
+   * Determines whether the given {@link CharSequence} is base64 encoded data
+   *
+   * @param  encoded  {@link CharSequence} to test
+   *
+   * @return  True if the byte represents an ASCII character in the set of valid characters for base64 encoding.
+   */
+  public static boolean isB64(final CharSequence encoded)
+  {
+    if (encoded == null) {
+      return false;
+    }
+    boolean isBase64 = true;
+    final byte[] bytes = encoded.toString().getBytes();
+    for (int i = 0; i < bytes.length; i++) {
+      if (!Base64Codec.isBase64Char(bytes[i])) {
+        if (i > bytes.length - 3) {
+          if (bytes[i] != 61) {
+            isBase64 = false;
+            break;
+          }
+        } else {
+          isBase64 = false;
+          break;
+        }
+      }
+    }
+    return isBase64;
+  }
 
   /**
    * Encodes raw bytes to the equivalent hexadecimal encoded string with optional delimiting of output.
