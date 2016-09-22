@@ -344,28 +344,28 @@ public final class PemUtil
    *
    * @param rfcFormat Format which governs this PEM data
    * @param maxLineLength maximum length in b64buffer lines prior to concatenation
-   * @throws IllegalArgumentException In case of a constraint violation
+   * @throws IOException In case of a constraint violation
    */
   private static void enforceLineLengthRestrictions(
           final EncapsulatedPemObject.Format rfcFormat,
-          final int maxLineLength) throws IllegalArgumentException
+          final int maxLineLength) throws IOException
   {
     switch (rfcFormat) {
     case RFC4716:
       if (maxLineLength > EncapsulatedPemObject.RFC4716_MAX_LINE_LENGTH) {
-        throw new IllegalArgumentException(
+        throw new IOException(
                 "Malformed RFC 4716 type PEM data (b64 lines longer than maximum allowed length)");
       }
       break;
     case RFC7468:
       if (maxLineLength > EncapsulatedPemObject.RFC7468_MAX_LINE_LENGTH) {
-        throw new IllegalArgumentException(
+        throw new IOException(
                 "Malformed RFC 7468 type PEM data (b64 lines longer than maximum allowed length)");
       }
       break;
     case RFC1421:
       if (maxLineLength > EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH) {
-        throw new IllegalArgumentException(
+        throw new IOException(
                 "Malformed RFC 1421 type PEM data (b64 lines longer than maximum allowed length)");
       }
       break;
