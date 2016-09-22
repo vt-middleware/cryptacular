@@ -1,5 +1,5 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.cryptacular.decoder;
+package org.cryptacular.key;
 
 import java.math.BigInteger;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;

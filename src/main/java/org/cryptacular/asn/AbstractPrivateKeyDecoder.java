@@ -7,7 +7,7 @@ import org.cryptacular.util.PemUtil;
 /**
  * Base class for all private key decoders.
  *
- * @deprecated Use {@link org.cryptacular.decoder.AbstractASN1PrivateKeyDecoder}
+ * @deprecated Use {@link org.cryptacular.key.AbstractASN1PrivateKeyDecoder}
  * @param  <T>  Type produced by decode operation.
  *
  * @author  Middleware Services

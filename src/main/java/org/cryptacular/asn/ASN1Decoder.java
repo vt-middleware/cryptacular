@@ -6,7 +6,7 @@ import org.cryptacular.EncodingException;
 /**
  * Strategy interface for converting encoded ASN.1 bytes to an object.
  *
- * @deprecated Use {@link org.cryptacular.decoder.KeyDecoder}
+ * @deprecated Use {@link org.cryptacular.key.KeyDecoder}
  * @param  <T>  Type of object to produce on decode.
  *
  * @author  Middleware Services

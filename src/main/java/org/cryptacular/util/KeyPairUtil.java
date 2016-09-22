@@ -27,9 +27,9 @@ import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
 import org.cryptacular.adapter.Converter;
-import org.cryptacular.decoder.OpenSSLPrivateKeyDecoder;
-import org.cryptacular.decoder.PKCS8PrivateKeyDecoder;
-import org.cryptacular.decoder.PublicKeyDecoder;
+import org.cryptacular.key.OpenSSLPrivateKeyDecoder;
+import org.cryptacular.key.PKCS8PrivateKeyDecoder;
+import org.cryptacular.key.PublicKeyDecoder;
 
 /**
  * Utility methods for public/private key pairs used for asymmetric encryption.

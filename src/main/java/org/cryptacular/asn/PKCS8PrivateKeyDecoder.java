@@ -19,7 +19,7 @@ import org.cryptacular.pbe.PBES2EncryptionScheme;
 /**
  * Decodes PEM or DER-encoded PKCS#8 private keys.
  *
- * @deprecated Use {@link org.cryptacular.decoder.PKCS8PrivateKeyDecoder}
+ * @deprecated Use {@link org.cryptacular.key.PKCS8PrivateKeyDecoder}
  * @author  Middleware Services
  */
 @Deprecated

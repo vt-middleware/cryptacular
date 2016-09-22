@@ -1,5 +1,5 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.cryptacular.decoder;
+package org.cryptacular.key;
 
 import java.io.IOException;
 import org.bouncycastle.asn1.ASN1InputStream;

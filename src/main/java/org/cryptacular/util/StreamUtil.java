@@ -2,6 +2,7 @@
 package org.cryptacular.util;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
@@ -156,6 +157,22 @@ public final class StreamUtil
 
 
   /**
+   * Reads the next line in a {@link BufferedReader} instance without consuming it from the buffer
+   * @param reader {@link BufferedReader} instance
+   * @param maximumReadLength Maximum number of characters to peek
+   * @return Next line
+   * @throws IOException In case of errors reading the buffer
+   */
+  public static String peekNextLine(final BufferedReader reader, final int maximumReadLength) throws IOException
+  {
+    reader.mark(maximumReadLength);
+    final String nextLine = reader.readLine();
+    reader.reset();
+    return nextLine;
+  }
+
+
+  /**
    * Pipes an input stream into an output stream with chunked processing.
    *
    * @param  in  Input stream providing data to process.
@@ -199,6 +216,19 @@ public final class StreamUtil
 
 
   /**
+   * Creates a {@link BufferedReader} around the given byte array data.
+   *
+   * @param  buffer  Byte array data
+   *
+   * @return  Reader around file.
+   */
+  public static BufferedReader makeBufferedReader(final byte[] buffer)
+  {
+    return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(buffer)));
+  }
+
+
+  /**
    * Creates a reader around the given file that presumably contains character data.
    *
    * @param  file  Reader source.
@@ -216,17 +246,6 @@ public final class StreamUtil
     }
   }
 
-  /**
-   * Creates a reader around the given byte array data.
-   *
-   * @param  buffer  Byte array data
-   *
-   * @return  Reader around file.
-   */
-  public static Reader makeReader(final byte[] buffer)
-  {
-    return new InputStreamReader(new ByteArrayInputStream(buffer));
-  }
 
   /**
    * Closes the given stream and swallows exceptions that may arise during the process.

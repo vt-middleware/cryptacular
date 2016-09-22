@@ -1,11 +1,14 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.CharBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import org.bouncycastle.util.io.pem.PemHeader;
 import org.cryptacular.codec.Base64Codec;
 import org.cryptacular.io.pem.EncapsulatedPemObject;
-import org.cryptacular.io.pem.PemReader;
 
 /**
  * Utility class with helper methods for common PEM encoding operations.
@@ -84,6 +87,7 @@ public final class PemUtil
     return true;
   }
 
+
   /**
    * Determines whether the data in the given byte array is a valid PEM file.
    *
@@ -94,11 +98,12 @@ public final class PemUtil
   public static boolean isValidPem(final byte[] data)
   {
     try {
-      return new PemReader(StreamUtil.makeReader(data)).readPemObject() != null;
+      return readPem(StreamUtil.makeBufferedReader(data)) != null;
     } catch (IOException ex) {
       return false;
     }
   }
+
 
   /**
    * Determines whether the data in the given byte array is base64-encoded data of PEM encoding
@@ -114,6 +119,7 @@ public final class PemUtil
             ByteUtil.ASCII_CHARSET).trim();
     return start.startsWith(EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER);
   }
+
 
  /**
    * Determines whether the given byte represents an ASCII character in the character set for base64 encoding.
@@ -131,6 +137,7 @@ public final class PemUtil
     return Base64Codec.isBase64Char(b);
   }
 
+
   /**
    * Decodes a PEM-encoded cryptographic object into {@link EncapsulatedPemObject} instance.
    *
@@ -141,8 +148,9 @@ public final class PemUtil
    */
   public static EncapsulatedPemObject decodeToPem(final byte[] pem) throws IOException
   {
-    return new PemReader(StreamUtil.makeReader(pem)).readPemObject();
+    return readPem(StreamUtil.makeBufferedReader(pem));
   }
+
 
   /**
    * Decodes a PEM-encoded cryptographic object into the raw bytes of its ASN.1 encoding. Header/footer data and
@@ -189,6 +197,181 @@ public final class PemUtil
     }
     output.flip();
     return CodecUtil.b64(output);
+  }
+
+
+  /**
+   * Determines the RFC format governing the PEM file in the Reader as well as
+   * populating a new ExtendedPemObject instance from the data.  Both RFC7468 and RFC4716 PEM formats
+   * may be read using this method
+   * @param reader {@link BufferedReader} instance instantiated with PEM file data
+   * @return Populated ExtendedPemObject instance
+   * @throws IOException In case of exceptions reading the buffer, or malformed PEM data
+   */
+  public static EncapsulatedPemObject readPem(final BufferedReader reader)
+          throws IOException
+  {
+    final EncapsulatedPemObject.Format foundFormat;
+    final StringBuilder explanatoryTextBuilder = new StringBuilder(256);
+    final List<PemHeader> headers = new ArrayList<>();
+    String line = reader.readLine();
+    while (line != null && !(line.startsWith(EncapsulatedPemObject.ENCAPSULATION_BEGIN_MARKER) ||
+            line.startsWith(EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER))) {
+      //Read "explanatory text" as defined by RFC 7468
+      if (line.length() > 0) {
+        explanatoryTextBuilder.append(line).append("\n");
+      }
+      line = reader.readLine();
+    }
+    if (line != null) {
+      final boolean isRFC4716 = line.startsWith(EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER);
+      line = line.substring(isRFC4716 ?
+                      EncapsulatedPemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER.length() :
+                      EncapsulatedPemObject.ENCAPSULATION_BEGIN_MARKER.length());
+      final int index = line.indexOf('-');
+      final String type = line.substring(0, index).trim();
+      if (isRFC4716) {
+        foundFormat = EncapsulatedPemObject.Format.RFC4716;
+      } else if (explanatoryTextBuilder.length() > 0) {
+        foundFormat = EncapsulatedPemObject.Format.RFC7468;
+      } else {
+        foundFormat = EncapsulatedPemObject.Format.RFC1421;
+      }
+      if (index > 0) {
+        return parsePem(reader, type, foundFormat, headers, explanatoryTextBuilder.toString());
+      }
+    }
+    return null;
+  }
+
+
+  /**
+   * Reads the contents of the PEM data between the BEGIN and END markers per its respective RFC
+   * @param reader {@link BufferedReader} instance instantiated with PEM file data
+   * @param type The type of this data
+   * @param rfcFormat RFC format governing the PEM structure
+   * @param headers Headers container
+   * @param explanatoryText "explanatory text" as defined by RFC 7468
+   * @return ExtendedPemObject instance with the data read
+   * @throws IOException In case of exceptions reading the buffer, or malformed PEM data
+   */
+  private static EncapsulatedPemObject parsePem(
+          final BufferedReader reader,
+          final String type,
+          final EncapsulatedPemObject.Format rfcFormat,
+          final List<PemHeader> headers,
+          final String explanatoryText)
+          throws IOException
+  {
+    int lineLength = -1;
+    String line;
+    final String endMarker = (rfcFormat == EncapsulatedPemObject.Format.RFC4716 ?
+            EncapsulatedPemObject.RFC4716_ENCAPSULATION_END_MARKER :
+            EncapsulatedPemObject.ENCAPSULATION_END_MARKER) + " " + type;
+    final StringBuilder base64DataBuilder = new StringBuilder();
+    while ((line = reader.readLine()) != null) {
+      final PemHeader headerLine = readPemHeader(reader, line, rfcFormat);
+      if (headerLine != null) {
+        headers.add(headerLine);
+        continue;
+      }
+      lineLength = Math.max(lineLength, line.length());
+      if (line.contains(endMarker)) {
+        break;
+      }
+      base64DataBuilder.append(line.trim());
+    }
+    final String b64buffer = base64DataBuilder.toString();
+    if (line == null) {
+      throw new IOException(endMarker + " not found");
+    }
+    enforceLineLengthRestrictions(rfcFormat, lineLength);
+    if (rfcFormat.equals(EncapsulatedPemObject.Format.RFC7468)) {
+      return new EncapsulatedPemObject(type, CodecUtil.b64(b64buffer), explanatoryText);
+    } else {
+      return new EncapsulatedPemObject(type, headers, CodecUtil.b64(b64buffer), rfcFormat);
+    }
+  }
+
+
+  /**
+   * Reads a header line which takes into account header types from RFC 1421 & RFC 4716
+   * @param reader {@link BufferedReader} instance instantiated with PEM file data
+   * @param line Current line read in the buffer
+   * @param rfcFormat RFC format governing the PEM file
+   * @return {@link PemHeader} if a header value pair could be successfully read, otherwise null is returned
+   * @throws IOException In case of any read errors in the buffer
+   */
+  private static PemHeader readPemHeader(
+          final BufferedReader reader,
+          final String line,
+          final EncapsulatedPemObject.Format rfcFormat) throws IOException
+  {
+    if (line.contains(":")) {
+      final int index = line.indexOf(':');
+      String hdr = line.substring(0, index);
+      String value = line.substring(index + 1);
+      if (rfcFormat == EncapsulatedPemObject.Format.RFC4716) {
+        while (value.endsWith("\\")) {
+          value = value.substring(0, value.length() - 1);
+          value += reader.readLine();
+        }
+      } else if (rfcFormat == EncapsulatedPemObject.Format.RFC1421) {
+        if (hdr.startsWith("X-")) {
+          //Chomp X- as per RFC 1421 Section 4.6
+          hdr = hdr.substring(2);
+        }
+        String nextLine = StreamUtil.peekNextLine(reader, EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH);
+        while (nextLine.startsWith(" ")) {
+          value += reader.readLine().trim();
+          nextLine = StreamUtil.peekNextLine(reader, EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH);
+        }
+      }
+      value = value.trim();
+      if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
+        //chomp the quotes as suggested by RFC 4716
+        value = value.substring(1, value.length() - 1);
+      }
+      return new PemHeader(hdr, value);
+    } else {
+      return null;
+    }
+  }
+
+
+  /**
+   * Throws an exception if the data contains rules restricted by their respective RFCs.
+   *
+   * @param rfcFormat Format which governs this PEM data
+   * @param maxLineLength maximum length in b64buffer lines prior to concatenation
+   * @throws IllegalArgumentException In case of a constraint violation
+   */
+  private static void enforceLineLengthRestrictions(
+          final EncapsulatedPemObject.Format rfcFormat,
+          final int maxLineLength) throws IllegalArgumentException
+  {
+    switch (rfcFormat) {
+    case RFC4716:
+      if (maxLineLength > EncapsulatedPemObject.RFC4716_MAX_LINE_LENGTH) {
+        throw new IllegalArgumentException(
+                "Malformed RFC 4716 type PEM data (b64 lines longer than maximum allowed length)");
+      }
+      break;
+    case RFC7468:
+      if (maxLineLength > EncapsulatedPemObject.RFC7468_MAX_LINE_LENGTH) {
+        throw new IllegalArgumentException(
+                "Malformed RFC 7468 type PEM data (b64 lines longer than maximum allowed length)");
+      }
+      break;
+    case RFC1421:
+      if (maxLineLength > EncapsulatedPemObject.RFC1421_MAX_LINE_LENGTH) {
+        throw new IllegalArgumentException(
+                "Malformed RFC 1421 type PEM data (b64 lines longer than maximum allowed length)");
+      }
+      break;
+    default:
+      break;
+    }
   }
 
 

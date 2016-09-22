@@ -28,7 +28,7 @@ import org.cryptacular.util.PemUtil;
 /**
  * Decrypts PEM-encoded OpenSSL "traditional" format private keys.
  *
- * @deprecated Use {@link org.cryptacular.decoder.OpenSSLPrivateKeyDecoder}
+ * @deprecated Use {@link org.cryptacular.key.OpenSSLPrivateKeyDecoder}
  * @author  Middleware Services
  */
 @Deprecated
