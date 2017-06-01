@@ -69,7 +69,8 @@
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
     <testng.verbosity>0</testng.verbosity>
-    <org.cryptacular.oldVersion>1.1.1</org.cryptacular.oldVersion>
+    <japicmp.enabled>true</japicmp.enabled>
+    <japicmp.oldVersion>1.2.0</japicmp.oldVersion>
   </properties>
 
   <dependencies>
@@ -194,7 +195,7 @@
             <dependency>
               <groupId>${project.groupId}</groupId>
               <artifactId>${project.artifactId}</artifactId>
-              <version>${org.cryptacular.oldVersion}</version>
+              <version>${japicmp.oldVersion}</version>
               <type>jar</type>
             </dependency>
           </oldVersion>
@@ -206,7 +207,7 @@
           <parameter>
             <ignoreNonResolvableArtifacts>false</ignoreNonResolvableArtifacts>
             <onlyBinaryIncompatible>true</onlyBinaryIncompatible>
-            <breakBuildOnBinaryIncompatibleModifications>false</breakBuildOnBinaryIncompatibleModifications>
+            <breakBuildOnBinaryIncompatibleModifications>${japicmp.enabled}</breakBuildOnBinaryIncompatibleModifications>
             <packagingSupporteds>
               <packagingSupported>jar</packagingSupported>
             </packagingSupporteds>
