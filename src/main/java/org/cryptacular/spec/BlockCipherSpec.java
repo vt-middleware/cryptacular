@@ -2,7 +2,7 @@
 package org.cryptacular.spec;
 
 import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.engines.AESFastEngine;
+import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.engines.BlowfishEngine;
 import org.bouncycastle.crypto.engines.CAST5Engine;
 import org.bouncycastle.crypto.engines.CAST6Engine;
@@ -56,7 +56,7 @@ public class BlockCipherSpec implements Spec<BlockCipher>
   {
     BlockCipher cipher;
     if ("AES".equalsIgnoreCase(algorithm)) {
-      cipher = new AESFastEngine();
+      cipher = new AESEngine();
     } else if ("Blowfish".equalsIgnoreCase(algorithm)) {
       cipher = new BlowfishEngine();
     } else if ("Camellia".equalsIgnoreCase(algorithm)) {
