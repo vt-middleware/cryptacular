@@ -18,9 +18,7 @@ public class Base64Decoder extends AbstractBaseNDecoder
   private static final byte[] URLSAFE_DECODING_TABLE = new byte[128];
 
 
-  /**
-   * Initializes the character decoding table.
-   */
+  /* Initializes the character decoding table. */
   static {
     Arrays.fill(DEFAULT_DECODING_TABLE, (byte) -1);
     for (int i = 0; i < 26; i++) {

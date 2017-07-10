@@ -66,7 +66,7 @@ public class RandomIdGeneratorTest
     final RandomIdGenerator generator = new RandomIdGenerator(50);
     final Collection<Callable<String>> tasks = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      tasks.add(() -> generator.generate());
+      tasks.add(generator::generate);
     }
 
     final List<Future<String>> results = executor.invokeAll(tasks);
