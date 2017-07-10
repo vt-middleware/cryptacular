@@ -13,9 +13,7 @@ public class Base32Encoder extends AbstractBaseNEncoder
   private static final char[] ENCODING_TABLE = new char[32];
 
 
-  /**
-   * Initializes the encoding character table.
-   */
+  /* Initializes the encoding character table. */
   static {
     final String charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     for (int i = 0; i < charset.length(); i++) {

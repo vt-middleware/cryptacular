@@ -18,9 +18,7 @@ public class HexEncoder implements Encoder
   private static final char[] ENCODING_TABLE = new char[16];
 
 
-  /**
-   * Initializes the encoding character table.
-   */
+  /* Initializes the encoding character table. */
   static {
     final String charset = "0123456789abcdef";
     for (int i = 0; i < charset.length(); i++) {

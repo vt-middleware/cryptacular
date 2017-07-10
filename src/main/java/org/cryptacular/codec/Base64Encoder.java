@@ -16,9 +16,7 @@ public class Base64Encoder extends AbstractBaseNEncoder
   private static final char[] URLSAFE_ENCODING_TABLE = new char[64];
 
 
-  /**
-   * Initializes the encoding character table.
-   */
+  /* Initializes the encoding character table. */
   static {
     final String defaultCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     for (int i = 0; i < defaultCharset.length(); i++) {

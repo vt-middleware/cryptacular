@@ -15,9 +15,7 @@ public class Base32Decoder extends AbstractBaseNDecoder
   private static final byte[] DECODING_TABLE = new byte[128];
 
 
-  /**
-   * Initializes the character decoding table.
-   */
+  /* Initializes the character decoding table. */
   static {
     Arrays.fill(DECODING_TABLE, (byte) -1);
     for (int i = 0; i < 26; i++) {
