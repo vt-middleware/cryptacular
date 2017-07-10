@@ -21,12 +21,24 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.2.1 - 10Jul2017 (Requires Java 8)
+
+Issue | Description
+:---- | :----------
+[cryptacular-36]({{ site.issueURL }}36) | Upgrade Bouncy Castle to version 1.57
+
 ### Version 1.2.0 - 10Aug2016 (Requires Java 8)
 
 Issue | Description
 :---- | :----------
 [cryptacular-26]({{ site.issueURL }}26) | Upgrade Bouncy Castle to version 1.54
 [cryptacular-23]({{ site.issueURL }}23) | EncodingHashBean convenience constructor
+
+### Version 1.1.2 - 10Jul2017 (Requires Java 7)
+
+Issue | Description
+:---- | :----------
+[cryptacular-36]({{ site.issueURL }}36) | Upgrade Bouncy Castle to version 1.57
 
 ### Version 1.1.1 - 10Aug2016 (Requires Java 7)
 Same as version 1.2.0 but without Java 8 language features
