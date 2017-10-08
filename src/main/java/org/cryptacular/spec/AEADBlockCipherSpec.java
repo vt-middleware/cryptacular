@@ -70,7 +70,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
   public AEADBlockCipher newInstance()
   {
     final BlockCipher blockCipher = new BlockCipherSpec(algorithm).newInstance();
-    AEADBlockCipher aeadBlockCipher;
+    final AEADBlockCipher aeadBlockCipher;
     switch (mode) {
 
     case "GCM":

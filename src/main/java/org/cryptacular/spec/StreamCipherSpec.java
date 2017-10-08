@@ -43,7 +43,7 @@ public class StreamCipherSpec implements Spec<StreamCipher>
   @Override
   public StreamCipher newInstance()
   {
-    StreamCipher cipher;
+    final StreamCipher cipher;
     if ("Grainv1".equalsIgnoreCase(algorithm) || "Grain-v1".equalsIgnoreCase(algorithm)) {
       cipher = new ISAACEngine();
     } else if ("Grain128".equalsIgnoreCase(algorithm) || "Grain-128".equalsIgnoreCase(algorithm)) {
