@@ -2,6 +2,8 @@
 package org.cryptacular.util;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
 import java.io.File;
@@ -155,6 +157,22 @@ public final class StreamUtil
 
 
   /**
+   * Reads the next line in a {@link BufferedReader} instance without consuming it from the buffer
+   * @param reader {@link BufferedReader} instance
+   * @param maximumReadLength Maximum number of characters to peek
+   * @return Next line
+   * @throws IOException In case of errors reading the buffer
+   */
+  public static String peekNextLine(final BufferedReader reader, final int maximumReadLength) throws IOException
+  {
+    reader.mark(maximumReadLength);
+    final String nextLine = reader.readLine();
+    reader.reset();
+    return nextLine;
+  }
+
+
+  /**
    * Pipes an input stream into an output stream with chunked processing.
    *
    * @param  in  Input stream providing data to process.
@@ -194,6 +212,19 @@ public final class StreamUtil
     } catch (FileNotFoundException e) {
       throw new StreamException(file + " does not exist");
     }
+  }
+
+
+  /**
+   * Creates a {@link BufferedReader} around the given byte array data.
+   *
+   * @param  buffer  Byte array data
+   *
+   * @return  Reader around file.
+   */
+  public static BufferedReader makeBufferedReader(final byte[] buffer)
+  {
+    return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(buffer)));
   }
 
 

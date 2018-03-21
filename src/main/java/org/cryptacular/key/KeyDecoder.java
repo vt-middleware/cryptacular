@@ -1,24 +1,22 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.cryptacular.asn;
+package org.cryptacular.key;
 
 import org.cryptacular.EncodingException;
 
 /**
- * Strategy interface for converting encoded ASN.1 bytes to an object.
+ * Strategy interface for converting encoded key bytes to an object.
  *
- * @deprecated Use {@link org.cryptacular.key.KeyDecoder}
  * @param  <T>  Type of object to produce on decode.
  *
  * @author  Middleware Services
  */
-@Deprecated
-public interface ASN1Decoder<T>
+public interface KeyDecoder<T>
 {
 
   /**
    * Produces an object from an encoded representation.
    *
-   * @param  encoded  ASN.1 encoded data.
+   * @param  encoded  encoded data.
    * @param  args  Additional data required to perform decoding.
    *
    * @return  Decoded object.

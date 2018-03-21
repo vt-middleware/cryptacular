@@ -11,8 +11,10 @@ import org.cryptacular.util.PemUtil;
 /**
  * Decodes public keys formatted in an X.509 SubjectPublicKeyInfo structure in either PEM or DER encoding.
  *
+ * @deprecated Use {@link org.cryptacular.key.PublicKeyDecoder}
  * @author  Middleware Services
  */
+@Deprecated
 public class PublicKeyDecoder implements ASN1Decoder<AsymmetricKeyParameter>
 {
 
