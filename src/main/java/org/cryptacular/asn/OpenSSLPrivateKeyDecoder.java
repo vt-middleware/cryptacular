@@ -49,9 +49,10 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
   @Override
   protected AsymmetricKeyParameter decodeASN1(final byte[] encoded)
   {
+    final ASN1InputStream stream = new ASN1InputStream(encoded);
     final ASN1Object o;
     try {
-      o = new ASN1InputStream(encoded).readObject();
+      o = stream.readObject();
     } catch (Exception e) {
       throw new EncodingException("Invalid encoded key", e);
     }
@@ -59,22 +60,12 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
     final AsymmetricKeyParameter key;
     if (o instanceof ASN1ObjectIdentifier) {
       // EC private key with named curve in the default OpenSSL format emitted
-      // by
-      //
-      // openssl ecparam -name xxxx -genkey
-      //
-      // which is the concatenation of the named curve OID and a sequence of 1
-      // containing the private point
-      final ASN1ObjectIdentifier oid = ASN1ObjectIdentifier.getInstance(o);
-      final int len = encoded[1];
-      final byte[] privatePart = new byte[encoded.length - len - 2];
-      System.arraycopy(encoded, len + 2, privatePart, 0, privatePart.length);
-
-      final ASN1Sequence seq = ASN1Sequence.getInstance(privatePart);
-      final X9ECParameters params = ECUtil.getNamedCurveByOid(oid);
-      key = new ECPrivateKeyParameters(
-        ASN1Integer.getInstance(seq.getObjectAt(0)).getValue(),
-        new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
+      // by openssl ecparam -name xxxx -genkey
+      try {
+        key = parseECPrivateKey(ASN1Sequence.getInstance(stream.readObject()));
+      } catch (Exception e) {
+        throw new EncodingException("Invalid encoded key", e);
+      }
     } else {
       // OpenSSL "traditional" format is an ASN.1 sequence of key parameters
 
@@ -104,15 +95,41 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
             ASN1Integer.getInstance(sequence.getObjectAt(3)).getValue()));
       } else if (sequence.size() == 4) {
         // EC private key with explicit curve
-        final X9ECParameters params = X9ECParameters.getInstance(
-          ASN1TaggedObject.getInstance(sequence.getObjectAt(2)).getObject());
-        key = new ECPrivateKeyParameters(
-          new BigInteger(ASN1OctetString.getInstance(sequence.getObjectAt(1)).getOctets()),
-          new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
+        key = parseECPrivateKey(sequence);
       } else {
         throw new EncodingException("Invalid OpenSSL traditional private key format.");
       }
     }
     return key;
+  }
+
+
+  /**
+   * Parses an EC private key as defined in RFC 5915.
+   * <pre>
+   *      ECPrivateKey ::= SEQUENCE {
+   *        version        INTEGER { ecPrivkeyVer1(1) } (ecPrivkeyVer1),
+   *        privateKey     OCTET STRING,
+   *        parameters [0] ECParameters {{ NamedCurve }} OPTIONAL,
+   *        publicKey  [1] BIT STRING OPTIONAL
+   *      }
+   * </pre>
+   *
+   * @param  seq  ASN1 sequence to parse
+   *
+   * @return  EC private key
+   */
+  private ECPrivateKeyParameters parseECPrivateKey(final ASN1Sequence seq)
+  {
+    final ASN1TaggedObject asn1Params = ASN1TaggedObject.getInstance(seq.getObjectAt(2));
+    final X9ECParameters params;
+    if (asn1Params.getObject() instanceof ASN1ObjectIdentifier) {
+      params = ECUtil.getNamedCurveByOid(ASN1ObjectIdentifier.getInstance(asn1Params.getObject()));
+    } else {
+      params = X9ECParameters.getInstance(asn1Params.getObject());
+    }
+    return new ECPrivateKeyParameters(
+      new BigInteger(1, ASN1OctetString.getInstance(seq.getObjectAt(1)).getOctets()),
+      new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH(), params.getSeed()));
   }
 }
