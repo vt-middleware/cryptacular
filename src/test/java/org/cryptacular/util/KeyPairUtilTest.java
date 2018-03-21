@@ -77,6 +77,43 @@ public class KeyPairUtilTest
         new Object[] {rsa512.getPublic(), rsa512.getPrivate(), true},
         new Object[] {rsa512p2.getPublic(), rsa512p2.getPrivate(), true},
         new Object[] {rsa512.getPublic(), rsa512p2.getPrivate(), false},
+        new Object[] {ec256.getPublic(), ec256.getPrivate(), true},
+        new Object[] {ec224.getPublic(), ec224.getPrivate(), true},
+        new Object[] {
+          KeyPairUtil.readPublicKey(KEY_PATH + "ec-openssl-prime256v1-named-pub.pem"),
+          KeyPairUtil.readPrivateKey(KEY_PATH + "ec-openssl-prime256v1-named-nopass.pem"),
+          true,
+        },
+        new Object[] {
+          KeyPairUtil.readPublicKey(KEY_PATH + "ec-openssl-secp112r1-named-pub.pem"),
+          KeyPairUtil.readPrivateKey(KEY_PATH + "ec-openssl-secp112r1-named-nopass.pem"),
+          true,
+        },
+        new Object[] {
+          KeyPairUtil.readPublicKey(KEY_PATH + "ec-openssl-secp224k1-explicit-pub.pem"),
+          KeyPairUtil.readPrivateKey(KEY_PATH + "ec-openssl-secp224k1-explicit-nopass.pem"),
+          true,
+        },
+        new Object[] {
+          KeyPairUtil.readPublicKey(KEY_PATH + "ec-openssl-secp256k1-explicit-pub.pem"),
+          KeyPairUtil.readPrivateKey(KEY_PATH + "ec-openssl-secp256k1-explicit-nopass.pem"),
+          true,
+        },
+        new Object[] {
+          KeyPairUtil.readPublicKey(KEY_PATH + "ec-openssl-sect409k1-named-pub.pem"),
+          KeyPairUtil.readPrivateKey(KEY_PATH + "ec-openssl-sect409k1-named-nopass.pem"),
+          true,
+        },
+        new Object[] {
+          KeyPairUtil.readPublicKey(KEY_PATH + "ec-openssl-sect571r1-explicit-pub.pem"),
+          KeyPairUtil.readPrivateKey(KEY_PATH + "ec-openssl-sect571r1-explicit-nopass.pem"),
+          true,
+        },
+        new Object[] {
+          KeyPairUtil.readPublicKey(KEY_PATH + "ec-openssl-sect571r1-explicit-pub.pem"),
+          KeyPairUtil.readPrivateKey(KEY_PATH + "ec-openssl-sect571r1-explicit-nopass.pem"),
+          true,
+        },
       };
   }
 
@@ -97,6 +134,18 @@ public class KeyPairUtilTest
         },
         new Object[] {
           KEY_PATH + "ec-openssl-prime256v1-named-nopass.der",
+          ECPrivateKey.class,
+        },
+        new Object[] {
+          KEY_PATH + "ec-openssl-prime256v1-named-nopass.pem",
+          ECPrivateKey.class,
+        },
+        new Object[] {
+          KEY_PATH + "ec-openssl-secp112r1-named-nopass.der",
+          ECPrivateKey.class,
+        },
+        new Object[] {
+          KEY_PATH + "ec-openssl-secp112r1-named-nopass.pem",
           ECPrivateKey.class,
         },
         new Object[] {
