@@ -8,6 +8,7 @@ import java.nio.CharBuffer;
 
 import org.cryptacular.FailListener;
 import org.cryptacular.util.ByteUtil;
+import org.cryptacular.util.CodecUtil;
 import org.cryptacular.util.HashUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
@@ -46,9 +47,19 @@ public class Base64DecoderTest
           HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
         },
         new Object[] {
-          new Base64Decoder(true),
+          new Base64Decoder.Builder().setUrlSafe(true).build(),
           "safx_LW8-SsSy_o3PmCNy4VEm5s=",
           HashUtil.sha1(ByteUtil.toBytes("t3stUs3r01")),
+        },
+        new Object[] {
+          new Base64Decoder.Builder().setUrlSafe(true).setPadding(false).build(),
+          "FPu_A9l-",
+          CodecUtil.hex("14FBBF03D97E"),
+        },
+        new Object[] {
+          new Base64Decoder.Builder().setUrlSafe(true).setPadding(false).build(),
+          "FPu_A9k",
+          CodecUtil.hex("14FBBF03D9"),
         },
       };
   }
