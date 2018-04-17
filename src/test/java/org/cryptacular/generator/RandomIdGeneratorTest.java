@@ -3,7 +3,9 @@ package org.cryptacular.generator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +19,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -50,7 +53,6 @@ public class RandomIdGeneratorTest
 
   @Test(dataProvider = "generators")
   public void testGenerate(final RandomIdGenerator generator, final Pattern expected)
-    throws Exception
   {
     for (int i = 0; i < 100; i++) {
       final Matcher m = expected.matcher(generator.generate());
@@ -58,20 +60,56 @@ public class RandomIdGeneratorTest
     }
   }
 
+  /**
+   * Test concurrent random ID generation on a shared instance.
+   *
+   * @throws Exception on test errors
+   */
   @Test
   public void testConcurrentGeneration()
     throws Exception
   {
-    final ExecutorService executor = Executors.newFixedThreadPool(20);
+    final int poolSize = 100;
+    final ExecutorService executor = Executors.newFixedThreadPool(poolSize);
     final RandomIdGenerator generator = new RandomIdGenerator(50);
     final Collection<Callable<String>> tasks = new ArrayList<>();
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < poolSize; i++) {
       tasks.add(generator::generate);
     }
-
+    // Ensure all generated IDs are unique
+    final Set<String> identifiers = new HashSet<>(poolSize);
     final List<Future<String>> results = executor.invokeAll(tasks);
     for (Future<String> result : results) {
-      assertNotNull(result.get(1, TimeUnit.SECONDS));
+      final String id = result.get(1, TimeUnit.SECONDS);
+      assertNotNull(id);
+      identifiers.add(id);
     }
+    assertEquals(poolSize, identifiers.size());
+  }
+
+  /**
+   * Test creating new instances and calling generate on them concurrently.
+   *
+   * @throws Exception on test errors
+   */
+  @Test
+  public void testConcurrentGeneration2()
+      throws Exception
+  {
+    final int poolSize = 100;
+    final ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+    final Collection<Callable<String>> tasks = new ArrayList<>();
+    for (int i = 0; i < poolSize; i++) {
+      tasks.add(() -> new RandomIdGenerator(50).generate());
+    }
+    // Ensure all generated IDs are unique
+    final Set<String> identifiers = new HashSet<>(poolSize);
+    final List<Future<String>> results = executor.invokeAll(tasks);
+    for (Future<String> result : results) {
+      final String id = result.get(1, TimeUnit.SECONDS);
+      assertNotNull(id);
+      identifiers.add(id);
+    }
+    assertEquals(poolSize, identifiers.size());
   }
 }
