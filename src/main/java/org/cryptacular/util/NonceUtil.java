@@ -27,7 +27,8 @@ public final class NonceUtil
   /** Seed random source. */
   static
   {
-    SECURE_RANDOM.setSeed(SECURE_RANDOM.generateSeed(16));
+    // Call nextBytes to force seeding via default process
+    SECURE_RANDOM.nextBytes(new byte[1]);
   }
 
   /** Private constructor of utility class. */

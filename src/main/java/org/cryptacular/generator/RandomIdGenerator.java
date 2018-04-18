@@ -51,7 +51,8 @@ public class RandomIdGenerator implements IdGenerator
     }
     this.charset = charset;
     secureRandom = new SecureRandom();
-    secureRandom.setSeed(secureRandom.generateSeed(16));
+    // Call nextBytes to force seeding via default process
+    secureRandom.nextBytes(new byte[1]);
   }
 
 
