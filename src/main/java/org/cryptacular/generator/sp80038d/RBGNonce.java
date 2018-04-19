@@ -2,7 +2,6 @@
 package org.cryptacular.generator.sp80038d;
 
 import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.prng.EntropySource;
 import org.bouncycastle.crypto.prng.drbg.HashSP800DRBG;
 import org.bouncycastle.crypto.prng.drbg.SP80090DRBG;
 import org.cryptacular.generator.LimitException;
@@ -112,30 +111,7 @@ public class RBGNonce implements Nonce
    */
   private static SP80090DRBG newRBG(final int length, final byte[] domain)
   {
-    return
-      new HashSP800DRBG(
-        new SHA256Digest(),
-        length,
-        new EntropySource() {
-          @Override
-          public boolean isPredictionResistant()
-          {
-            return false;
-          }
-
-          @Override
-          public byte[] getEntropy()
-          {
-            return NonceUtil.timestampNonce(length);
-          }
-
-          @Override
-          public int entropySize()
-          {
-            return length;
-          }
-        },
-        domain,
-        NonceUtil.timestampNonce(8));
+    return new HashSP800DRBG(
+        new SHA256Digest(), length, NonceUtil.randomEntropySource(length), domain, NonceUtil.timestampNonce(8));
   }
 }
