@@ -3,7 +3,6 @@ package org.cryptacular.bean;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import org.cryptacular.CryptoException;
 import org.cryptacular.StreamException;
 

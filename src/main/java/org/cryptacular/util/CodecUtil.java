@@ -3,7 +3,6 @@ package org.cryptacular.util;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-
 import org.cryptacular.EncodingException;
 import org.cryptacular.codec.Base32Decoder;
 import org.cryptacular.codec.Base32Encoder;

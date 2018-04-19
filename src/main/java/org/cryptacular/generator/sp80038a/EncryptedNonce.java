@@ -58,7 +58,7 @@ public class EncryptedNonce implements Nonce
     throws LimitException
   {
     final byte[] result = new byte[cipher.getBlockSize()];
-    final byte[] nonce = NonceUtil.timestampNonce(result.length);
+    final byte[] nonce = NonceUtil.randomNonce(result.length);
     synchronized (cipher) {
       cipher.init(true, new KeyParameter(key.getEncoded()));
       cipher.processBlock(nonce, 0, result, 0);

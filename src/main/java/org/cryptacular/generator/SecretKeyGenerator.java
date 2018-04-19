@@ -45,7 +45,7 @@ public final class SecretKeyGenerator
   public static SecretKey generate(final int bitLength, final BlockCipher cipher)
   {
     // Want as much nonce data as key bits
-    final byte[] nonce = NonceUtil.timestampNonce((bitLength + 7) / 8);
+    final byte[] nonce = NonceUtil.randomNonce((bitLength + 7) / 8);
     return generate(bitLength, cipher, new SP800SecureRandomBuilder().buildHash(new SHA256Digest(), nonce, false));
   }
 

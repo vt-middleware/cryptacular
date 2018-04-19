@@ -195,7 +195,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
       name = padding;
     }
 
-    BlockCipherPadding blockCipherPadding;
+    final BlockCipherPadding blockCipherPadding;
     if ("ISO7816d4".equalsIgnoreCase(name) | "ISO7816".equalsIgnoreCase(name)) {
       blockCipherPadding = new ISO7816d4Padding();
     } else if ("ISO10126".equalsIgnoreCase(name) || "ISO10126-2".equalsIgnoreCase(name)) {

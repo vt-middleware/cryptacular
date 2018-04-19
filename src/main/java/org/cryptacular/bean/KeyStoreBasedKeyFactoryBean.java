@@ -6,7 +6,6 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
-
 import org.cryptacular.CryptoException;
 
 /**

@@ -3,7 +3,6 @@ package org.cryptacular.bean;
 
 import java.io.IOException;
 import java.security.PrivateKey;
-
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;

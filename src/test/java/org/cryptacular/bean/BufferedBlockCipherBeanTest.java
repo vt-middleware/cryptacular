@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.KeyStore;
-
 import org.cryptacular.FailListener;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.generator.sp80038a.BigIntegerCounterNonce;
@@ -19,7 +18,6 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 
 /**

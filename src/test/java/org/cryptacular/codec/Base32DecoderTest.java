@@ -3,14 +3,12 @@ package org.cryptacular.codec;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-
 import org.cryptacular.FailListener;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -24,6 +22,8 @@ public class Base32DecoderTest
   @DataProvider(name = "encoded-data")
   public Object[][] getEncodedData()
   {
+    final Base32Decoder unpadded = new Base32Decoder();
+    unpadded.setPaddedInput(false);
     return
       new Object[][] {
         // Multiple of 40 bits
@@ -34,8 +34,8 @@ public class Base32DecoderTest
         },
         // Final quantum of encoding input is exactly 8 bits
         new Object[] {
-          new Base32Decoder(),
-          "43H7CNN2EI======",
+          unpadded,
+          "43H7CNN2EI",
           CodecUtil.hex("e6cff135ba22"),
         },
         // Final quantum of encoding input is exactly 16 bits

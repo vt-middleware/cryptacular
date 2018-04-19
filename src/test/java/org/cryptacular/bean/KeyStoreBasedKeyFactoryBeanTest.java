@@ -5,13 +5,11 @@ import java.io.File;
 import java.security.Key;
 import java.security.interfaces.RSAPrivateKey;
 import javax.crypto.SecretKey;
-
 import org.cryptacular.FailListener;
 import org.cryptacular.io.FileResource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 
 /**

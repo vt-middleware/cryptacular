@@ -6,7 +6,6 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-
 import org.cryptacular.CryptoException;
 import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;

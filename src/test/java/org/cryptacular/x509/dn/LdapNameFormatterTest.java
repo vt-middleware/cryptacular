@@ -2,13 +2,11 @@
 package org.cryptacular.x509.dn;
 
 import javax.security.auth.x500.X500Principal;
-
 import org.cryptacular.FailListener;
 import org.cryptacular.util.CertUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 
 /**

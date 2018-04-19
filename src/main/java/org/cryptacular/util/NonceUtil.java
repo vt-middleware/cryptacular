@@ -2,6 +2,7 @@
 package org.cryptacular.util;
 
 import java.lang.reflect.Method;
+import java.security.SecureRandom;
 import javax.crypto.SecretKey;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.Digest;
@@ -20,6 +21,15 @@ import org.cryptacular.generator.sp80038d.RBGNonce;
  */
 public final class NonceUtil
 {
+  /** Class-wide random source. */
+  private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+  /** Seed random source. */
+  static
+  {
+    // Call nextBytes to force seeding via default process
+    SECURE_RANDOM.nextBytes(new byte[1]);
+  }
 
   /** Private constructor of utility class. */
   private NonceUtil() {}
@@ -50,6 +60,57 @@ public final class NonceUtil
       }
     }
     return nonce;
+  }
+
+
+  /**
+   * Generates a random nonce of the given length in bytes.
+   *
+   * @param  length  Positive number of bytes in nonce.
+   *
+   * @return  Nonce bytes.
+   */
+  public static byte[] randomNonce(final int length)
+  {
+    if (length <= 0) {
+      throw new IllegalArgumentException(length + " is invalid. Length must be positive.");
+    }
+    final byte[] nonce = new byte[length];
+    SECURE_RANDOM.nextBytes(nonce);
+    return nonce;
+  }
+
+
+  /**
+   * Creates a new entropy source that wraps a {@link SecureRandom} to produce random bytes.
+   *
+   * @param length Size of entropy blocks.
+   *
+   * @return New random entropy source.
+   */
+  public static EntropySource randomEntropySource(final int length)
+  {
+    return new EntropySource() {
+      @Override
+      public boolean isPredictionResistant()
+      {
+        return true;
+      }
+
+      @Override
+      public byte[] getEntropy()
+      {
+        final byte[] bytes = new byte[length];
+        SECURE_RANDOM.nextBytes(bytes);
+        return bytes;
+      }
+
+      @Override
+      public int entropySize()
+      {
+        return length;
+      }
+    };
   }
 
 
@@ -106,7 +167,7 @@ public final class NonceUtil
    */
   public static byte[] nist80063a(final SP800SecureRandom prng, final int blockSize)
   {
-    prng.setSeed(System.nanoTime());
+    prng.setSeed(randomNonce(blockSize));
 
     final byte[] iv = new byte[blockSize];
     prng.nextBytes(iv);
@@ -154,30 +215,21 @@ public final class NonceUtil
    */
   public static SP80090DRBG newRBG(final Digest digest, final int length)
   {
-    return
-      new HashSP800DRBG(
-        digest,
-        length,
-        new EntropySource() {
-          @Override
-          public boolean isPredictionResistant()
-          {
-            return false;
-          }
+    return newRBG(digest, length, randomEntropySource(length));
+  }
 
-          @Override
-          public byte[] getEntropy()
-          {
-            return NonceUtil.timestampNonce(length);
-          }
-
-          @Override
-          public int entropySize()
-          {
-            return length;
-          }
-        },
-        null,
-        NonceUtil.timestampNonce(8));
+  /**
+   * Creates a new hash-based DRBG instance that uses the given digest as the pseudorandom source.
+   *
+   * @param  digest  Digest algorithm.
+   * @param  length  Length in bits of values to be produced by DRBG instance.
+   * @param  es  Entropy source.
+   *
+   * @return  New DRGB instance.
+   */
+  public static SP80090DRBG newRBG(final Digest digest, final int length, final EntropySource es)
+  {
+    return new HashSP800DRBG(
+        digest, length, es, Thread.currentThread().getName().getBytes(), NonceUtil.timestampNonce(8));
   }
 }

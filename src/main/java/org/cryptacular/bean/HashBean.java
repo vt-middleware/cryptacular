@@ -42,5 +42,5 @@ public interface HashBean<T>
    * @throws  CryptoException  on hash computation errors.
    * @throws  StreamException  on stream IO errors.
    */
-  boolean compare(final T hash, Object... data) throws CryptoException, StreamException;
+  boolean compare(T hash, Object... data) throws CryptoException, StreamException;
 }
