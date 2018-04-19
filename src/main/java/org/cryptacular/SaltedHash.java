@@ -73,7 +73,8 @@ public class SaltedHash
    *
    * @return First N bytes of salt.
    */
-  public byte[] getSalt(final int n) {
+  public byte[] getSalt(final int n)
+  {
     if (n > salt.length) {
       throw new IllegalArgumentException("Requested size exceeded length: " + n + ">" + salt.length);
     }
