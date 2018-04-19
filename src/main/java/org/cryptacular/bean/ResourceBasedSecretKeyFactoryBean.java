@@ -4,7 +4,6 @@ package org.cryptacular.bean;
 import java.io.IOException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
 import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
 import org.cryptacular.util.StreamUtil;

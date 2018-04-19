@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
-
 import org.cryptacular.FailListener;
 import org.cryptacular.generator.sp80038d.CounterNonce;
 import org.cryptacular.io.FileResource;
@@ -16,7 +15,6 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 
 /**

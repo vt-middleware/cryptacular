@@ -4,7 +4,6 @@ package org.cryptacular.codec;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.Arrays;
-
 import org.cryptacular.EncodingException;
 
 /**

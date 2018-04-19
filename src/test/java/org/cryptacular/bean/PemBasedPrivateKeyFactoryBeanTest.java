@@ -3,14 +3,12 @@ package org.cryptacular.bean;
 
 import java.io.File;
 import java.security.PrivateKey;
-
 import org.cryptacular.FailListener;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertTrue;
 
 /**
