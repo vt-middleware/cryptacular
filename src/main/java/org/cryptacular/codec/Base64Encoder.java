@@ -10,21 +10,17 @@ public class Base64Encoder extends AbstractBaseNEncoder
 {
 
   /** Default base 64 character encoding table. */
-  private static final char[] DEFAULT_ENCODING_TABLE = new char[64];
+  private static final char[] DEFAULT_ENCODING_TABLE;
 
   /** Filesystem and URL-safe base 64 character encoding table. */
-  private static final char[] URLSAFE_ENCODING_TABLE = new char[64];
+  private static final char[] URLSAFE_ENCODING_TABLE;
 
 
-  /* Initializes the encoding character table. */
-  static {
-    final String defaultCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    for (int i = 0; i < defaultCharset.length(); i++) {
-      DEFAULT_ENCODING_TABLE[i] = defaultCharset.charAt(i);
-      URLSAFE_ENCODING_TABLE[i] = defaultCharset.charAt(i);
-    }
-    URLSAFE_ENCODING_TABLE[62] = '-';
-    URLSAFE_ENCODING_TABLE[63] = '_';
+  /* Initializes the default character encoding tables. */
+  static
+  {
+    DEFAULT_ENCODING_TABLE = encodingTable("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", 64);
+    URLSAFE_ENCODING_TABLE = encodingTable("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_", 64);
   }
 
 
@@ -73,6 +69,30 @@ public class Base64Encoder extends AbstractBaseNEncoder
   }
 
 
+  /**
+   * Creates a new instance that produces base 64-encoded output with the given 64-character alphabet.
+   *
+   * @param  alphabet  64-character alphabet to use.
+   */
+  public Base64Encoder(final String alphabet)
+  {
+    this(alphabet, -1);
+  }
+
+
+  /**
+   * Creates a new instance that produces base 64-encoded output with the given 64-character alphabet with line
+   * wrapping at the specified line length;
+   *
+   * @param  alphabet  64-character alphabet to use.
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
+   */
+  public Base64Encoder(final String alphabet, final int charactersPerLine)
+  {
+    super(encodingTable(alphabet, 64), charactersPerLine);
+  }
+
+
   @Override
   protected int getBlockLength()
   {
@@ -84,5 +104,98 @@ public class Base64Encoder extends AbstractBaseNEncoder
   protected int getBitsPerChar()
   {
     return 6;
+  }
+
+
+  /**
+   * Builder for base-64 encoders.
+   */
+  public static class Builder
+  {
+    /** URL-safe alphabet flag. */
+    private boolean urlSafe;
+
+    /** Arbitrary alphbet. */
+    private String alphabet;
+
+    /** Padding flag. */
+    private boolean padding;
+
+    /** Number of base-64 characters per line in output. */
+    private int charactersPerLine = -1;
+
+
+    /**
+     * Sets the URL-safe alphabet flag.
+     *
+     * @param  safe  True for URL-safe alphabet, false otherwise.
+     *
+     * @return  This instance.
+     */
+    public Base64Encoder.Builder setUrlSafe(final boolean safe)
+    {
+      urlSafe = safe;
+      return this;
+    }
+
+
+    /**
+     * Sets an arbitrary 64-character alphabet for encoding.
+     *
+     * @param  alpha  Alternative alphabet.
+     *
+     * @return  This instance.
+     */
+    public Base64Encoder.Builder setAlphabet(final String alpha)
+    {
+      alphabet = alpha;
+      return this;
+    }
+
+
+    /**
+     * Sets padding flag on the encoder.
+     *
+     * @param  pad  True for base-64 padding, false otherwise.
+     *
+     * @return  This instance.
+     */
+    public Base64Encoder.Builder setPadding(final boolean pad)
+    {
+      padding = pad;
+      return this;
+    }
+
+
+    /**
+     * Sets the number of characters per line in output produced by the encoder.
+     *
+     * @param  lineLength  Number of characters per line. Set to <code>-1</code> to suppress line breaks.
+     *
+     * @return  This instance.
+     */
+    public Base64Encoder.Builder setCharactersPerLine(final int lineLength)
+    {
+      charactersPerLine = lineLength;
+      return this;
+    }
+
+
+    /**
+     * Builds a base-64 encoder with the given options.
+     *
+     * @return  New base-64 encoder instance.
+     */
+    public Base64Encoder build()
+    {
+      final Base64Encoder decoder;
+      if (alphabet != null) {
+        decoder = new Base64Encoder(alphabet, charactersPerLine);
+      } else {
+        decoder = new Base64Encoder(urlSafe, charactersPerLine);
+      }
+      decoder.setPaddedOutput(padding);
+      return decoder;
+    }
   }
 }

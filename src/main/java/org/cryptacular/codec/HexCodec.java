@@ -28,4 +28,18 @@ public class HexCodec implements Codec
   {
     return decoder;
   }
+
+
+  @Override
+  public Encoder newEncoder()
+  {
+    return new HexEncoder();
+  }
+
+
+  @Override
+  public Decoder newDecoder()
+  {
+    return new HexDecoder();
+  }
 }

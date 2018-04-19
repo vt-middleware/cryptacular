@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
-
 import org.cryptacular.StreamException;
 
 /**
@@ -236,12 +235,12 @@ public final class ByteUtil
    */
   public static byte[] toArray(final ByteBuffer buffer)
   {
-    if (buffer.limit() == buffer.capacity()) {
+    final int size = buffer.limit() - buffer.position();
+    if (buffer.hasArray() && size == buffer.capacity()) {
       return buffer.array();
     }
 
-    final byte[] array = new byte[buffer.limit()];
-    buffer.position(0);
+    final byte[] array = new byte[size];
     buffer.get(array);
     return array;
   }

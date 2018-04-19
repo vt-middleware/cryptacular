@@ -1,7 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
+import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.util.regex.Pattern;
+import org.cryptacular.codec.Base64Decoder;
 
 /**
  * Utility class with helper methods for common PEM encoding operations.
@@ -25,6 +28,13 @@ public final class PemUtil
 
   /** Decryption infor tag for PEM-encoded private key in OpenSSL format. */
   public static final String DEK_INFO = "DEK-Info:";
+
+  /** Pattern used to split multiple PEM-encoded objects in a single file. */
+  private static final Pattern PEM_SPLITTER = Pattern.compile("-----(?:BEGIN|END) [A-Z ]+-----");
+
+  /** Pattern used to a file by line terminator. */
+  private static final Pattern LINE_SPLITTER = Pattern.compile("[\r\n]+");
+
 
 
   /** Private constructor of utility class. */
@@ -92,8 +102,9 @@ public final class PemUtil
 
 
   /**
-   * Decodes a PEM-encoded cryptographic object into the raw bytes of its ASN.1 encoding. Header/footer data and
-   * metadata info, e.g. Proc-Type, are ignored.
+   * Decodes one or more PEM-encoded cryptographic objects into the raw bytes of their ASN.1 encoding. All header and
+   * metadata, e.g. Proc-Type, are ignored. If multiple cryptographic objects are represented, the decoded bytes of
+   * each object are concatenated together and returned.
    *
    * @param  pem  PEM-encoded data to decode.
    *
@@ -101,44 +112,23 @@ public final class PemUtil
    */
   public static byte[] decode(final String pem)
   {
-    final CharBuffer line = CharBuffer.allocate(128);
-    final CharBuffer input = CharBuffer.wrap(pem);
-    final CharBuffer output = CharBuffer.allocate(pem.length());
-    char current;
-    while (input.hasRemaining()) {
-      current = input.get();
-      if (current == '\r') {
-        // Assume CRLF line endings, so discard next char before writing line
-        input.get();
-        writeLine(line, output);
-      } else if (current == '\n') {
-        writeLine(line, output);
-      } else {
-        line.put(current);
+    final Base64Decoder decoder = new Base64Decoder();
+    final CharBuffer buffer = CharBuffer.allocate(pem.length());
+    final ByteBuffer output = ByteBuffer.allocate(pem.length() * 3 / 4);
+    // There may be multiple PEM-encoded objects in the input
+    for (String object : PEM_SPLITTER.split(pem)) {
+      buffer.clear();
+      for (String line : LINE_SPLITTER.split(object)) {
+        if (line.startsWith(DEK_INFO) || line.startsWith(PROC_TYPE)) {
+          continue;
+        }
+        buffer.append(line);
       }
-    }
-    if (line.hasRemaining()) {
-      writeLine(line, output);
+      buffer.flip();
+      decoder.decode(buffer, output);
+      decoder.finalize(output);
     }
     output.flip();
-    return CodecUtil.b64(output);
-  }
-
-
-  /**
-   * Copies a non-header line to the output buffer.
-   *
-   * @param  line  Line to consider writing.
-   * @param  output  Output buffer.
-   */
-  private static void writeLine(final CharBuffer line, final CharBuffer output)
-  {
-    final String s = line.flip().toString();
-    if (
-      !(s.startsWith(HEADER_BEGIN) || s.startsWith(FOOTER_END) || s.startsWith(PROC_TYPE) || s.startsWith(DEK_INFO) ||
-          s.trim().length() == 0)) {
-      output.put(line);
-    }
-    line.clear();
+    return ByteUtil.toArray(output);
   }
 }

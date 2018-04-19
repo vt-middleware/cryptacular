@@ -3,7 +3,6 @@ package org.cryptacular.codec;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-
 import org.cryptacular.EncodingException;
 
 /**
@@ -41,6 +40,9 @@ public abstract class AbstractBaseNEncoder implements Encoder
   /** Number of characters written. */
   private int outCount;
 
+  /** Flag indicating whether output is padded. True by default. */
+  private boolean paddedOutput = true;
+
 
   /**
    * Creates a new instance with given parameters.
@@ -58,6 +60,26 @@ public abstract class AbstractBaseNEncoder implements Encoder
     }
     initialBitMask = mask;
     lineLength = charactersPerLine;
+  }
+
+
+  /**
+   * @return True if padded output is enabled (default), false otherwise.
+   */
+  public boolean isPaddedOutput()
+  {
+    return paddedOutput;
+  }
+
+
+  /**
+   * Sets the output padding mode.
+   *
+   * @param  enabled  True to enable padded output, false otherwise.
+   */
+  public void setPaddedOutput(final boolean enabled)
+  {
+    this.paddedOutput = enabled;
   }
 
 
@@ -81,8 +103,10 @@ public abstract class AbstractBaseNEncoder implements Encoder
       // Floor division
       final int stop = remaining / bitsPerChar * bitsPerChar;
       writeOutput(output, stop);
-      for (int i = stop; i > 0; i -= bitsPerChar) {
-        output.put('=');
+      if (paddedOutput) {
+        for (int i = stop; i > 0; i -= bitsPerChar) {
+          output.put('=');
+        }
       }
     }
     // Append trailing newline to make consistent with OpenSSL base64 output
@@ -110,6 +134,27 @@ public abstract class AbstractBaseNEncoder implements Encoder
 
   /** @return  Number of bits encoding a single character. */
   protected abstract int getBitsPerChar();
+
+
+  /**
+   * Converts the given alphabet into a base-N encoding table.
+   *
+   * @param  alphabet  Encoding alphabet to use.
+   * @param  n  Encoding base.
+   *
+   * @return  Encoding table of N elements.
+   */
+  protected static char[] encodingTable(final String alphabet, final int n)
+  {
+    if (alphabet.length() != n) {
+      throw new IllegalArgumentException("Alphabet must be exactly " + n + " characters long");
+    }
+    final char[] encodingTable = new char[n];
+    for (int i = 0; i < n; i++) {
+      encodingTable[i] = alphabet.charAt(i);
+    }
+    return encodingTable;
+  }
 
 
   /**

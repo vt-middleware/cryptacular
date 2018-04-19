@@ -66,6 +66,23 @@ public class SaltedHash
     return salt;
   }
 
+  /**
+   * Gets N bytes of salt.
+   *
+   * @param n Number of bytes of salt; must be less than or equal to salt size.
+   *
+   * @return First N bytes of salt.
+   */
+  public byte[] getSalt(final int n)
+  {
+    if (n > salt.length) {
+      throw new IllegalArgumentException("Requested size exceeded length: " + n + ">" + salt.length);
+    }
+    final byte[] bytes = new byte[n];
+    System.arraycopy(salt, 0, bytes, 0, n);
+    return bytes;
+  }
+
 
   /**
    * Gets an encoded string of the concatenation of digest output and salt.
