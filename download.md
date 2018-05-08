@@ -21,6 +21,14 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.2.2 - 08May2018 (Requires Java 8)
+
+Issue | Description
+:---- | :----------
+[cryptacular-40]({{ site.issueURL }}40) | RandomIdGenerator has weak PRNG seeding
+[cryptacular-39]({{ site.issueURL }}39) | BCrypt HashBean implementation
+[cryptacular-37]({{ site.issueURL }}37) | Incorrect parsing of OpenSSL EC keys
+
 ### Version 1.2.1 - 10Jul2017 (Requires Java 8)
 
 Issue | Description
