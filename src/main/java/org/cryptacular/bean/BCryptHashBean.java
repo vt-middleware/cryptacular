@@ -17,7 +17,7 @@ import org.cryptacular.util.ByteUtil;
  * {@link HashBean} implementation that uses the <em>bcrypt</em> algorithm for hashing. Hash strings of the following
  * format are supported:
  * <br>
- * <code><pre>
+ * <code>
  *   $2n$cost$xxxxxxxxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
  *
  *   where:
@@ -25,9 +25,10 @@ import org.cryptacular.util.ByteUtil;
  *     4 &le; cost &le; 31
  *     x is 22 characters of encoded salt
  *     y is 31 characters of encoded hash bytes
- * </pre></code>
+ * </code>
  * <p>
  * The encoding for salt and hash bytes is a variant of base-64 encoding without padding in the following alphabet:
+ * </p>
  * <br>
  * <code>./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</code>
  *
