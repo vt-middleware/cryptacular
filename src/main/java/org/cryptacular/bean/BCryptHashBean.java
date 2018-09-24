@@ -39,11 +39,15 @@ public class BCryptHashBean implements HashBean<String>
   /** Custom base-64 alphabet. */
   private static final String ALPHABET = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  /** BCrypt cost factor in the range [4, 31]. */
-  private final int cost;
+  /** BCrypt cost factor in the range [4, 31]. Default value is {@value}. */
+  private int cost = 12;
 
-  /** BCrypt version used when computing hashes. */
+  /** BCrypt version used when computing hashes. Default value is {@value}. */
   private String version = "2b";
+
+
+  /** Creates a new instance. */
+  public BCryptHashBean() {}
 
 
   /**
@@ -52,6 +56,17 @@ public class BCryptHashBean implements HashBean<String>
    * @param costFactor BCrypt cost in the range [4, 31].
    */
   public BCryptHashBean(final int costFactor)
+  {
+    setCost(costFactor);
+  }
+
+
+  /**
+   * Sets the bcrypt cost factor.
+   *
+   * @param costFactor BCrypt cost in the range [4, 31].
+   */
+  public void setCost(final int costFactor)
   {
     if (costFactor < 4 || costFactor > 31) {
       throw new IllegalArgumentException("Cost must be in the range [4, 31].");
@@ -68,7 +83,7 @@ public class BCryptHashBean implements HashBean<String>
   public void setVersion(final String ver)
   {
     if (!ver.startsWith("2") && ver.length() <= 2) {
-      throw new IllegalArgumentException("Invalid version");
+      throw new IllegalArgumentException("Invalid version: " + ver);
     }
     version = ver;
   }
@@ -182,20 +197,20 @@ public class BCryptHashBean implements HashBean<String>
 
 
   /**
-   * Converts an input object into a password as an array of UTF-8 bytes. If the version is &gt;= 2a, null terminator is
-   * added if the supplied data does not end with one.
+   * Converts an input object into a password as an array of UTF-8 bytes. A null terminator is added if the supplied
+   * data does not end with one.
    *
    * @param  version  Bcrypt version, e.g. "2a".
    * @param  data  Input password.
    *
-   * @return  Password as UTF-8 byte array.
+   * @return  Null terminated password as UTF-8 byte array.
    */
   private static byte[] password(final String version, final Object data)
   {
     if (data instanceof byte[]) {
       final byte[] origData = (byte[]) data;
       final byte[] newData;
-      if (version.length() > 1 && origData[origData.length - 1] != 0x00) {
+      if (origData[origData.length - 1] != 0x00) {
         newData = new byte[origData.length + 1];
         System.arraycopy(origData, 0, newData, 0, origData.length);
         newData[newData.length - 1] = 0x00;
@@ -212,7 +227,7 @@ public class BCryptHashBean implements HashBean<String>
     } else {
       throw new IllegalArgumentException("Expected byte array or string.");
     }
-    if (version.length() > 1 && sb.charAt(sb.length() - 1) != '\0') {
+    if (sb.charAt(sb.length() - 1) != '\0') {
       // Version 2a and later requires null terminator on password
       sb.append('\0');
     }
