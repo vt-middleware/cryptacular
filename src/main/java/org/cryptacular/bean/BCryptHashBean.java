@@ -182,7 +182,8 @@ public class BCryptHashBean implements HashBean<String>
 
 
   /**
-   * Converts an input object into a password as an array of UTF-8 bytes.
+   * Converts an input object into a password as an array of UTF-8 bytes. If the version is &gt;= 2a, null terminator is
+   * added if the supplied data does not end with one.
    *
    * @param  version  Bcrypt version, e.g. "2a".
    * @param  data  Input password.
@@ -192,7 +193,16 @@ public class BCryptHashBean implements HashBean<String>
   private static byte[] password(final String version, final Object data)
   {
     if (data instanceof byte[]) {
-      return (byte[]) data;
+      final byte[] origData = (byte[]) data;
+      final byte[] newData;
+      if (version.length() > 1 && origData[origData.length - 1] != 0x00) {
+        newData = new byte[origData.length + 1];
+        System.arraycopy(origData, 0, newData, 0, origData.length);
+        newData[newData.length - 1] = 0x00;
+      } else {
+        newData = origData;
+      }
+      return newData;
     }
     final StringBuilder sb = new StringBuilder();
     if (data instanceof char[]) {
@@ -202,7 +212,7 @@ public class BCryptHashBean implements HashBean<String>
     } else {
       throw new IllegalArgumentException("Expected byte array or string.");
     }
-    if (version.length() > 1) {
+    if (version.length() > 1 && sb.charAt(sb.length() - 1) != '\0') {
       // Version 2a and later requires null terminator on password
       sb.append('\0');
     }
