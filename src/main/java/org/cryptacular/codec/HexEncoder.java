@@ -13,36 +13,54 @@ import org.cryptacular.EncodingException;
 public class HexEncoder implements Encoder
 {
 
-  /** Hex character encoding table. */
-  private static final char[] ENCODING_TABLE = new char[16];
+  /** Lowercase hex character encoding table. */
+  private static final char[] LC_ENCODING_TABLE = new char[16];
+
+  /** Uppercase hex character encoding table. */
+  private static final char[] UC_ENCODING_TABLE = new char[16];
+
 
 
   /* Initializes the encoding character table. */
   static {
-    final String charset = "0123456789abcdef";
-    for (int i = 0; i < charset.length(); i++) {
-      ENCODING_TABLE[i] = charset.charAt(i);
-    }
+    initTable("0123456789abcdef", LC_ENCODING_TABLE);
+    initTable("0123456789ABCDEF", UC_ENCODING_TABLE);
   }
 
   /** Flag indicating whether to delimit every two characters with ':' as in key fingerprints, etc. */
   private final boolean delimit;
 
+  /** Encoding table to use. */
+  private final char[] table;
+
 
   /** Creates a new instance that does not delimit bytes in the output hex string. */
   public HexEncoder()
   {
-    this(false);
+    this(false, false);
   }
 
   /**
-   * Creates a new instance with optional delimiting of bytes in the output hex string.
+   * Creates a new instance with optional colon-delimiting of bytes.
    *
    * @param  delimitBytes  True to delimit every two characters (i.e. every byte) with ':' character.
    */
   public HexEncoder(final boolean delimitBytes)
   {
+    this(delimitBytes, false);
+  }
+
+
+  /**
+   * Creates a new instance with optional colon-delimiting of bytes and uppercase output.
+   *
+   * @param  delimitBytes  True to delimit every two characters (i.e. every byte) with ':' character.
+   * @param  uppercase  True to output uppercase alphabetic characters, false for lowercase.
+   */
+  public HexEncoder(final boolean delimitBytes, final boolean uppercase)
+  {
     delimit = delimitBytes;
+    table = uppercase ? UC_ENCODING_TABLE : LC_ENCODING_TABLE;
   }
 
 
@@ -52,8 +70,8 @@ public class HexEncoder implements Encoder
     byte current;
     while (input.hasRemaining()) {
       current = input.get();
-      output.put(ENCODING_TABLE[(current & 0xf0) >> 4]);
-      output.put(ENCODING_TABLE[current & 0x0f]);
+      output.put(table[(current & 0xf0) >> 4]);
+      output.put(table[current & 0x0f]);
       if (delimit && input.hasRemaining()) {
         output.put(':');
       }
@@ -73,5 +91,19 @@ public class HexEncoder implements Encoder
       size += inputSize - 1;
     }
     return size;
+  }
+
+
+  /**
+   * Initializes the encoding table for the given character set.
+   *
+   * @param  charset  Character set.
+   * @param  table  Encoding table.
+   */
+  private static void initTable(final String charset, final char[] table)
+  {
+    for (int i = 0; i < charset.length(); i++) {
+      table[i] = charset.charAt(i);
+    }
   }
 }
