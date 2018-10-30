@@ -36,7 +36,7 @@ public class HexCodec implements Codec
   public HexCodec(final boolean uppercaseOutput)
   {
     uppercase = uppercaseOutput;
-    encoder = new HexEncoder(uppercase);
+    encoder = new HexEncoder(false, uppercase);
   }
 
 
@@ -57,7 +57,7 @@ public class HexCodec implements Codec
   @Override
   public Encoder newEncoder()
   {
-    return new HexEncoder(uppercase);
+    return new HexEncoder(false, uppercase);
   }
 
 

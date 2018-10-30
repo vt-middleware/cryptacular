@@ -39,6 +39,11 @@ public class HexEncoderTest
           "41:62:6c:65:20:77:61:73:20:49:20:65:72:65:20:49:20:73:61:77:20:65:6c:62:61",
         },
         new Object[] {
+          new HexEncoder(true, true),
+          ByteUtil.toBytes("Able was I ere I saw elba"),
+          "41:62:6C:65:20:77:61:73:20:49:20:65:72:65:20:49:20:73:61:77:20:65:6C:62:61",
+        },
+        new Object[] {
           new HexEncoder(),
           new byte[] {
             (byte) -100,
