@@ -24,7 +24,7 @@ public class HexDecoderTest
     return
       new Object[][] {
         new Object[] {
-          "41626c652077617320492065726520492073617720656c6261",
+          "41626C652077617320492065726520492073617720656C6261",
           "Able was I ere I saw elba",
         },
         new Object[] {

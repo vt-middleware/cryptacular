@@ -29,9 +29,9 @@ public class HexEncoderTest
           "41626c652077617320492065726520492073617720656c6261",
         },
         new Object[] {
-          new HexEncoder(false),
+          new HexEncoder(false, true),
           ByteUtil.toBytes("Able was I ere I saw elba\n"),
-          "41626c652077617320492065726520492073617720656c62610a",
+          "41626C652077617320492065726520492073617720656C62610A",
         },
         new Object[] {
           new HexEncoder(true),
