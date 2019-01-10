@@ -21,6 +21,13 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.2.3 - 09Jan2019 (Requires Java 8)
+Issue | Description
+:---- | :----------
+[cryptacular-47]({{ site.issueURL }}47) | Support upper case hex
+[cryptacular-44]({{ site.issueURL }}44) | BCrypt implementation inconsistent with null terminator
+
+
 ### Version 1.2.2 - 08May2018 (Requires Java 8)
 
 Issue | Description
