@@ -60,7 +60,7 @@
   </developers>
 
   <prerequisites>
-    <maven>3.0.5</maven>
+    <maven>3.6.0</maven>
   </prerequisites>
 
   <properties>
@@ -82,7 +82,7 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>7.0.0</version>
+      <version>7.1.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -175,7 +175,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.27</version>
+            <version>8.28</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -215,7 +215,7 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.14.2</version>
+        <version>0.14.3</version>
         <configuration>
           <oldVersion>
             <dependency>
@@ -271,7 +271,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <id>source</id>
@@ -304,7 +304,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>4.0.0</version>
+        <version>4.2.1</version>
         <executions>
           <execution>
             <id>bundle-manifest</id>
@@ -342,7 +342,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
+        <version>3.0.0-M1</version>
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
