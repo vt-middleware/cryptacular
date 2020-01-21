@@ -31,11 +31,24 @@ public final class ByteUtil
    *
    * @param  data  4-byte array in big-endian format.
    *
-   * @return  Long integer value.
+   * @return  Integer value.
    */
   public static int toInt(final byte[] data)
   {
     return (data[0] << 24) | ((data[1] & 0xff) << 16) | ((data[2] & 0xff) << 8) | (data[3] & 0xff);
+  }
+
+
+  /**
+   * Converts an unsigned byte into an integer.
+   *
+   * @param  unsigned  Unsigned byte.
+   *
+   * @return  Integer value.
+   */
+  public static int toInt(final byte unsigned)
+  {
+    return 0x000000FF & unsigned;
   }
 
 
@@ -176,6 +189,21 @@ public final class ByteUtil
 
 
   /**
+   * Converts a portion of a byte array into a string in the UTF-8 character set.
+   *
+   * @param  bytes  Byte array to convert.
+   * @param  offset  Offset into byte array where string content begins.
+   * @param  length  Total number of bytes to convert.
+   *
+   * @return  UTF-8 string representation of bytes.
+   */
+  public static String toString(final byte[] bytes, final int offset, final int length)
+  {
+    return new String(bytes, offset, length, DEFAULT_CHARSET);
+  }
+
+
+  /**
    * Converts a byte buffer into a string in the UTF-8 character set.
    *
    * @param  buffer  Byte buffer to convert.
@@ -227,6 +255,19 @@ public final class ByteUtil
 
 
   /**
+   * Converts an integer into an unsigned byte. All bits above 1 byte are truncated.
+   *
+   * @param  b  Integer value.
+   *
+   * @return  Unsigned byte as a byte.
+   */
+  public static byte toUnsignedByte(final int b)
+  {
+    return (byte) (0x000000FF & b);
+  }
+
+
+  /**
    * Converts a byte buffer into a byte array.
    *
    * @param  buffer  Byte buffer to convert.
@@ -244,4 +285,6 @@ public final class ByteUtil
     buffer.get(array);
     return array;
   }
+
+
 }

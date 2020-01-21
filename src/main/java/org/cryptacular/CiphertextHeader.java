@@ -34,18 +34,26 @@ import org.cryptacular.util.ByteUtil;
  * decrypt outstanding data which will be subsequently re-encrypted with a new key.</p>
  *
  * @author  Middleware Services
+ *
+ * @deprecated Superseded by {@link CiphertextHeaderV2}
  */
+@Deprecated
 public class CiphertextHeader
 {
+  /** Maximum nonce length in bytes. */
+  protected static final int MAX_NONCE_LEN = 255;
+
+  /** Maximum key name length in bytes. */
+  protected static final int MAX_KEYNAME_LEN = 500;
 
   /** Header nonce field value. */
-  private final byte[] nonce;
+  protected final byte[] nonce;
 
   /** Header key name field value. */
-  private String keyName;
+  protected final String keyName;
 
   /** Header length in bytes. */
-  private int length;
+  protected final int length;
 
 
   /**
@@ -67,12 +75,17 @@ public class CiphertextHeader
    */
   public CiphertextHeader(final byte[] nonce, final String keyName)
   {
-    this.nonce = nonce;
-    this.length = 8 + nonce.length;
-    if (keyName != null) {
-      this.length += 4 + keyName.getBytes().length;
-      this.keyName = keyName;
+    if (nonce.length > 255) {
+      throw new IllegalArgumentException("Nonce exceeds size limit in bytes (255)");
     }
+    if (keyName != null) {
+      if (ByteUtil.toBytes(keyName).length > MAX_KEYNAME_LEN) {
+        throw new IllegalArgumentException("Key name exceeds size limit in bytes (500)");
+      }
+    }
+    this.nonce = nonce;
+    this.keyName = keyName;
+    length = computeLength();
   }
 
   /**
@@ -128,6 +141,19 @@ public class CiphertextHeader
 
 
   /**
+   * @return  Length of this header encoded as bytes.
+   */
+  protected int computeLength()
+  {
+    int len = 8 + nonce.length;
+    if (keyName != null) {
+      len += 4 + keyName.getBytes().length;
+    }
+    return len;
+  }
+
+
+  /**
    * Creates a header from encrypted data containing a cleartext header prepended to the start.
    *
    * @param  data  Encrypted data with prepended header data.
@@ -143,17 +169,20 @@ public class CiphertextHeader
 
     final int length = bb.getInt();
     if (length < 0) {
-      throw new EncodingException("Invalid ciphertext header length: " + length);
+      throw new EncodingException("Bad ciphertext header");
     }
 
     final byte[] nonce;
     int nonceLen = 0;
     try {
       nonceLen = bb.getInt();
+      if (nonceLen > MAX_NONCE_LEN) {
+        throw new EncodingException("Bad ciphertext header: maximum nonce length exceeded");
+      }
       nonce = new byte[nonceLen];
       bb.get(nonce);
     } catch (IndexOutOfBoundsException | BufferUnderflowException e) {
-      throw new EncodingException("Invalid nonce length: " + nonceLen);
+      throw new EncodingException("Bad ciphertext header");
     }
 
     String keyName = null;
@@ -162,11 +191,14 @@ public class CiphertextHeader
       int keyLen = 0;
       try {
         keyLen = bb.getInt();
+        if (keyLen > MAX_KEYNAME_LEN) {
+          throw new EncodingException("Bad ciphertext header: maximum key length exceeded");
+        }
         b = new byte[keyLen];
         bb.get(b);
         keyName = new String(b);
       } catch (IndexOutOfBoundsException | BufferUnderflowException e) {
-        throw new EncodingException("Invalid key length: " + keyLen);
+        throw new EncodingException("Bad ciphertext header");
       }
     }
 
@@ -188,17 +220,20 @@ public class CiphertextHeader
   {
     final int length = ByteUtil.readInt(input);
     if (length < 0) {
-      throw new EncodingException("Invalid ciphertext header length: " + length);
+      throw new EncodingException("Bad ciphertext header");
     }
 
     final byte[] nonce;
     int nonceLen = 0;
     try {
       nonceLen = ByteUtil.readInt(input);
+      if (nonceLen > MAX_NONCE_LEN) {
+        throw new EncodingException("Bad ciphertext header: maximum nonce size exceeded");
+      }
       nonce = new byte[nonceLen];
       input.read(nonce);
     } catch (ArrayIndexOutOfBoundsException e) {
-      throw new EncodingException("Invalid nonce length: " + nonceLen);
+      throw new EncodingException("Bad ciphertext header");
     } catch (IOException e) {
       throw new StreamException(e);
     }
@@ -209,10 +244,13 @@ public class CiphertextHeader
       int keyLen = 0;
       try {
         keyLen = ByteUtil.readInt(input);
+        if (keyLen > MAX_KEYNAME_LEN) {
+          throw new EncodingException("Bad ciphertext header: maximum key length exceeded");
+        }
         b = new byte[keyLen];
         input.read(b);
       } catch (ArrayIndexOutOfBoundsException e) {
-        throw new EncodingException("Invalid key length: " + keyLen);
+        throw new EncodingException("Bad ciphertext header");
       } catch (IOException e) {
         throw new StreamException(e);
       }
@@ -221,4 +259,5 @@ public class CiphertextHeader
 
     return new CiphertextHeader(nonce, keyName);
   }
+
 }

@@ -8,14 +8,16 @@ import java.security.Key;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.CiphertextHeaderV2;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
 import org.cryptacular.generator.Nonce;
+import org.cryptacular.util.CipherUtil;
 
 /**
  * Base class for all cipher beans. The base class assumes all ciphertext output will contain a prepended {@link
- * CiphertextHeader} containing metadata that facilitates decryption.
+ * CiphertextHeaderV2} containing metadata that facilitates decryption.
  *
  * @author  Middleware Services
  */
@@ -128,14 +130,14 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public byte[] encrypt(final byte[] input) throws CryptoException
   {
-    return process(new CiphertextHeader(nonce.generate(), keyAlias), true, input);
+    return process(header(), true, input);
   }
 
 
   @Override
   public void encrypt(final InputStream input, final OutputStream output) throws CryptoException, StreamException
   {
-    final CiphertextHeader header = new CiphertextHeader(nonce.generate(), keyAlias);
+    final CiphertextHeaderV2 header = header();
     try {
       output.write(header.encode());
     } catch (IOException e) {
@@ -148,11 +150,7 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public byte[] decrypt(final byte[] input) throws CryptoException, EncodingException
   {
-    final CiphertextHeader header = CiphertextHeader.decode(input);
-    if (header.getKeyName() == null) {
-      throw new CryptoException("Ciphertext header does not contain required key");
-    }
-    return process(header, false, input);
+    return process(CipherUtil.decodeHeader(input, this::lookupKey), false, input);
   }
 
 
@@ -160,11 +158,7 @@ public abstract class AbstractCipherBean implements CipherBean
   public void decrypt(final InputStream input, final OutputStream output)
       throws CryptoException, EncodingException, StreamException
   {
-    final CiphertextHeader header = CiphertextHeader.decode(input);
-    if (header.getKeyName() == null) {
-      throw new CryptoException("Ciphertext header does not contain required key");
-    }
-    process(header, false, input, output);
+    process(CipherUtil.decodeHeader(input, this::lookupKey), false, input, output);
   }
 
 
@@ -211,4 +205,15 @@ public abstract class AbstractCipherBean implements CipherBean
    * @param  output  Stream that receives output of cipher.
    */
   protected abstract void process(CiphertextHeader header, boolean mode, InputStream input, OutputStream output);
+
+
+  /**
+   * @return  New ciphertext header for a pending encryption or decryption operation performed by this instance.
+   */
+  private CiphertextHeaderV2 header()
+  {
+    final CiphertextHeaderV2 header = new CiphertextHeaderV2(nonce.generate(), keyAlias);
+    header.setKeyLookup(this::lookupKey);
+    return header;
+  }
 }

@@ -45,12 +45,12 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
   protected byte[] process(final CiphertextHeader header, final boolean mode, final byte[] input)
   {
     final BlockCipherAdapter cipher = newCipher(header, mode);
-    final byte[] headerBytes = header.encode();
     int outOff;
     final int inOff;
     final int length;
     final byte[] output;
     if (mode) {
+      final byte[] headerBytes = header.encode();
       final int outSize = headerBytes.length + cipher.getOutputSize(input.length);
       output = new byte[outSize];
       System.arraycopy(headerBytes, 0, output, 0, headerBytes.length);
@@ -58,12 +58,12 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
       outOff = headerBytes.length;
       length = input.length;
     } else {
-      length = input.length - headerBytes.length;
+      outOff = 0;
+      inOff = header.getLength();
+      length = input.length - inOff;
 
       final int outSize = cipher.getOutputSize(length);
       output = new byte[outSize];
-      inOff = headerBytes.length;
-      outOff = 0;
     }
     outOff += cipher.processBytes(input, inOff, length, output, outOff);
     outOff += cipher.doFinal(output, outOff);
@@ -85,7 +85,7 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
   {
     final BlockCipherAdapter cipher = newCipher(header, mode);
     final int outSize = cipher.getOutputSize(StreamUtil.CHUNK_SIZE);
-    final byte[] outBuf = new byte[outSize > StreamUtil.CHUNK_SIZE ? outSize : StreamUtil.CHUNK_SIZE];
+    final byte[] outBuf = new byte[Math.max(outSize, StreamUtil.CHUNK_SIZE)];
     StreamUtil.pipeAll(
       input,
       output,
