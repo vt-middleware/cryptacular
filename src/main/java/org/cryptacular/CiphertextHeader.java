@@ -75,12 +75,12 @@ public class CiphertextHeader
    */
   public CiphertextHeader(final byte[] nonce, final String keyName)
   {
-    if (nonce.length > 255) {
-      throw new IllegalArgumentException("Nonce exceeds size limit in bytes (255)");
+    if (nonce.length > MAX_NONCE_LEN) {
+      throw new IllegalArgumentException("Nonce exceeds size limit in bytes (" + MAX_NONCE_LEN + ")");
     }
     if (keyName != null) {
       if (ByteUtil.toBytes(keyName).length > MAX_KEYNAME_LEN) {
-        throw new IllegalArgumentException("Key name exceeds size limit in bytes (500)");
+        throw new IllegalArgumentException("Key name exceeds size limit in bytes (" + MAX_KEYNAME_LEN + ")");
       }
     }
     this.nonce = nonce;
