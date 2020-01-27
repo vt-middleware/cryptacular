@@ -102,6 +102,9 @@ public class CiphertextHeaderV2 extends CiphertextHeader
    */
   public byte[] encode(final SecretKey hmacKey)
   {
+    if (hmacKey == null) {
+      throw new IllegalArgumentException("Secret key cannot be null");
+    }
     final ByteBuffer bb = ByteBuffer.allocate(length);
     bb.order(ByteOrder.BIG_ENDIAN);
     bb.putInt(VERSION);
@@ -109,10 +112,7 @@ public class CiphertextHeaderV2 extends CiphertextHeader
     bb.put((byte) 0);
     bb.put(ByteUtil.toUnsignedByte(nonce.length));
     bb.put(nonce);
-    if (hmacKey != null) {
-      final byte[] hmac = hmac(bb.array(), 0, bb.limit() - HMAC_SIZE);
-      bb.put(hmac);
-    }
+    bb.put(hmac(bb.array(), 0, bb.limit() - HMAC_SIZE));
     return bb.array();
   }
 
@@ -253,8 +253,10 @@ public class CiphertextHeaderV2 extends CiphertextHeader
    *
    * @param  input  Input stream.
    * @param  output  Output buffer.
+   *
+   * @throws  StreamException  on stream IO errors.
    */
-  private static void readInto(final InputStream input, final byte[] output)
+  private static void readInto(final InputStream input, final byte[] output) throws StreamException
   {
     try {
       input.read(output);

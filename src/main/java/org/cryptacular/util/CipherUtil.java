@@ -376,7 +376,6 @@ public final class CipherUtil
   }
 
 
-
   /**
    * Writes a ciphertext header to the output stream.
    *
