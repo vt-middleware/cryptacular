@@ -256,7 +256,7 @@ public class CiphertextHeaderV2 extends CiphertextHeader
    *
    * @throws  StreamException  on stream IO errors.
    */
-  private static void readInto(final InputStream input, final byte[] output) throws StreamException
+  private static void readInto(final InputStream input, final byte[] output)
   {
     try {
       input.read(output);
