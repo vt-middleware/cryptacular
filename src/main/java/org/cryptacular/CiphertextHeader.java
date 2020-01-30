@@ -50,10 +50,10 @@ public class CiphertextHeader
   protected final byte[] nonce;
 
   /** Header key name field value. */
-  protected final String keyName;
+  protected String keyName;
 
   /** Header length in bytes. */
-  protected final int length;
+  protected int length;
 
 
   /**
