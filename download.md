@@ -21,7 +21,14 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.2.4 - 06Feb2020 (Requires Java 8)
+
+Issue | Description
+:---- | :----------
+[cryptacular-52]({{ site.issueURL }}52) | Potential denial of service (CVE-2020-7226)
+
 ### Version 1.2.3 - 09Jan2019 (Requires Java 8)
+
 Issue | Description
 :---- | :----------
 [cryptacular-47]({{ site.issueURL }}47) | Support upper case hex
