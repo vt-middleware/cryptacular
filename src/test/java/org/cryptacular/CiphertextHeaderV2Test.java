@@ -32,10 +32,10 @@ public class CiphertextHeaderV2Test
     final byte[] nonce = new byte[255];
     Arrays.fill(nonce, (byte) 7);
     final CiphertextHeaderV2 expected = new CiphertextHeaderV2(nonce, "aleph");
-    expected.setKeyLookup(this::getKey);
+    expected.setKeyLookup(new TestKeyLookup());
     final byte[] encoded = expected.encode();
     assertEquals(expected.getLength(), encoded.length);
-    final CiphertextHeaderV2 actual = CiphertextHeaderV2.decode(encoded, this::getKey);
+    final CiphertextHeaderV2 actual = CiphertextHeaderV2.decode(encoded, new TestKeyLookup());
     assertEquals(expected.getNonce(), actual.getNonce());
     assertEquals(expected.getKeyName(), actual.getKeyName());
     assertEquals(expected.getLength(), actual.getLength());
@@ -54,14 +54,19 @@ public class CiphertextHeaderV2Test
     final int index = encoded.length - 3;
     final byte b = encoded[index];
     encoded[index] = (byte) (b + 1);
-    CiphertextHeaderV2.decode(encoded, this::getKey);
+    CiphertextHeaderV2.decode(encoded, new TestKeyLookup());
   }
 
-  private SecretKey getKey(final String alias)
+  private class TestKeyLookup implements KeyLookup
   {
-    if ("aleph".equals(alias)) {
-      return key;
+
+    @Override
+    public SecretKey lookupKey(final String keyName)
+    {
+      if ("aleph".equals(keyName)) {
+        return key;
+      }
+      return null;
     }
-    return null;
   }
 }

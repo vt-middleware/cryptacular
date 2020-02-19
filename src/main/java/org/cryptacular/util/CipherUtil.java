@@ -4,7 +4,6 @@ package org.cryptacular.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.function.Function;
 import javax.crypto.SecretKey;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.modes.AEADBlockCipher;
@@ -17,6 +16,7 @@ import org.cryptacular.CiphertextHeader;
 import org.cryptacular.CiphertextHeaderV2;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
+import org.cryptacular.KeyLookup;
 import org.cryptacular.StreamException;
 import org.cryptacular.adapter.AEADBlockCipherAdapter;
 import org.cryptacular.adapter.BlockCipherAdapter;
@@ -108,7 +108,7 @@ public final class CipherUtil
   public static byte[] decrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)
       throws CryptoException, EncodingException
   {
-    final CiphertextHeader header = decodeHeader(data, String -> key);
+    final CiphertextHeader header = decodeHeader(data, new StaticKeyLookup(key));
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
     cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, hbytes));
@@ -136,7 +136,7 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, EncodingException, StreamException
   {
-    final CiphertextHeader header = decodeHeader(input, String -> key);
+    final CiphertextHeader header = decodeHeader(input, new StaticKeyLookup(key));
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
     cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, hbytes));
@@ -216,7 +216,7 @@ public final class CipherUtil
   public static byte[] decrypt(final BlockCipher cipher, final SecretKey key, final byte[] data)
     throws CryptoException, EncodingException
   {
-    final CiphertextHeader header = decodeHeader(data, String -> key);
+    final CiphertextHeader header = decodeHeader(data, new StaticKeyLookup(key));
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
     return decrypt(new BufferedBlockCipherAdapter(padded), data, header.getLength());
@@ -242,7 +242,7 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, EncodingException, StreamException
   {
-    final CiphertextHeader header = decodeHeader(input, String -> key);
+    final CiphertextHeader header = decodeHeader(input, new StaticKeyLookup(key));
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
     process(new BufferedBlockCipherAdapter(padded), input, output);
@@ -258,7 +258,7 @@ public final class CipherUtil
    *
    * @return  Ciphertext header instance.
    */
-  public static CiphertextHeader decodeHeader(final byte[] data, final Function<String, SecretKey> keyLookup)
+  public static CiphertextHeader decodeHeader(final byte[] data, final KeyLookup keyLookup)
   {
     try {
       return CiphertextHeaderV2.decode(data, keyLookup);
@@ -277,7 +277,7 @@ public final class CipherUtil
    *
    * @return  Ciphertext header instance.
    */
-  public static CiphertextHeader decodeHeader(final InputStream in, final Function<String, SecretKey> keyLookup)
+  public static CiphertextHeader decodeHeader(final InputStream in, final KeyLookup keyLookup)
   {
     CiphertextHeader header;
     try {
@@ -391,4 +391,29 @@ public final class CipherUtil
     }
   }
 
+  /**
+   * This {@link KeyLookup} implementation returns the same key regardless of the key name requested during lookup.
+   */
+  private static class StaticKeyLookup implements KeyLookup
+  {
+
+    /** The secret key that should be always returned. */
+    private final SecretKey key;
+
+    /**
+     * Creates a new instance with the provided secret key.
+     *
+     * @param key  The secret key to return for lookups.
+     */
+    StaticKeyLookup(final SecretKey key)
+    {
+      this.key = key;
+    }
+
+    @Override
+    public SecretKey lookupKey(final String keyName)
+    {
+      return key;
+    }
+  }
 }

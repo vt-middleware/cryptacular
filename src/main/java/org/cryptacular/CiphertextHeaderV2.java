@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 import javax.crypto.SecretKey;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.macs.HMac;
@@ -53,7 +51,7 @@ public class CiphertextHeaderV2 extends CiphertextHeader
   private static final int HMAC_SIZE = 32;
 
   /** Function to resolve a key from a symbolic key name. */
-  private Function<String, SecretKey> keyLookup;
+  private KeyLookup keyLookup;
 
 
   /**
@@ -76,7 +74,7 @@ public class CiphertextHeaderV2 extends CiphertextHeader
    *
    * @param  keyLookup  Key lookup function.
    */
-  public void setKeyLookup(final Function<String, SecretKey> keyLookup)
+  public void setKeyLookup(final KeyLookup keyLookup)
   {
     this.keyLookup = keyLookup;
   }
@@ -85,7 +83,7 @@ public class CiphertextHeaderV2 extends CiphertextHeader
   @Override
   public byte[] encode()
   {
-    final SecretKey key = keyLookup != null ? keyLookup.apply(keyName) : null;
+    final SecretKey key = keyLookup != null ? keyLookup.lookupKey(keyName) : null;
     if (key == null) {
       throw new IllegalStateException("Could not resolve secret key to generate header HMAC");
     }
@@ -136,16 +134,49 @@ public class CiphertextHeaderV2 extends CiphertextHeader
    *
    * @throws  EncodingException  when ciphertext header cannot be decoded.
    */
-  public static CiphertextHeaderV2 decode(final byte[] data, final Function<String, SecretKey> keyLookup)
+  public static CiphertextHeaderV2 decode(final byte[] data, final KeyLookup keyLookup)
       throws EncodingException
   {
-    final ByteBuffer bb = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN);
-    return decodeInternal(
-      ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN),
-      keyLookup,
-      ByteBuffer -> bb.getInt(),
-      ByteBuffer -> bb.get(),
-      (ByteBuffer, output) -> bb.get(output));
+    final ByteBuffer source = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN);
+    final SecretKey key;
+    final String keyName;
+    final byte[] nonce;
+    final byte[] hmac;
+    try {
+      final int version = source.getInt();
+      if (version != VERSION) {
+        throw new EncodingException("Unsupported ciphertext header version");
+      }
+      final ByteArrayOutputStream out = new ByteArrayOutputStream(100);
+      byte b = 0;
+      int count = 0;
+      while ((b = source.get()) != 0) {
+        out.write(b);
+        if (out.size() > MAX_KEYNAME_LEN) {
+          throw new EncodingException("Bad ciphertext header: maximum nonce length exceeded");
+        }
+        count++;
+      }
+      keyName = ByteUtil.toString(out.toByteArray(), 0, count);
+      key = keyLookup.lookupKey(keyName);
+      if (key == null) {
+        throw new IllegalStateException("Symbolic key name mentioned in header was not found");
+      }
+      final int nonceLen = ByteUtil.toInt(source.get());
+      nonce = new byte[nonceLen];
+      source.get(nonce);
+      hmac = new byte[HMAC_SIZE];
+      source.get(hmac);
+    } catch (IndexOutOfBoundsException | BufferUnderflowException e) {
+      throw new EncodingException("Bad ciphertext header");
+    }
+    final CiphertextHeaderV2 header = new CiphertextHeaderV2(nonce, keyName);
+    final byte[] encoded = header.encode(key);
+    if (!arraysEqual(hmac, 0, encoded, encoded.length - HMAC_SIZE, HMAC_SIZE)) {
+      throw new EncodingException("Ciphertext header HMAC verification failed");
+    }
+    header.setKeyLookup(keyLookup);
+    return header;
   }
 
 
@@ -160,46 +191,22 @@ public class CiphertextHeaderV2 extends CiphertextHeader
    * @throws  EncodingException  when ciphertext header cannot be decoded.
    * @throws  StreamException  on stream IO errors.
    */
-  public static CiphertextHeaderV2 decode(final InputStream input, final Function<String, SecretKey> keyLookup)
+  public static CiphertextHeaderV2 decode(final InputStream input, final KeyLookup keyLookup)
       throws EncodingException, StreamException
-  {
-    return decodeInternal(
-      input, keyLookup, ByteUtil::readInt, CiphertextHeaderV2::readByte, CiphertextHeaderV2::readInto);
-  }
-
-
-  /**
-   * Internal header decoding routine.
-   *
-   * @param  <T>  Type of input source.
-   * @param  source  Source of header data (input stream or byte buffer).
-   * @param  keyLookup  Function to look up key from symbolic key name in header.
-   * @param  readIntFn  Function that produces a 4-byte integer from the input source.
-   * @param  readByteFn  Function that produces a byte from the input source.
-   * @param  readBytesConsumer  Function that fills a byte array from the input source.
-   *
-   * @return  Decoded header.
-   */
-  private static <T> CiphertextHeaderV2 decodeInternal(
-      final T source,
-      final Function<String, SecretKey> keyLookup,
-      final Function<T, Integer> readIntFn,
-      final Function<T, Byte> readByteFn,
-      final BiConsumer<T, byte[]> readBytesConsumer)
   {
     final SecretKey key;
     final String keyName;
     final byte[] nonce;
     final byte[] hmac;
     try {
-      final int version = readIntFn.apply(source);
+      final int version = ByteUtil.readInt(input);
       if (version != VERSION) {
         throw new EncodingException("Unsupported ciphertext header version");
       }
       final ByteArrayOutputStream out = new ByteArrayOutputStream(100);
       byte b = 0;
       int count = 0;
-      while ((b = readByteFn.apply(source)) != 0) {
+      while ((b = readByte(input)) != 0) {
         out.write(b);
         if (out.size() > MAX_KEYNAME_LEN) {
           throw new EncodingException("Bad ciphertext header: maximum nonce length exceeded");
@@ -207,15 +214,15 @@ public class CiphertextHeaderV2 extends CiphertextHeader
         count++;
       }
       keyName = ByteUtil.toString(out.toByteArray(), 0, count);
-      key = keyLookup.apply(keyName);
+      key = keyLookup.lookupKey(keyName);
       if (key == null) {
         throw new IllegalStateException("Symbolic key name mentioned in header was not found");
       }
-      final int nonceLen = ByteUtil.toInt(readByteFn.apply(source));
+      final int nonceLen = ByteUtil.toInt(readByte(input));
       nonce = new byte[nonceLen];
-      readBytesConsumer.accept(source, nonce);
+      readInto(input, nonce);
       hmac = new byte[HMAC_SIZE];
-      readBytesConsumer.accept(source, hmac);
+      readInto(input, hmac);
     } catch (IndexOutOfBoundsException | BufferUnderflowException e) {
       throw new EncodingException("Bad ciphertext header");
     }
@@ -227,7 +234,6 @@ public class CiphertextHeaderV2 extends CiphertextHeader
     header.setKeyLookup(keyLookup);
     return header;
   }
-
 
   /**
    * Generates an HMAC-256 over the given input byte array.

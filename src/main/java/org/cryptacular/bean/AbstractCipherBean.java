@@ -11,6 +11,7 @@ import org.cryptacular.CiphertextHeader;
 import org.cryptacular.CiphertextHeaderV2;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
+import org.cryptacular.KeyLookup;
 import org.cryptacular.StreamException;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.util.CipherUtil;
@@ -150,7 +151,7 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public byte[] decrypt(final byte[] input) throws CryptoException, EncodingException
   {
-    return process(CipherUtil.decodeHeader(input, this::lookupKey), false, input);
+    return process(CipherUtil.decodeHeader(input, new KeyStoreKeyLookup()), false, input);
   }
 
 
@@ -158,7 +159,7 @@ public abstract class AbstractCipherBean implements CipherBean
   public void decrypt(final InputStream input, final OutputStream output)
       throws CryptoException, EncodingException, StreamException
   {
-    process(CipherUtil.decodeHeader(input, this::lookupKey), false, input, output);
+    process(CipherUtil.decodeHeader(input, new KeyStoreKeyLookup()), false, input, output);
   }
 
 
@@ -213,7 +214,20 @@ public abstract class AbstractCipherBean implements CipherBean
   private CiphertextHeaderV2 header()
   {
     final CiphertextHeaderV2 header = new CiphertextHeaderV2(nonce.generate(), keyAlias);
-    header.setKeyLookup(this::lookupKey);
+    header.setKeyLookup(new KeyStoreKeyLookup());
     return header;
+  }
+
+  /**
+   * Default {@link KeyLookup} implementation that looks up the keys by name in the key store.
+   */
+  private class KeyStoreKeyLookup implements KeyLookup
+  {
+
+    @Override
+    public SecretKey lookupKey(final String keyName)
+    {
+      return AbstractCipherBean.this.lookupKey(keyName);
+    }
   }
 }
