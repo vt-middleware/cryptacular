@@ -13,8 +13,10 @@ import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.CiphertextHeaderV2;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
+import org.cryptacular.KeyLookup;
 import org.cryptacular.StreamException;
 import org.cryptacular.adapter.AEADBlockCipherAdapter;
 import org.cryptacular.adapter.BlockCipherAdapter;
@@ -37,15 +39,15 @@ public final class CipherUtil
 
 
   /**
-   * Encrypts data using an AEAD cipher. A {@link CiphertextHeader} is prepended to the resulting ciphertext and used as
-   * AAD (Additional Authenticated Data) passed to the AEAD cipher.
+   * Encrypts data using an AEAD cipher. A {@link CiphertextHeaderV2} is prepended to the resulting ciphertext and
+   * used as AAD (Additional Authenticated Data) passed to the AEAD cipher.
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
    * @param  nonce  Nonce generator.
    * @param  data  Plaintext data to be encrypted.
    *
-   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
+   * @return  Concatenation of encoded {@link CiphertextHeaderV2} and encrypted data that completely fills the returned
    *          byte array.
    *
    * @throws  CryptoException  on encryption errors.
@@ -54,22 +56,22 @@ public final class CipherUtil
     throws CryptoException
   {
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeader(iv).encode();
+    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
     cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
     return encrypt(new AEADBlockCipherAdapter(cipher), header, data);
   }
 
 
   /**
-   * Encrypts data using an AEAD cipher. A {@link CiphertextHeader} is prepended to the resulting ciphertext and used as
-   * AAD (Additional Authenticated Data) passed to the AEAD cipher.
+   * Encrypts data using an AEAD cipher. A {@link CiphertextHeaderV2} is prepended to the resulting ciphertext and used
+   * as AAD (Additional Authenticated Data) passed to the AEAD cipher.
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
    * @param  nonce  Nonce generator.
    * @param  input  Input stream containing plaintext data.
-   * @param  output  Output stream that receives a {@link CiphertextHeader} followed by ciphertext data produced by the
-   *                 AEAD cipher in encryption mode.
+   * @param  output  Output stream that receives a {@link CiphertextHeaderV2} followed by ciphertext data produced by
+   *                 the AEAD cipher in encryption mode.
    *
    * @throws  CryptoException  on encryption errors.
    * @throws  StreamException  on IO errors.
@@ -83,7 +85,7 @@ public final class CipherUtil
     throws CryptoException, StreamException
   {
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeader(iv).encode();
+    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
     cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
     writeHeader(header, output);
     process(new AEADBlockCipherAdapter(cipher), input, output);
@@ -95,7 +97,7 @@ public final class CipherUtil
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
-   * @param  data  Ciphertext data containing a prepended {@link CiphertextHeader}. The header is treated as AAD input
+   * @param  data  Ciphertext data containing a prepended {@link CiphertextHeaderV2}. The header is treated as AAD input
    *               to the cipher that is verified during decryption.
    *
    * @return  Decrypted data that completely fills the returned byte array.
@@ -106,7 +108,7 @@ public final class CipherUtil
   public static byte[] decrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)
       throws CryptoException, EncodingException
   {
-    final CiphertextHeader header = CiphertextHeader.decode(data);
+    final CiphertextHeader header = decodeHeader(data, new StaticKeyLookup(key));
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
     cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, hbytes));
@@ -119,7 +121,7 @@ public final class CipherUtil
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
-   * @param  input  Input stream containing a {@link CiphertextHeader} followed by ciphertext data. The header is
+   * @param  input  Input stream containing a {@link CiphertextHeaderV2} followed by ciphertext data. The header is
    *                treated as AAD input to the cipher that is verified during decryption.
    * @param  output  Output stream that receives plaintext produced by block cipher in decryption mode.
    *
@@ -134,7 +136,7 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, EncodingException, StreamException
   {
-    final CiphertextHeader header = CiphertextHeader.decode(input);
+    final CiphertextHeader header = decodeHeader(input, new StaticKeyLookup(key));
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
     cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, nonce, hbytes));
@@ -143,7 +145,7 @@ public final class CipherUtil
 
 
   /**
-   * Encrypts data using the given block cipher with PKCS5 padding. A {@link CiphertextHeader} is prepended to the
+   * Encrypts data using the given block cipher with PKCS5 padding. A {@link CiphertextHeaderV2} is prepended to the
    * resulting ciphertext.
    *
    * @param  cipher  Block cipher.
@@ -152,7 +154,7 @@ public final class CipherUtil
    *                cipher block size.
    * @param  data  Plaintext data to be encrypted.
    *
-   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
+   * @return  Concatenation of encoded {@link CiphertextHeaderV2} and encrypted data that completely fills the returned
    *          byte array.
    *
    * @throws  CryptoException  on encryption errors.
@@ -161,7 +163,7 @@ public final class CipherUtil
     throws CryptoException
   {
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeader(iv).encode();
+    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));
     return encrypt(new BufferedBlockCipherAdapter(padded), header, data);
@@ -191,7 +193,7 @@ public final class CipherUtil
     throws CryptoException, StreamException
   {
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeader(iv).encode();
+    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));
     writeHeader(header, output);
@@ -214,7 +216,7 @@ public final class CipherUtil
   public static byte[] decrypt(final BlockCipher cipher, final SecretKey key, final byte[] data)
     throws CryptoException, EncodingException
   {
-    final CiphertextHeader header = CiphertextHeader.decode(data);
+    final CiphertextHeader header = decodeHeader(data, new StaticKeyLookup(key));
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
     return decrypt(new BufferedBlockCipherAdapter(padded), data, header.getLength());
@@ -240,10 +242,59 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, EncodingException, StreamException
   {
-    final CiphertextHeader header = CiphertextHeader.decode(input);
+    final CiphertextHeader header = decodeHeader(input, new StaticKeyLookup(key));
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
     process(new BufferedBlockCipherAdapter(padded), input, output);
+  }
+
+
+  /**
+   * Decodes the ciphertext header at the start of the given byte array.
+   * Supports both original (deprecated) and v2 formats.
+   *
+   * @param  data  Ciphertext data with prepended header.
+   * @param  keyLookup  Decryption key lookup function.
+   *
+   * @return  Ciphertext header instance.
+   */
+  public static CiphertextHeader decodeHeader(final byte[] data, final KeyLookup keyLookup)
+  {
+    try {
+      return CiphertextHeaderV2.decode(data, keyLookup);
+    } catch (EncodingException e) {
+      return CiphertextHeader.decode(data);
+    }
+  }
+
+
+  /**
+   * Decodes the ciphertext header at the start of the given input stream.
+   * Supports both original (deprecated) and v2 formats.
+   *
+   * @param  in  Ciphertext stream that is positioned at the start of the ciphertext header.
+   * @param  keyLookup  Decryption key lookup function.
+   *
+   * @return  Ciphertext header instance.
+   */
+  public static CiphertextHeader decodeHeader(final InputStream in, final KeyLookup keyLookup)
+  {
+    CiphertextHeader header;
+    try {
+      // Mark the stream start position so we can try again with old format header
+      if (in.markSupported()) {
+        in.mark(4);
+      }
+      header = CiphertextHeaderV2.decode(in, keyLookup);
+    } catch (EncodingException e) {
+      try {
+        in.reset();
+      } catch (IOException ioe) {
+        throw new StreamException("Stream error trying to process old header format: " + ioe.getMessage());
+      }
+      header = CiphertextHeader.decode(in);
+    }
+    return header;
   }
 
 
@@ -340,4 +391,29 @@ public final class CipherUtil
     }
   }
 
+  /**
+   * This {@link KeyLookup} implementation returns the same key regardless of the key name requested during lookup.
+   */
+  private static class StaticKeyLookup implements KeyLookup
+  {
+
+    /** The secret key that should be always returned. */
+    private final SecretKey key;
+
+    /**
+     * Creates a new instance with the provided secret key.
+     *
+     * @param key  The secret key to return for lookups.
+     */
+    StaticKeyLookup(final SecretKey key)
+    {
+      this.key = key;
+    }
+
+    @Override
+    public SecretKey lookupKey(final String keyName)
+    {
+      return key;
+    }
+  }
 }
