@@ -56,6 +56,12 @@ Issue | Description
 [cryptacular-26]({{ site.issueURL }}26) | Upgrade Bouncy Castle to version 1.54
 [cryptacular-23]({{ site.issueURL }}23) | EncodingHashBean convenience constructor
 
+### Version 1.1.4 - 27Feb2020 (Requires Java 7)
+
+Issue | Description
+:---- | :----------
+[cryptacular-56]({{ site.issueURL }}56) | Potential denial of service (CVE-2020-7226)
+
 ### Version 1.1.3 - 08May2018 (Requires Java 7)
 Same as version 1.2.2 but without Java 8 language features
 
