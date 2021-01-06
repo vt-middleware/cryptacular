@@ -9,11 +9,11 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 /**
- * Unit test for {@link CiphertextHeaderV2}.
+ * Unit test for {@link V2CiphertextHeader}.
  *
  * @author Middleware Services
  */
-public class CiphertextHeaderV2Test
+public class V1V2CiphertextHeaderTest
 {
   /** Test HMAC key. */
   private final SecretKey key = new SecretKeySpec(new RBGNonce().generate(), "AES");
@@ -23,7 +23,7 @@ public class CiphertextHeaderV2Test
       expectedExceptionsMessageRegExp = "Nonce exceeds size limit in bytes.*")
   public void testNonceLimitConstructor()
   {
-    new CiphertextHeaderV2(new byte[256], "key2");
+    new V2CiphertextHeader(new byte[256], "key2");
   }
 
   @Test
@@ -31,11 +31,11 @@ public class CiphertextHeaderV2Test
   {
     final byte[] nonce = new byte[255];
     Arrays.fill(nonce, (byte) 7);
-    final CiphertextHeaderV2 expected = new CiphertextHeaderV2(nonce, "aleph");
+    final V2CiphertextHeader expected = new V2CiphertextHeader(nonce, "aleph");
     expected.setKeyLookup(this::getKey);
     final byte[] encoded = expected.encode();
     assertEquals(expected.getLength(), encoded.length);
-    final CiphertextHeaderV2 actual = CiphertextHeaderV2.decode(encoded, this::getKey);
+    final CiphertextHeader actual = CiphertextHeaderFactory.decode(encoded, this::getKey);
     assertEquals(expected.getNonce(), actual.getNonce());
     assertEquals(expected.getKeyName(), actual.getKeyName());
     assertEquals(expected.getLength(), actual.getLength());
@@ -48,13 +48,13 @@ public class CiphertextHeaderV2Test
   {
     final byte[] nonce = new byte[16];
     Arrays.fill(nonce, (byte) 3);
-    final CiphertextHeaderV2 expected = new CiphertextHeaderV2(nonce, "aleph");
+    final V2CiphertextHeader expected = new V2CiphertextHeader(nonce, "aleph");
     // Tamper with computed HMAC
     final byte[] encoded = expected.encode(key);
     final int index = encoded.length - 3;
     final byte b = encoded[index];
     encoded[index] = (byte) (b + 1);
-    CiphertextHeaderV2.decode(encoded, this::getKey);
+    CiphertextHeaderFactory.decode(encoded, this::getKey);
   }
 
   private SecretKey getKey(final String alias)

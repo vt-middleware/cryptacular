@@ -8,16 +8,16 @@ import java.security.Key;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
 import org.cryptacular.CiphertextHeader;
-import org.cryptacular.CiphertextHeaderV2;
+import org.cryptacular.CiphertextHeaderFactory;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
+import org.cryptacular.V2CiphertextHeader;
 import org.cryptacular.generator.Nonce;
-import org.cryptacular.util.CipherUtil;
 
 /**
  * Base class for all cipher beans. The base class assumes all ciphertext output will contain a prepended {@link
- * CiphertextHeaderV2} containing metadata that facilitates decryption.
+ * V2CiphertextHeader} containing metadata that facilitates decryption.
  *
  * @author  Middleware Services
  */
@@ -137,7 +137,7 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public void encrypt(final InputStream input, final OutputStream output) throws CryptoException, StreamException
   {
-    final CiphertextHeaderV2 header = header();
+    final CiphertextHeader header = header();
     try {
       output.write(header.encode());
     } catch (IOException e) {
@@ -150,7 +150,7 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public byte[] decrypt(final byte[] input) throws CryptoException, EncodingException
   {
-    return process(CipherUtil.decodeHeader(input, this::lookupKey), false, input);
+    return process(CiphertextHeaderFactory.decode(input, this::lookupKey), false, input);
   }
 
 
@@ -158,7 +158,7 @@ public abstract class AbstractCipherBean implements CipherBean
   public void decrypt(final InputStream input, final OutputStream output)
       throws CryptoException, EncodingException, StreamException
   {
-    process(CipherUtil.decodeHeader(input, this::lookupKey), false, input, output);
+    process(CiphertextHeaderFactory.decode(input, this::lookupKey), false, input, output);
   }
 
 
@@ -210,9 +210,9 @@ public abstract class AbstractCipherBean implements CipherBean
   /**
    * @return  New ciphertext header for a pending encryption or decryption operation performed by this instance.
    */
-  private CiphertextHeaderV2 header()
+  private CiphertextHeader header()
   {
-    final CiphertextHeaderV2 header = new CiphertextHeaderV2(nonce.generate(), keyAlias);
+    final V2CiphertextHeader header = new V2CiphertextHeader(nonce.generate(), keyAlias);
     header.setKeyLookup(this::lookupKey);
     return header;
   }
