@@ -33,8 +33,7 @@ public abstract class AbstractWrappedDSAKey<T extends DSAKeyParameters> extends 
   /** @return  DSA key parameters. */
   public DSAParams getParams()
   {
-    return
-      new DSAParams() {
+    return new DSAParams() {
       @Override
       public BigInteger getP()
       {
