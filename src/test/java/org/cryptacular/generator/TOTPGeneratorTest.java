@@ -23,7 +23,7 @@ public class TOTPGeneratorTest
   public Object[][] getTestDataRfc6238()
   {
     // Key size is equal to hash length for test vectors in RFC-6238
-    // (via careful of review main method of reference implementation in Appendix A)
+    // (via careful review of the main method in the reference implementation under Appendix A)
     final String sha1Key = "12345678901234567890";
     final String sha256Key = "12345678901234567890123456789012";
     final String sha512Key = "1234567890123456789012345678901234567890123456789012345678901234";
