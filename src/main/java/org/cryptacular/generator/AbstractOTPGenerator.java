@@ -78,7 +78,8 @@ public abstract class AbstractOTPGenerator
 
 
   /**
-   * Truncates HMAC output onto an unsigned (i.e. 31-bit) integer.
+   * Truncates HMAC output onto an unsigned (i.e. 31-bit) integer using the strategy discussed in RFC 4226,
+   * section 5.3.
    *
    * @param  hmac  HMAC output.
    *
@@ -86,7 +87,8 @@ public abstract class AbstractOTPGenerator
    */
   private int truncate(final byte[] hmac)
   {
-    final int offset = hmac[19] & 0xf;
+    // Offset is the lowest 4 bits of the computed hash
+    final int offset = hmac[hmac.length - 1] & 0xf;
     return
       (hmac[offset] & 0x7f) << 24 |
       (hmac[offset + 1] & 0xff) << 16 |

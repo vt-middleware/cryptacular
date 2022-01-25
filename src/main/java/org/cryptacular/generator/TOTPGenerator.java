@@ -17,6 +17,12 @@ public class TOTPGenerator extends AbstractOTPGenerator
   /** Digest algorithm specification. */
   private Spec<Digest> digestSpecification = new DigestSpec("SHA1");
 
+  /**
+   * Current system time in seconds since the start of the epoch, 1970-01-01T00:00:00.
+   * This value is used if and only if it is a non-negative value; otherwise the current system time is used.
+   */
+  private long currentTime = -1;
+
   /** Reference start time, T0. Default 0, i.e. 1970-01-01T00:00:00. */
   private int startTime;
 
@@ -97,8 +103,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
    */
   public int generate(final byte[] key)
   {
-    final int unixTime = (int) (System.currentTimeMillis() / 1000);
-    final int t = (unixTime - startTime) / timeStep;
+    final long t = (currentTime() - startTime) / timeStep;
     return generateInternal(key, t);
   }
 
@@ -107,5 +112,29 @@ public class TOTPGenerator extends AbstractOTPGenerator
   protected Digest getDigest()
   {
     return digestSpecification.newInstance();
+  }
+
+
+  /**
+   * Sets the current time (supports testing). This value is used if and only if it is a non-negative value; otherwise
+   * the current system time is used.
+   *
+   * @param epochSeconds Seconds since the start of the epoch, 1970-01-01T00:00:00.
+   */
+  protected void setCurrentTime(final long epochSeconds)
+  {
+    currentTime = epochSeconds;
+  }
+
+
+  /**
+   * @return Current system time in seconds since the start of epoch, 1970-01-01T00:00:00.
+   */
+  protected long currentTime()
+  {
+    if (currentTime >= 0) {
+      return currentTime;
+    }
+    return System.currentTimeMillis() / 1000;
   }
 }
