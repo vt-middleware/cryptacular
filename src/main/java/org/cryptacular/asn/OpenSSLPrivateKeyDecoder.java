@@ -123,10 +123,10 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
   {
     final ASN1TaggedObject asn1Params = ASN1TaggedObject.getInstance(seq.getObjectAt(2));
     final X9ECParameters params;
-    if (asn1Params.getObject() instanceof ASN1ObjectIdentifier) {
-      params = ECUtil.getNamedCurveByOid(ASN1ObjectIdentifier.getInstance(asn1Params.getObject()));
+    if (asn1Params.getBaseObject() instanceof ASN1ObjectIdentifier) {
+      params = ECUtil.getNamedCurveByOid(ASN1ObjectIdentifier.getInstance(asn1Params.getBaseObject()));
     } else {
-      params = X9ECParameters.getInstance(asn1Params.getObject());
+      params = X9ECParameters.getInstance(asn1Params.getBaseObject());
     }
     return new ECPrivateKeyParameters(
       new BigInteger(1, ASN1OctetString.getInstance(seq.getObjectAt(1)).getOctets()),
