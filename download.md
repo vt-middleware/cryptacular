@@ -21,6 +21,9 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.2.6 - 14Aug2023 (Requires Java 8)
+This version updates bouncycastle to version 1.76.
+
 ### Version 1.2.5 - 14Apr2022 (Requires Java 8)
 This version changes the bouncycastle artifactId from bcprov-jdk15on to bcprov-jdk18on. See the [BC release notes](https://www.bouncycastle.org/latest_releases.html) for details on this change.
 
