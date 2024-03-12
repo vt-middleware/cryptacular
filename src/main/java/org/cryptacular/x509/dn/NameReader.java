@@ -64,7 +64,20 @@ public class NameReader
    */
   public static RDNSequence readX500Principal(final X500Principal principal)
   {
-    final X500Name name = X500Name.getInstance(principal.getEncoded());
+    return readX500Name(X500Name.getInstance(principal.getEncoded()));
+  }
+
+
+  /**
+   * Converts the given X.500 name to a list of relative distinguished names that contains the attributes
+   * comprising the DN.
+   *
+   * @param  name  X.500 name.
+   *
+   * @return  X.500 name as an RDN sequence.
+   */
+  public static RDNSequence readX500Name(final X500Name name)
+  {
     final RDNSequence sequence = new RDNSequence();
     for (org.bouncycastle.asn1.x500.RDN rdn : name.getRDNs()) {
       final Attributes attributes = new Attributes();
