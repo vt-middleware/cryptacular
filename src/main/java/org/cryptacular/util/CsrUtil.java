@@ -62,6 +62,8 @@ public final class CsrUtil
    * @param csr Certificate signing request.
    *
    * @return PEM-encoded CSR.
+   *
+   * @throws EncodingException on errors writing PEM-encoded data.
    */
   public static String encodeCsr(final PKCS10CertificationRequest csr)
   {
@@ -81,6 +83,8 @@ public final class CsrUtil
    * @param csr PEM-encoded CSR.
    *
    * @return Decoded CSR.
+   *
+   * @throws IllegalArgumentException if input does not appear to be PEM-encoded data.
    */
   public static CertificationRequest decodeCsr(final String csr)
   {
@@ -193,6 +197,9 @@ public final class CsrUtil
    * @param csr Certificate request.
    *
    * @return Public key size in bits.
+   *
+   * @throws IllegalArgumentException if CSR specifies a key algorithm other than RSA or EC.
+   * @throws CryptoException on errors creating a public key from data in the CSR.
    */
   public static int keyLength(final CertificationRequest csr)
   {
@@ -223,10 +230,12 @@ public final class CsrUtil
    *
    * @return PKCS#10 certification request. Use {@link PKCS10CertificationRequest#toASN1Structure()} to get the
    * underlying {@link CertificationRequest} that may be used with other helper methods.
+   *
+   * @throws IllegalArgumentException if CSR specifies a key algorithm other than RSA or EC.
+   * @throws CryptoException on errors generating the CSR from data provided.
    */
   public static PKCS10CertificationRequest generateCsr(
     final KeyPair keyPair, final String subjectDN, final String ... subjectAltNames)
-    throws CryptoException
   {
     final String keyAlg = keyPair.getPublic().getAlgorithm();
     final String sigAlg;
