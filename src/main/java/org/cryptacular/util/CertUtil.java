@@ -58,9 +58,6 @@ import org.cryptacular.x509.dn.StandardAttributeType;
 public final class CertUtil
 {
 
-  /** Unix line separator. */
-  private static final String UNIX_LINE_SEPARATOR = "\n";
-
   /** Private constructor of utility class. */
   private CertUtil() {}
 
@@ -487,13 +484,17 @@ public final class CertUtil
    * @param certificate X.509 certificate.
    * @param encodeType Type of encoding. {@link EncodeType#X509} or {@link EncodeType#PKCS7}
    *
-   * @return PEM-encoded certificate headed and footer defined by {@link EncodeType} and data wrapped at 64
-   * characters per line.
+   * @return either DER encoded certificate or PEM-encoded certificate headed and footer defined by {@link EncodeType}
+   * and data wrapped at 64 characters per line.
    */
   public static String encodeCert(final X509Certificate certificate, final EncodeType encodeType)
   {
     try {
-      return encodeCert(certificate.getEncoded(), encodeType);
+      if (encodeType == EncodeType.DER) {
+        return new String(certificate.getEncoded());
+      } else {
+        return encodeCert(certificate.getEncoded(), encodeType);
+      }
     } catch (CertificateEncodingException e) {
       throw new RuntimeException("Error getting encoded X.509 certificate data", e);
     }
@@ -512,14 +513,15 @@ public final class CertUtil
   {
     final Base64Encoder encoder = new Base64Encoder(64);
     final ByteBuffer input = ByteBuffer.wrap(der);
+    // Space for Base64-encoded data + header, footer, line breaks, and potential padding
     final CharBuffer output = CharBuffer.allocate(encoder.outputSize(der.length) + 100);
     output.append("-----BEGIN ").append(encodeType.getType()).append("-----");
-    output.append(UNIX_LINE_SEPARATOR);
+    output.append(System.lineSeparator());
     encoder.encode(input, output);
     encoder.finalize(output);
     output.flip();
     return output.toString().trim()
-      .concat(UNIX_LINE_SEPARATOR).concat("-----END ").concat(encodeType.getType()).concat("-----");
+      .concat(System.lineSeparator()).concat("-----END ").concat(encodeType.getType()).concat("-----");
   }
 
   /**
@@ -550,15 +552,17 @@ public final class CertUtil
    * @param dn Subject dn
    * @param duration Validity period of the certificate. The <em>notAfter</em> field is set to {@code now}
    * plus this value.
+   * @param signatureAlgo the signature algorithm identifier to use
    *
    * @return a self-signed X509Certificate
    */
-  public static X509Certificate generateX509Certificate(final KeyPair keyPair, final String dn, final Duration duration)
+  public static X509Certificate generateX509Certificate(final KeyPair keyPair, final String dn,
+    final Duration duration, final String signatureAlgo)
   {
     final Instant now = Instant.now();
     final Date notBefore = Date.from(now);
     final Date notAfter = Date.from(now.plus(duration));
-    return generateX509Certificate(keyPair, dn, notBefore, notAfter);
+    return generateX509Certificate(keyPair, dn, notBefore, notAfter, signatureAlgo);
   }
 
   /**
@@ -568,17 +572,18 @@ public final class CertUtil
    * @param dn Subject dn
    * @param notBefore the date and time when the certificate validity period starts
    * @param notAfter  the date and time when the certificate validity period ends
+   * @param signatureAlgo the signature algorithm identifier to use
    *
    * @return a self-signed X509Certificate
    */
   public static X509Certificate generateX509Certificate(final KeyPair keyPair, final String dn,
-    final Date notBefore, final Date notAfter)
+    final Date notBefore, final Date notAfter, final String signatureAlgo)
   {
     final Instant now = Instant.now();
     final BigInteger serial = BigInteger.valueOf(now.toEpochMilli());
 
     try {
-      final ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSA")
+      final ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgo)
         .build(keyPair.getPrivate());
       final X500Name x500Name = new X500Name(RFC4519Style.INSTANCE, dn);
       final X509v3CertificateBuilder certificateBuilder =
@@ -601,6 +606,10 @@ public final class CertUtil
    * Header and Footer type for pem encoded data
    */
   public enum EncodeType {
+
+    /** DER type. */
+    DER("DER"),
+
     /** X509 type. */
     X509("CERTIFICATE"),
 

@@ -99,6 +99,18 @@ public class CertUtilTest
       };
   }
 
+  @DataProvider(name = "encode-cert-der")
+  public Object[][] getDERCert() throws Exception
+  {
+    return
+      new Object[][] {
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
+          new String(Files.readAllBytes(new File(CRT_PATH + "ed.middleware.vt.edu.der").toPath())),
+        },
+      };
+  }
+
   @DataProvider(name = "subject-alt-names")
   public Object[][] getSubjectAltNames()
   {
@@ -430,6 +442,13 @@ public class CertUtilTest
     assertEquals(encodedCert, x509Cert);
   }
 
+  @Test(dataProvider = "encode-cert-der")
+  public void certEncodedAsDER(final X509Certificate certificate, final String derCert)
+  {
+    final String encodedCert = CertUtil.encodeCert(certificate, CertUtil.EncodeType.DER);
+    assertEquals(encodedCert, derCert);
+  }
+
   @Test(dataProvider = "subject-dn")
   public void testSubjectDN(final X509Certificate certificate, final String expectedResponse)
   {
@@ -454,11 +473,28 @@ public class CertUtilTest
     final Instant expectedNotAfter = Instant.now().plus(Duration.ofDays(365));
 
     final X509Certificate x509Certificate = CertUtil.generateX509Certificate(keyPair, dn,
-      Date.from(expectedNotBefore), Date.from(expectedNotAfter));
+      Date.from(expectedNotBefore), Date.from(expectedNotAfter), "SHA256WithRSA");
 
     assertEquals(truncateToSeconds(expectedNotBefore), truncateToSeconds(x509Certificate.getNotBefore().toInstant()));
     assertEquals(truncateToSeconds(expectedNotAfter), truncateToSeconds(x509Certificate.getNotAfter().toInstant()));
   }
+
+  @Test(expectedExceptions = RuntimeException.class,
+    expectedExceptionsMessageRegExp = "Unknown signature type requested: UNSUPPORTEDALGO")
+  public void testGenX509UnSupportedAlgo()
+  {
+    final KeyPair keyPair = KeyPairGenerator.generateRSA(new SecureRandom(), 2048);
+    final String dn = "C=US, DC=edu, DC=vt, ST=Virginia, " +
+      "L=Blacksburg, O=Virginia Polytechnic Institute and State University, OU=Middleware-Server-with-saltr, " +
+      "OU=Middleware Services, CN=ed.middleware.vt.edu";
+
+    final Instant expectedNotBefore = Instant.now();
+    final Instant expectedNotAfter = Instant.now().plus(Duration.ofDays(365));
+
+    CertUtil.generateX509Certificate(keyPair, dn,
+        Date.from(expectedNotBefore), Date.from(expectedNotAfter), "UNSUPPORTEDALGO");
+  }
+
 
   private OffsetDateTime truncateToSeconds(final Instant instant)
   {
