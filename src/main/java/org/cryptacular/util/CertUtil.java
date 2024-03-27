@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
@@ -491,7 +492,7 @@ public final class CertUtil
   {
     try {
       if (encodeType == EncodeType.DER) {
-        return new String(certificate.getEncoded());
+        return new String(certificate.getEncoded(), StandardCharsets.UTF_8);
       } else {
         return encodeCert(certificate.getEncoded(), encodeType);
       }
