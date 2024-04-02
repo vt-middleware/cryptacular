@@ -59,4 +59,15 @@ public interface EncryptionScheme
    */
   void decrypt(InputStream in, OutputStream out)
     throws IOException;
+
+
+  /***
+   * Wraps an output stream with one that performs encryption or decryption on the fly.
+   *
+   * @param  encryptionFlag  True to signal encryption, false for decryption.
+   * @param  out  Output stream to wrap
+   *
+   * @return Wrapped output steam.
+   */
+  OutputStream wrap(boolean encryptionFlag, OutputStream out);
 }

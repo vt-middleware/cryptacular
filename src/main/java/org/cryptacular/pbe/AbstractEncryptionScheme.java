@@ -67,6 +67,14 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   }
 
 
+  @Override
+  public OutputStream wrap(final boolean encryptionFlag, final OutputStream out)
+  {
+    cipher.init(encryptionFlag, parameters);
+    return new CipherOutputStream(out, cipher);
+  }
+
+
   /**
    * Sets the block cipher used for encryption/decryption.
    *
