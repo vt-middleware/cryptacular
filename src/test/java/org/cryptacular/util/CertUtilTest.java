@@ -106,7 +106,7 @@ public class CertUtilTest
       new Object[][] {
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
-          new String(Files.readAllBytes(new File(CRT_PATH + "ed.middleware.vt.edu.der").toPath())),
+          Files.readAllBytes(new File(CRT_PATH + "ed.middleware.vt.edu.der").toPath()),
         },
       };
   }
@@ -443,9 +443,9 @@ public class CertUtilTest
   }
 
   @Test(dataProvider = "encode-cert-der")
-  public void certEncodedAsDER(final X509Certificate certificate, final String derCert)
+  public void certEncodedAsDER(final X509Certificate certificate, final byte[] derCert)
   {
-    final String encodedCert = CertUtil.encodeCert(certificate, CertUtil.EncodeType.DER);
+    final byte[] encodedCert = CertUtil.encodeCert(certificate, CertUtil.EncodeType.DER);
     assertEquals(encodedCert, derCert);
   }
 

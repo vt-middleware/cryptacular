@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
@@ -482,47 +481,23 @@ public final class CertUtil
   /**
    * PEM encodes the given certificate with the provided encoding type.
    *
+   * @param <T> type of encoding
+   *
    * @param certificate X.509 certificate.
    * @param encodeType Type of encoding. {@link EncodeType#X509} or {@link EncodeType#PKCS7}
    *
-   * @return either DER encoded certificate or PEM-encoded certificate headed and footer defined by {@link EncodeType}
+   * @return either DER encoded certificate or PEM-encoded certificate header and footer defined by {@link EncodeType}
    * and data wrapped at 64 characters per line.
+   *
+   * @throws RuntimeException if a certificate encoding error occurs
    */
-  public static String encodeCert(final X509Certificate certificate, final EncodeType encodeType)
+  public static <T> T encodeCert(final X509Certificate certificate, final EncodeType<T> encodeType)
   {
     try {
-      if (encodeType == EncodeType.DER) {
-        return new String(certificate.getEncoded(), StandardCharsets.UTF_8);
-      } else {
-        return encodeCert(certificate.getEncoded(), encodeType);
-      }
+      return encodeType.encode(certificate);
     } catch (CertificateEncodingException e) {
       throw new RuntimeException("Error getting encoded X.509 certificate data", e);
     }
-  }
-
-  /**
-   * Converts the given der encoding to PEM encoding.
-   *
-   * @param der DER encoding of certificate with specified encoding.
-   * @param encodeType Encoding type that define the header and footer.
-   *
-   * @return PEM-encoded certificate headed and footer defined by {@link EncodeType} and data wrapped at 64
-   * characters per line.
-   */
-  public static String encodeCert(final byte[] der, final EncodeType encodeType)
-  {
-    final Base64Encoder encoder = new Base64Encoder(64);
-    final ByteBuffer input = ByteBuffer.wrap(der);
-    // Space for Base64-encoded data + header, footer, line breaks, and potential padding
-    final CharBuffer output = CharBuffer.allocate(encoder.outputSize(der.length) + 100);
-    output.append("-----BEGIN ").append(encodeType.getType()).append("-----");
-    output.append(System.lineSeparator());
-    encoder.encode(input, output);
-    encoder.finalize(output);
-    output.flip();
-    return output.toString().trim()
-      .concat(System.lineSeparator()).concat("-----END ").concat(encodeType.getType()).concat("-----");
   }
 
   /**
@@ -604,31 +579,121 @@ public final class CertUtil
   }
 
   /**
-   * Header and Footer type for pem encoded data
+   * Marker interface for encoding types.
+   *
+   * @param <T> type of encoding
    */
-  public enum EncodeType {
+  public interface EncodeType<T>
+  {
 
-    /** DER type. */
-    DER("DER"),
+    /** DER encode type.*/
+    EncodeType<byte[]> DER = new DEREncodeType();
 
-    /** X509 type. */
-    X509("CERTIFICATE"),
+    /** X509 encode type. */
+    EncodeType<String> X509 = new X509EncodeType();
 
-    /** PKCS7 type. */
-    PKCS7("PKCS7");
+    /** PKCS7 encode type. */
+    EncodeType<String> PKCS7 = new PKCS7EncodeType();
 
-    /** Type string. */
-    private String type;
+    /**
+     * Returns the type of encoding.
+     *
+     * @return type
+     */
+    String getType();
 
-    EncodeType(final String encodedType)
+    /**
+     * Encodes the supplied certificate.
+     *
+     * @param cert to encode
+     *
+     * @return encoded certificate
+     *
+     * @throws CertificateEncodingException if an error occurs encoding the certificate
+     */
+    T encode(X509Certificate cert) throws CertificateEncodingException;
+  }
+
+  /**
+   * Base implementation for PEM encoded types.
+   */
+  private abstract static class AbstractPemEncodeType implements EncodeType<String>
+  {
+
+    /**
+     * Returns a PEM encoding of the supplied DER bytes.
+     *
+     * @param der to encode
+     *
+     * @return PEM encoded certificate
+     */
+    protected String encodePem(final byte[] der)
     {
-      type = encodedType;
-    }
-
-    public String getType()
-    {
-      return type;
+      final Base64Encoder encoder = new Base64Encoder(64);
+      final ByteBuffer input = ByteBuffer.wrap(der);
+      // Space for Base64-encoded data + header, footer, line breaks, and potential padding
+      final CharBuffer output = CharBuffer.allocate(encoder.outputSize(der.length) + 100);
+      output.append("-----BEGIN ").append(getType()).append("-----");
+      output.append(System.lineSeparator());
+      encoder.encode(input, output);
+      encoder.finalize(output);
+      output.flip();
+      return output.toString().trim()
+        .concat(System.lineSeparator()).concat("-----END ").concat(getType()).concat("-----");
     }
   }
 
+  /** DER encode type. */
+  private static class DEREncodeType implements EncodeType<byte[]>
+  {
+
+    @Override
+    public String getType()
+    {
+      return "DER";
+    }
+
+    @Override
+    public byte[] encode(final X509Certificate cert)
+      throws CertificateEncodingException
+    {
+      return cert.getEncoded();
+    }
+  }
+
+  /** X509 encode type. */
+  private static final class X509EncodeType extends AbstractPemEncodeType
+  {
+
+    @Override
+    public String getType()
+    {
+      return "CERTIFICATE";
+    }
+
+    @Override
+    public String encode(final X509Certificate cert)
+      throws CertificateEncodingException
+    {
+      return encodePem(cert.getEncoded());
+    }
+  }
+
+  /** PKCS7 encode type. */
+  private static final class PKCS7EncodeType extends AbstractPemEncodeType
+  {
+
+    @Override
+    public String getType()
+    {
+      return "PKCS7";
+    }
+
+    @Override
+    public String encode(final X509Certificate cert)
+      throws CertificateEncodingException
+    {
+      return encodePem(cert.getEncoded());
+    }
+  }
 }
