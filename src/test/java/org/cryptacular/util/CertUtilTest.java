@@ -452,13 +452,13 @@ public class CertUtilTest
   @Test(dataProvider = "subject-dn")
   public void testSubjectDN(final X509Certificate certificate, final String expectedResponse)
   {
-    assertEquals(CertUtil.subjectDN(certificate, false), expectedResponse);
+    assertEquals(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.RFC2253), expectedResponse);
   }
 
   @Test(dataProvider = "subject-dn-spaces")
   public void testSubjectDNWithSpaces(final X509Certificate certificate, final String expectedResponse)
   {
-    assertEquals(CertUtil.subjectDN(certificate, true), expectedResponse);
+    assertEquals(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.CANONICAL), expectedResponse);
   }
 
   @Test

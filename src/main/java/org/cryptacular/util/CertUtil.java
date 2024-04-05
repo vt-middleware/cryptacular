@@ -519,7 +519,7 @@ public final class CertUtil
   {
     final X500Principal subjectX500Principal = cert.getSubjectX500Principal();
     return X500PrincipalFormat.CANONICAL.equals(format) ?
-      subjectX500Principal.toString() : subjectX500Principal.getName();
+      subjectX500Principal.toString() : subjectX500Principal.getName(X500Principal.RFC2253);
   }
 
   /**
