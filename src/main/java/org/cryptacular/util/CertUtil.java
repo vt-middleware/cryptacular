@@ -507,18 +507,19 @@ public final class CertUtil
    * such as the common name (CN), organizational unit (OU), organization (O), locality (L), state (ST),
    * country (C), and other attributes.
    *
-   * @param cert           The X.509 certificate from which to extract the subject DN.
-   * @param includeSpaces  A boolean flag indicating whether to include spaces in the subject DN string.
-   * @return The subject DN string of the X.509 certificate. If {@code includeSpaces} is true,
-   *         the DN string will be returned in its original format. If {@code includeSpaces} is false,
-   *         the DN string will be returned without spaces between attributes.
+   * @param cert   The X.509 certificate from which to extract the subject DN.
+   * @param format Controls whether the output contains spaces between attributes in the DN.
+   *               Use {@link X500PrincipalFormat#CANONICAL} to generate a DN with spaces after the commas separating
+   *               attribute-value pairs, {@link X500PrincipalFormat#RFC2253} for no spaces.
+   * @return The subject DN string of the X.509 certificate.
    *
    * @throws NullPointerException  If the provided certificate is null.
    */
-  public static String subjectDN(final X509Certificate cert, final boolean includeSpaces)
+  public static String subjectDN(final X509Certificate cert, final X500PrincipalFormat format)
   {
     final X500Principal subjectX500Principal = cert.getSubjectX500Principal();
-    return includeSpaces ? subjectX500Principal.toString() : subjectX500Principal.getName();
+    return X500PrincipalFormat.CANONICAL.equals(format) ?
+      subjectX500Principal.toString() : subjectX500Principal.getName();
   }
 
   /**
@@ -576,6 +577,18 @@ public final class CertUtil
     } catch (OperatorCreationException | CertIOException | CertificateException e) {
       throw new RuntimeException("Certificate generation error", e);
     }
+  }
+
+  /**
+   * Describes the behavior of string formatting of X.500 distinguished names.
+   */
+  public enum X500PrincipalFormat
+  {
+    /** The format described in RFC 2253 (without spaces). */
+    RFC2253,
+
+    /** Similar to RFC2253, but with spaces. */
+    CANONICAL
   }
 
   /**
