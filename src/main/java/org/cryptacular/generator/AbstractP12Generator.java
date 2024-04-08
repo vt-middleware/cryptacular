@@ -37,6 +37,9 @@ public abstract class AbstractP12Generator implements P12Generator
     if (certificates.length < 1) {
       throw new IllegalArgumentException("At least one certificate must be provided");
     }
+    if (password == null || password.length == 0) {
+      throw new IllegalArgumentException("Password cannot be null or empty");
+    }
     final PKCS12PfxPduBuilder pfxPduBuilder = new PKCS12PfxPduBuilder();
     final PKCS12SafeBag[] certBags = new PKCS12SafeBag[certificates.length];
     final JcaX509ExtensionUtils extUtils;
