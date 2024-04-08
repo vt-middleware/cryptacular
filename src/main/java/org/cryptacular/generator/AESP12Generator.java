@@ -165,7 +165,7 @@ public class AESP12Generator extends AbstractP12Generator
       this.pbkdf2Config = config;
     }
 
-    public OutputEncryptor build(final char[] password)
+    OutputEncryptor build(final char[] password)
     {
       final byte[] salt = new byte[pbkdf2Config.getSaltLength()];
       random.nextBytes(salt);
