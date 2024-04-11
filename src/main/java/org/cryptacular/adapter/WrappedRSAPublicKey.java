@@ -13,6 +13,9 @@ import org.bouncycastle.crypto.params.RSAKeyParameters;
 public class WrappedRSAPublicKey extends AbstractWrappedRSAKey<RSAKeyParameters> implements RSAPublicKey
 {
 
+  /** serialVersionUID. */
+  private static final long serialVersionUID = -5733201361124222309L;
+
   /**
    * Creates a new instance that wraps the given key.
    *

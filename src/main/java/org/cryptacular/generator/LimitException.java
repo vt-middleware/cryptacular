@@ -11,7 +11,7 @@ public class LimitException extends RuntimeException
 {
 
   /**
-   * Creates a new instance with the given error description..
+   * Creates a new instance with the given error description.
    *
    * @param  message  Error message.
    */

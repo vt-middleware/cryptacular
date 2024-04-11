@@ -13,6 +13,9 @@ import org.bouncycastle.crypto.params.DSAPublicKeyParameters;
 public class WrappedDSAPublicKey extends AbstractWrappedDSAKey<DSAPublicKeyParameters> implements DSAPublicKey
 {
 
+  /** serialVersionUID. */
+  private static final long serialVersionUID = -3349509056520420431L;
+
   /**
    * Creates a new instance that wraps the given key.
    *

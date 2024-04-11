@@ -9,6 +9,9 @@ package org.cryptacular.spec;
 public class KeyedBlockCipherSpec extends BufferedBlockCipherSpec
 {
 
+  /** serialVersionUID. */
+  private static final long serialVersionUID = -7623413862633189082L;
+
   /** Key length in bits. */
   private final int keyLength;
 

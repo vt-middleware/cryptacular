@@ -42,7 +42,7 @@ public class CodecSpec implements Spec<Codec>
 
 
   /** Name of encoding, e.g. "Hex, "Base64". */
-  private String encoding;
+  private final String encoding;
 
 
   /**

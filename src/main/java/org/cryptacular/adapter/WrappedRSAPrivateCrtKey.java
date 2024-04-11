@@ -14,6 +14,9 @@ public class WrappedRSAPrivateCrtKey extends AbstractWrappedRSAKey<RSAPrivateCrt
   implements RSAPrivateCrtKey
 {
 
+  /** serialVersionUID. */
+  private static final long serialVersionUID = 99555083744578278L;
+
   /**
    * Creates a new instance that wraps the given BC RSA private key.
    *

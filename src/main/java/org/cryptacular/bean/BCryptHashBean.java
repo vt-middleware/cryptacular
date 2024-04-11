@@ -311,15 +311,7 @@ public class BCryptHashBean implements HashBean<String>
      */
     public String encode()
     {
-      return new StringBuilder(60)
-          .append('$')
-          .append(version)
-          .append('$')
-          .append(cost)
-          .append('$')
-          .append(BCryptHashBean.encode(salt, 16))
-          .append(BCryptHashBean.encode(hash, 23))
-          .toString();
+      return '$' + version + '$' + cost + '$' + BCryptHashBean.encode(salt, 16) + BCryptHashBean.encode(hash, 23);
     }
 
 
@@ -332,15 +324,7 @@ public class BCryptHashBean implements HashBean<String>
      */
     public String encode(final String hash)
     {
-      return new StringBuilder(60)
-          .append('$')
-          .append(version)
-          .append('$')
-          .append(cost)
-          .append('$')
-          .append(BCryptHashBean.encode(salt, 16))
-          .append(hash)
-          .toString();
+      return '$' + version + '$' + cost + '$' + BCryptHashBean.encode(salt, 16) + hash;
     }
   }
 }

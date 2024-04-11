@@ -96,7 +96,7 @@ public class RDNSequence implements Iterable<RDN>
   public String getValue(final AttributeType type)
   {
     final List<String> values = getValues(type);
-    if (values.size() > 0) {
+    if (!values.isEmpty()) {
       return values.get(0);
     }
     return null;

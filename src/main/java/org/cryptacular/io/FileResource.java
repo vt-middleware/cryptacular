@@ -17,7 +17,7 @@ public class FileResource implements Resource
 {
 
   /** Underlying file resource. */
-  private File file;
+  private final File file;
 
 
   /**

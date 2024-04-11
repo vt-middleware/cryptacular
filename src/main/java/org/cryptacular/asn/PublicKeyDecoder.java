@@ -23,7 +23,9 @@ public class PublicKeyDecoder implements ASN1Decoder<AsymmetricKeyParameter>
       if (PemUtil.isPem(encoded)) {
         return PublicKeyFactory.createKey(PemUtil.decode(encoded));
       }
-      return PublicKeyFactory.createKey(new ASN1InputStream(encoded).readObject().getEncoded());
+      try (ASN1InputStream is = new ASN1InputStream(encoded)) {
+        return PublicKeyFactory.createKey(is.readObject().getEncoded());
+      }
     } catch (IOException e) {
       throw new EncodingException("ASN.1 decoding error", e);
     }

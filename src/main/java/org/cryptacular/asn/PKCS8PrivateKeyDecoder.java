@@ -45,8 +45,8 @@ public class PKCS8PrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetric
   @Override
   protected AsymmetricKeyParameter decodeASN1(final byte[] encoded)
   {
-    try {
-      return PrivateKeyFactory.createKey(new ASN1InputStream(encoded).readObject().getEncoded());
+    try (ASN1InputStream is = new ASN1InputStream(encoded)) {
+      return PrivateKeyFactory.createKey(is.readObject().getEncoded());
     } catch (IOException e) {
       throw new EncodingException("ASN.1 decoding error", e);
     }

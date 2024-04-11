@@ -29,7 +29,7 @@ import org.bouncycastle.crypto.engines.XTEAEngine;
 public class BlockCipherSpec implements Spec<BlockCipher>
 {
 
-  /** Cipher algorithm algorithm. */
+  /** Cipher algorithm. */
   private final String algorithm;
 
 

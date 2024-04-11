@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter
+    xmlns="https://github.com/spotbugs/filter/4.8.4"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://github.com/spotbugs/filter/4.8.4
+                        https://raw.githubusercontent.com/spotbugs/spotbugs/4.8.4/spotbugs/etc/findbugsfilter.xsd">
+
+  <!-- See https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html -->
+
+  <!-- Allow platform specific encoding -->
+  <Match>
+    <Class name="org.cryptacular.CiphertextHeader" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <!-- Result of InputStream#read is ignored -->
+  <Match>
+    <Class name="org.cryptacular.CiphertextHeader" />
+    <Method name="decode" />
+    <Bug pattern="RR_NOT_CHECKED" />
+  </Match>
+
+  <!-- Allow constructors to throw exceptions -->
+  <Match>
+    <Bug pattern="CT_CONSTRUCTOR_THROW" />
+  </Match>
+
+  <!-- Allow platform specific encoding when reading and writing files -->
+  <Match>
+    <Or>
+      <Class name="org.cryptacular.util.StreamUtil" />
+      <Class name="org.cryptacular.io.DecodingInputStream" />
+      <Class name="org.cryptacular.io.EncodingOutputStream" />
+    </Or>
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <!-- This check appears broken, SecureRandom is not discarded -->
+  <Match>
+    <Or>
+      <Class name="org.cryptacular.generator.RandomIdGenerator" />
+      <Class name="org.cryptacular.util.NonceUtil" />
+    </Or>
+    <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE" />
+  </Match>
+
+  <!-- Byte array streams do not need to be closed -->
+  <Match>
+    <Class name="org.cryptacular.asn.OpenSSLPrivateKeyDecoder" />
+    <Method name="decodeASN1" />
+    <Bug pattern="OS_OPEN_STREAM" />
+  </Match>
+
+  <!-- Internal representation is exposed throughout the API -->
+  <Match>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP" />
+      <Bug pattern="EI_EXPOSE_REP2" />
+    </Or>
+  </Match>
+
+</FindBugsFilter>
