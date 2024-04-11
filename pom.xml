@@ -7,28 +7,19 @@
   <version>1.2.7-SNAPSHOT</version>
   <name>Cryptacular Library</name>
   <description>The spectacular complement to the Bouncy Castle crypto API for Java.</description>
-  <url>http://www.cryptacular.org</url>
+  <url>https://www.cryptacular.org</url>
   <issueManagement>
     <system>GitHub</system>
     <url>https://github.com/vt-middleware/cryptacular/issues</url>
   </issueManagement>
-  <mailingLists>
-    <mailingList>
-      <name>cryptacular</name>
-      <subscribe>cryptacular+subscribe@googlegroups.com</subscribe>
-      <unsubscribe>cryptacular+unsubscribe@googlegroups.com</unsubscribe>
-      <post>cryptacular@googlegroups.com</post>
-      <archive>http://groups.google.com/group/cryptacular</archive>
-    </mailingList>
-  </mailingLists>
   <licenses>
     <license>
       <name>Apache 2</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
     <license>
       <name>GNU Lesser General Public License</name>
-      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+      <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
     </license>
   </licenses>
   <scm>
@@ -42,7 +33,7 @@
       <name>Daniel Fisher</name>
       <email>dfisher@vt.edu</email>
       <organization>Virginia Tech</organization>
-      <organizationUrl>http://www.vt.edu</organizationUrl>
+      <organizationUrl>https://www.vt.edu</organizationUrl>
       <roles>
         <role>developer</role>
       </roles>
@@ -52,7 +43,7 @@
       <name>Marvin S. Addison</name>
       <email>serac@vt.edu</email>
       <organization>Virginia Tech</organization>
-      <organizationUrl>http://www.vt.edu</organizationUrl>
+      <organizationUrl>https://www.vt.edu</organizationUrl>
       <roles>
         <role>developer</role>
       </roles>
@@ -279,7 +270,7 @@
         <configuration>
           <source>8</source>
           <links>
-            <link>http://download.oracle.com/javase/8/docs/api</link>
+            <link>https://download.oracle.com/javase/8/docs/api</link>
           </links>
           <bottom><![CDATA[<i>Copyright &#169; 2003-2024 Virginia Tech. All Rights Reserved.</i>]]></bottom>
         </configuration>
