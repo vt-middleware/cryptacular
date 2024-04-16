@@ -36,7 +36,7 @@ public final class KeyPairGenerator
 
 
   /**
-   * Generates a RSA key pair.
+   * Generates an RSA key pair.
    *
    * @param  random  Random source required for key generation.
    * @param  bitLength  Desired key size in bits.
@@ -53,7 +53,7 @@ public final class KeyPairGenerator
 
 
   /**
-   * Generates a EC key pair.
+   * Generates an EC key pair.
    *
    * @param  random  Random source required for key generation.
    * @param  bitLength  Desired key size in bits.
@@ -70,7 +70,7 @@ public final class KeyPairGenerator
 
 
   /**
-   * Generates a EC key pair.
+   * Generates an EC key pair.
    *
    * @param  random  Random source required for key generation.
    * @param  namedCurve  Well-known elliptic curve name that includes domain parameters including key size.

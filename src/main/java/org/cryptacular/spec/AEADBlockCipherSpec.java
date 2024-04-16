@@ -23,7 +23,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
   /** String specification format, <code>algorithm/mode</code>. */
   public static final Pattern FORMAT = Pattern.compile("(?<alg>[A-Za-z0-9_-]+)/(?<mode>\\w+)");
 
-  /** Cipher algorithm algorithm. */
+  /** Cipher algorithm. */
   private final String algorithm;
 
   /** Cipher mode, e.g. GCM, CCM. */

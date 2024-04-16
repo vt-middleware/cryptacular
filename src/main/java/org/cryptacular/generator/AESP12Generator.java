@@ -4,6 +4,7 @@ package org.cryptacular.generator;
 import java.io.OutputStream;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,13 +36,14 @@ import org.cryptacular.spec.DigestSpec;
 public class AESP12Generator extends AbstractP12Generator
 {
   /** Set of supported digest algorithms. */
-  public static final Set<ASN1ObjectIdentifier> SUPPORTED_DIGEST_ALGORITHMS = new HashSet<>(Arrays.asList(
-    NISTObjectIdentifiers.id_sha256,
-    NISTObjectIdentifiers.id_sha512,
-    NISTObjectIdentifiers.id_sha3_256,
-    NISTObjectIdentifiers.id_sha3_384,
-    NISTObjectIdentifiers.id_sha3_512
-  ));
+  public static final Set<ASN1ObjectIdentifier> SUPPORTED_DIGEST_ALGORITHMS = Collections.unmodifiableSet(
+    new HashSet<>(Arrays.asList(
+      NISTObjectIdentifiers.id_sha256,
+      NISTObjectIdentifiers.id_sha512,
+      NISTObjectIdentifiers.id_sha3_256,
+      NISTObjectIdentifiers.id_sha3_384,
+      NISTObjectIdentifiers.id_sha3_512
+    )));
 
   /** Map of digest algorithm identifiers to digest specifications. */
   private static final Map<ASN1ObjectIdentifier, DigestSpec> DIGEST_ID_TO_DIGEST_SPEC_MAP = new HashMap<>();

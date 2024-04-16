@@ -197,7 +197,7 @@ public class CiphertextHeaderV2 extends CiphertextHeader
         throw new EncodingException("Unsupported ciphertext header version");
       }
       final ByteArrayOutputStream out = new ByteArrayOutputStream(100);
-      byte b = 0;
+      byte b;
       int count = 0;
       while ((b = readByteFn.apply(source)) != 0) {
         out.write(b);
@@ -254,12 +254,14 @@ public class CiphertextHeaderV2 extends CiphertextHeader
    * @param  input  Input stream.
    * @param  output  Output buffer.
    *
+   * @return  number of bytes read
+   *
    * @throws  StreamException  on stream IO errors.
    */
-  private static void readInto(final InputStream input, final byte[] output)
+  private static int readInto(final InputStream input, final byte[] output)
   {
     try {
-      input.read(output);
+      return input.read(output);
     } catch (IOException e) {
       throw new StreamException(e);
     }

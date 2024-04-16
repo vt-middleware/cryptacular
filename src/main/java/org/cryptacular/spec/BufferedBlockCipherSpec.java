@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.spec;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bouncycastle.crypto.BlockCipher;
@@ -24,13 +25,16 @@ import org.bouncycastle.crypto.paddings.ZeroBytePadding;
  * @author  Middleware Services
  * @version  $Revision: 2744 $
  */
-public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
+public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>, Serializable
 {
 
   /** String specification format, <code>algorithm/mode/padding</code>. */
   public static final Pattern FORMAT = Pattern.compile("(?<alg>[A-Za-z0-9_-]+)/(?<mode>\\w+)/(?<padding>\\w+)");
 
-  /** Cipher algorithm algorithm. */
+  /** serialVersionUID. */
+  private static final long serialVersionUID = 2900237827716742605L;
+
+  /** Cipher algorithm. */
   private final String algorithm;
 
   /** Cipher mode, e.g. CBC, OFB. */
@@ -179,7 +183,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
 
 
   /**
-   * Gets a instance of block cipher padding from a padding name string.
+   * Gets an instance of block cipher padding from a padding name string.
    *
    * @param  padding  Name of padding algorithm.
    *
@@ -196,7 +200,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>
     }
 
     final BlockCipherPadding blockCipherPadding;
-    if ("ISO7816d4".equalsIgnoreCase(name) | "ISO7816".equalsIgnoreCase(name)) {
+    if ("ISO7816d4".equalsIgnoreCase(name) || "ISO7816".equalsIgnoreCase(name)) {
       blockCipherPadding = new ISO7816d4Padding();
     } else if ("ISO10126".equalsIgnoreCase(name) || "ISO10126-2".equalsIgnoreCase(name)) {
       blockCipherPadding = new ISO10126d2Padding();

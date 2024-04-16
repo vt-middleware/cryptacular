@@ -54,6 +54,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
+    <spotbugs.dir>${basedir}/src/main/spotbugs</spotbugs.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
     <testng.verbosity>0</testng.verbosity>
     <japicmp.enabled>true</japicmp.enabled>
@@ -209,6 +210,25 @@
             <phase>compile</phase>
             <goals>
               <goal>checkstyle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.8.4.0</version>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Medium</threshold>
+          <xmlOutput>true</xmlOutput>
+          <xmlOutputDirectory>${project.build.directory}/spotbugs</xmlOutputDirectory>
+          <excludeFilterFile>${spotbugs.dir}/exclude.xml</excludeFilterFile>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>

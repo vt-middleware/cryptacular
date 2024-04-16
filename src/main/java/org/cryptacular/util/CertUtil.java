@@ -322,7 +322,7 @@ public final class CertUtil
     try {
       final CertificateFactory factory = CertificateFactory.getInstance("X.509");
       final Collection<? extends Certificate> certs = factory.generateCertificates(in);
-      return certs.toArray(new X509Certificate[certs.size()]);
+      return certs.toArray(new X509Certificate[0]);
     } catch (CertificateException e) {
       if (e.getCause() instanceof IOException) {
         throw new StreamException((IOException) e.getCause());
@@ -373,7 +373,7 @@ public final class CertUtil
    * Determines whether the certificate allows the given extended key usages.
    *
    * @param  cert  Certificate to check.
-   * @param  purposes  One ore more extended key usage purposes to check.
+   * @param  purposes  One or more extended key usage purposes to check.
    *
    * @return  True if certificate allows all given purposes, false otherwise.
    *
@@ -392,7 +392,7 @@ public final class CertUtil
 
 
   /**
-   * Determines whether the certificate defines all of the given certificate policies.
+   * Determines whether the certificate defines all the given certificate policies.
    *
    * @param  cert  Certificate to check.
    * @param  policyOidsToCheck  One or more certificate policy OIDs to check.

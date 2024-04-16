@@ -59,7 +59,7 @@ public class KeyStoreBasedKeyFactoryBeanTest
     keyStoreFactory.setPassword("vtcrypt");
     keyStoreFactory.setType(keyStoreType);
 
-    final KeyStoreBasedKeyFactoryBean secretKeyFactory = new KeyStoreBasedKeyFactoryBean();
+    final KeyStoreBasedKeyFactoryBean<? extends Key> secretKeyFactory = new KeyStoreBasedKeyFactoryBean<>();
     secretKeyFactory.setKeyStore(keyStoreFactory.newInstance());
     secretKeyFactory.setAlias(alias);
     secretKeyFactory.setPassword("vtcrypt");

@@ -14,6 +14,7 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.DSAParameters;
@@ -203,7 +204,7 @@ public final class KeyPairUtil
       signer.init(false, new RSAKeyParameters(false, pubKey.getModulus(), pubKey.getPublicExponent()));
       signer.update(SIGN_BYTES, 0, SIGN_BYTES.length);
       return signer.verifySignature(sig);
-    } catch (Exception e) {
+    } catch (CryptoException e) {
       throw new org.cryptacular.CryptoException("Signature computation error", e);
     }
   }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,7 @@ public final class CsrUtil
       pemWriter.writeObject(csr);
       pemWriter.close();
       return writer.toString();
-    } catch (Exception e) {
+    } catch (IOException e) {
       throw new EncodingException("CSR encoding error", e);
     }
   }
@@ -88,7 +89,7 @@ public final class CsrUtil
    */
   public static CertificationRequest decodeCsr(final String csr)
   {
-    byte[] csrBytes = csr.getBytes();
+    byte[] csrBytes = csr.getBytes(StandardCharsets.US_ASCII);
     if (!PemUtil.isPem(csrBytes)) {
       throw new IllegalArgumentException("Input is not PEM-encoded as required");
     }

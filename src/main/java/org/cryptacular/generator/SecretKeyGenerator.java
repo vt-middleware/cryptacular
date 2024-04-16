@@ -24,7 +24,7 @@ public final class SecretKeyGenerator
   /**
    * Generates a symmetric encryption key whose size is equal to the cipher block size.
    *
-   * @param  cipher  Cipher with with key will be used.
+   * @param  cipher  Cipher with key will be used.
    *
    * @return  Symmetric encryption key.
    */
@@ -38,7 +38,7 @@ public final class SecretKeyGenerator
    * Generates a symmetric encryption key of the given length.
    *
    * @param  bitLength  Desired key length in bits.
-   * @param  cipher  Cipher with with key will be used.
+   * @param  cipher  Cipher with key will be used.
    *
    * @return  Symmetric encryption key.
    */
@@ -54,7 +54,7 @@ public final class SecretKeyGenerator
    * Generates a symmetric encryption key of the given length.
    *
    * @param  bitLength  Desired key length in bits.
-   * @param  cipher  Cipher with with key will be used.
+   * @param  cipher  Cipher with key will be used.
    * @param  random  Randomness provider for key generation.
    *
    * @return  Symmetric encryption key.

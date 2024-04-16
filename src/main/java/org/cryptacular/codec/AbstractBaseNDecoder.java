@@ -118,7 +118,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
     }
     final byte[] decodingTable = new byte[128];
     for (int i = 0; i < n; i++) {
-      decodingTable[(int) alphabet.charAt(i)] = (byte) i;
+      decodingTable[alphabet.charAt(i)] = (byte) i;
     }
     return decodingTable;
   }

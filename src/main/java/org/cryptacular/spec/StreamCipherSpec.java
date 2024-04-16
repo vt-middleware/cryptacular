@@ -18,7 +18,7 @@ import org.bouncycastle.crypto.engines.VMPCEngine;
 public class StreamCipherSpec implements Spec<StreamCipher>
 {
 
-  /** Cipher algorithm algorithm. */
+  /** Cipher algorithm. */
   private final String algorithm;
 
 

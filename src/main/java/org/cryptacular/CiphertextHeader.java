@@ -173,7 +173,7 @@ public class CiphertextHeader
     }
 
     final byte[] nonce;
-    int nonceLen = 0;
+    final int nonceLen;
     try {
       nonceLen = bb.getInt();
       if (nonceLen > MAX_NONCE_LEN) {
@@ -188,7 +188,7 @@ public class CiphertextHeader
     String keyName = null;
     if (length > nonce.length + 8) {
       final byte[] b;
-      int keyLen = 0;
+      final int keyLen;
       try {
         keyLen = bb.getInt();
         if (keyLen > MAX_KEYNAME_LEN) {
@@ -224,7 +224,7 @@ public class CiphertextHeader
     }
 
     final byte[] nonce;
-    int nonceLen = 0;
+    final int nonceLen;
     try {
       nonceLen = ByteUtil.readInt(input);
       if (nonceLen > MAX_NONCE_LEN) {
@@ -241,7 +241,7 @@ public class CiphertextHeader
     String keyName = null;
     if (length > nonce.length + 8) {
       final byte[] b;
-      int keyLen = 0;
+      final int keyLen;
       try {
         keyLen = ByteUtil.readInt(input);
         if (keyLen > MAX_KEYNAME_LEN) {

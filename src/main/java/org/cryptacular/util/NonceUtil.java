@@ -2,6 +2,7 @@
 package org.cryptacular.util;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import javax.crypto.SecretKey;
 import org.bouncycastle.crypto.BlockCipher;
@@ -24,7 +25,7 @@ public final class NonceUtil
   /** Class-wide random source. */
   private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
-  /** Seed random source. */
+  /* Seed random source. */
   static
   {
     // Call nextBytes to force seeding via default process
@@ -230,6 +231,10 @@ public final class NonceUtil
   public static SP80090DRBG newRBG(final Digest digest, final int length, final EntropySource es)
   {
     return new HashSP800DRBG(
-        digest, length, es, Thread.currentThread().getName().getBytes(), NonceUtil.timestampNonce(8));
+      digest,
+      length,
+      es,
+      Thread.currentThread().getName().getBytes(StandardCharsets.UTF_8),
+      NonceUtil.timestampNonce(8));
   }
 }

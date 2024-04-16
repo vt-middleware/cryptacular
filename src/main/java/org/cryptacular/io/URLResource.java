@@ -14,7 +14,7 @@ public class URLResource implements Resource
 {
 
   /** Location of resource. */
-  private URL url;
+  private final URL url;
 
 
   /**

@@ -164,7 +164,7 @@ public class CipherUtilTest
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);
-    assertEquals(new String(actual.toByteArray()), expected);
+    assertEquals(actual.toString(), expected);
   }
 
 
@@ -182,7 +182,7 @@ public class CipherUtilTest
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);
-    assertEquals(new String(actual.toByteArray()), expected);
+    assertEquals(actual.toString(), expected);
   }
 
 

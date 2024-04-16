@@ -281,7 +281,7 @@ public final class CipherUtil
   {
     CiphertextHeader header;
     try {
-      // Mark the stream start position so we can try again with old format header
+      // Mark the stream start position, so we can try again with old format header
       if (in.markSupported()) {
         in.mark(4);
       }

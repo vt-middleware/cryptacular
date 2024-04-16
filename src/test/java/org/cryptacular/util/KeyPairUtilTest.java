@@ -393,7 +393,7 @@ public class KeyPairUtilTest
   /**
    * Class for testing usage of {@link FileInputStream}.
    */
-  private class TestableFileInputStream extends FileInputStream
+  private static class TestableFileInputStream extends FileInputStream
   {
 
     /** Whether {@link #close()} has been invoked. */

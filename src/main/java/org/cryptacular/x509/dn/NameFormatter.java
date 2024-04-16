@@ -14,7 +14,7 @@ public interface NameFormatter
   /**
    * Produces a string representation of the given X.500 principal.
    *
-   * @param  dn  Distinguished name as as X.500 principal.
+   * @param  dn  Distinguished name as an X.500 principal.
    *
    * @return  String representation of DN.
    */

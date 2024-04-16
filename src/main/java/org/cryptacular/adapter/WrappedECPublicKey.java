@@ -13,6 +13,9 @@ import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 public class WrappedECPublicKey extends AbstractWrappedECKey<ECPublicKeyParameters> implements ECPublicKey
 {
 
+  /** serialVersionUID. */
+  private static final long serialVersionUID = -8218654577692012657L;
+
   /**
    * Creates a new instance that wraps the given key.
    *

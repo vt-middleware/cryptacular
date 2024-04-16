@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.cryptacular.StreamException;
 
 /**
@@ -17,10 +18,10 @@ public final class ByteUtil
 {
 
   /** Default character set for bytes is UTF-8. */
-  public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+  public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-  /** ASCII charactr set. */
-  public static final Charset ASCII_CHARSET = Charset.forName("ASCII");
+  /** ASCII character set. */
+  public static final Charset ASCII_CHARSET = StandardCharsets.US_ASCII;
 
   /** Private constructor of utilty class. */
   private ByteUtil() {}
@@ -159,7 +160,7 @@ public final class ByteUtil
 
 
   /**
-   * Converts an integer into a 8-byte big endian array.
+   * Converts an integer into an 8-byte big endian array.
    *
    * @param  value  Long value to convert.
    * @param  output  Array into which bytes are placed.
