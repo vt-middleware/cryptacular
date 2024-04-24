@@ -509,7 +509,7 @@ public final class CertUtil
    *
    * @param cert   The X.509 certificate from which to extract the subject DN.
    * @param format Controls whether the output contains spaces between attributes in the DN.
-   *               Use {@link X500PrincipalFormat#CANONICAL} to generate a DN with spaces after the commas separating
+   *               Use {@link X500PrincipalFormat#READABLE} to generate a DN with spaces after the commas separating
    *               attribute-value pairs, {@link X500PrincipalFormat#RFC2253} for no spaces.
    * @return The subject DN string of the X.509 certificate.
    *
@@ -518,7 +518,7 @@ public final class CertUtil
   public static String subjectDN(final X509Certificate cert, final X500PrincipalFormat format)
   {
     final X500Principal subjectX500Principal = cert.getSubjectX500Principal();
-    return X500PrincipalFormat.CANONICAL.equals(format) ?
+    return X500PrincipalFormat.READABLE.equals(format) ?
       subjectX500Principal.toString() : subjectX500Principal.getName(X500Principal.RFC2253);
   }
 
@@ -584,11 +584,11 @@ public final class CertUtil
    */
   public enum X500PrincipalFormat
   {
-    /** The format described in RFC 2253 (without spaces). */
+    /** The format described in RFC2253 (without spaces). */
     RFC2253,
 
     /** Similar to RFC2253, but with spaces. */
-    CANONICAL
+    READABLE
   }
 
   /**
