@@ -23,4 +23,17 @@ public interface P12Generator
    * @return Bouncy Castle PKCS12 container object.
    */
   PKCS12PfxPdu generate(char[] password, PrivateKey key, X509Certificate... certificates);
+
+  /**
+   * Generates a PKCS12 container object that contains the given private key and certificates with the given alias.
+   *
+   * @param password PKCS12 encryption password. This secret is also used to encrypt the inner private key.
+   * @param key Private key.
+   * @param alias Keystore alias.
+   * @param certificates One or more certificates. If more than one certificate is provided, the first is taken as the
+   *                     end-entity certificate.
+   *
+   * @return Bouncy Castle PKCS12 container object.
+   */
+  PKCS12PfxPdu generate(char[] password, PrivateKey key, String alias, X509Certificate... certificates);
 }

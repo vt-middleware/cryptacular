@@ -32,8 +32,10 @@ import org.cryptacular.spec.DigestSpec;
 public abstract class AbstractP12Generator implements P12Generator
 {
   @Override
-  public PKCS12PfxPdu generate(final char[] password, final PrivateKey key, final X509Certificate... certificates)
+  public PKCS12PfxPdu generate(final char[] password, final PrivateKey key, final String alias,
+    final X509Certificate... certificates)
   {
+    String label;
     if (certificates.length < 1) {
       throw new IllegalArgumentException("At least one certificate must be provided");
     }
@@ -45,15 +47,14 @@ public abstract class AbstractP12Generator implements P12Generator
     final JcaX509ExtensionUtils extUtils;
     try {
       extUtils = new JcaX509ExtensionUtils();
-      String label = "end-entity-cert";
       final PKCS12SafeBagBuilder keyBagBuilder = new JcaPKCS12SafeBagBuilder(
         key, keyOutputEncryptor(password));
-      keyBagBuilder.addBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName, new DERBMPString(label));
+      keyBagBuilder.addBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName, new DERBMPString(alias));
       keyBagBuilder.addBagAttribute(
         PKCSObjectIdentifiers.pkcs_9_at_localKeyId,
         extUtils.createSubjectKeyIdentifier(certificates[0].getPublicKey()));
       certBags[0] = new JcaPKCS12SafeBagBuilder(certificates[0])
-        .addBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName, new DERBMPString(label))
+        .addBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName, new DERBMPString(alias))
         .addBagAttribute(
           PKCSObjectIdentifiers.pkcs_9_at_localKeyId,
           extUtils.createSubjectKeyIdentifier(certificates[0].getPublicKey()))
@@ -76,6 +77,11 @@ public abstract class AbstractP12Generator implements P12Generator
     } catch (IOException | NoSuchAlgorithmException | PKCSException e) {
       throw new CryptoException("P12 generation failed", e);
     }
+  }
+  @Override
+  public PKCS12PfxPdu generate(final char[] password, final PrivateKey key, final X509Certificate... certificates)
+  {
+    return generate(password, key, "end-entity-cert", certificates);
   }
 
   /** @return Number of hashing rounds. */
