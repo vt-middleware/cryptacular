@@ -31,6 +31,7 @@ import org.cryptacular.spec.DigestSpec;
  */
 public abstract class AbstractP12Generator implements P12Generator
 {
+
   @Override
   public PKCS12PfxPdu generate(final char[] password, final PrivateKey key, final String alias,
     final X509Certificate... certificates)
@@ -78,6 +79,7 @@ public abstract class AbstractP12Generator implements P12Generator
       throw new CryptoException("P12 generation failed", e);
     }
   }
+
   @Override
   public PKCS12PfxPdu generate(final char[] password, final PrivateKey key, final X509Certificate... certificates)
   {
