@@ -59,7 +59,7 @@
     <testng.verbosity>0</testng.verbosity>
     <japicmp.enabled>true</japicmp.enabled>
     <japicmp.oldVersion>1.2.0</japicmp.oldVersion>
-    <bc.version>1.77</bc.version>
+    <bc.version>1.78.1</bc.version>
   </properties>
 
   <dependencies>
@@ -250,7 +250,7 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.20.0</version>
+        <version>0.21.1</version>
         <configuration>
           <oldVersion>
             <dependency>
@@ -307,7 +307,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.1</version>
         <executions>
           <execution>
             <id>source</id>
@@ -321,7 +321,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.4.1</version>
         <configuration>
           <archive>
             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -399,7 +399,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.2.1</version>
+            <version>3.2.4</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
