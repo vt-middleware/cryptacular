@@ -5,23 +5,45 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import javax.security.auth.x500.X500Principal;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.style.RFC4519Style;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.GeneralNamesBuilder;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.PolicyInformation;
+import org.bouncycastle.cert.CertIOException;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
+import org.cryptacular.codec.Base64Encoder;
 import org.cryptacular.x509.ExtensionReader;
 import org.cryptacular.x509.GeneralNameType;
 import org.cryptacular.x509.KeyUsageBits;
@@ -453,5 +475,238 @@ public final class CertUtil
   public static String authorityKeyId(final X509Certificate cert) throws EncodingException
   {
     return CodecUtil.hex(new ExtensionReader(cert).readAuthorityKeyIdentifier().getKeyIdentifier(), true);
+  }
+
+
+  /**
+   * PEM encodes the given certificate with the provided encoding type.
+   *
+   * @param <T> type of encoding
+   *
+   * @param certificate X.509 certificate.
+   * @param encodeType Type of encoding. {@link EncodeType#X509} or {@link EncodeType#PKCS7}
+   *
+   * @return either DER encoded certificate or PEM-encoded certificate header and footer defined by {@link EncodeType}
+   * and data wrapped at 64 characters per line.
+   *
+   * @throws RuntimeException if a certificate encoding error occurs
+   */
+  public static <T> T encodeCert(final X509Certificate certificate, final EncodeType<T> encodeType)
+  {
+    try {
+      return encodeType.encode(certificate);
+    } catch (CertificateEncodingException e) {
+      throw new RuntimeException("Error getting encoded X.509 certificate data", e);
+    }
+  }
+
+  /**
+   * Retrieves the subject distinguished name (DN) of the provided X.509 certificate.
+   *
+   * The subject DN represents the identity of the certificate holder and typically includes information
+   * such as the common name (CN), organizational unit (OU), organization (O), locality (L), state (ST),
+   * country (C), and other attributes.
+   *
+   * @param cert   The X.509 certificate from which to extract the subject DN.
+   * @param format Controls whether the output contains spaces between attributes in the DN.
+   *               Use {@link X500PrincipalFormat#READABLE} to generate a DN with spaces after the commas separating
+   *               attribute-value pairs, {@link X500PrincipalFormat#RFC2253} for no spaces.
+   * @return The subject DN string of the X.509 certificate.
+   *
+   * @throws NullPointerException  If the provided certificate is null.
+   */
+  public static String subjectDN(final X509Certificate cert, final X500PrincipalFormat format)
+  {
+    final X500Principal subjectX500Principal = cert.getSubjectX500Principal();
+    return X500PrincipalFormat.READABLE.equals(format) ?
+      subjectX500Principal.toString() : subjectX500Principal.getName(X500Principal.RFC2253);
+  }
+
+  /**
+   * Generates a self-signed certificate.
+   *
+   * @param keyPair used for signing the certificate
+   * @param dn Subject dn
+   * @param duration Validity period of the certificate. The <em>notAfter</em> field is set to {@code now}
+   * plus this value.
+   * @param signatureAlgo the signature algorithm identifier to use
+   *
+   * @return a self-signed X509Certificate
+   */
+  public static X509Certificate generateX509Certificate(final KeyPair keyPair, final String dn,
+    final Duration duration, final String signatureAlgo)
+  {
+    final Instant now = Instant.now();
+    final Date notBefore = Date.from(now);
+    final Date notAfter = Date.from(now.plus(duration));
+    return generateX509Certificate(keyPair, dn, notBefore, notAfter, signatureAlgo);
+  }
+
+  /**
+   * Generates a self-signed certificate.
+   *
+   * @param keyPair used for signing the certificate
+   * @param dn Subject dn
+   * @param notBefore the date and time when the certificate validity period starts
+   * @param notAfter  the date and time when the certificate validity period ends
+   * @param signatureAlgo the signature algorithm identifier to use
+   *
+   * @return a self-signed X509Certificate
+   */
+  public static X509Certificate generateX509Certificate(final KeyPair keyPair, final String dn,
+    final Date notBefore, final Date notAfter, final String signatureAlgo)
+  {
+    final Instant now = Instant.now();
+    final BigInteger serial = BigInteger.valueOf(now.toEpochMilli());
+
+    try {
+      final ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgo)
+        .build(keyPair.getPrivate());
+      final X500Name x500Name = new X500Name(RFC4519Style.INSTANCE, dn);
+      final X509v3CertificateBuilder certificateBuilder =
+        new JcaX509v3CertificateBuilder(x500Name,
+          serial,
+          notBefore,
+          notAfter,
+          x500Name,
+          keyPair.getPublic())
+          .addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
+
+      return new JcaX509CertificateConverter()
+        .setProvider(new BouncyCastleProvider()).getCertificate(certificateBuilder.build(contentSigner));
+    } catch (OperatorCreationException | CertIOException | CertificateException e) {
+      throw new RuntimeException("Certificate generation error", e);
+    }
+  }
+
+  /**
+   * Describes the behavior of string formatting of X.500 distinguished names.
+   */
+  public enum X500PrincipalFormat
+  {
+    /** The format described in RFC2253 (without spaces). */
+    RFC2253,
+
+    /** Similar to RFC2253, but with spaces. */
+    READABLE
+  }
+
+  /**
+   * Marker interface for encoding types.
+   *
+   * @param <T> type of encoding
+   */
+  public interface EncodeType<T>
+  {
+
+    /** DER encode type.*/
+    EncodeType<byte[]> DER = new DEREncodeType();
+
+    /** X509 encode type. */
+    EncodeType<String> X509 = new X509EncodeType();
+
+    /** PKCS7 encode type. */
+    EncodeType<String> PKCS7 = new PKCS7EncodeType();
+
+    /**
+     * Returns the type of encoding.
+     *
+     * @return type
+     */
+    String getType();
+
+    /**
+     * Encodes the supplied certificate.
+     *
+     * @param cert to encode
+     *
+     * @return encoded certificate
+     *
+     * @throws CertificateEncodingException if an error occurs encoding the certificate
+     */
+    T encode(X509Certificate cert) throws CertificateEncodingException;
+  }
+
+  /**
+   * Base implementation for PEM encoded types.
+   */
+  private abstract static class AbstractPemEncodeType implements EncodeType<String>
+  {
+
+    /**
+     * Returns a PEM encoding of the supplied DER bytes.
+     *
+     * @param der to encode
+     *
+     * @return PEM encoded certificate
+     */
+    protected String encodePem(final byte[] der)
+    {
+      final Base64Encoder encoder = new Base64Encoder(64);
+      final ByteBuffer input = ByteBuffer.wrap(der);
+      // Space for Base64-encoded data + header, footer, line breaks, and potential padding
+      final CharBuffer output = CharBuffer.allocate(encoder.outputSize(der.length) + 100);
+      output.append("-----BEGIN ").append(getType()).append("-----");
+      output.append(System.lineSeparator());
+      encoder.encode(input, output);
+      encoder.finalize(output);
+      output.flip();
+      return output.toString().trim()
+        .concat(System.lineSeparator()).concat("-----END ").concat(getType()).concat("-----");
+    }
+  }
+
+  /** DER encode type. */
+  private static class DEREncodeType implements EncodeType<byte[]>
+  {
+
+    @Override
+    public String getType()
+    {
+      return "DER";
+    }
+
+    @Override
+    public byte[] encode(final X509Certificate cert)
+      throws CertificateEncodingException
+    {
+      return cert.getEncoded();
+    }
+  }
+
+  /** X509 encode type. */
+  private static final class X509EncodeType extends AbstractPemEncodeType
+  {
+
+    @Override
+    public String getType()
+    {
+      return "CERTIFICATE";
+    }
+
+    @Override
+    public String encode(final X509Certificate cert)
+      throws CertificateEncodingException
+    {
+      return encodePem(cert.getEncoded());
+    }
+  }
+
+  /** PKCS7 encode type. */
+  private static final class PKCS7EncodeType extends AbstractPemEncodeType
+  {
+
+    @Override
+    public String getType()
+    {
+      return "PKCS7";
+    }
+
+    @Override
+    public String encode(final X509Certificate cert)
+      throws CertificateEncodingException
+    {
+      return encodePem(cert.getEncoded());
+    }
   }
 }

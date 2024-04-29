@@ -1,12 +1,22 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.cryptacular.FailListener;
+import org.cryptacular.generator.KeyPairGenerator;
 import org.cryptacular.x509.GeneralNameType;
 import org.cryptacular.x509.KeyUsageBits;
 import org.testng.annotations.DataProvider;
@@ -34,6 +44,69 @@ public class CertUtilTest
         new Object[] {
           CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
           "ed.middleware.vt.edu",
+        },
+      };
+  }
+
+  @DataProvider(name = "subject-dn")
+  public Object[][] getSubjectDN()
+  {
+    return
+      new Object[][] {
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
+          "C=US,DC=edu,DC=vt,ST=Virginia,L=Blacksburg,O=Virginia Polytechnic Institute and State University," +
+            "OU=Middleware-Server-with-saltr,OU=Middleware Services,CN=ed.middleware.vt.edu",
+        },
+      };
+  }
+
+  @DataProvider(name = "subject-dn-spaces")
+  public Object[][] getSubjectDNWithSpaces()
+  {
+    return
+      new Object[][] {
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
+          "C=US, DC=edu, DC=vt, ST=Virginia, L=Blacksburg, O=Virginia Polytechnic Institute and State University, " +
+            "OU=Middleware-Server-with-saltr, OU=Middleware Services, CN=ed.middleware.vt.edu",
+        },
+      };
+  }
+
+
+  @DataProvider(name = "encode-cert-p7")
+  public Object[][] getP7EncodedCert() throws Exception
+  {
+    return
+      new Object[][] {
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
+          new String(Files.readAllBytes(new File(CRT_PATH + "ed.middleware.vt.edu.p7b").toPath())),
+        },
+      };
+  }
+
+  @DataProvider(name = "encode-cert-x509")
+  public Object[][] getX509Cert() throws Exception
+  {
+    return
+      new Object[][] {
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
+          new String(Files.readAllBytes(new File(CRT_PATH + "ed.middleware.vt.edu.crt").toPath())),
+        },
+      };
+  }
+
+  @DataProvider(name = "encode-cert-der")
+  public Object[][] getDERCert() throws Exception
+  {
+    return
+      new Object[][] {
+        new Object[] {
+          CertUtil.readCertificate(CRT_PATH + "ed.middleware.vt.edu.crt"),
+          Files.readAllBytes(new File(CRT_PATH + "ed.middleware.vt.edu.der").toPath()),
         },
       };
   }
@@ -350,5 +423,81 @@ public class CertUtilTest
     throws Exception
   {
     assertEquals(CertUtil.readCertificateChain(path).length, expectedCount);
+  }
+
+  @Test(dataProvider = "encode-cert-p7")
+  public void certEncodedAsPkcs7(final X509Certificate certificate, final String expectedEncodedCert)
+  {
+    final String actualEncodedCertString = CertUtil.encodeCert(certificate, CertUtil.EncodeType.PKCS7);
+    final X509Certificate decodedCert = CertUtil.decodeCertificate(CertUtil.encodeCert(certificate,
+      CertUtil.EncodeType.PKCS7).getBytes());
+    assertEquals(actualEncodedCertString, expectedEncodedCert);
+    assertEquals(certificate, decodedCert);
+  }
+
+  @Test(dataProvider = "encode-cert-x509")
+  public void certEncodedAsX509(final X509Certificate certificate, final String x509Cert)
+  {
+    final String encodedCert = CertUtil.encodeCert(certificate, CertUtil.EncodeType.X509);
+    assertEquals(encodedCert, x509Cert);
+  }
+
+  @Test(dataProvider = "encode-cert-der")
+  public void certEncodedAsDER(final X509Certificate certificate, final byte[] derCert)
+  {
+    final byte[] encodedCert = CertUtil.encodeCert(certificate, CertUtil.EncodeType.DER);
+    assertEquals(encodedCert, derCert);
+  }
+
+  @Test(dataProvider = "subject-dn")
+  public void testSubjectDN(final X509Certificate certificate, final String expectedResponse)
+  {
+    assertEquals(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.RFC2253), expectedResponse);
+  }
+
+  @Test(dataProvider = "subject-dn-spaces")
+  public void testSubjectDNWithSpaces(final X509Certificate certificate, final String expectedResponse)
+  {
+    assertEquals(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.READABLE), expectedResponse);
+  }
+
+  @Test
+  public void testGenX509()
+  {
+    final KeyPair keyPair = KeyPairGenerator.generateRSA(new SecureRandom(), 2048);
+    final String dn = "C=US, DC=edu, DC=vt, ST=Virginia, " +
+      "L=Blacksburg, O=Virginia Polytechnic Institute and State University, OU=Middleware-Server-with-saltr, " +
+      "OU=Middleware Services, CN=ed.middleware.vt.edu";
+
+    final Instant expectedNotBefore = Instant.now();
+    final Instant expectedNotAfter = Instant.now().plus(Duration.ofDays(365));
+
+    final X509Certificate x509Certificate = CertUtil.generateX509Certificate(keyPair, dn,
+      Date.from(expectedNotBefore), Date.from(expectedNotAfter), "SHA256WithRSA");
+
+    assertEquals(truncateToSeconds(expectedNotBefore), truncateToSeconds(x509Certificate.getNotBefore().toInstant()));
+    assertEquals(truncateToSeconds(expectedNotAfter), truncateToSeconds(x509Certificate.getNotAfter().toInstant()));
+  }
+
+  @Test(expectedExceptions = RuntimeException.class,
+    expectedExceptionsMessageRegExp = "Unknown signature type requested: UNSUPPORTEDALGO")
+  public void testGenX509UnSupportedAlgo()
+  {
+    final KeyPair keyPair = KeyPairGenerator.generateRSA(new SecureRandom(), 2048);
+    final String dn = "C=US, DC=edu, DC=vt, ST=Virginia, " +
+      "L=Blacksburg, O=Virginia Polytechnic Institute and State University, OU=Middleware-Server-with-saltr, " +
+      "OU=Middleware Services, CN=ed.middleware.vt.edu";
+
+    final Instant expectedNotBefore = Instant.now();
+    final Instant expectedNotAfter = Instant.now().plus(Duration.ofDays(365));
+
+    CertUtil.generateX509Certificate(keyPair, dn,
+        Date.from(expectedNotBefore), Date.from(expectedNotAfter), "UNSUPPORTEDALGO");
+  }
+
+
+  private OffsetDateTime truncateToSeconds(final Instant instant)
+  {
+    return instant.atOffset(ZoneOffset.UTC).withNano(0);
   }
 }
