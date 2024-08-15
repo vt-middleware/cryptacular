@@ -21,6 +21,14 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.2.7 - 15Aug2024 (Requires Java 8)
+
+Issue | Description
+:---- | :----------
+[cryptacular-71]({{ site.issueURL }}71) | Provide facilities for generating PKCS12 files
+[cryptacular-67]({{ site.issueURL }}67) | Add certificate utility methods
+[cryptacular-65]({{ site.issueURL }}65) | Add utilities for common CSR operations
+
 ### Version 1.2.6 - 14Aug2023 (Requires Java 8)
 This version updates bouncycastle to version 1.76.
 
