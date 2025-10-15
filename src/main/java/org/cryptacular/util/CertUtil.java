@@ -657,7 +657,7 @@ public final class CertUtil
   }
 
   /** DER encode type. */
-  private static class DEREncodeType implements EncodeType<byte[]>
+  private static final class DEREncodeType implements EncodeType<byte[]>
   {
 
     @Override

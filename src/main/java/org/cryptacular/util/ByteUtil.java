@@ -281,11 +281,8 @@ public final class ByteUtil
     if (buffer.hasArray() && size == buffer.capacity()) {
       return buffer.array();
     }
-
     final byte[] array = new byte[size];
     buffer.get(array);
     return array;
   }
-
-
 }
