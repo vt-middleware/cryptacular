@@ -19,4 +19,27 @@ public class LimitException extends RuntimeException
   {
     super(message);
   }
+
+
+  /**
+   * Creates a new instance with the given cause.
+   *
+   * @param  cause  Error cause.
+   */
+  public LimitException(final Throwable cause)
+  {
+    super(cause);
+  }
+
+
+  /**
+   * Creates a new instance with the given error message and cause.
+   *
+   * @param  message  Error message.
+   * @param  cause  Error cause.
+   */
+  public LimitException(final String message, final Throwable cause)
+  {
+    super(message, cause);
+  }
 }

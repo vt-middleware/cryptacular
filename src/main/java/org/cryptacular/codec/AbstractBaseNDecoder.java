@@ -1,8 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.codec;
 
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 
 /**
@@ -17,13 +19,13 @@ public abstract class AbstractBaseNDecoder implements Decoder
   private final char[] block = new char[getBlockLength() / getBitsPerChar()];
 
   /** Decoding table. */
-  private final byte[] table;
+  private final byte[] decodingTable;
+
+  /** Flag indicating whether input is padded. True by default. */
+  private final boolean paddedInput;
 
   /** Current position in character block. */
   private int blockPos;
-
-  /** Flag indicating whether input is padded. True by default. */
-  private boolean paddedInput = true;
 
 
   /**
@@ -33,7 +35,20 @@ public abstract class AbstractBaseNDecoder implements Decoder
    */
   public AbstractBaseNDecoder(final byte[] decodingTable)
   {
-    table = decodingTable;
+    this(decodingTable, true);
+  }
+
+
+  /**
+   * Creates a new instance with given parameters.
+   *
+   * @param  decodingTable  Byte array indexed by characters in the character set encoding.
+   * @param  paddedInput  True to enable support for padded input, false otherwise.
+   */
+  public AbstractBaseNDecoder(final byte[] decodingTable, final boolean paddedInput)
+  {
+    this.decodingTable = CryptUtil.assertNotNullArg(decodingTable, "Decoding table cannot be null");
+    this.paddedInput = paddedInput;
   }
 
 
@@ -44,20 +59,11 @@ public abstract class AbstractBaseNDecoder implements Decoder
   }
 
 
-  /**
-   * Determines whether padded input is accepted.
-   *
-   * @param  enabled  True to enable support for padded input, false otherwise.
-   */
-  public void setPaddedInput(final boolean enabled)
-  {
-    this.paddedInput = enabled;
-  }
-
-
   @Override
   public void decode(final CharBuffer input, final ByteBuffer output) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(input, "Input cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output cannot be null");
     char current;
     while (input.hasRemaining()) {
       current = input.get();
@@ -75,8 +81,13 @@ public abstract class AbstractBaseNDecoder implements Decoder
   @Override
   public void finalize(final ByteBuffer output) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(output, "Output cannot be null");
     if (blockPos > 0) {
-      writeOutput(output, blockPos);
+      try {
+        writeOutput(output, blockPos);
+      } catch (BufferOverflowException e) {
+        throw new EncodingException("Buffer overflow", e);
+      }
     }
   }
 
@@ -113,6 +124,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
    */
   protected static byte[] decodingTable(final String alphabet, final int n)
   {
+    CryptUtil.assertNotNullArg(alphabet, "Alphabet cannot be null");
     if (alphabet.length() != n) {
       throw new IllegalArgumentException("Alphabet must be exactly " + n + " characters long");
     }
@@ -136,7 +148,7 @@ public abstract class AbstractBaseNDecoder implements Decoder
     long value = 0;
     int shift = getBlockLength();
     for (int i = 0; i < len; i++) {
-      b = table[block[i] & 0x7F];
+      b = decodingTable[block[i] & 0x7F];
       if (b < 0) {
         throw new EncodingException("Invalid character " + block[i]);
       }

@@ -289,7 +289,7 @@ public class ExtensionReaderTest
     throws Exception
   {
     final AuthorityKeyIdentifier keyId = new ExtensionReader(cert).readAuthorityKeyIdentifier();
-    assertEquals(CodecUtil.hex(keyId.getKeyIdentifier(), true).toUpperCase(), expected);
+    assertEquals(CodecUtil.hex(keyId.getKeyIdentifierOctets(), true).toUpperCase(), expected);
   }
 
   @Test(dataProvider = "key-usage")

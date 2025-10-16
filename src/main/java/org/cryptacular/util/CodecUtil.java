@@ -3,6 +3,7 @@ package org.cryptacular.util;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.codec.Base32Decoder;
 import org.cryptacular.codec.Base32Encoder;
@@ -177,6 +178,8 @@ public final class CodecUtil
    */
   public static String encode(final Encoder encoder, final byte[] raw) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(encoder, "Encoder cannot be null");
+    CryptUtil.assertNotNullArg(raw, "Raw bytes cannot be null");
     final CharBuffer output = CharBuffer.allocate(encoder.outputSize(raw.length));
     encoder.encode(ByteBuffer.wrap(raw), output);
     encoder.finalize(output);
@@ -196,6 +199,8 @@ public final class CodecUtil
    */
   public static byte[] decode(final Decoder decoder, final CharSequence encoded) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(decoder, "Decoder cannot be null");
+    CryptUtil.assertNotNullArg(encoded, "Encoded cannot be null");
     final ByteBuffer output = ByteBuffer.allocate(decoder.outputSize(encoded.length()));
     decoder.decode(CharBuffer.wrap(encoded), output);
     decoder.finalize(output);

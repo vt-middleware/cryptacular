@@ -4,6 +4,7 @@ package org.cryptacular.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import org.cryptacular.CryptUtil;
 
 /**
  * Describes a (presumably remote) resource accessible via URL.
@@ -24,10 +25,7 @@ public class URLResource implements Resource
    */
   public URLResource(final URL url)
   {
-    if (url == null) {
-      throw new IllegalArgumentException("URL cannot be null.");
-    }
-    this.url = url;
+    this.url = CryptUtil.assertNotNullArg(url, "URL cannot be null.");
   }
 
 

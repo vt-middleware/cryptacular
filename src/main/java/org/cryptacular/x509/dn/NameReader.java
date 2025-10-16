@@ -2,9 +2,12 @@
 package org.cryptacular.x509.dn;
 
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.X500Name;
+import org.cryptacular.CryptUtil;
 
 /**
  * Reads X.509 subject and issuer DNs as a raw sequence of attributes to facilitate precise handling of name parsing.
@@ -25,10 +28,7 @@ public class NameReader
    */
   public NameReader(final X509Certificate cert)
   {
-    if (cert == null) {
-      throw new IllegalArgumentException("Certificate cannot be null.");
-    }
-    this.certificate = cert;
+    this.certificate = CryptUtil.assertNotNullArg(cert, "Certificate cannot be null.");
   }
 
 
@@ -64,6 +64,7 @@ public class NameReader
    */
   public static RDNSequence readX500Principal(final X500Principal principal)
   {
+    CryptUtil.assertNotNullArg(principal, "Principal cannot be null.");
     return readX500Name(X500Name.getInstance(principal.getEncoded()));
   }
 
@@ -78,14 +79,15 @@ public class NameReader
    */
   public static RDNSequence readX500Name(final X500Name name)
   {
-    final RDNSequence sequence = new RDNSequence();
+    CryptUtil.assertNotNullArg(name, "Name cannot be null.");
+    final List<RDN> rdns = new ArrayList<>();
     for (org.bouncycastle.asn1.x500.RDN rdn : name.getRDNs()) {
-      final Attributes attributes = new Attributes();
+      final List<Attribute> attrs = new ArrayList<>();
       for (AttributeTypeAndValue tv : rdn.getTypesAndValues()) {
-        attributes.add(tv.getType().getId(), tv.getValue().toString());
+        attrs.add(new Attribute(tv.getType().getId(), tv.getValue().toString()));
       }
-      sequence.add(new RDN(attributes));
+      rdns.add(new RDN(new Attributes(attrs)));
     }
-    return sequence;
+    return new RDNSequence(rdns);
   }
 }

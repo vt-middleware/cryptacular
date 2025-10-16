@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.codec.Base64Decoder;
 import org.cryptacular.codec.Decoder;
 import org.cryptacular.codec.HexDecoder;
@@ -40,11 +41,8 @@ public class DecodingInputStream extends FilterInputStream
    */
   public DecodingInputStream(final InputStream in, final Decoder d)
   {
-    super(in);
-    if (d == null) {
-      throw new IllegalArgumentException("Decoder cannot be null.");
-    }
-    decoder = d;
+    super(CryptUtil.assertNotNullArg(in, "Input stream cannot be null"));
+    decoder = CryptUtil.assertNotNullArg(d,  "Decoder cannot be null");
     reader = new InputStreamReader(in);
   }
 
@@ -61,6 +59,7 @@ public class DecodingInputStream extends FilterInputStream
   public int read(final byte[] b)
     throws IOException
   {
+    CryptUtil.assertNotNullArg(b, "Input byte array cannot be null");
     return read(b, 0, b.length);
   }
 
@@ -69,6 +68,7 @@ public class DecodingInputStream extends FilterInputStream
   public int read(final byte[] b, final int off, final int len)
     throws IOException
   {
+    CryptUtil.assertNotNullArg(b, "Input byte array cannot be null");
     prepareInputBuffer(len - off);
     prepareOutputBuffer();
     if (reader.read(input) < 0) {

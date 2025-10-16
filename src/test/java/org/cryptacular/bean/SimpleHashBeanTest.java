@@ -47,9 +47,7 @@ public class SimpleHashBeanTest
   public void testHash(final DigestSpec digest, final Object[] input, final int iterations, final String expectedBase64)
     throws Exception
   {
-    final SimpleHashBean bean = new SimpleHashBean();
-    bean.setDigestSpec(digest);
-    bean.setIterations(iterations);
+    final SimpleHashBean bean = new SimpleHashBean(digest, iterations);
     assertEquals(CodecUtil.b64(bean.hash(input)), expectedBase64);
   }
 }

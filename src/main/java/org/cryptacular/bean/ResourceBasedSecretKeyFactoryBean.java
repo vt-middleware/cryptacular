@@ -4,6 +4,7 @@ package org.cryptacular.bean;
 import java.io.IOException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
 import org.cryptacular.util.StreamUtil;
@@ -17,26 +18,22 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
 {
 
   /** Key algorithm. */
-  private String algorithm;
+  private final String algorithm;
 
   /** Resource containing key data. */
-  private Resource resource;
-
-
-  /** Creates a new instance. */
-  public ResourceBasedSecretKeyFactoryBean() {}
+  private final Resource resource;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new resource based secret key factory bean.
    *
    * @param  resource  Resource containing encoded key data.
    * @param  algorithm  Algorithm name of cipher with which key will be used.
    */
   public ResourceBasedSecretKeyFactoryBean(final Resource resource, final String algorithm)
   {
-    setResource(resource);
-    setAlgorithm(algorithm);
+    this.resource = CryptUtil.assertNotNullArg(resource, "Resource cannot be null");
+    this.algorithm = CryptUtil.assertNotNullArg(algorithm, "Algorithm cannot be null");
   }
 
 
@@ -47,32 +44,10 @@ public class ResourceBasedSecretKeyFactoryBean implements FactoryBean<SecretKey>
   }
 
 
-  /**
-   * Sets the key algorithm.
-   *
-   * @param  algorithm  Secret key algorithm, e.g. AES.
-   */
-  public void setAlgorithm(final String algorithm)
-  {
-    this.algorithm = algorithm;
-  }
-
-
   /** @return  Resource containing key data. */
   public Resource getResource()
   {
     return resource;
-  }
-
-
-  /**
-   * Sets the resource containing key data.
-   *
-   * @param  resource  Resource containing key bytes.
-   */
-  public void setResource(final Resource resource)
-  {
-    this.resource = resource;
   }
 
 

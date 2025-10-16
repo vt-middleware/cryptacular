@@ -7,6 +7,7 @@ import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.adapter.BufferedBlockCipherAdapter;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.spec.Spec;
@@ -21,15 +22,11 @@ public class BufferedBlockCipherBean extends AbstractBlockCipherBean
 {
 
   /** Block cipher specification (algorithm, mode, padding). */
-  private Spec<BufferedBlockCipher> blockCipherSpec;
-
-
-  /** Creates a new instance. */
-  public BufferedBlockCipherBean() {}
+  private final Spec<BufferedBlockCipher> blockCipherSpec;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a buffered block cipher bean.
    *
    * @param  blockCipherSpec  Block cipher specification.
    * @param  keyStore  Key store containing encryption key.
@@ -45,7 +42,7 @@ public class BufferedBlockCipherBean extends AbstractBlockCipherBean
     final Nonce nonce)
   {
     super(keyStore, keyAlias, keyPassword, nonce);
-    setBlockCipherSpec(blockCipherSpec);
+    this.blockCipherSpec = CryptUtil.assertNotNullArg(blockCipherSpec, "Block cipher spec cannot be null");
   }
 
 
@@ -53,17 +50,6 @@ public class BufferedBlockCipherBean extends AbstractBlockCipherBean
   public Spec<BufferedBlockCipher> getBlockCipherSpec()
   {
     return blockCipherSpec;
-  }
-
-
-  /**
-   * Sets the block cipher specification.
-   *
-   * @param  blockCipherSpec  Describes a block cipher in terms of algorithm, mode, and padding.
-   */
-  public void setBlockCipherSpec(final Spec<BufferedBlockCipher> blockCipherSpec)
-  {
-    this.blockCipherSpec = blockCipherSpec;
   }
 
 

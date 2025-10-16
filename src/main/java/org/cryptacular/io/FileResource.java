@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import org.cryptacular.CryptUtil;
 
 /**
  * Resource that produces a buffered {@link FileInputStream} from a file.
@@ -27,10 +28,7 @@ public class FileResource implements Resource
    */
   public FileResource(final File file)
   {
-    if (file == null) {
-      throw new IllegalArgumentException("File cannot be null.");
-    }
-    this.file = file;
+    this.file = CryptUtil.assertNotNullArg(file, "File cannot be null.");
   }
 
 

@@ -15,6 +15,9 @@ import org.cryptacular.util.ByteUtil;
 public abstract class AbstractOTPGenerator
 {
 
+  /** Default number of digits to generate. */
+  protected static final int DEFAULT_NUMBER_OF_DIGITS = 6;
+
   /** Array of modulus values indexed per number of digits in OTP output. */
   private static final int[] MODULUS = new int[] {
     1,
@@ -30,27 +33,35 @@ public abstract class AbstractOTPGenerator
   };
 
   /** Number of digits in generated OTP. */
-  private int numberOfDigits = 6;
+  private final int numberOfDigits;
+
+
+  /**
+   * Creates a new abstract OTP generator.
+   */
+  public AbstractOTPGenerator()
+  {
+    this(DEFAULT_NUMBER_OF_DIGITS);
+  }
+
+  /**
+   * Creates a new abstract OTP generator.
+   *
+   * @param  numberOfDigits  Number of digits in generated OTP. MUST be in the range 6 - 9.
+   */
+  public AbstractOTPGenerator(final int numberOfDigits)
+  {
+    if (numberOfDigits < 6 || numberOfDigits > 9) {
+      throw new IllegalArgumentException("Number of generated digits must be in range 6-9.");
+    }
+    this.numberOfDigits = numberOfDigits;
+  }
 
 
   /** @return  Number of digits in generated OTP. */
   public int getNumberOfDigits()
   {
     return numberOfDigits;
-  }
-
-
-  /**
-   * Sets the numbers in the generated OTP.
-   *
-   * @param  digits  Number of digits in generated OTP. MUST be in the range 6 - 9. Default is 6.
-   */
-  public void setNumberOfDigits(final int digits)
-  {
-    if (digits < 6 || digits > 9) {
-      throw new IllegalArgumentException("Number of generated digits must be in range 6-9.");
-    }
-    this.numberOfDigits = digits;
   }
 
 
@@ -95,5 +106,4 @@ public abstract class AbstractOTPGenerator
       (hmac[offset + 2] & 0xff) << 8 |
       (hmac[offset + 3] & 0xff);
   }
-
 }

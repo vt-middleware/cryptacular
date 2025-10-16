@@ -21,8 +21,7 @@ public class Base32EncoderTest
   @DataProvider(name = "byte-data")
   public Object[][] getByteData()
   {
-    final Base32Encoder unpadded = new Base32Encoder();
-    unpadded.setPaddedOutput(false);
+    final Base32Encoder unpadded = new Base32Encoder(-1, false);
     return
       new Object[][] {
         // Multiple of 40 bits

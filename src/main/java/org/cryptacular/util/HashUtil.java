@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.digests.SHA3Digest;
 import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 import org.cryptacular.SaltedHash;
 import org.cryptacular.StreamException;
@@ -48,12 +49,14 @@ public final class HashUtil
    */
   public static byte[] hash(final Digest digest, final Object... data) throws CryptoException, StreamException
   {
+    CryptUtil.assertNotNullArg(digest, "Digest cannot be null");
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     for (Object o : data) {
       if (o instanceof byte[]) {
         final byte[] bytes = (byte[]) o;
         digest.update(bytes, 0, bytes.length);
-      } else if (o instanceof String) {
-        final byte[] bytes = ByteUtil.toBytes((String) o);
+      } else if (o instanceof CharSequence) {
+        final byte[] bytes = ByteUtil.toBytes((CharSequence) o);
         digest.update(bytes, 0, bytes.length);
       } else if (o instanceof InputStream) {
         hashStream(digest, (InputStream) o);
@@ -108,7 +111,6 @@ public final class HashUtil
     if (iterations < 1) {
       throw new IllegalArgumentException("Iterations must be positive");
     }
-
     final byte[] output = hash(digest, data);
     try {
       for (int i = 1; i < iterations; i++) {
@@ -140,6 +142,12 @@ public final class HashUtil
   public static boolean compareHash(final Digest digest, final byte[] hash, final int iterations, final Object... data)
       throws CryptoException, StreamException
   {
+    if (iterations < 1) {
+      throw new IllegalArgumentException("Iterations must be positive");
+    }
+    CryptUtil.assertNotNullArg(digest, "Digest cannot be null");
+    CryptUtil.assertNotNullArg(hash, "Hash cannot be null");
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     if (hash.length > digest.getDigestSize()) {
       final byte[] hashPart = Arrays.copyOfRange(hash, 0, digest.getDigestSize());
       final byte[] saltPart = Arrays.copyOfRange(hash, digest.getDigestSize(), hash.length);
@@ -173,6 +181,12 @@ public final class HashUtil
     final Object... data)
     throws CryptoException, StreamException
   {
+    if (iterations < 1) {
+      throw new IllegalArgumentException("Iterations must be positive");
+    }
+    CryptUtil.assertNotNullArg(digest, "Digest cannot be null");
+    CryptUtil.assertNotNullArg(hash, "Hash cannot be null");
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     final Object[] dataWithSalt;
     if (saltAfterData) {
       dataWithSalt = Arrays.copyOf(data, data.length + 1);

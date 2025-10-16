@@ -37,9 +37,7 @@ public class ResourceBasedSecretKeyFactoryBeanTest
   public void testNewInstance(final String algorithm, final Resource resource, final int expectedSize)
     throws Exception
   {
-    final ResourceBasedSecretKeyFactoryBean factory = new ResourceBasedSecretKeyFactoryBean();
-    factory.setAlgorithm(algorithm);
-    factory.setResource(resource);
+    final ResourceBasedSecretKeyFactoryBean factory = new ResourceBasedSecretKeyFactoryBean(resource, algorithm);
     assertEquals(factory.newInstance().getEncoded().length, expectedSize);
   }
 }

@@ -14,7 +14,7 @@ import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.cryptacular.CiphertextHeader;
-import org.cryptacular.CiphertextHeaderV2;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
@@ -39,7 +39,7 @@ public final class CipherUtil
 
 
   /**
-   * Encrypts data using an AEAD cipher. A {@link CiphertextHeaderV2} is prepended to the resulting ciphertext and
+   * Encrypts data using an AEAD cipher. A {@link CiphertextHeader} is prepended to the resulting ciphertext and
    * used as AAD (Additional Authenticated Data) passed to the AEAD cipher.
    *
    * @param  cipher  AEAD cipher.
@@ -47,7 +47,7 @@ public final class CipherUtil
    * @param  nonce  Nonce generator.
    * @param  data  Plaintext data to be encrypted.
    *
-   * @return  Concatenation of encoded {@link CiphertextHeaderV2} and encrypted data that completely fills the returned
+   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
    *          byte array.
    *
    * @throws  CryptoException  on encryption errors.
@@ -55,22 +55,26 @@ public final class CipherUtil
   public static byte[] encrypt(final AEADBlockCipher cipher, final SecretKey key, final Nonce nonce, final byte[] data)
     throws CryptoException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(nonce, "Nonce cannot be null");
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
+    final byte[] header = new CiphertextHeader(iv, "1").encode(key);
     cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
     return encrypt(new AEADBlockCipherAdapter(cipher), header, data);
   }
 
 
   /**
-   * Encrypts data using an AEAD cipher. A {@link CiphertextHeaderV2} is prepended to the resulting ciphertext and used
+   * Encrypts data using an AEAD cipher. A {@link CiphertextHeader} is prepended to the resulting ciphertext and used
    * as AAD (Additional Authenticated Data) passed to the AEAD cipher.
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
    * @param  nonce  Nonce generator.
    * @param  input  Input stream containing plaintext data.
-   * @param  output  Output stream that receives a {@link CiphertextHeaderV2} followed by ciphertext data produced by
+   * @param  output  Output stream that receives a {@link CiphertextHeader} followed by ciphertext data produced by
    *                 the AEAD cipher in encryption mode.
    *
    * @throws  CryptoException  on encryption errors.
@@ -84,8 +88,13 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, StreamException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(nonce, "Nonce cannot be null");
+    CryptUtil.assertNotNullArg(input, "Input stream cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output stream cannot be null");
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
+    final byte[] header = new CiphertextHeader(iv, "1").encode(key);
     cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), MAC_SIZE_BITS, iv, header));
     writeHeader(header, output);
     process(new AEADBlockCipherAdapter(cipher), input, output);
@@ -97,7 +106,7 @@ public final class CipherUtil
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
-   * @param  data  Ciphertext data containing a prepended {@link CiphertextHeaderV2}. The header is treated as AAD input
+   * @param  data  Ciphertext data containing a prepended {@link CiphertextHeader}. The header is treated as AAD input
    *               to the cipher that is verified during decryption.
    *
    * @return  Decrypted data that completely fills the returned byte array.
@@ -108,6 +117,9 @@ public final class CipherUtil
   public static byte[] decrypt(final AEADBlockCipher cipher, final SecretKey key, final byte[] data)
       throws CryptoException, EncodingException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     final CiphertextHeader header = decodeHeader(data, String -> key);
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
@@ -121,7 +133,7 @@ public final class CipherUtil
    *
    * @param  cipher  AEAD cipher.
    * @param  key  Encryption key.
-   * @param  input  Input stream containing a {@link CiphertextHeaderV2} followed by ciphertext data. The header is
+   * @param  input  Input stream containing a {@link CiphertextHeader} followed by ciphertext data. The header is
    *                treated as AAD input to the cipher that is verified during decryption.
    * @param  output  Output stream that receives plaintext produced by block cipher in decryption mode.
    *
@@ -136,6 +148,10 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, EncodingException, StreamException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(input, "Input stream cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output stream cannot be null");
     final CiphertextHeader header = decodeHeader(input, String -> key);
     final byte[] nonce = header.getNonce();
     final byte[] hbytes = header.encode();
@@ -145,7 +161,7 @@ public final class CipherUtil
 
 
   /**
-   * Encrypts data using the given block cipher with PKCS5 padding. A {@link CiphertextHeaderV2} is prepended to the
+   * Encrypts data using the given block cipher with PKCS5 padding. A {@link CiphertextHeader} is prepended to the
    * resulting ciphertext.
    *
    * @param  cipher  Block cipher.
@@ -154,7 +170,7 @@ public final class CipherUtil
    *                cipher block size.
    * @param  data  Plaintext data to be encrypted.
    *
-   * @return  Concatenation of encoded {@link CiphertextHeaderV2} and encrypted data that completely fills the returned
+   * @return  Concatenation of encoded {@link CiphertextHeader} and encrypted data that completely fills the returned
    *          byte array.
    *
    * @throws  CryptoException  on encryption errors.
@@ -162,8 +178,12 @@ public final class CipherUtil
   public static byte[] encrypt(final BlockCipher cipher, final SecretKey key, final Nonce nonce, final byte[] data)
     throws CryptoException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(nonce, "Nonce cannot be null");
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
+    final byte[] header = new CiphertextHeader(iv, "1").encode(key);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));
     return encrypt(new BufferedBlockCipherAdapter(padded), header, data);
@@ -192,8 +212,13 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, StreamException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(nonce, "Nonce cannot be null");
+    CryptUtil.assertNotNullArg(input, "Input stream cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output stream cannot be null");
     final byte[] iv = nonce.generate();
-    final byte[] header = new CiphertextHeaderV2(iv, "1").encode(key);
+    final byte[] header = new CiphertextHeader(iv, "1").encode(key);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(true, new ParametersWithIV(new KeyParameter(key.getEncoded()), iv));
     writeHeader(header, output);
@@ -216,6 +241,9 @@ public final class CipherUtil
   public static byte[] decrypt(final BlockCipher cipher, final SecretKey key, final byte[] data)
     throws CryptoException, EncodingException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     final CiphertextHeader header = decodeHeader(data, String -> key);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
@@ -242,6 +270,10 @@ public final class CipherUtil
     final OutputStream output)
     throws CryptoException, EncodingException, StreamException
   {
+    CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    CryptUtil.assertNotNullArg(key, "Key cannot be null");
+    CryptUtil.assertNotNullArg(input, "Input stream cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output stream cannot be null");
     final CiphertextHeader header = decodeHeader(input, String -> key);
     final PaddedBufferedBlockCipher padded = new PaddedBufferedBlockCipher(cipher, new PKCS7Padding());
     padded.init(false, new ParametersWithIV(new KeyParameter(key.getEncoded()), header.getNonce()));
@@ -260,11 +292,7 @@ public final class CipherUtil
    */
   public static CiphertextHeader decodeHeader(final byte[] data, final Function<String, SecretKey> keyLookup)
   {
-    try {
-      return CiphertextHeaderV2.decode(data, keyLookup);
-    } catch (EncodingException e) {
-      return CiphertextHeader.decode(data);
-    }
+    return CiphertextHeader.decode(data, keyLookup);
   }
 
 
@@ -279,22 +307,7 @@ public final class CipherUtil
    */
   public static CiphertextHeader decodeHeader(final InputStream in, final Function<String, SecretKey> keyLookup)
   {
-    CiphertextHeader header;
-    try {
-      // Mark the stream start position, so we can try again with old format header
-      if (in.markSupported()) {
-        in.mark(4);
-      }
-      header = CiphertextHeaderV2.decode(in, keyLookup);
-    } catch (EncodingException e) {
-      try {
-        in.reset();
-      } catch (IOException ioe) {
-        throw new StreamException("Stream error trying to process old header format: " + ioe.getMessage());
-      }
-      header = CiphertextHeader.decode(in);
-    }
-    return header;
+    return CiphertextHeader.decode(in, keyLookup);
   }
 
 
@@ -360,7 +373,7 @@ public final class CipherUtil
     final int inSize = 1024;
     final int outSize = cipher.getOutputSize(inSize);
     final byte[] inBuf = new byte[inSize];
-    final byte[] outBuf = new byte[outSize > inSize ? outSize : inSize];
+    final byte[] outBuf = new byte[Math.max(outSize, inSize)];
     int readLen;
     int writeLen;
     try {
@@ -390,5 +403,4 @@ public final class CipherUtil
       throw new StreamException(e);
     }
   }
-
 }

@@ -70,6 +70,20 @@ public class Base64Encoder extends AbstractBaseNEncoder
 
 
   /**
+   * Creates a new instance that produces base 64-encoded output with the given number of characters per line with the
+   * option of URL-safe character set.
+   *
+   * @param  urlSafe  True to use URL and filesystem-safe character set, false otherwise.
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
+   * @param  paddedOutput  True to enable padded output, false otherwise.
+   */
+  public Base64Encoder(final boolean urlSafe, final int charactersPerLine, final boolean paddedOutput)
+  {
+    super(urlSafe ? URLSAFE_ENCODING_TABLE : DEFAULT_ENCODING_TABLE, charactersPerLine, paddedOutput);
+  }
+
+
+  /**
    * Creates a new instance that produces base 64-encoded output with the given 64-character alphabet.
    *
    * @param  alphabet  64-character alphabet to use.
@@ -90,6 +104,20 @@ public class Base64Encoder extends AbstractBaseNEncoder
   public Base64Encoder(final String alphabet, final int charactersPerLine)
   {
     super(encodingTable(alphabet, 64), charactersPerLine);
+  }
+
+
+  /**
+   * Creates a new instance that produces base 64-encoded output with the given 64-character alphabet with line
+   * wrapping at the specified line length;
+   *
+   * @param  alphabet  64-character alphabet to use.
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
+   * @param  paddedOutput  True to enable padded output, false otherwise.
+   */
+  public Base64Encoder(final String alphabet, final int charactersPerLine, final boolean paddedOutput)
+  {
+    super(encodingTable(alphabet, 64), charactersPerLine, paddedOutput);
   }
 
 
@@ -190,11 +218,10 @@ public class Base64Encoder extends AbstractBaseNEncoder
     {
       final Base64Encoder decoder;
       if (alphabet != null) {
-        decoder = new Base64Encoder(alphabet, charactersPerLine);
+        decoder = new Base64Encoder(alphabet, charactersPerLine, padding);
       } else {
-        decoder = new Base64Encoder(urlSafe, charactersPerLine);
+        decoder = new Base64Encoder(urlSafe, charactersPerLine, padding);
       }
-      decoder.setPaddedOutput(padding);
       return decoder;
     }
   }
