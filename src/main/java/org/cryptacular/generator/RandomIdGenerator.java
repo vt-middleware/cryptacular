@@ -14,6 +14,9 @@ public class RandomIdGenerator implements IdGenerator
   /** Default character set. */
   public static final String DEFAULT_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+  /** Maximum length of ID to generate. */
+  private static final int MAX_ID_LENGTH = 10240;
+
   /** Size of generated identifiers. */
   private final int length;
 
@@ -42,8 +45,8 @@ public class RandomIdGenerator implements IdGenerator
    */
   public RandomIdGenerator(final int length, final String charset)
   {
-    if (length < 1) {
-      throw new IllegalArgumentException("Length must be positive");
+    if (length < 1 || length > MAX_ID_LENGTH) {
+      throw new IllegalArgumentException("Length must be greater than 0 and less than " + MAX_ID_LENGTH);
     }
     this.length = length;
     if (charset == null || charset.length() < 2 || charset.length() > 128) {

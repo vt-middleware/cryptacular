@@ -4,6 +4,7 @@ package org.cryptacular.codec;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.Arrays;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 
 /**
@@ -36,6 +37,8 @@ public class HexDecoder implements Decoder
   @Override
   public void decode(final CharBuffer input, final ByteBuffer output) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(input, "Input cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output cannot be null");
     // Ignore leading 0x characters if present
     if (input.get(0) == '0' && input.get(1) == 'x') {
       input.position(input.position() + 2);

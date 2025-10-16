@@ -19,7 +19,6 @@ import org.cryptacular.util.ByteUtil;
  * <br>
  * <code>
  *   $2n$cost$xxxxxxxxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
- *
  *   where:
  *     n is an optional bcrypt algorithm version (typically "a" or "b")
  *     4 &le; cost &le; 31
@@ -39,15 +38,24 @@ public class BCryptHashBean implements HashBean<String>
   /** Custom base-64 alphabet. */
   private static final String ALPHABET = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+  /** Default cost. Value is 12. */
+  private static final int DEFAULT_COST = 12;
+
+  /** Default version. Value is '2b'. */
+  private static final String DEFAULT_VERSION = "2b";
+
   /** BCrypt cost factor in the range [4, 31]. Default value is {@value}. */
-  private int cost = 12;
+  private final int costFactor;
 
   /** BCrypt version used when computing hashes. Default value is {@value}. */
-  private String version = "2b";
+  private final String version;
 
 
   /** Creates a new instance. */
-  public BCryptHashBean() {}
+  public BCryptHashBean()
+  {
+    this(DEFAULT_COST);
+  }
 
 
   /**
@@ -57,36 +65,28 @@ public class BCryptHashBean implements HashBean<String>
    */
   public BCryptHashBean(final int costFactor)
   {
-    setCost(costFactor);
+    this(costFactor, DEFAULT_VERSION);
   }
 
 
   /**
-   * Sets the bcrypt cost factor.
+   * Creates a new instance that uses the given cost factor when hashing.
    *
    * @param costFactor BCrypt cost in the range [4, 31].
+   * @param  version  Bcrypt version, e.g. "2b"
    */
-  public void setCost(final int costFactor)
+  public BCryptHashBean(final int costFactor, final String version)
   {
     if (costFactor < 4 || costFactor > 31) {
       throw new IllegalArgumentException("Cost must be in the range [4, 31].");
     }
-    cost = costFactor;
-  }
-
-
-  /**
-   * Sets the bcrypt version.
-   *
-   * @param  ver  Bcrypt version, e.g. "2b"
-   */
-  public void setVersion(final String ver)
-  {
-    if (!ver.startsWith("2") && ver.length() <= 2) {
-      throw new IllegalArgumentException("Invalid version: " + ver);
+    if (version == null || !version.startsWith("2") && version.length() <= 2) {
+      throw new IllegalArgumentException("Invalid version: " + version);
     }
-    version = ver;
+    this.costFactor = costFactor;
+    this.version = version;
   }
+
 
   /**
    * Compute a bcrypt hash of the form <code>$2n$cost$xxxxxxxxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</code>
@@ -101,10 +101,10 @@ public class BCryptHashBean implements HashBean<String>
   @Override
   public String hash(final Object... data) throws CryptoException
   {
-    if (data.length != 2) {
-      throw new IllegalArgumentException("Expected exactly two elements in data array but got " + data.length);
+    if (data == null || data.length != 2) {
+      throw new IllegalArgumentException("Data must contain 2 elements.");
     }
-    return encode(BCrypt.generate(password(version, data[1]), salt(data[0]), cost), 23);
+    return encode(BCrypt.generate(password(version, data[1]), salt(data[0]), costFactor), 23);
   }
 
 

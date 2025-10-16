@@ -5,6 +5,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.SecureRandom;
 import org.bouncycastle.jce.spec.ECNamedCurveGenParameterSpec;
+import org.cryptacular.CryptUtil;
 
 /**
  * Static factory that generates various types of asymmetric key pairs.
@@ -28,6 +29,10 @@ public final class KeyPairGenerator
    */
   public static KeyPair generateDSA(final SecureRandom random, final int bitLength)
   {
+    CryptUtil.assertNotNullArg(random, "Secure random cannot be null");
+    if (bitLength < 1) {
+      throw new IllegalArgumentException("Bit length must be positive");
+    }
     final org.bouncycastle.jcajce.provider.asymmetric.dsa.KeyPairGeneratorSpi generator =
       new org.bouncycastle.jcajce.provider.asymmetric.dsa.KeyPairGeneratorSpi();
     generator.initialize(bitLength, random);
@@ -45,6 +50,10 @@ public final class KeyPairGenerator
    */
   public static KeyPair generateRSA(final SecureRandom random, final int bitLength)
   {
+    CryptUtil.assertNotNullArg(random, "Secure random cannot be null");
+    if (bitLength < 1) {
+      throw new IllegalArgumentException("Bit length must be positive");
+    }
     final org.bouncycastle.jcajce.provider.asymmetric.rsa.KeyPairGeneratorSpi generator =
       new org.bouncycastle.jcajce.provider.asymmetric.rsa.KeyPairGeneratorSpi();
     generator.initialize(bitLength, random);
@@ -62,6 +71,10 @@ public final class KeyPairGenerator
    */
   public static KeyPair generateEC(final SecureRandom random, final int bitLength)
   {
+    CryptUtil.assertNotNullArg(random, "Secure random cannot be null");
+    if (bitLength < 1) {
+      throw new IllegalArgumentException("Bit length must be positive");
+    }
     final org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC generator =
       new org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC();
     generator.initialize(bitLength, random);
@@ -79,6 +92,8 @@ public final class KeyPairGenerator
    */
   public static KeyPair generateEC(final SecureRandom random, final String namedCurve)
   {
+    CryptUtil.assertNotNullArg(random, "Secure random cannot be null");
+    CryptUtil.assertNotNullArg(namedCurve, "Named curve cannot be null");
     final org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC generator =
       new org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi.EC();
     try {

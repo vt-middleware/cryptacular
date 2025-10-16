@@ -23,6 +23,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.bouncycastle.crypto.params.RC2Parameters;
 import org.bouncycastle.crypto.params.RC5Parameters;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.spec.DigestSpec;
 
 /**
@@ -59,6 +60,7 @@ public class PBES2EncryptionScheme extends AbstractEncryptionScheme
    */
   public PBES2EncryptionScheme(final PBES2Parameters params, final char[] password)
   {
+    CryptUtil.assertNotNullArg(params, "Parameters cannot be null");
     final PBKDF2Params kdfParams = PBKDF2Params.getInstance(params.getKeyDerivationFunc().getParameters());
     final byte[] salt = kdfParams.getSalt();
     final int iterations = kdfParams.getIterationCount().intValue();
@@ -112,9 +114,9 @@ public class PBES2EncryptionScheme extends AbstractEncryptionScheme
       final int rounds = ASN1Integer.getInstance(rc5Params.getObjectAt(1)).getValue().intValue();
       final int blockSize = ASN1Integer.getInstance(rc5Params.getObjectAt(2)).getValue().intValue();
       if (blockSize == 64) {
-        setCipher(new PaddedBufferedBlockCipher(new CBCBlockCipher(new RC564Engine()), new PKCS7Padding()));
+        setCipher(new PaddedBufferedBlockCipher(CBCBlockCipher.newInstance(new RC564Engine()), new PKCS7Padding()));
       } else if (blockSize == 32) {
-        setCipher(new PaddedBufferedBlockCipher(new CBCBlockCipher(new RC532Engine()), new PKCS7Padding()));
+        setCipher(new PaddedBufferedBlockCipher(CBCBlockCipher.newInstance(new RC532Engine()), new PKCS7Padding()));
       } else {
         throw new IllegalArgumentException("Invalid RC5 block size: " + blockSize);
       }

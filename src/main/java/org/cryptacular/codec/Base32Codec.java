@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.codec;
 
+import org.cryptacular.CryptUtil;
+
 /**
  * Base 32 encoder/decoder pair.
  *
@@ -53,7 +55,7 @@ public class Base32Codec implements Codec
    */
   public Base32Codec(final String alphabet, final boolean inputOutputPadding)
   {
-    customAlphabet = alphabet;
+    customAlphabet = CryptUtil.assertNotNullArg(alphabet, "Alphabet cannot be null");
     padding = inputOutputPadding;
     encoder = newEncoder();
     decoder = newDecoder();
@@ -79,11 +81,10 @@ public class Base32Codec implements Codec
   {
     final Base32Encoder encoder;
     if (customAlphabet != null) {
-      encoder = new Base32Encoder(customAlphabet);
+      encoder = new Base32Encoder(customAlphabet, -1, padding);
     } else {
-      encoder = new Base32Encoder();
+      encoder = new Base32Encoder(-1, padding);
     }
-    encoder.setPaddedOutput(padding);
     return encoder;
   }
 
@@ -93,11 +94,10 @@ public class Base32Codec implements Codec
   {
     final Base32Decoder decoder;
     if (customAlphabet != null) {
-      decoder = new Base32Decoder(customAlphabet);
+      decoder = new Base32Decoder(customAlphabet, padding);
     } else {
-      decoder = new Base32Decoder();
+      decoder = new Base32Decoder(padding);
     }
-    decoder.setPaddedInput(padding);
     return decoder;
   }
 }

@@ -11,13 +11,14 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.io.CipherInputStream;
 import org.bouncycastle.crypto.io.CipherOutputStream;
 import org.bouncycastle.util.io.Streams;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 
 /**
  * Abstract base class for password-based encryption schemes based on salt data and iterated hashing as the basis of the
  * key derivation function.
  *
- * <p>NOTE: Classes derived from this class are not thread safe. In particular, care should be take to prevent multiple
+ * <p>NOTE: Classes derived from this class are not thread safe. In particular, care should be taken to prevent multiple
  * threads from performing encryption and/or decryption concurrently.</p>
  *
  * @author  Middleware Services
@@ -36,6 +37,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   @Override
   public byte[] encrypt(final byte[] plaintext)
   {
+    CryptUtil.assertNotNullArg(plaintext, "Plain text cannot be null");
     cipher.init(true, parameters);
     return process(plaintext);
   }
@@ -45,6 +47,8 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   public void encrypt(final InputStream in, final OutputStream out)
     throws IOException
   {
+    CryptUtil.assertNotNullArg(in, "Input stream cannot be null");
+    CryptUtil.assertNotNullArg(out, "Output stream cannot be null");
     cipher.init(true, parameters);
     Streams.pipeAll(in, new CipherOutputStream(out, cipher));
   }
@@ -53,6 +57,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   @Override
   public byte[] decrypt(final byte[] ciphertext)
   {
+    CryptUtil.assertNotNullArg(ciphertext, "Cipher text cannot be null");
     cipher.init(false, parameters);
     return process(ciphertext);
   }
@@ -62,6 +67,8 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   public void decrypt(final InputStream in, final OutputStream out)
     throws IOException
   {
+    CryptUtil.assertNotNullArg(in, "Input stream cannot be null");
+    CryptUtil.assertNotNullArg(out, "Output stream cannot be null");
     cipher.init(false, parameters);
     Streams.pipeAll(new CipherInputStream(in, cipher), out);
   }
@@ -70,6 +77,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
   @Override
   public OutputStream wrap(final boolean encryptionFlag, final OutputStream out)
   {
+    CryptUtil.assertNotNullArg(out, "Output stream cannot be null");
     cipher.init(encryptionFlag, parameters);
     return new CipherOutputStream(out, cipher);
   }
@@ -82,10 +90,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
    */
   protected void setCipher(final BufferedBlockCipher bufferedBlockCipher)
   {
-    if (bufferedBlockCipher == null) {
-      throw new IllegalArgumentException("Block cipher cannot be null");
-    }
-    this.cipher = bufferedBlockCipher;
+    this.cipher = CryptUtil.assertNotNullArg(bufferedBlockCipher, "Block cipher cannot be null");
   }
 
 
@@ -96,10 +101,7 @@ public abstract class AbstractEncryptionScheme implements EncryptionScheme
    */
   protected void setCipherParameters(final CipherParameters parameters)
   {
-    if (parameters == null) {
-      throw new IllegalArgumentException("Cipher parameters cannot be null");
-    }
-    this.parameters = parameters;
+    this.parameters = CryptUtil.assertNotNullArg(parameters, "Cipher parameters cannot be null");
   }
 
 

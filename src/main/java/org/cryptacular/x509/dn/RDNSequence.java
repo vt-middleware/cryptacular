@@ -2,10 +2,13 @@
 package org.cryptacular.x509.dn;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
+import org.cryptacular.CryptUtil;
 
 /**
  * Simple implementation of the X.501 RDNSequence type described in section 4.1.2.4 of RFC 2459.
@@ -20,13 +23,25 @@ public class RDNSequence implements Iterable<RDN>
 
 
   /**
-   * Adds an RDN to the sequence.
+   * Creates a new RDN sequence.
    *
-   * @param  rdn  RDN to add.
+   * @param rdns to include
    */
-  public void add(final RDN rdn)
+  public RDNSequence(final RDN... rdns)
   {
-    rdns.add(rdn);
+    this(Arrays.asList(rdns));
+  }
+
+
+  /**
+   * Creates a new RDN sequence.
+   *
+   * @param rdns to include
+   */
+  public RDNSequence(final List<RDN> rdns)
+  {
+    this.rdns.addAll(
+      CryptUtil.assertNotNullArgOr(rdns, v -> v.stream().anyMatch(Objects::isNull), "RDNs cannot be null"));
   }
 
 

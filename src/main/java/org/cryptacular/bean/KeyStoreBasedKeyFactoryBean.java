@@ -6,6 +6,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 
 /**
@@ -21,21 +22,17 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key> implements FactoryBean<T
 {
 
   /** Keystore containing secret key. */
-  private KeyStore keyStore;
+  private final KeyStore keyStore;
 
   /** Alias of keystore entry containing secret key. */
-  private String alias;
+  private final String alias;
 
   /** Password required to read key entry. */
-  private String password;
-
-
-  /** Creates a new instance. */
-  public KeyStoreBasedKeyFactoryBean() {}
+  private final String password;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new keystore based key factory bean.
    *
    * @param  keyStore  Key store containing encryption key.
    * @param  alias  Name of encryption key entry in key store.
@@ -43,9 +40,9 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key> implements FactoryBean<T
    */
   public KeyStoreBasedKeyFactoryBean(final KeyStore keyStore, final String alias, final String password)
   {
-    setKeyStore(keyStore);
-    setAlias(alias);
-    setPassword(password);
+    this.keyStore = CryptUtil.assertNotNullArg(keyStore, "KeyStore cannot be null");
+    this.alias = alias;
+    this.password = password;
   }
 
 
@@ -56,43 +53,10 @@ public class KeyStoreBasedKeyFactoryBean<T extends Key> implements FactoryBean<T
   }
 
 
-  /**
-   * Sets the keystore that contains the key.
-   *
-   * @param  keyStore  Non-null keystore.
-   */
-  public void setKeyStore(final KeyStore keyStore)
-  {
-    this.keyStore = keyStore;
-  }
-
-
   /** @return  Alias that specifies the {@link KeyStore} entry containing the key. */
   public String getAlias()
   {
     return alias;
-  }
-
-
-  /**
-   * Sets the alias that specifies the {@link KeyStore} entry containing the key.
-   *
-   * @param  alias  Keystore alias of key entry.
-   */
-  public void setAlias(final String alias)
-  {
-    this.alias = alias;
-  }
-
-
-  /**
-   * Sets the password used to access the key entry.
-   *
-   * @param  password  Key entry password.
-   */
-  public void setPassword(final String password)
-  {
-    this.password = password;
   }
 
 

@@ -54,15 +54,11 @@ public class KeyStoreBasedKeyFactoryBeanTest
     final int expectedSize)
     throws Exception
   {
-    final KeyStoreFactoryBean keyStoreFactory = new KeyStoreFactoryBean();
-    keyStoreFactory.setResource(new FileResource(new File(keyStorePath)));
-    keyStoreFactory.setPassword("vtcrypt");
-    keyStoreFactory.setType(keyStoreType);
+    final KeyStoreFactoryBean keyStoreFactory = new KeyStoreFactoryBean(
+      new FileResource(new File(keyStorePath)),  keyStoreType, "vtcrypt");
 
-    final KeyStoreBasedKeyFactoryBean<? extends Key> secretKeyFactory = new KeyStoreBasedKeyFactoryBean<>();
-    secretKeyFactory.setKeyStore(keyStoreFactory.newInstance());
-    secretKeyFactory.setAlias(alias);
-    secretKeyFactory.setPassword("vtcrypt");
+    final KeyStoreBasedKeyFactoryBean<? extends Key> secretKeyFactory = new KeyStoreBasedKeyFactoryBean<>(
+      keyStoreFactory.newInstance(), alias, "vtcrypt");
 
     final Key key = secretKeyFactory.newInstance();
     assertEquals(key.getAlgorithm(), expectedAlg);

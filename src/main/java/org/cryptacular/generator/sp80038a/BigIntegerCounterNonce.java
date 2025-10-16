@@ -3,6 +3,7 @@ package org.cryptacular.generator.sp80038a;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.generator.LimitException;
 import org.cryptacular.generator.Nonce;
 
@@ -17,6 +18,9 @@ import org.cryptacular.generator.Nonce;
  */
 public class BigIntegerCounterNonce implements Nonce
 {
+
+  /** Maximum length of nonce to generate. */
+  private static final int MAX_NONCE_LENGTH = 10240;
 
   /** Counter. */
   private BigInteger counter;
@@ -33,11 +37,11 @@ public class BigIntegerCounterNonce implements Nonce
    */
   public BigIntegerCounterNonce(final BigInteger counter, final int length)
   {
-    if (length < 1) {
-      throw new IllegalArgumentException("Length must be positive");
+    if (length < 1 || length > MAX_NONCE_LENGTH) {
+      throw new IllegalArgumentException("Length must be positive and less than " + MAX_NONCE_LENGTH);
     }
     this.length = length;
-    this.counter = counter;
+    this.counter = CryptUtil.assertNotNullArg(counter, "Counter cannot be null");
   }
 
 

@@ -48,10 +48,7 @@ public class KeyStoreFactoryBeanTest
   public void testNewInstance(final String type, final Resource resource, final int expectedSize)
     throws Exception
   {
-    final KeyStoreFactoryBean factory = new KeyStoreFactoryBean();
-    factory.setType(type);
-    factory.setResource(resource);
-    factory.setPassword("vtcrypt");
+    final KeyStoreFactoryBean factory = new KeyStoreFactoryBean(resource, type, "vtcrypt");
     assertEquals(factory.newInstance().size(), expectedSize);
   }
 }

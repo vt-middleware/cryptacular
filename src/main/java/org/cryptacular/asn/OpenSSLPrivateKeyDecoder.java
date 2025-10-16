@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.asn;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Integer;
@@ -49,56 +50,59 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
   @Override
   protected AsymmetricKeyParameter decodeASN1(final byte[] encoded)
   {
-    final ASN1InputStream stream = new ASN1InputStream(encoded);
-    final ASN1Object o;
-    try {
-      o = stream.readObject();
-    } catch (Exception e) {
-      throw new EncodingException("Invalid encoded key", e);
-    }
-
     final AsymmetricKeyParameter key;
-    if (o instanceof ASN1ObjectIdentifier) {
-      // EC private key with named curve in the default OpenSSL format emitted
-      // by openssl ecparam -name xxxx -genkey
+    try (ASN1InputStream stream = new ASN1InputStream(encoded)) {
+      final ASN1Object o;
       try {
-        key = parseECPrivateKey(ASN1Sequence.getInstance(stream.readObject()));
+        o = stream.readObject();
       } catch (Exception e) {
         throw new EncodingException("Invalid encoded key", e);
       }
-    } else {
-      // OpenSSL "traditional" format is an ASN.1 sequence of key parameters
 
-      // Detect key type based on number and types of parameters:
-      // RSA -> {version, mod, pubExp, privExp, prime1, prime2, exp1, exp2, c}
-      // DSA -> {version, p, q, g, pubExp, privExp}
-      // EC ->  {version, privateKey, parameters, publicKey}
-      final ASN1Sequence sequence = ASN1Sequence.getInstance(o);
-      if (sequence.size() == 9) {
-        // RSA private certificate key
-        key = new RSAPrivateCrtKeyParameters(
-          ASN1Integer.getInstance(sequence.getObjectAt(1)).getValue(),
-          ASN1Integer.getInstance(sequence.getObjectAt(2)).getValue(),
-          ASN1Integer.getInstance(sequence.getObjectAt(3)).getValue(),
-          ASN1Integer.getInstance(sequence.getObjectAt(4)).getValue(),
-          ASN1Integer.getInstance(sequence.getObjectAt(5)).getValue(),
-          ASN1Integer.getInstance(sequence.getObjectAt(6)).getValue(),
-          ASN1Integer.getInstance(sequence.getObjectAt(7)).getValue(),
-          ASN1Integer.getInstance(sequence.getObjectAt(8)).getValue());
-      } else if (sequence.size() == 6) {
-        // DSA private key
-        key = new DSAPrivateKeyParameters(
-          ASN1Integer.getInstance(sequence.getObjectAt(5)).getValue(),
-          new DSAParameters(
+      if (o instanceof ASN1ObjectIdentifier) {
+        // EC private key with named curve in the default OpenSSL format emitted
+        // by openssl ecparam -name xxxx -genkey
+        try {
+          key = parseECPrivateKey(ASN1Sequence.getInstance(stream.readObject()));
+        } catch (Exception e) {
+          throw new EncodingException("Invalid encoded key", e);
+        }
+      } else {
+        // OpenSSL "traditional" format is an ASN.1 sequence of key parameters
+
+        // Detect key type based on number and types of parameters:
+        // RSA -> {version, mod, pubExp, privExp, prime1, prime2, exp1, exp2, c}
+        // DSA -> {version, p, q, g, pubExp, privExp}
+        // EC ->  {version, privateKey, parameters, publicKey}
+        final ASN1Sequence sequence = ASN1Sequence.getInstance(o);
+        if (sequence.size() == 9) {
+          // RSA private certificate key
+          key = new RSAPrivateCrtKeyParameters(
             ASN1Integer.getInstance(sequence.getObjectAt(1)).getValue(),
             ASN1Integer.getInstance(sequence.getObjectAt(2)).getValue(),
-            ASN1Integer.getInstance(sequence.getObjectAt(3)).getValue()));
-      } else if (sequence.size() == 4) {
-        // EC private key with explicit curve
-        key = parseECPrivateKey(sequence);
-      } else {
-        throw new EncodingException("Invalid OpenSSL traditional private key format.");
+            ASN1Integer.getInstance(sequence.getObjectAt(3)).getValue(),
+            ASN1Integer.getInstance(sequence.getObjectAt(4)).getValue(),
+            ASN1Integer.getInstance(sequence.getObjectAt(5)).getValue(),
+            ASN1Integer.getInstance(sequence.getObjectAt(6)).getValue(),
+            ASN1Integer.getInstance(sequence.getObjectAt(7)).getValue(),
+            ASN1Integer.getInstance(sequence.getObjectAt(8)).getValue());
+        } else if (sequence.size() == 6) {
+          // DSA private key
+          key = new DSAPrivateKeyParameters(
+            ASN1Integer.getInstance(sequence.getObjectAt(5)).getValue(),
+            new DSAParameters(
+              ASN1Integer.getInstance(sequence.getObjectAt(1)).getValue(),
+              ASN1Integer.getInstance(sequence.getObjectAt(2)).getValue(),
+              ASN1Integer.getInstance(sequence.getObjectAt(3)).getValue()));
+        } else if (sequence.size() == 4) {
+          // EC private key with explicit curve
+          key = parseECPrivateKey(sequence);
+        } else {
+          throw new EncodingException("Invalid OpenSSL traditional private key format.");
+        }
       }
+    } catch (IOException e) {
+      throw new EncodingException("Unexpected IO error", e);
     }
     return key;
   }

@@ -22,6 +22,9 @@ import org.cryptacular.generator.sp80038d.RBGNonce;
  */
 public final class NonceUtil
 {
+  /** Maximum length of nonce to generate. */
+  private static final int MAX_NONCE_LENGTH = 10240;
+
   /** Class-wide random source. */
   private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
@@ -46,8 +49,9 @@ public final class NonceUtil
    */
   public static byte[] timestampNonce(final int length)
   {
-    if (length <= 0) {
-      throw new IllegalArgumentException(length + " is invalid. Length must be positive.");
+    if (length <= 0 || length > MAX_NONCE_LENGTH) {
+      throw new IllegalArgumentException(
+        length + " is invalid. Length must be positive and less than " + MAX_NONCE_LENGTH);
     }
 
     final byte[] nonce = new byte[length];
@@ -73,8 +77,9 @@ public final class NonceUtil
    */
   public static byte[] randomNonce(final int length)
   {
-    if (length <= 0) {
-      throw new IllegalArgumentException(length + " is invalid. Length must be positive.");
+    if (length <= 0 || length > MAX_NONCE_LENGTH) {
+      throw new IllegalArgumentException(
+        length + " is invalid. Length must be positive and less than " + MAX_NONCE_LENGTH);
     }
     final byte[] nonce = new byte[length];
     SECURE_RANDOM.nextBytes(nonce);
@@ -91,6 +96,10 @@ public final class NonceUtil
    */
   public static EntropySource randomEntropySource(final int length)
   {
+    if (length <= 0 || length > MAX_NONCE_LENGTH) {
+      throw new IllegalArgumentException(
+        length + " is invalid. Length must be positive and less than " + MAX_NONCE_LENGTH);
+    }
     return new EntropySource() {
       @Override
       public boolean isPredictionResistant()
@@ -168,8 +177,11 @@ public final class NonceUtil
    */
   public static byte[] nist80063a(final SP800SecureRandom prng, final int blockSize)
   {
+    if (blockSize <= 0 || blockSize > MAX_NONCE_LENGTH) {
+      throw new IllegalArgumentException(
+        blockSize + " is invalid. Block size must be positive and less than " + MAX_NONCE_LENGTH);
+    }
     prng.setSeed(randomNonce(blockSize));
-
     final byte[] iv = new byte[blockSize];
     prng.nextBytes(iv);
     return iv;

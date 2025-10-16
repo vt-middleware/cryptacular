@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.engines.ISAACEngine;
 import org.bouncycastle.crypto.engines.RC4Engine;
 import org.bouncycastle.crypto.engines.Salsa20Engine;
 import org.bouncycastle.crypto.engines.VMPCEngine;
+import org.cryptacular.CryptUtil;
 
 /**
  * Stream cipher specification.
@@ -29,7 +30,7 @@ public class StreamCipherSpec implements Spec<StreamCipher>
    */
   public StreamCipherSpec(final String algName)
   {
-    this.algorithm = algName;
+    this.algorithm = CryptUtil.assertNotNullArg(algName, "Algorithm name cannot be null");
   }
 
 
