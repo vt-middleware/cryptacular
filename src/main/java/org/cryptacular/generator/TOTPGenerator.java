@@ -175,7 +175,7 @@ public class TOTPGenerator extends AbstractOTPGenerator
   public int generate(final byte[] key)
   {
     CryptUtil.assertNotNullArg(key, "Key cannot be null");
-    final long t = (currentTime().toEpochMilli() - startTime.toEpochMilli()) / timeStep.getSeconds();
+    final long t = (currentTime().getEpochSecond() - startTime.getEpochSecond()) / timeStep.getSeconds();
     return generateInternal(key, t);
   }
 
@@ -193,16 +193,16 @@ public class TOTPGenerator extends AbstractOTPGenerator
    *
    * @param time to override the current time with
    */
-  void setCurrentTime(final Instant time)
+  protected void setCurrentTime(final Instant time)
   {
-    currentTime = time;
+    currentTime = time.truncatedTo(ChronoUnit.SECONDS);
   }
 
 
   /**
    * @return Current system time in seconds since the start of epoch, 1970-01-01T00:00:00.
    */
-  Instant currentTime()
+  protected Instant currentTime()
   {
     if (currentTime != null) {
       return currentTime;
