@@ -7,19 +7,26 @@ import org.cryptacular.StreamException;
 import org.cryptacular.spec.Spec;
 
 /**
- * Computes a hash using an instance of {@link Digest} specified by {@link #setDigestSpec(org.cryptacular.spec.Spec)}.
+ * Computes a hash using an instance of {@link Digest} specified by {@link #getDigestSpec()}.
  *
  * @author  Middleware Services
  */
 public class SimpleHashBean extends AbstractHashBean implements HashBean<byte[]>
 {
 
-  /** Creates a new instance. */
-  public SimpleHashBean() {}
+  /**
+   * Creates a new simple hash bean.
+   *
+   * @param  digestSpec  Digest specification.
+   */
+  public SimpleHashBean(final Spec<Digest> digestSpec)
+  {
+    this(digestSpec, 1);
+  }
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new simple hash bean.
    *
    * @param  digestSpec  Digest specification.
    * @param  iterations  Number of hash rounds.

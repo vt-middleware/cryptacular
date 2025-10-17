@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.modes.CCMBlockCipher;
 import org.bouncycastle.crypto.modes.EAXBlockCipher;
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.modes.OCBBlockCipher;
+import org.cryptacular.CryptUtil;
 
 /**
  * Describes an AEAD block cipher in terms of a (algorithm, mode) tuple and provides a facility to create a new instance
@@ -38,8 +39,8 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
    */
   public AEADBlockCipherSpec(final String algName, final String cipherMode)
   {
-    this.algorithm = algName;
-    this.mode = cipherMode;
+    this.algorithm = CryptUtil.assertNotNullArg(algName, "Algorithm name cannot be null.");
+    this.mode = CryptUtil.assertNotNullArg(cipherMode, "Cipher mode cannot be null.");
   }
 
 
@@ -74,11 +75,11 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
     switch (mode) {
 
     case "GCM":
-      aeadBlockCipher = new GCMBlockCipher(blockCipher);
+      aeadBlockCipher = GCMBlockCipher.newInstance(blockCipher);
       break;
 
     case "CCM":
-      aeadBlockCipher = new CCMBlockCipher(blockCipher);
+      aeadBlockCipher = CCMBlockCipher.newInstance(blockCipher);
       break;
 
     case "OCB":
@@ -112,7 +113,7 @@ public class AEADBlockCipherSpec implements Spec<AEADBlockCipher>
    */
   public static AEADBlockCipherSpec parse(final String specification)
   {
-    final Matcher m = FORMAT.matcher(specification);
+    final Matcher m = FORMAT.matcher(CryptUtil.assertNotNullArg(specification, "Specification cannot be null."));
     if (!m.matches()) {
       throw new IllegalArgumentException("Invalid specification " + specification);
     }

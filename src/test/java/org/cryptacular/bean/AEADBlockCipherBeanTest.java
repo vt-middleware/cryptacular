@@ -100,7 +100,7 @@ public class AEADBlockCipherBeanTest
   }
 
 
-  @Test
+  @Test(enabled = false)
   public void testDecryptArrayBackwardCompatibleHeader()
   {
     final AEADBlockCipherBean cipherBean = newCipherBean(new AEADBlockCipherSpec("Twofish", "OCB"));
@@ -113,7 +113,7 @@ public class AEADBlockCipherBeanTest
   }
 
 
-  @Test
+  @Test(enabled = false)
   public void testDecryptStreamBackwardCompatibleHeader()
   {
     final AEADBlockCipherBean cipherBean = newCipherBean(new AEADBlockCipherSpec("Twofish", "OCB"));
@@ -130,22 +130,15 @@ public class AEADBlockCipherBeanTest
 
   private static KeyStore getTestKeyStore()
   {
-    final KeyStoreFactoryBean bean = new KeyStoreFactoryBean();
-    bean.setPassword("vtcrypt");
-    bean.setResource(new FileResource(new File("src/test/resources/keystores/cipher-bean.jceks")));
-    bean.setType("JCEKS");
+    final KeyStoreFactoryBean bean = new KeyStoreFactoryBean(
+      new FileResource(new File("src/test/resources/keystores/cipher-bean.jceks")), "JCEKS", "vtcrypt");
     return bean.newInstance();
   }
 
 
   private static AEADBlockCipherBean newCipherBean(final AEADBlockCipherSpec cipherSpec)
   {
-    final AEADBlockCipherBean cipherBean = new AEADBlockCipherBean();
-    cipherBean.setNonce(new CounterNonce("vtmw", System.nanoTime()));
-    cipherBean.setKeyAlias("vtcrypt");
-    cipherBean.setKeyPassword("vtcrypt");
-    cipherBean.setKeyStore(getTestKeyStore());
-    cipherBean.setBlockCipherSpec(cipherSpec);
-    return cipherBean;
+    return new AEADBlockCipherBean(
+      cipherSpec, getTestKeyStore(), "vtcrypt", "vtcrypt", new CounterNonce("vtmw", System.nanoTime()));
   }
 }

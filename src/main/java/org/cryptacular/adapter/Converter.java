@@ -10,6 +10,7 @@ import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
+import org.cryptacular.CryptUtil;
 
 /**
  * Static factory with methods to convert from BC type to the corresponding JCE type.
@@ -32,6 +33,7 @@ public final class Converter
    */
   public static PrivateKey convertPrivateKey(final AsymmetricKeyParameter bcKey)
   {
+    CryptUtil.assertNotNullArg(bcKey, "Key cannot be null");
     if (!bcKey.isPrivate()) {
       throw new IllegalArgumentException("AsymmetricKeyParameter is not a private key: " + bcKey);
     }
@@ -59,6 +61,7 @@ public final class Converter
    */
   public static PublicKey convertPublicKey(final AsymmetricKeyParameter bcKey)
   {
+    CryptUtil.assertNotNullArg(bcKey, "Key parameter cannot be null");
     if (bcKey.isPrivate()) {
       throw new IllegalArgumentException("AsymmetricKeyParameter is not a public key: " + bcKey);
     }

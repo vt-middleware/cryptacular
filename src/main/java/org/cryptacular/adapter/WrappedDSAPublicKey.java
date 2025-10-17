@@ -32,5 +32,4 @@ public class WrappedDSAPublicKey extends AbstractWrappedDSAKey<DSAPublicKeyParam
   {
     return delegate.getY();
   }
-
 }

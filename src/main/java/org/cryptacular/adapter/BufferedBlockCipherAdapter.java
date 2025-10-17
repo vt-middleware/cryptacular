@@ -4,6 +4,7 @@ package org.cryptacular.adapter;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 
 /**
@@ -25,7 +26,7 @@ public class BufferedBlockCipherAdapter implements BlockCipherAdapter
    */
   public BufferedBlockCipherAdapter(final BufferedBlockCipher delegate)
   {
-    cipherDelegate = delegate;
+    cipherDelegate = CryptUtil.assertNotNullArg(delegate, "Cipher delegate cannot be null");
   }
 
 

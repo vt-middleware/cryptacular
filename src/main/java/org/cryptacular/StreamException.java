@@ -10,6 +10,8 @@ import java.io.IOException;
  */
 public class StreamException extends RuntimeException
 {
+
+
   /**
    * Creates a new instance with the given error message.
    *
@@ -29,5 +31,17 @@ public class StreamException extends RuntimeException
   public StreamException(final IOException cause)
   {
     super("IO error", cause);
+  }
+
+
+  /**
+   * Creates a new instance with causing IO exception and message.
+   *
+   * @param  message  Error message.
+   * @param  cause  IO exception to wrap.
+   */
+  public StreamException(final String message, final IOException cause)
+  {
+    super(message, cause);
   }
 }

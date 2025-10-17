@@ -3,6 +3,7 @@ package org.cryptacular.codec;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 
 /**
@@ -67,6 +68,8 @@ public class HexEncoder implements Encoder
   @Override
   public void encode(final ByteBuffer input, final CharBuffer output) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(input, "Input cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output cannot be null");
     byte current;
     while (input.hasRemaining()) {
       current = input.get();

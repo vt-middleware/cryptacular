@@ -4,6 +4,7 @@ package org.cryptacular.util;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.regex.Pattern;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.codec.Base64Decoder;
 
 /**
@@ -51,6 +52,8 @@ public final class PemUtil
    */
   public static boolean isPem(final byte[] data)
   {
+    CryptUtil.assertNotNullArgOr(
+      data, v -> v.length < LINE_LENGTH, "Data must be at least " + LINE_LENGTH + " bytes long");
     final String start = new String(data, 0, 10, ByteUtil.ASCII_CHARSET).trim();
     if (!start.startsWith(HEADER_BEGIN) && !start.startsWith(PROC_TYPE)) {
       // Check all bytes in first line to make sure they are in the range
@@ -97,7 +100,7 @@ public final class PemUtil
    */
   public static byte[] decode(final byte[] pem)
   {
-    return decode(new String(pem, ByteUtil.ASCII_CHARSET));
+    return decode(new String(CryptUtil.assertNotNullArg(pem, "PEM cannot be null"), ByteUtil.ASCII_CHARSET));
   }
 
 
@@ -112,6 +115,7 @@ public final class PemUtil
    */
   public static byte[] decode(final String pem)
   {
+    CryptUtil.assertNotNullArg(pem, "PEM cannot be null");
     final Base64Decoder decoder = new Base64Decoder();
     final CharBuffer buffer = CharBuffer.allocate(pem.length());
     final ByteBuffer output = ByteBuffer.allocate(pem.length() * 3 / 4);

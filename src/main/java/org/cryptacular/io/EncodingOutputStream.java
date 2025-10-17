@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.codec.Base64Encoder;
 import org.cryptacular.codec.Encoder;
 import org.cryptacular.codec.HexEncoder;
@@ -37,11 +38,8 @@ public class EncodingOutputStream extends FilterOutputStream
    */
   public EncodingOutputStream(final OutputStream out, final Encoder e)
   {
-    super(out);
-    if (e == null) {
-      throw new IllegalArgumentException("Encoder cannot be null.");
-    }
-    encoder = e;
+    super(CryptUtil.assertNotNullArg(out, "Output stream cannot be null"));
+    encoder = CryptUtil.assertNotNullArg(e, "Encoder cannot be null");
     writer = new OutputStreamWriter(out);
   }
 
@@ -58,6 +56,7 @@ public class EncodingOutputStream extends FilterOutputStream
   public void write(final byte[] b)
     throws IOException
   {
+    CryptUtil.assertNotNullArg(b, "Byte array cannot be null");
     write(b, 0, b.length);
   }
 
@@ -66,6 +65,7 @@ public class EncodingOutputStream extends FilterOutputStream
   public void write(final byte[] b, final int off, final int len)
     throws IOException
   {
+    CryptUtil.assertNotNullArg(b, "Byte array cannot be null");
     final ByteBuffer input = ByteBuffer.wrap(b, off, len);
     final int required = encoder.outputSize(len - off);
     if (output == null || output.capacity() < required) {
@@ -149,5 +149,4 @@ public class EncodingOutputStream extends FilterOutputStream
   {
     return new EncodingOutputStream(out, new HexEncoder());
   }
-
 }

@@ -6,6 +6,7 @@ import java.security.Key;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.util.PrivateKeyInfoFactory;
 import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 
 /**
@@ -36,10 +37,7 @@ public abstract class AbstractWrappedKey<T extends AsymmetricKeyParameter> imple
    */
   public AbstractWrappedKey(final T wrappedKey)
   {
-    if (wrappedKey == null) {
-      throw new IllegalArgumentException("Wrapped key cannot be null.");
-    }
-    delegate = wrappedKey;
+    delegate = CryptUtil.assertNotNullArg(wrappedKey, "Wrapped key cannot be null");
   }
 
 

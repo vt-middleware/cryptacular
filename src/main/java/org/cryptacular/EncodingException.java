@@ -8,6 +8,8 @@ package org.cryptacular;
  */
 public class EncodingException extends RuntimeException
 {
+
+
   /**
    * Creates a new instance with the given error message.
    *
@@ -16,6 +18,17 @@ public class EncodingException extends RuntimeException
   public EncodingException(final String message)
   {
     super(message);
+  }
+
+
+  /**
+   * Creates a new instance with the given cause.
+   *
+   * @param  cause  Error cause.
+   */
+  public EncodingException(final Throwable cause)
+  {
+    super(cause);
   }
 
 

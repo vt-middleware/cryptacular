@@ -3,6 +3,7 @@ package org.cryptacular.bean;
 
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.util.Arrays;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
@@ -15,18 +16,14 @@ import org.cryptacular.util.CodecUtil;
  *
  * @author  Middleware Services
  */
-public class EncodingHashBean extends AbstractHashBean implements HashBean<String>
+public class EncodingHashBean extends AbstractHashBean implements HashBean<CharSequence>
 {
 
   /** Determines kind of encoding. */
-  private Spec<Codec> codecSpec;
+  private final Spec<Codec> codecSpec;
 
   /** Whether data provided to this bean includes a salt. */
-  private boolean salted;
-
-
-  /** Creates a new instance. */
-  public EncodingHashBean() {}
+  private final boolean salted;
 
 
   /**
@@ -55,7 +52,7 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new encoding hash bean.
    *
    * @param  codecSpec  Digest specification.
    * @param  digestSpec  Digest specification.
@@ -69,8 +66,8 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
     final boolean salted)
   {
     super(digestSpec, iterations);
-    setCodecSpec(codecSpec);
-    setSalted(salted);
+    this.codecSpec = CryptUtil.assertNotNullArg(codecSpec, "Codec spec cannot be null");
+    this.salted = salted;
   }
 
 
@@ -82,18 +79,6 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
 
 
   /**
-   * Sets the codec specification that determines the encoding applied to the hash output bytes.
-   *
-   * @param  codecSpec  Codec specification, e.g. {@link org.cryptacular.spec.CodecSpec#BASE64}, {@link
-   *                    org.cryptacular.spec.CodecSpec#HEX}.
-   */
-  public void setCodecSpec(final Spec<Codec> codecSpec)
-  {
-    this.codecSpec = codecSpec;
-  }
-
-
-  /**
    * Whether data provided to {@link #hash(Object...)} includes a salt as the last parameter.
    *
    * @return  whether hash data includes a salt
@@ -101,17 +86,6 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
   public boolean isSalted()
   {
     return salted;
-  }
-
-
-  /**
-   * Sets whether {@link #hash(Object...)} should expect a salt as the last parameter.
-   *
-   * @param  salted  whether hash data includes a salt
-   */
-  public void setSalted(final boolean salted)
-  {
-    this.salted = salted;
   }
 
 
@@ -130,6 +104,7 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
   @Override
   public String hash(final Object... data) throws CryptoException, EncodingException, StreamException
   {
+    CryptUtil.assertNotNullArg(data, "Data cannot be null");
     if (salted) {
       if (data.length < 2 || !(data[data.length - 1] instanceof byte[])) {
         throw new IllegalArgumentException("Last parameter must be a salt of type byte[]");
@@ -157,7 +132,7 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
    * @throws  StreamException  on stream IO errors.
    */
   @Override
-  public boolean compare(final String hash, final Object... data)
+  public boolean compare(final CharSequence hash, final Object... data)
       throws CryptoException, EncodingException, StreamException
   {
     return compareInternal(CodecUtil.decode(codecSpec.newInstance().getDecoder(), hash), data);

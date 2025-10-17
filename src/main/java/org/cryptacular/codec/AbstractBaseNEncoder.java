@@ -3,6 +3,7 @@ package org.cryptacular.codec;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 
 /**
@@ -31,6 +32,9 @@ public abstract class AbstractBaseNEncoder implements Encoder
   /** Initial bit mask for selecting characters in a block. */
   private final long initialBitMask;
 
+  /** Flag indicating whether output is padded. True by default. */
+  private final boolean paddedOutput;
+
   /** Holds a block of bytes to encode. */
   private long block;
 
@@ -39,9 +43,6 @@ public abstract class AbstractBaseNEncoder implements Encoder
 
   /** Number of characters written. */
   private int outCount;
-
-  /** Flag indicating whether output is padded. True by default. */
-  private boolean paddedOutput = true;
 
 
   /**
@@ -52,7 +53,20 @@ public abstract class AbstractBaseNEncoder implements Encoder
    */
   public AbstractBaseNEncoder(final char[] characterSet, final int charactersPerLine)
   {
-    charset = characterSet;
+    this(characterSet, charactersPerLine, true);
+  }
+
+
+  /**
+   * Creates a new instance with given parameters.
+   *
+   * @param  charset  Encoding character set.
+   * @param  charactersPerLine  Number of characters per line.
+   * @param  paddedOutput  True to enable padded output, false otherwise.
+   */
+  public AbstractBaseNEncoder(final char[] charset, final int charactersPerLine, final boolean paddedOutput)
+  {
+    this.charset = CryptUtil.assertNotNullArg(charset, "Charset cannot be null");
 
     long mask = 0;
     for (int i = 1; i <= bitsPerChar; i++) {
@@ -60,6 +74,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
     }
     initialBitMask = mask;
     lineLength = charactersPerLine;
+    this.paddedOutput = paddedOutput;
   }
 
 
@@ -72,20 +87,11 @@ public abstract class AbstractBaseNEncoder implements Encoder
   }
 
 
-  /**
-   * Sets the output padding mode.
-   *
-   * @param  enabled  True to enable padded output, false otherwise.
-   */
-  public void setPaddedOutput(final boolean enabled)
-  {
-    this.paddedOutput = enabled;
-  }
-
-
   @Override
   public void encode(final ByteBuffer input, final CharBuffer output) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(input, "Input cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output cannot be null");
     while (input.hasRemaining()) {
       remaining -= 8;
       block |= (input.get() & 0xffL) << remaining;
@@ -99,6 +105,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
   @Override
   public void finalize(final CharBuffer output) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(output, "Output cannot be null");
     if (remaining < blockLength) {
       // Floor division
       final int stop = remaining / bitsPerChar * bitsPerChar;
@@ -146,6 +153,7 @@ public abstract class AbstractBaseNEncoder implements Encoder
    */
   protected static char[] encodingTable(final String alphabet, final int n)
   {
+    CryptUtil.assertNotNullArg(alphabet, "Alphabet cannot be null");
     if (alphabet.length() != n) {
       throw new IllegalArgumentException("Alphabet must be exactly " + n + " characters long");
     }

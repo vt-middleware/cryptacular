@@ -2,6 +2,7 @@
 package org.cryptacular.io;
 
 import java.io.InputStream;
+import org.cryptacular.CryptUtil;
 
 /**
  * Resource that produces a {@link InputStream} from a classpath resource.
@@ -39,6 +40,7 @@ public class ClassPathResource implements Resource
    */
   public ClassPathResource(final String path, final ClassLoader loader)
   {
+    CryptUtil.assertNotNullArg(path, "Path cannot be null");
     // Strip leading / since absolute paths are not supported by
     // ClassLoader#getResourceAsStream(...)
     if (path.startsWith("/")) {
@@ -46,7 +48,7 @@ public class ClassPathResource implements Resource
     } else {
       this.classPath = path;
     }
-    this.classLoader = loader;
+    this.classLoader = CryptUtil.assertNotNullArg(loader, "Class loader cannot be null");
   }
 
 

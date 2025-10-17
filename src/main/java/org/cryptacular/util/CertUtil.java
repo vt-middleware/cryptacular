@@ -41,6 +41,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
 import org.cryptacular.codec.Base64Encoder;
@@ -73,6 +74,7 @@ public final class CertUtil
    */
   public static String subjectCN(final X509Certificate cert) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
     return new NameReader(cert).readSubject().getValue(StandardAttributeType.CommonName);
   }
 
@@ -88,6 +90,7 @@ public final class CertUtil
    */
   public static GeneralNames subjectAltNames(final X509Certificate cert) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
     return new ExtensionReader(cert).readSubjectAlternativeName();
   }
 
@@ -105,6 +108,8 @@ public final class CertUtil
   public static GeneralNames subjectAltNames(final X509Certificate cert, final GeneralNameType... types)
     throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
+    CryptUtil.assertNotNullArg(types, "Types cannot be null");
     final GeneralNamesBuilder builder = new GeneralNamesBuilder();
     final GeneralNames altNames = subjectAltNames(cert);
     if (altNames != null) {
@@ -137,6 +142,7 @@ public final class CertUtil
    */
   public static List<String> subjectNames(final X509Certificate cert) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
     final List<String> names = new ArrayList<>();
     final String cn = subjectCN(cert);
     if (cn != null) {
@@ -168,6 +174,8 @@ public final class CertUtil
   public static List<String> subjectNames(final X509Certificate cert, final GeneralNameType... types)
     throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
+    CryptUtil.assertNotNullArg(types, "Types cannot be null");
     final List<String> names = new ArrayList<>();
     final String cn = subjectCN(cert);
     if (cn != null) {
@@ -198,6 +206,8 @@ public final class CertUtil
   public static X509Certificate findEntityCertificate(final PrivateKey key, final X509Certificate... candidates)
     throws EncodingException
   {
+    CryptUtil.assertNotNullArg(key, "Private key cannot be null");
+    CryptUtil.assertNotNullArg(candidates, "Certificates cannot be null");
     return findEntityCertificate(key, Arrays.asList(candidates));
   }
 
@@ -217,6 +227,8 @@ public final class CertUtil
     final Collection<X509Certificate> candidates)
     throws EncodingException
   {
+    CryptUtil.assertNotNullArg(key, "Private key cannot be null");
+    CryptUtil.assertNotNullArg(candidates, "Certificates cannot be null");
     for (X509Certificate candidate : candidates) {
       if (KeyPairUtil.isKeyPair(candidate.getPublicKey(), key)) {
         return candidate;
@@ -238,7 +250,7 @@ public final class CertUtil
    */
   public static X509Certificate readCertificate(final String path) throws EncodingException, StreamException
   {
-    return readCertificate(StreamUtil.makeStream(new File(path)));
+    return readCertificate(StreamUtil.makeStream(new File(CryptUtil.assertNotNullArg(path, "Path cannot be null"))));
   }
 
 
@@ -254,7 +266,7 @@ public final class CertUtil
    */
   public static X509Certificate readCertificate(final File file) throws EncodingException, StreamException
   {
-    return readCertificate(StreamUtil.makeStream(file));
+    return readCertificate(StreamUtil.makeStream(CryptUtil.assertNotNullArg(file, "File cannot be null")));
   }
 
 
@@ -270,6 +282,7 @@ public final class CertUtil
    */
   public static X509Certificate readCertificate(final InputStream in) throws EncodingException, StreamException
   {
+    CryptUtil.assertNotNullArg(in, "Input stream cannot be null");
     try {
       final CertificateFactory factory = CertificateFactory.getInstance("X.509");
       return (X509Certificate) factory.generateCertificate(in);
@@ -293,7 +306,8 @@ public final class CertUtil
    */
   public static X509Certificate decodeCertificate(final byte[] encoded) throws EncodingException
   {
-    return readCertificate(new ByteArrayInputStream(encoded));
+    return readCertificate(
+      new ByteArrayInputStream(CryptUtil.assertNotNullArg(encoded, "Encoded certificate cannot be null")));
   }
 
 
@@ -309,7 +323,8 @@ public final class CertUtil
    */
   public static X509Certificate[] readCertificateChain(final String path) throws EncodingException, StreamException
   {
-    return readCertificateChain(StreamUtil.makeStream(new File(path)));
+    return readCertificateChain(
+      StreamUtil.makeStream(new File(CryptUtil.assertNotNullArg(path, "Path cannot be null"))));
   }
 
 
@@ -325,7 +340,7 @@ public final class CertUtil
    */
   public static X509Certificate[] readCertificateChain(final File file) throws EncodingException, StreamException
   {
-    return readCertificateChain(StreamUtil.makeStream(file));
+    return readCertificateChain(StreamUtil.makeStream(CryptUtil.assertNotNullArg(file, "File cannot be null")));
   }
 
 
@@ -341,6 +356,7 @@ public final class CertUtil
    */
   public static X509Certificate[] readCertificateChain(final InputStream in) throws EncodingException, StreamException
   {
+    CryptUtil.assertNotNullArg(in, "Input stream cannot be null");
     try {
       final CertificateFactory factory = CertificateFactory.getInstance("X.509");
       final Collection<? extends Certificate> certs = factory.generateCertificates(in);
@@ -365,7 +381,8 @@ public final class CertUtil
    */
   public static X509Certificate[] decodeCertificateChain(final byte[] encoded) throws EncodingException
   {
-    return readCertificateChain(new ByteArrayInputStream(encoded));
+    return readCertificateChain(
+      new ByteArrayInputStream(CryptUtil.assertNotNullArg(encoded, "Encoded certificate chain cannot be null")));
   }
 
 
@@ -381,6 +398,8 @@ public final class CertUtil
    */
   public static boolean allowsUsage(final X509Certificate cert, final KeyUsageBits... bits) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
+    CryptUtil.assertNotNullArg(bits, "Key usage bits cannot be null");
     final KeyUsage usage = new ExtensionReader(cert).readKeyUsage();
     for (KeyUsageBits bit : bits) {
       if (!bit.isSet(usage)) {
@@ -403,6 +422,8 @@ public final class CertUtil
    */
   public static boolean allowsUsage(final X509Certificate cert, final KeyPurposeId... purposes) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
+    CryptUtil.assertNotNullArg(purposes, "Purposes cannot be null");
     final List<KeyPurposeId> allowedUses = new ExtensionReader(cert).readExtendedKeyUsage();
     for (KeyPurposeId purpose : purposes) {
       if (allowedUses == null || !allowedUses.contains(purpose)) {
@@ -426,6 +447,8 @@ public final class CertUtil
   public static boolean hasPolicies(final X509Certificate cert, final String... policyOidsToCheck)
     throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
+    CryptUtil.assertNotNullArg(policyOidsToCheck, "Policy OIDs to check cannot be null");
     final List<PolicyInformation> policies = new ExtensionReader(cert).readCertificatePolicies();
     boolean hasPolicy;
     for (String policyOid : policyOidsToCheck) {
@@ -458,6 +481,7 @@ public final class CertUtil
    */
   public static String subjectKeyId(final X509Certificate cert) throws EncodingException
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
     return CodecUtil.hex(new ExtensionReader(cert).readSubjectKeyIdentifier().getKeyIdentifier(), true);
   }
 
@@ -474,7 +498,8 @@ public final class CertUtil
    */
   public static String authorityKeyId(final X509Certificate cert) throws EncodingException
   {
-    return CodecUtil.hex(new ExtensionReader(cert).readAuthorityKeyIdentifier().getKeyIdentifier(), true);
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
+    return CodecUtil.hex(new ExtensionReader(cert).readAuthorityKeyIdentifier().getKeyIdentifierOctets(), true);
   }
 
 
@@ -483,7 +508,7 @@ public final class CertUtil
    *
    * @param <T> type of encoding
    *
-   * @param certificate X.509 certificate.
+   * @param cert X.509 certificate.
    * @param encodeType Type of encoding. {@link EncodeType#X509} or {@link EncodeType#PKCS7}
    *
    * @return either DER encoded certificate or PEM-encoded certificate header and footer defined by {@link EncodeType}
@@ -491,10 +516,12 @@ public final class CertUtil
    *
    * @throws RuntimeException if a certificate encoding error occurs
    */
-  public static <T> T encodeCert(final X509Certificate certificate, final EncodeType<T> encodeType)
+  public static <T> T encodeCert(final X509Certificate cert, final EncodeType<T> encodeType)
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
+    CryptUtil.assertNotNullArg(encodeType, "Encode type cannot be null");
     try {
-      return encodeType.encode(certificate);
+      return encodeType.encode(cert);
     } catch (CertificateEncodingException e) {
       throw new RuntimeException("Error getting encoded X.509 certificate data", e);
     }
@@ -502,7 +529,6 @@ public final class CertUtil
 
   /**
    * Retrieves the subject distinguished name (DN) of the provided X.509 certificate.
-   *
    * The subject DN represents the identity of the certificate holder and typically includes information
    * such as the common name (CN), organizational unit (OU), organization (O), locality (L), state (ST),
    * country (C), and other attributes.
@@ -517,6 +543,7 @@ public final class CertUtil
    */
   public static String subjectDN(final X509Certificate cert, final X500PrincipalFormat format)
   {
+    CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
     final X500Principal subjectX500Principal = cert.getSubjectX500Principal();
     return X500PrincipalFormat.READABLE.equals(format) ?
       subjectX500Principal.toString() : subjectX500Principal.getName(X500Principal.RFC2253);
@@ -533,9 +560,13 @@ public final class CertUtil
    *
    * @return a self-signed X509Certificate
    */
-  public static X509Certificate generateX509Certificate(final KeyPair keyPair, final String dn,
-    final Duration duration, final String signatureAlgo)
+  public static X509Certificate generateX509Certificate(
+    final KeyPair keyPair, final String dn, final Duration duration, final String signatureAlgo)
   {
+    CryptUtil.assertNotNullArg(keyPair, "Key pair cannot be null");
+    CryptUtil.assertNotNullArg(dn, "DN cannot be null");
+    CryptUtil.assertNotNullArg(duration, "Duration cannot be null");
+    CryptUtil.assertNotNullArg(signatureAlgo, "Signature algorithm cannot be null");
     final Instant now = Instant.now();
     final Date notBefore = Date.from(now);
     final Date notAfter = Date.from(now.plus(duration));
@@ -553,15 +584,19 @@ public final class CertUtil
    *
    * @return a self-signed X509Certificate
    */
-  public static X509Certificate generateX509Certificate(final KeyPair keyPair, final String dn,
-    final Date notBefore, final Date notAfter, final String signatureAlgo)
+  public static X509Certificate generateX509Certificate(
+    final KeyPair keyPair, final String dn, final Date notBefore, final Date notAfter, final String signatureAlgo)
   {
+    CryptUtil.assertNotNullArg(keyPair, "Key pair cannot be null");
+    CryptUtil.assertNotNullArg(dn, "DN cannot be null");
+    CryptUtil.assertNotNullArg(notBefore, "Not before cannot be null");
+    CryptUtil.assertNotNullArg(notAfter, "Not after cannot be null");
+    CryptUtil.assertNotNullArg(signatureAlgo, "Signature algorithm cannot be null");
     final Instant now = Instant.now();
     final BigInteger serial = BigInteger.valueOf(now.toEpochMilli());
 
     try {
-      final ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgo)
-        .build(keyPair.getPrivate());
+      final ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgo).build(keyPair.getPrivate());
       final X500Name x500Name = new X500Name(RFC4519Style.INSTANCE, dn);
       final X509v3CertificateBuilder certificateBuilder =
         new JcaX509v3CertificateBuilder(x500Name,
@@ -571,7 +606,6 @@ public final class CertUtil
           x500Name,
           keyPair.getPublic())
           .addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
-
       return new JcaX509CertificateConverter()
         .setProvider(new BouncyCastleProvider()).getCertificate(certificateBuilder.build(contentSigner));
     } catch (OperatorCreationException | CertIOException | CertificateException e) {
@@ -643,7 +677,7 @@ public final class CertUtil
     protected String encodePem(final byte[] der)
     {
       final Base64Encoder encoder = new Base64Encoder(64);
-      final ByteBuffer input = ByteBuffer.wrap(der);
+      final ByteBuffer input = ByteBuffer.wrap(CryptUtil.assertNotNullArg(der, "DER cannot be null"));
       // Space for Base64-encoded data + header, footer, line breaks, and potential padding
       final CharBuffer output = CharBuffer.allocate(encoder.outputSize(der.length) + 100);
       output.append("-----BEGIN ").append(getType()).append("-----");
@@ -670,7 +704,7 @@ public final class CertUtil
     public byte[] encode(final X509Certificate cert)
       throws CertificateEncodingException
     {
-      return cert.getEncoded();
+      return CryptUtil.assertNotNullArg(cert, "Certificate cannot be null").getEncoded();
     }
   }
 
@@ -688,7 +722,7 @@ public final class CertUtil
     public String encode(final X509Certificate cert)
       throws CertificateEncodingException
     {
-      return encodePem(cert.getEncoded());
+      return encodePem(CryptUtil.assertNotNullArg(cert, "Certificate cannot be null").getEncoded());
     }
   }
 
@@ -706,7 +740,7 @@ public final class CertUtil
     public String encode(final X509Certificate cert)
       throws CertificateEncodingException
     {
-      return encodePem(cert.getEncoded());
+      return encodePem(CryptUtil.assertNotNullArg(cert, "Certificate cannot be null").getEncoded());
     }
   }
 }

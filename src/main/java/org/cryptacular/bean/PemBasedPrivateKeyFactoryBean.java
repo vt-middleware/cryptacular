@@ -20,21 +20,20 @@ public class PemBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKey>
 {
 
   /** PEM-encoded public key data. */
-  private String encodedKey;
-
-
-  /** Creates a new instance. */
-  public PemBasedPrivateKeyFactoryBean() {}
+  private final String encodedKey;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new PEM based private key factory bean.
    *
    * @param  pemEncodedKey  PEM-encoded private key data.
    */
   public PemBasedPrivateKeyFactoryBean(final String pemEncodedKey)
   {
-    setEncodedKey(pemEncodedKey);
+    if (!PemUtil.isPem(ByteUtil.toBytes(pemEncodedKey))) {
+      throw new IllegalArgumentException("Data is not PEM encoded.");
+    }
+    this.encodedKey = pemEncodedKey;
   }
 
 
@@ -42,20 +41,6 @@ public class PemBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKey>
   public String getEncodedKey()
   {
     return encodedKey;
-  }
-
-
-  /**
-   * Sets the PEM-encoded private key data.
-   *
-   * @param  pemEncodedKey  PEM-encoded private key data.
-   */
-  public void setEncodedKey(final String pemEncodedKey)
-  {
-    if (!PemUtil.isPem(ByteUtil.toBytes(pemEncodedKey))) {
-      throw new IllegalArgumentException("Data is not PEM encoded.");
-    }
-    this.encodedKey = pemEncodedKey;
   }
 
 

@@ -20,6 +20,7 @@ import org.bouncycastle.crypto.engines.SkipjackEngine;
 import org.bouncycastle.crypto.engines.TEAEngine;
 import org.bouncycastle.crypto.engines.TwofishEngine;
 import org.bouncycastle.crypto.engines.XTEAEngine;
+import org.cryptacular.CryptUtil;
 
 /**
  * Block cipher specification.
@@ -40,7 +41,7 @@ public class BlockCipherSpec implements Spec<BlockCipher>
    */
   public BlockCipherSpec(final String algName)
   {
-    this.algorithm = algName;
+    this.algorithm = CryptUtil.assertNotNullArg(algName, "Algorithm name cannot be null.");
   }
 
 
@@ -56,7 +57,7 @@ public class BlockCipherSpec implements Spec<BlockCipher>
   {
     final BlockCipher cipher;
     if ("AES".equalsIgnoreCase(algorithm)) {
-      cipher = new AESEngine();
+      cipher = AESEngine.newInstance();
     } else if ("Blowfish".equalsIgnoreCase(algorithm)) {
       cipher = new BlowfishEngine();
     } else if ("Camellia".equalsIgnoreCase(algorithm)) {
@@ -103,5 +104,4 @@ public class BlockCipherSpec implements Spec<BlockCipher>
   {
     return algorithm;
   }
-
 }

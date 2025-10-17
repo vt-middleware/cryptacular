@@ -75,6 +75,4 @@ public class WrappedRSAPrivateCrtKey extends AbstractWrappedRSAKey<RSAPrivateCrt
   {
     return delegate.getExponent();
   }
-
-
 }

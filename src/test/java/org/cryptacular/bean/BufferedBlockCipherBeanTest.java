@@ -93,13 +93,9 @@ public class BufferedBlockCipherBeanTest
   public void testEncryptDecryptArray(final String input, final String cipherSpecString, final Nonce nonce)
     throws Exception
   {
-    final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
     final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
-    cipherBean.setNonce(nonce);
-    cipherBean.setKeyAlias("vtcrypt");
-    cipherBean.setKeyPassword("vtcrypt");
-    cipherBean.setKeyStore(getTestKeyStore());
-    cipherBean.setBlockCipherSpec(cipherSpec);
+    final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean(
+      cipherSpec, getTestKeyStore(), "vtcrypt", "vtcrypt", nonce);
 
     final byte[] ciphertext = cipherBean.encrypt(ByteUtil.toBytes(input));
     assertEquals(ByteUtil.toString(cipherBean.decrypt(ciphertext)), input);
@@ -110,13 +106,9 @@ public class BufferedBlockCipherBeanTest
   public void testEncryptDecryptStream(final String path, final String cipherSpecString, final Nonce nonce)
     throws Exception
   {
-    final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
     final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
-    cipherBean.setNonce(nonce);
-    cipherBean.setKeyAlias("vtcrypt");
-    cipherBean.setKeyPassword("vtcrypt");
-    cipherBean.setKeyStore(getTestKeyStore());
-    cipherBean.setBlockCipherSpec(cipherSpec);
+    final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean(
+      cipherSpec, getTestKeyStore(), "vtcrypt", "vtcrypt", nonce);
 
     final ByteArrayOutputStream tempOut = new ByteArrayOutputStream(8192);
     cipherBean.encrypt(StreamUtil.makeStream(new File(path)), tempOut);
@@ -129,10 +121,8 @@ public class BufferedBlockCipherBeanTest
 
   private static KeyStore getTestKeyStore()
   {
-    final KeyStoreFactoryBean bean = new KeyStoreFactoryBean();
-    bean.setPassword("vtcrypt");
-    bean.setResource(new FileResource(new File("src/test/resources/keystores/cipher-bean.jceks")));
-    bean.setType("JCEKS");
+    final KeyStoreFactoryBean bean = new KeyStoreFactoryBean(
+      new FileResource(new File("src/test/resources/keystores/cipher-bean.jceks")), "JCEKS", "vtcrypt");
     return bean.newInstance();
   }
 }

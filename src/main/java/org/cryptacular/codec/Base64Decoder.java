@@ -43,6 +43,18 @@ public class Base64Decoder extends AbstractBaseNDecoder
 
 
   /**
+   * Creates a new instance that decodes base 64-encoded input in the optional URL-safe character set.
+   *
+   * @param  urlSafe  True to use URL and filesystem-safe character set, false otherwise.
+   * @param  paddedInput  True to enable support for padded input, false otherwise.
+   */
+  public Base64Decoder(final boolean urlSafe, final boolean paddedInput)
+  {
+    super(urlSafe ? URLSAFE_DECODING_TABLE : DEFAULT_DECODING_TABLE, paddedInput);
+  }
+
+
+  /**
    * Creates a new instance that decodes base-64 character data encoded in the given alphabet.
    *
    * @param  alphabet  Base-64 alphabet to use for decoding
@@ -50,6 +62,18 @@ public class Base64Decoder extends AbstractBaseNDecoder
   public Base64Decoder(final String alphabet)
   {
     super(decodingTable(alphabet, 64));
+  }
+
+
+  /**
+   * Creates a new instance that decodes base-64 character data encoded in the given alphabet.
+   *
+   * @param  alphabet  Base-64 alphabet to use for decoding
+   * @param  paddedInput  True to enable support for padded input, false otherwise.
+   */
+  public Base64Decoder(final String alphabet, final boolean paddedInput)
+  {
+    super(decodingTable(alphabet, 64), paddedInput);
   }
 
 
@@ -133,11 +157,10 @@ public class Base64Decoder extends AbstractBaseNDecoder
     {
       final Base64Decoder decoder;
       if (alphabet != null) {
-        decoder = new Base64Decoder(alphabet);
+        decoder = new Base64Decoder(alphabet, padding);
       } else {
-        decoder = new Base64Decoder(urlSafe);
+        decoder = new Base64Decoder(urlSafe, padding);
       }
-      decoder.setPaddedInput(padding);
       return decoder;
     }
   }

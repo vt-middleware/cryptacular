@@ -35,5 +35,4 @@ public class WrappedECPublicKey extends AbstractWrappedECKey<ECPublicKeyParamete
         delegate.getQ().normalize().getXCoord().toBigInteger(),
         delegate.getQ().normalize().getYCoord().toBigInteger());
   }
-
 }

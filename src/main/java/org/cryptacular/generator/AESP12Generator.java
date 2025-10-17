@@ -105,6 +105,9 @@ public class AESP12Generator extends AbstractP12Generator
     if (!SUPPORTED_DIGEST_ALGORITHMS.contains(digestAlgId)) {
       throw new IllegalArgumentException("Unsupported digest algorithm");
     }
+    if (iterations < 1) {
+      throw new IllegalArgumentException("Iterations must be positive");
+    }
     digestAlgorithm = digestAlgId;
     final ASN1ObjectIdentifier hmacAlgId = DIGEST_ID_TO_HMAC_ID_MAP.get(digestAlgId);
     // The default behavior of the builder is to select salt size based on HMAC algorithm,

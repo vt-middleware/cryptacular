@@ -18,6 +18,7 @@ import org.bouncycastle.crypto.digests.SHA3Digest;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.digests.TigerDigest;
 import org.bouncycastle.crypto.digests.WhirlpoolDigest;
+import org.cryptacular.CryptUtil;
 
 /**
  * Describes a message digest function by name and provides a means to create a new instance of the digest via the
@@ -42,10 +43,7 @@ public class DigestSpec implements Spec<Digest>
    */
   public DigestSpec(final String algName)
   {
-    if (algName == null) {
-      throw new IllegalArgumentException("Algorithm name is required.");
-    }
-    this.algorithm = algName;
+    this.algorithm = CryptUtil.assertNotNullArg(algName, "Algorithm name cannot be null.");
     this.size = -1;
   }
 
@@ -58,10 +56,7 @@ public class DigestSpec implements Spec<Digest>
    */
   public DigestSpec(final String algName, final int digestSize)
   {
-    if (algName == null) {
-      throw new IllegalArgumentException("Algorithm name is required.");
-    }
-    this.algorithm = algName;
+    this.algorithm = CryptUtil.assertNotNullArg(algName, "Algorithm name cannot be null.");
     if (digestSize < 0) {
       throw new IllegalArgumentException("Digest size must be positive.");
     }

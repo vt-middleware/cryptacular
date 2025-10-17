@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.KeyStore;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.StreamException;
 import org.cryptacular.adapter.BlockCipherAdapter;
 import org.cryptacular.generator.Nonce;
@@ -19,12 +20,9 @@ import org.cryptacular.util.StreamUtil;
 public abstract class AbstractBlockCipherBean extends AbstractCipherBean
 {
 
-  /** Creates a new instance. */
-  public AbstractBlockCipherBean() {}
-
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new abstract block cipher bean.
    *
    * @param  keyStore  Key store containing encryption key.
    * @param  keyAlias  Name of encryption key entry in key store.
@@ -44,6 +42,8 @@ public abstract class AbstractBlockCipherBean extends AbstractCipherBean
   @Override
   protected byte[] process(final CiphertextHeader header, final boolean mode, final byte[] input)
   {
+    CryptUtil.assertNotNullArg(header, "Header cannot be null");
+    CryptUtil.assertNotNullArg(input, "Input cannot be null");
     final BlockCipherAdapter cipher = newCipher(header, mode);
     int outOff;
     final int inOff;

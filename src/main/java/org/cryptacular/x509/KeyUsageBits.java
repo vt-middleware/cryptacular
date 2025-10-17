@@ -105,7 +105,7 @@ public enum KeyUsageBits {
   /**
    * Computes the key usage value from one or more key usage bits.
    *
-   * @param  bits  One ore more key usage bits.
+   * @param  bits  One or more key usage bits.
    *
    * @return  Key usage bit string as an integer.
    */

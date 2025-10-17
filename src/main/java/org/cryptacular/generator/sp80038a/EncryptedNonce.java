@@ -4,6 +4,7 @@ package org.cryptacular.generator.sp80038a;
 import javax.crypto.SecretKey;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.generator.LimitException;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.spec.Spec;
@@ -36,7 +37,7 @@ public class EncryptedNonce implements Nonce
    */
   public EncryptedNonce(final Spec<BlockCipher> cipherSpec, final SecretKey key)
   {
-    this(cipherSpec.newInstance(), key);
+    this(CryptUtil.assertNotNullArg(cipherSpec, "Cipher spec cannot be null").newInstance(), key);
   }
 
 
@@ -48,8 +49,8 @@ public class EncryptedNonce implements Nonce
    */
   public EncryptedNonce(final BlockCipher cipher, final SecretKey key)
   {
-    this.cipher = cipher;
-    this.key = key;
+    this.cipher = CryptUtil.assertNotNullArg(cipher, "Cipher cannot be null");
+    this.key = CryptUtil.assertNotNullArgOr(key, v -> v.getEncoded().length == 0, "Secret key cannot be empty");
   }
 
 
@@ -60,9 +61,13 @@ public class EncryptedNonce implements Nonce
     final byte[] result = new byte[cipher.getBlockSize()];
     final byte[] nonce = NonceUtil.randomNonce(result.length);
     synchronized (cipher) {
-      cipher.init(true, new KeyParameter(key.getEncoded()));
-      cipher.processBlock(nonce, 0, result, 0);
-      cipher.reset();
+      try {
+        cipher.init(true, new KeyParameter(key.getEncoded()));
+        cipher.processBlock(nonce, 0, result, 0);
+        cipher.reset();
+      } catch (ArrayIndexOutOfBoundsException e) {
+        throw new LimitException(e);
+      }
     }
     return result;
   }

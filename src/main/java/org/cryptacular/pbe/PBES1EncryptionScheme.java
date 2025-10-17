@@ -4,6 +4,7 @@ package org.cryptacular.pbe;
 import org.bouncycastle.asn1.pkcs.PBEParameter;
 import org.bouncycastle.crypto.PBEParametersGenerator;
 import org.bouncycastle.crypto.generators.PKCS5S1ParametersGenerator;
+import org.cryptacular.CryptUtil;
 
 /**
  * Implements the PBES1 encryption scheme defined in PKCS#5v2.
@@ -30,6 +31,8 @@ public class PBES1EncryptionScheme extends AbstractEncryptionScheme
    */
   public PBES1EncryptionScheme(final PBES1Algorithm alg, final PBEParameter params, final char[] password)
   {
+    CryptUtil.assertNotNullArg(alg, "Algorithm name cannot be null");
+    CryptUtil.assertNotNullArg(params, "Parameters cannot be null");
     final byte[] salt = params.getSalt();
     final int iterations = params.getIterationCount().intValue();
     final PKCS5S1ParametersGenerator generator = new PKCS5S1ParametersGenerator(alg.getDigestSpec().newInstance());

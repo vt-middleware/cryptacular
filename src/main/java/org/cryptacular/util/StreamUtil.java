@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import org.bouncycastle.util.io.Streams;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.StreamException;
 import org.cryptacular.io.ChunkHandler;
 
@@ -46,7 +47,7 @@ public final class StreamUtil
    */
   public static byte[] readAll(final String path) throws StreamException
   {
-    return readAll(new File(path));
+    return readAll(new File(CryptUtil.assertNotNullArg(path, "Path cannot be null")));
   }
 
 
@@ -61,7 +62,7 @@ public final class StreamUtil
    */
   public static byte[] readAll(final File file) throws StreamException
   {
-    final InputStream input = makeStream(file);
+    final InputStream input = makeStream(CryptUtil.assertNotNullArg(file, "File cannot be null"));
     try {
       return readAll(input, (int) file.length());
     } finally {
@@ -97,6 +98,10 @@ public final class StreamUtil
    */
   public static byte[] readAll(final InputStream input, final int sizeHint) throws StreamException
   {
+    CryptUtil.assertNotNullArg(input, "Input cannot be null");
+    if (sizeHint <= 0) {
+      throw new IllegalArgumentException("Size hint must be greater than 0");
+    }
     final ByteArrayOutputStream output = new ByteArrayOutputStream(sizeHint);
     try {
       Streams.pipeAll(input, output);
@@ -137,6 +142,10 @@ public final class StreamUtil
    */
   public static String readAll(final Reader reader, final int sizeHint) throws StreamException
   {
+    CryptUtil.assertNotNullArg(reader, "Reader cannot be null");
+    if (sizeHint <= 0) {
+      throw new IllegalArgumentException("Size hint must be greater than 0");
+    }
     final CharArrayWriter writer = new CharArrayWriter(sizeHint);
     final char[] buffer = new char[CHUNK_SIZE];
     int len;
@@ -166,6 +175,9 @@ public final class StreamUtil
   public static void pipeAll(final InputStream in, final OutputStream out, final ChunkHandler handler)
       throws StreamException
   {
+    CryptUtil.assertNotNullArg(in, "In cannot be null");
+    CryptUtil.assertNotNullArg(out, "Out cannot be null");
+    CryptUtil.assertNotNullArg(handler, "Handler cannot be null");
     final byte[] buffer = new byte[CHUNK_SIZE];
     int count;
     try {
@@ -190,7 +202,7 @@ public final class StreamUtil
   public static InputStream makeStream(final File file) throws StreamException
   {
     try {
-      return new BufferedInputStream(new FileInputStream(file));
+      return new BufferedInputStream(new FileInputStream(CryptUtil.assertNotNullArg(file, "File cannot be null")));
     } catch (FileNotFoundException e) {
       throw new StreamException(file + " does not exist");
     }
@@ -209,7 +221,8 @@ public final class StreamUtil
   public static Reader makeReader(final File file) throws StreamException
   {
     try {
-      return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)));
+      return new InputStreamReader(
+        new BufferedInputStream(new FileInputStream(CryptUtil.assertNotNullArg(file, "File cannot be null"))));
     } catch (FileNotFoundException e) {
       throw new StreamException(file + " does not exist");
     }
@@ -223,6 +236,7 @@ public final class StreamUtil
    */
   public static void closeStream(final InputStream in)
   {
+    CryptUtil.assertNotNullArg(in, "In cannot be null");
     try {
       in.close();
     } catch (IOException e) {
@@ -238,6 +252,7 @@ public final class StreamUtil
    */
   public static void closeStream(final OutputStream out)
   {
+    CryptUtil.assertNotNullArg(out, "Out cannot be null");
     try {
       out.close();
     } catch (IOException e) {
@@ -253,6 +268,7 @@ public final class StreamUtil
    */
   public static void closeReader(final Reader reader)
   {
+    CryptUtil.assertNotNullArg(reader, "Reader cannot be null");
     try {
       reader.close();
     } catch (IOException e) {
@@ -268,6 +284,7 @@ public final class StreamUtil
    */
   public static void closeWriter(final Writer writer)
   {
+    CryptUtil.assertNotNullArg(writer, "Writer cannot be null");
     try {
       writer.close();
     } catch (IOException e) {

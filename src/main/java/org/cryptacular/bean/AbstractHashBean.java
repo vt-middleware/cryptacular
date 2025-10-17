@@ -2,6 +2,7 @@
 package org.cryptacular.bean;
 
 import org.bouncycastle.crypto.Digest;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.spec.Spec;
 import org.cryptacular.util.HashUtil;
 
@@ -14,26 +15,36 @@ public abstract class AbstractHashBean
 {
 
   /** Digest specification. */
-  private Spec<Digest> digestSpec;
+  private final Spec<Digest> digestSpec;
 
   /** Number of hash rounds. */
-  private int iterations = 1;
-
-
-  /** Creates a new instance. */
-  public AbstractHashBean() {}
+  private final int iterations;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new abstract hash bean.
+   *
+   * @param  digestSpec  Digest specification.
+   */
+  public AbstractHashBean(final Spec<Digest> digestSpec)
+  {
+    this(digestSpec, 1);
+  }
+
+
+  /**
+   * Creates a new abstract hash bean.
    *
    * @param  digestSpec  Digest specification.
    * @param  iterations  Number of hash rounds.
    */
   public AbstractHashBean(final Spec<Digest> digestSpec, final int iterations)
   {
-    setDigestSpec(digestSpec);
-    setIterations(iterations);
+    if (iterations < 1) {
+      throw new IllegalArgumentException("Iterations must be positive");
+    }
+    this.digestSpec = CryptUtil.assertNotNullArg(digestSpec, "Digest spec cannot be null");
+    this.iterations = iterations;
   }
 
 
@@ -44,35 +55,10 @@ public abstract class AbstractHashBean
   }
 
 
-  /**
-   * Sets the digest specification that determines the instance of {@link Digest} used to compute the hash.
-   *
-   * @param  digestSpec  Digest algorithm specification.
-   */
-  public void setDigestSpec(final Spec<Digest> digestSpec)
-  {
-    this.digestSpec = digestSpec;
-  }
-
-
   /** @return  Number of iterations the digest function is applied to the input data. */
   public int getIterations()
   {
     return iterations;
-  }
-
-
-  /**
-   * Sets the number of iterations the digest function is applied to the input data.
-   *
-   * @param  iterations  Number of hash rounds. Default value is 1.
-   */
-  public void setIterations(final int iterations)
-  {
-    if (iterations < 1) {
-      throw new IllegalArgumentException("Iterations must be positive");
-    }
-    this.iterations = iterations;
   }
 
 

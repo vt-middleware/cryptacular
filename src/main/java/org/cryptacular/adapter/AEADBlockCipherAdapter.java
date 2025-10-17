@@ -4,6 +4,7 @@ package org.cryptacular.adapter;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.modes.AEADBlockCipher;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 
 /**
@@ -25,7 +26,7 @@ public class AEADBlockCipherAdapter implements BlockCipherAdapter
    */
   public AEADBlockCipherAdapter(final AEADBlockCipher delegate)
   {
-    cipherDelegate = delegate;
+    cipherDelegate = CryptUtil.assertNotNullArg(delegate, "Cipher delegate cannot be null");
   }
 
 

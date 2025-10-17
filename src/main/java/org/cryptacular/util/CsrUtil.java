@@ -35,6 +35,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
 import org.cryptacular.x509.dn.NameReader;
@@ -68,6 +69,7 @@ public final class CsrUtil
    */
   public static String encodeCsr(final PKCS10CertificationRequest csr)
   {
+    CryptUtil.assertNotNullArg(csr, "CSR cannot be null");
     final StringWriter writer = new StringWriter();
     try (JcaPEMWriter pemWriter = new JcaPEMWriter(writer)) {
       pemWriter.writeObject(csr);
@@ -89,6 +91,7 @@ public final class CsrUtil
    */
   public static CertificationRequest decodeCsr(final String csr)
   {
+    CryptUtil.assertNotNullArg(csr, "CSR cannot be null");
     byte[] csrBytes = csr.getBytes(StandardCharsets.US_ASCII);
     if (!PemUtil.isPem(csrBytes)) {
       throw new IllegalArgumentException("Input is not PEM-encoded as required");
@@ -106,7 +109,7 @@ public final class CsrUtil
    */
   public static CertificationRequest decodeCsr(final byte[] csr)
   {
-    return CertificationRequest.getInstance(csr);
+    return CertificationRequest.getInstance(CryptUtil.assertNotNullArg(csr, "CSR cannot be null"));
   }
 
   /**
@@ -118,7 +121,7 @@ public final class CsrUtil
    */
   public static CertificationRequest readCsr(final File file)
   {
-    return readCsr(StreamUtil.makeStream(file));
+    return readCsr(StreamUtil.makeStream(CryptUtil.assertNotNullArg(file, "File cannot be null")));
   }
 
   /**
@@ -130,7 +133,7 @@ public final class CsrUtil
    */
   public static CertificationRequest readCsr(final InputStream in)
   {
-    final byte[] data = StreamUtil.readAll(in);
+    final byte[] data = StreamUtil.readAll(CryptUtil.assertNotNullArg(in, "Input stream cannot be null"));
     if (PemUtil.isPem(data)) {
       return decodeCsr(PemUtil.decode(data));
     }
@@ -146,6 +149,7 @@ public final class CsrUtil
    */
   public static List<String> commonNames(final CertificationRequest csr)
   {
+    CryptUtil.assertNotNullArg(csr, "CSR cannot be null");
     final RDNSequence sequence = NameReader.readX500Name(csr.getCertificationRequestInfo().getSubject());
     return sequence.getValues(StandardAttributeType.CommonName);
   }
@@ -159,6 +163,7 @@ public final class CsrUtil
    */
   public static List<String> subjectAltNames(final CertificationRequest csr)
   {
+    CryptUtil.assertNotNullArg(csr, "CSR cannot be null");
     final List<String> names = new ArrayList<>();
     final ASN1Set attributeSet = csr.getCertificationRequestInfo().getAttributes();
     if (attributeSet == null) {
@@ -189,6 +194,7 @@ public final class CsrUtil
    */
   public static String sigAlgName(final CertificationRequest csr)
   {
+    CryptUtil.assertNotNullArg(csr, "CSR cannot be null");
     return ALG_NAME_FINDER.getAlgorithmName(csr.getSignatureAlgorithm()).replace("WITH", "with");
   }
 
@@ -204,6 +210,7 @@ public final class CsrUtil
    */
   public static int keyLength(final CertificationRequest csr)
   {
+    CryptUtil.assertNotNullArg(csr, "CSR cannot be null");
     final AsymmetricKeyParameter pubKeyParam;
     try {
       pubKeyParam = PublicKeyFactory.createKey(
@@ -238,6 +245,8 @@ public final class CsrUtil
   public static PKCS10CertificationRequest generateCsr(
     final KeyPair keyPair, final String subjectDN, final String ... subjectAltNames)
   {
+    CryptUtil.assertNotNullArg(keyPair, "Key pair cannot be null");
+    CryptUtil.assertNotNullArg(subjectDN, "Subject DN cannot be null");
     final String keyAlg = keyPair.getPublic().getAlgorithm();
     final String sigAlg;
     if ("RSA".equals(keyAlg)) {

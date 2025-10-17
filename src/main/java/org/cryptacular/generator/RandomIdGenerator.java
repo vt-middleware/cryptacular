@@ -2,6 +2,7 @@
 package org.cryptacular.generator;
 
 import java.security.SecureRandom;
+import org.cryptacular.CryptUtil;
 
 /**
  * Generates random identifiers with an alphanumeric character set by default.
@@ -13,6 +14,10 @@ public class RandomIdGenerator implements IdGenerator
 
   /** Default character set. */
   public static final String DEFAULT_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  /** Maximum length of ID to generate in bytes. */
+  private static final int MAX_ID_LENGTH = CryptUtil.parseInt(
+    System.getProperty("org.cryptacular.generator.maxIdLength", "1024"), i -> i > 0, 1024);
 
   /** Size of generated identifiers. */
   private final int length;
@@ -42,8 +47,8 @@ public class RandomIdGenerator implements IdGenerator
    */
   public RandomIdGenerator(final int length, final String charset)
   {
-    if (length < 1) {
-      throw new IllegalArgumentException("Length must be positive");
+    if (length < 1 || length > MAX_ID_LENGTH) {
+      throw new IllegalArgumentException("Length must be greater than 0 and cannot exceed " + MAX_ID_LENGTH);
     }
     this.length = length;
     if (charset == null || charset.length() < 2 || charset.length() > 128) {

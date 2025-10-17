@@ -2,6 +2,7 @@
 package org.cryptacular.generator.sp80038d;
 
 import java.util.concurrent.atomic.AtomicLong;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.generator.LimitException;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.util.ByteUtil;
@@ -93,11 +94,8 @@ public class CounterNonce implements Nonce
    */
   public CounterNonce(final byte[] fixed, final long invocations)
   {
-    if (fixed == null || fixed.length == 0) {
-      throw new IllegalArgumentException("Fixed part cannot be null or empty.");
-    }
+    this.fixed = CryptUtil.assertNotNullArgOr(fixed, v -> v.length == 0, "Fixed part cannot be null or empty.");
     this.count = new AtomicLong(invocations);
-    this.fixed = fixed;
   }
 
 

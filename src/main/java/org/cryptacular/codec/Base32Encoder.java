@@ -44,6 +44,19 @@ public class Base32Encoder extends AbstractBaseNEncoder
 
 
   /**
+   * Creates a new instance that produces base 32-encoded output in the RFC 4648 alphabet,
+   * <code>ABCDEFGHIJKLMNOPQRSTUVWXYZ234567</code>, with the given number of characters per line in the output.
+   *
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
+   * @param  paddedOutput  True to enable padded output, false otherwise.
+   */
+  public Base32Encoder(final int charactersPerLine, final boolean paddedOutput)
+  {
+    super(ENCODING_TABLE, charactersPerLine, paddedOutput);
+  }
+
+
+  /**
    * Creates a new instance that produces base 32-encoded output in the given 32-character alphabet with no line
    * breaks in the output.
    *
@@ -65,6 +78,20 @@ public class Base32Encoder extends AbstractBaseNEncoder
   public Base32Encoder(final String alphabet, final int charactersPerLine)
   {
     super(encodingTable(alphabet, 32), charactersPerLine);
+  }
+
+
+  /**
+   * Creates a new instance that produces base 32-encoded output in the given 32-character alphabet
+   * with the given number of characters per line in the output.
+   *
+   * @param  alphabet  32-character alphabet to use.
+   * @param  charactersPerLine  Number of characters per line. A zero or negative value disables line breaks.
+   * @param  paddedOutput  True to enable padded output, false otherwise.
+   */
+  public Base32Encoder(final String alphabet, final int charactersPerLine, final boolean paddedOutput)
+  {
+    super(encodingTable(alphabet, 32), charactersPerLine, paddedOutput);
   }
 
 

@@ -6,6 +6,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
@@ -22,21 +23,29 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
   public static final String DEFAULT_TYPE = "JCEKS";
 
   /** Keystore type, e.g. JKS, JCEKS, BKS. */
-  private String type = DEFAULT_TYPE;
+  private final String type;
 
   /** Resource that provides encoded keystore data. */
-  private Resource resource;
+  private final Resource resource;
 
   /** Keystore password. */
-  private String password;
-
-
-  /** Creates a new instance. */
-  public KeyStoreFactoryBean() {}
+  private final String password;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new keystore factory bean.
+   *
+   * @param  resource  Resource containing encoded keystore data.
+   * @param  password  Password used to decrypt key entry in keystore.
+   */
+  public KeyStoreFactoryBean(final Resource resource, final String password)
+  {
+    this(resource, DEFAULT_TYPE, password);
+  }
+
+
+  /**
+   * Creates a new keystore factory bean.
    *
    * @param  resource  Resource containing encoded keystore data.
    * @param  type  Keystore type, e.g. JCEKS.
@@ -44,9 +53,9 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
    */
   public KeyStoreFactoryBean(final Resource resource, final String type, final String password)
   {
-    setResource(resource);
-    setType(type);
-    setPassword(password);
+    this.resource = CryptUtil.assertNotNullArg(resource, "Resource cannot be null");
+    this.type = CryptUtil.assertNotNullArg(type, "Type cannot be null");
+    this.password = password;
   }
 
 
@@ -57,44 +66,10 @@ public class KeyStoreFactoryBean implements FactoryBean<KeyStore>
   }
 
 
-  /**
-   * Sets the keystore type.
-   *
-   * @param  type  JCEKS (default), JKS, PKCS12, or BKS. <strong>NOTE:</strong> BKS type is supported only when BC
-   *               provider is installed.
-   */
-  public void setType(final String type)
-  {
-    this.type = type;
-  }
-
-
   /** @return  Resource that provides encoded keystore data. */
   public Resource getResource()
   {
     return resource;
-  }
-
-
-  /**
-   * Sets the resource that provides encoded keystore data.
-   *
-   * @param  resource  Keystore resource.
-   */
-  public void setResource(final Resource resource)
-  {
-    this.resource = resource;
-  }
-
-
-  /**
-   * Sets the keystore password required to decrypt an encrypted keystore.
-   *
-   * @param  password  Keystore password.
-   */
-  public void setPassword(final String password)
-  {
-    this.password = password;
   }
 
 

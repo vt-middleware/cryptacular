@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.x509.dn;
 
+import org.cryptacular.CryptUtil;
+
 /**
  * Simple implementation of the X.501 RelativeDistinguishedName type described in section 4.1.2.4 of RFC 2459.
  *
@@ -20,10 +22,7 @@ public class RDN
    */
   public RDN(final Attributes attributes)
   {
-    if (attributes == null) {
-      throw new IllegalArgumentException("Attributes cannot be null");
-    }
-    this.attributes = attributes;
+    this.attributes = CryptUtil.assertNotNullArg(attributes, "Attributes cannot be null");
   }
 
 

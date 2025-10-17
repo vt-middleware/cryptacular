@@ -101,7 +101,6 @@ public class LdapNameFormatter implements NameFormatter
   private static void encode(final String value, final StringBuilder output)
   {
     output.append('#');
-
     final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
     final CharBuffer out = CharBuffer.allocate(bytes.length * 2);
     ENCODER.encode(ByteBuffer.wrap(bytes), out);

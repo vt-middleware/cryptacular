@@ -5,6 +5,7 @@ import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.PBEParametersGenerator;
 import org.bouncycastle.crypto.generators.OpenSSLPBEParametersGenerator;
 import org.bouncycastle.crypto.params.ParametersWithIV;
+import org.cryptacular.CryptUtil;
 
 /**
  * Password-based encryption scheme used by OpenSSL for encrypting private keys.
@@ -45,6 +46,8 @@ public class OpenSSLEncryptionScheme extends AbstractEncryptionScheme
    */
   public OpenSSLEncryptionScheme(final OpenSSLAlgorithm algorithm, final byte[] iv, final char[] password)
   {
+    CryptUtil.assertNotNullArg(algorithm, "Algorithm cannot be null");
+    CryptUtil.assertNotNullArg(iv, "IV cannot be null");
     byte[] salt = iv;
     if (iv.length > 8) {
       salt = new byte[8];

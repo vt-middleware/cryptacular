@@ -39,6 +39,29 @@ public class Base32Decoder extends AbstractBaseNDecoder
   }
 
 
+  /**
+   * Creates a new instance using the given 32-character alphabet for decoding.
+   *
+   * @param  paddedInput  True to enable support for padded input, false otherwise.
+   */
+  public Base32Decoder(final boolean paddedInput)
+  {
+    super(DECODING_TABLE, paddedInput);
+  }
+
+
+  /**
+   * Creates a new instance using the given 32-character alphabet for decoding.
+   *
+   * @param  alphabet  32-character alphabet to use.
+   * @param  paddedInput  True to enable support for padded input, false otherwise.
+   */
+  public Base32Decoder(final String alphabet, final boolean paddedInput)
+  {
+    super(decodingTable(alphabet, 32), paddedInput);
+  }
+
+
   @Override
   protected int getBlockLength()
   {

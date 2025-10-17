@@ -17,11 +17,12 @@ import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 
 /**
  * Reads X.509v3 extended properties from an {@link java.security.cert.X509Certificate} object. The available properties
- * are described in section 4.2 of RFC 2459, http://www.faqs.org/rfcs/rfc2459.html.
+ * are described in section 4.2 of <a href="http://www.faqs.org/rfcs/rfc2459.html">RFC 2459</a>.
  *
  * @author  Middleware Services
  */
@@ -39,7 +40,7 @@ public final class ExtensionReader
    */
   public ExtensionReader(final X509Certificate cert)
   {
-    certificate = cert;
+    certificate = CryptUtil.assertNotNullArg(cert, "Certificate cannot be null");
   }
 
 
@@ -55,9 +56,7 @@ public final class ExtensionReader
    */
   public ASN1Encodable read(final String extensionOidOrName) throws EncodingException
   {
-    if (extensionOidOrName == null) {
-      throw new IllegalArgumentException("extensionOidOrName cannot be null.");
-    }
+    CryptUtil.assertNotNullArg(extensionOidOrName, "Extension OID cannot be null");
     if (extensionOidOrName.contains(".")) {
       return read(ExtensionType.fromOid(extensionOidOrName));
     } else {
@@ -77,6 +76,7 @@ public final class ExtensionReader
    */
   public ASN1Encodable read(final ExtensionType extension)
   {
+    CryptUtil.assertNotNullArg(extension, "Extension cannot be null");
     byte[] data = certificate.getExtensionValue(extension.getOid());
     if (data == null) {
       return null;
@@ -307,5 +307,4 @@ public final class ExtensionReader
       throw new EncodingException("AccessDescription parse error", e);
     }
   }
-
 }

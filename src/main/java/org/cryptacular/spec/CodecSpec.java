@@ -2,13 +2,14 @@
 package org.cryptacular.spec;
 
 
+import org.cryptacular.CryptUtil;
 import org.cryptacular.codec.Base32Codec;
 import org.cryptacular.codec.Base64Codec;
 import org.cryptacular.codec.Codec;
 import org.cryptacular.codec.HexCodec;
 
 /**
- * Describes a string-to-byte encoding provides a means to create a new instance of the coed via the {@link
+ * Describes a string-to-byte encoding and provides a means to create a new instance of the codec via the {@link
  * #newInstance()} method.
  *
  * @author  Middleware Services
@@ -40,8 +41,7 @@ public class CodecSpec implements Spec<Codec>
   /** Unpadded base64 encoding specification. */
   public static final CodecSpec BASE64_UNPADDED = new CodecSpec("Base64-Unpadded");
 
-
-  /** Name of encoding, e.g. "Hex, "Base64". */
+  /** Name of encoding, e.g. "Hex", "Base64". */
   private final String encoding;
 
 
@@ -52,10 +52,7 @@ public class CodecSpec implements Spec<Codec>
    */
   public CodecSpec(final String encoding)
   {
-    if (encoding == null) {
-      throw new IllegalArgumentException("Encoding cannot be null.");
-    }
-    this.encoding = encoding;
+    this.encoding = CryptUtil.assertNotNullArg(encoding, "Encoding cannot be null.");
   }
 
 

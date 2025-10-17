@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.modes.AEADBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.cryptacular.CiphertextHeader;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.adapter.AEADBlockCipherAdapter;
 import org.cryptacular.generator.Nonce;
 import org.cryptacular.spec.Spec;
@@ -25,15 +26,11 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   public static final int MAC_SIZE_BITS = 128;
 
   /** AEAD block cipher specification (algorithm, mode, padding). */
-  private Spec<AEADBlockCipher> blockCipherSpec;
-
-
-  /** Creates a new instance. */
-  public AEADBlockCipherBean() {}
+  private final Spec<AEADBlockCipher> blockCipherSpec;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new AEAD block cipher bean.
    *
    * @param  blockCipherSpec  Block cipher specification.
    * @param  keyStore  Key store containing encryption key.
@@ -49,7 +46,7 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
     final Nonce nonce)
   {
     super(keyStore, keyAlias, keyPassword, nonce);
-    setBlockCipherSpec(blockCipherSpec);
+    this.blockCipherSpec = CryptUtil.assertNotNullArg(blockCipherSpec, "Block cipher spec cannot be null");
   }
 
 
@@ -57,17 +54,6 @@ public class AEADBlockCipherBean extends AbstractBlockCipherBean
   public Spec<AEADBlockCipher> getBlockCipherSpec()
   {
     return blockCipherSpec;
-  }
-
-
-  /**
-   * Sets the AEAD block cipher specification.
-   *
-   * @param  blockCipherSpec  Describes a block cipher in terms of algorithm, mode, and padding.
-   */
-  public void setBlockCipherSpec(final Spec<AEADBlockCipher> blockCipherSpec)
-  {
-    this.blockCipherSpec = blockCipherSpec;
   }
 
 

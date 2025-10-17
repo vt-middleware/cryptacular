@@ -8,7 +8,7 @@ import java.security.Key;
 import java.security.KeyStore;
 import javax.crypto.SecretKey;
 import org.cryptacular.CiphertextHeader;
-import org.cryptacular.CiphertextHeaderV2;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
@@ -17,7 +17,7 @@ import org.cryptacular.util.CipherUtil;
 
 /**
  * Base class for all cipher beans. The base class assumes all ciphertext output will contain a prepended {@link
- * CiphertextHeaderV2} containing metadata that facilitates decryption.
+ * CiphertextHeader} containing metadata that facilitates decryption.
  *
  * @author  Middleware Services
  */
@@ -25,24 +25,23 @@ public abstract class AbstractCipherBean implements CipherBean
 {
 
   /** Keystore containing symmetric key(s). */
-  private KeyStore keyStore;
+  private final KeyStore keyStore;
 
   /** Keystore entry for alias of current key. */
-  private String keyAlias;
+  private final String keyAlias;
 
   /** Password on private key entry. */
-  private String keyPassword;
+  private final String keyPassword;
 
   /** Nonce generator. */
-  private Nonce nonce;
-
-
-  /** Creates a new instance. */
-  public AbstractCipherBean() {}
+  private final Nonce nonce;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new abstract cipher bean. The keystore must contain a {@link SecretKey} entry whose alias is given by the
+   * supplied alias, which will be used at the encryption key. It may contain additional symmetric keys to support, for
+   * example, key rollover where some existing ciphertexts have headers specifying a different key. In general all keys
+   * used for outstanding ciphertexts should be contained in the keystore.
    *
    * @param  keyStore  Key store containing encryption key.
    * @param  keyAlias  Name of encryption key entry in key store.
@@ -51,10 +50,10 @@ public abstract class AbstractCipherBean implements CipherBean
    */
   public AbstractCipherBean(final KeyStore keyStore, final String keyAlias, final String keyPassword, final Nonce nonce)
   {
-    setKeyStore(keyStore);
-    setKeyAlias(keyAlias);
-    setKeyPassword(keyPassword);
-    setNonce(nonce);
+    this.keyStore = CryptUtil.assertNotNullArg(keyStore, "Keystore cannot be null");
+    this.keyAlias = keyAlias;
+    this.keyPassword = keyPassword;
+    this.nonce = nonce;
   }
 
 
@@ -65,21 +64,6 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /**
-   * Sets the keystore containing encryption/decryption key(s). The keystore must contain a {@link SecretKey} entry
-   * whose alias is given by {@link #setKeyAlias(String)}, which will be used at the encryption key. It may contain
-   * additional symmetric keys to support, for example, key rollover where some existing ciphertexts have headers
-   * specifying a different key. In general all keys used for outstanding ciphertexts should be contained in the
-   * keystore.
-   *
-   * @param  keyStore  Keystore containing encryption key(s).
-   */
-  public void setKeyStore(final KeyStore keyStore)
-  {
-    this.keyStore = keyStore;
-  }
-
-
   /** @return  Alias that specifies the {@link KeyStore} entry containing the {@link SecretKey}. */
   public String getKeyAlias()
   {
@@ -87,43 +71,10 @@ public abstract class AbstractCipherBean implements CipherBean
   }
 
 
-  /**
-   * Sets the keystore entry alias used to locate the current encryption key.
-   *
-   * @param  keyAlias  Alias of {@link SecretKey} used for encryption.
-   */
-  public void setKeyAlias(final String keyAlias)
-  {
-    this.keyAlias = keyAlias;
-  }
-
-
-  /**
-   * Sets the password used to access the encryption key.
-   *
-   * @param  keyPassword  Encryption key password.
-   */
-  public void setKeyPassword(final String keyPassword)
-  {
-    this.keyPassword = keyPassword;
-  }
-
-
   /** @return  Nonce/IV generation strategy. */
   public Nonce getNonce()
   {
     return nonce;
-  }
-
-
-  /**
-   * Sets the nonce/IV generation strategy.
-   *
-   * @param  nonce  Nonce generator.
-   */
-  public void setNonce(final Nonce nonce)
-  {
-    this.nonce = nonce;
   }
 
 
@@ -137,7 +88,9 @@ public abstract class AbstractCipherBean implements CipherBean
   @Override
   public void encrypt(final InputStream input, final OutputStream output) throws CryptoException, StreamException
   {
-    final CiphertextHeaderV2 header = header();
+    CryptUtil.assertNotNullArg(input, "Input cannot be null");
+    CryptUtil.assertNotNullArg(output, "Output cannot be null");
+    final CiphertextHeader header = header();
     try {
       output.write(header.encode());
     } catch (IOException e) {
@@ -210,10 +163,8 @@ public abstract class AbstractCipherBean implements CipherBean
   /**
    * @return  New ciphertext header for a pending encryption or decryption operation performed by this instance.
    */
-  private CiphertextHeaderV2 header()
+  private CiphertextHeader header()
   {
-    final CiphertextHeaderV2 header = new CiphertextHeaderV2(nonce.generate(), keyAlias);
-    header.setKeyLookup(this::lookupKey);
-    return header;
+    return new CiphertextHeader(nonce.generate(), keyAlias, this::lookupKey);
   }
 }

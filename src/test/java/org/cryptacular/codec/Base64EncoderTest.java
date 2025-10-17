@@ -27,8 +27,6 @@ public class Base64EncoderTest
   @DataProvider(name = "byte-data")
   public Object[][] getByteData()
   {
-    final Base64Encoder unpadded = new Base64Encoder();
-    unpadded.setPaddedOutput(false);
     return
       new Object[][] {
         new Object[] {

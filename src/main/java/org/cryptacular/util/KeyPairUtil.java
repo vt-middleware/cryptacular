@@ -25,6 +25,7 @@ import org.bouncycastle.crypto.signers.DSASigner;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
 import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
 import org.cryptacular.adapter.Converter;
@@ -63,6 +64,7 @@ public final class KeyPairUtil
    */
   public static int length(final PublicKey pubKey)
   {
+    CryptUtil.assertNotNullArg(pubKey, "Public key cannot be null");
     final int size;
     if (pubKey instanceof DSAPublicKey) {
       size = ((DSAPublicKey) pubKey).getParams().getP().bitLength();
@@ -92,6 +94,7 @@ public final class KeyPairUtil
    */
   public static int length(final PrivateKey privKey)
   {
+    CryptUtil.assertNotNullArg(privKey, "Private key cannot be null");
     final int size;
     if (privKey instanceof DSAPrivateKey) {
       size = ((DSAPrivateKey) privKey).getParams().getQ().bitLength();
@@ -121,6 +124,8 @@ public final class KeyPairUtil
   public static boolean isKeyPair(final PublicKey pubKey, final PrivateKey privKey)
       throws org.cryptacular.CryptoException
   {
+    CryptUtil.assertNotNullArg(pubKey, "Public key cannot be null");
+    CryptUtil.assertNotNullArg(privKey, "Private key cannot be null");
     final String alg = pubKey.getAlgorithm();
     if (!alg.equals(privKey.getAlgorithm())) {
       return false;
@@ -164,6 +169,8 @@ public final class KeyPairUtil
   public static boolean isKeyPair(final DSAPublicKey pubKey, final DSAPrivateKey privKey)
       throws org.cryptacular.CryptoException
   {
+    CryptUtil.assertNotNullArg(pubKey, "Public key cannot be null");
+    CryptUtil.assertNotNullArg(privKey, "Private key cannot be null");
     final DSASigner signer = new DSASigner();
     final DSAParameters params = new DSAParameters(
       privKey.getParams().getP(),
@@ -196,6 +203,8 @@ public final class KeyPairUtil
   public static boolean isKeyPair(final RSAPublicKey pubKey, final RSAPrivateKey privKey)
       throws org.cryptacular.CryptoException
   {
+    CryptUtil.assertNotNullArg(pubKey, "Public key cannot be null");
+    CryptUtil.assertNotNullArg(privKey, "Private key cannot be null");
     final RSADigestSigner signer = new RSADigestSigner(new SHA256Digest());
     try {
       signer.init(true, new RSAKeyParameters(true, privKey.getModulus(), privKey.getPrivateExponent()));
@@ -225,6 +234,8 @@ public final class KeyPairUtil
   public static boolean isKeyPair(final ECPublicKey pubKey, final ECPrivateKey privKey)
       throws org.cryptacular.CryptoException
   {
+    CryptUtil.assertNotNullArg(pubKey, "Public key cannot be null");
+    CryptUtil.assertNotNullArg(privKey, "Private key cannot be null");
     final ECDSASigner signer = new ECDSASigner();
     try {
       signer.init(true, ECUtil.generatePrivateKeyParameter(privKey));
@@ -251,7 +262,7 @@ public final class KeyPairUtil
    */
   public static PrivateKey readPrivateKey(final String path) throws EncodingException, StreamException
   {
-    return readPrivateKey(new File(path));
+    return readPrivateKey(new File(CryptUtil.assertNotNullArg(path, "Path cannot be null")));
   }
 
 
@@ -269,7 +280,7 @@ public final class KeyPairUtil
   public static PrivateKey readPrivateKey(final File file) throws EncodingException, StreamException
   {
     try {
-      return readPrivateKey(new FileInputStream(file));
+      return readPrivateKey(new FileInputStream(CryptUtil.assertNotNullArg(file, "File cannot be null")));
     } catch (FileNotFoundException e) {
       throw new StreamException("File not found: " + file);
     }
@@ -290,7 +301,7 @@ public final class KeyPairUtil
    */
   public static PrivateKey readPrivateKey(final InputStream in) throws EncodingException, StreamException
   {
-    return decodePrivateKey(StreamUtil.readAll(in));
+    return decodePrivateKey(StreamUtil.readAll(CryptUtil.assertNotNullArg(in, "Input stream cannot be null")));
   }
 
 
@@ -309,7 +320,7 @@ public final class KeyPairUtil
   public static PrivateKey readPrivateKey(final String path, final char[] password)
       throws EncodingException, StreamException
   {
-    return readPrivateKey(new File(path), password);
+    return readPrivateKey(new File(CryptUtil.assertNotNullArg(path, "Path cannot be null")), password);
   }
 
 
@@ -329,7 +340,7 @@ public final class KeyPairUtil
     throws EncodingException, StreamException
   {
     try {
-      return readPrivateKey(new FileInputStream(file), password);
+      return readPrivateKey(new FileInputStream(CryptUtil.assertNotNullArg(file, "File cannot be null")), password);
     } catch (FileNotFoundException e) {
       throw new StreamException("File not found: " + file);
     }
@@ -352,7 +363,8 @@ public final class KeyPairUtil
   public static PrivateKey readPrivateKey(final InputStream in, final char[] password)
     throws EncodingException, StreamException
   {
-    return decodePrivateKey(StreamUtil.readAll(in), password);
+    return decodePrivateKey(
+      StreamUtil.readAll(CryptUtil.assertNotNullArg(in, "Input stream cannot be null")), password);
   }
 
 
@@ -427,7 +439,7 @@ public final class KeyPairUtil
    */
   public static PublicKey readPublicKey(final String path) throws EncodingException, StreamException
   {
-    return readPublicKey(new File(path));
+    return readPublicKey(new File(CryptUtil.assertNotNullArg(path, "Path cannot be null")));
   }
 
 
@@ -444,7 +456,7 @@ public final class KeyPairUtil
   public static PublicKey readPublicKey(final File file) throws EncodingException, StreamException
   {
     try {
-      return readPublicKey(new FileInputStream(file));
+      return readPublicKey(new FileInputStream(CryptUtil.assertNotNullArg(file, "File cannot be null")));
     } catch (FileNotFoundException e) {
       throw new StreamException("File not found: " + file);
     }
@@ -464,7 +476,7 @@ public final class KeyPairUtil
    */
   public static PublicKey readPublicKey(final InputStream in) throws EncodingException, StreamException
   {
-    return decodePublicKey(StreamUtil.readAll(in));
+    return decodePublicKey(StreamUtil.readAll(CryptUtil.assertNotNullArg(in, "Input stream cannot be null")));
   }
 
 

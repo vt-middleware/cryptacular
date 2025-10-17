@@ -39,8 +39,8 @@ public class RBGNonce implements Nonce
    */
   public RBGNonce(final int length)
   {
-    if (length < 1) {
-      throw new IllegalArgumentException("Length must be positive");
+    if (length < 1 || length > NonceUtil.getMaxNonceLength()) {
+      throw new IllegalArgumentException("Length must be positive and cannot exceed " + NonceUtil.getMaxNonceLength());
     }
     this.length = length;
     this.rbg = NonceUtil.newRBG(length);

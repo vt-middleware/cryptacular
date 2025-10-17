@@ -21,6 +21,7 @@ import org.bouncycastle.pkcs.PKCS12SafeBagBuilder;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.bc.BcPKCS12MacCalculatorBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS12SafeBagBuilder;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.CryptoException;
 import org.cryptacular.spec.DigestSpec;
 
@@ -33,23 +34,19 @@ public abstract class AbstractP12Generator implements P12Generator
 {
 
   @Override
-  public PKCS12PfxPdu generate(final char[] password, final PrivateKey key, final String alias,
-    final X509Certificate... certificates)
+  public PKCS12PfxPdu generate(
+    final char[] password, final PrivateKey key, final String alias, final X509Certificate... certificates)
   {
     String label;
-    if (certificates.length < 1) {
-      throw new IllegalArgumentException("At least one certificate must be provided");
-    }
-    if (password == null || password.length == 0) {
-      throw new IllegalArgumentException("Password cannot be null or empty");
-    }
+    CryptUtil.assertNotNullArgOr(password, v -> v.length == 0, "Password cannot be null or empty");
+    CryptUtil.assertNotNullArg(key, "Private key cannot be null");
+    CryptUtil.assertNotNullArgOr(certificates, v -> v.length == 0, "Certificates cannot be null or empty");
     final PKCS12PfxPduBuilder pfxPduBuilder = new PKCS12PfxPduBuilder();
     final PKCS12SafeBag[] certBags = new PKCS12SafeBag[certificates.length];
     final JcaX509ExtensionUtils extUtils;
     try {
       extUtils = new JcaX509ExtensionUtils();
-      final PKCS12SafeBagBuilder keyBagBuilder = new JcaPKCS12SafeBagBuilder(
-        key, keyOutputEncryptor(password));
+      final PKCS12SafeBagBuilder keyBagBuilder = new JcaPKCS12SafeBagBuilder(key, keyOutputEncryptor(password));
       keyBagBuilder.addBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName, new DERBMPString(alias));
       keyBagBuilder.addBagAttribute(
         PKCSObjectIdentifiers.pkcs_9_at_localKeyId,

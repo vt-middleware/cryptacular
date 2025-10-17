@@ -3,6 +3,7 @@ package org.cryptacular.bean;
 
 import java.io.IOException;
 import java.security.PrivateKey;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
@@ -20,14 +21,10 @@ public class ResourceBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKe
 {
 
   /** Resource containing key data. */
-  private Resource resource;
+  private final Resource resource;
 
   /** Password required to decrypt an encrypted private key. */
-  private String password;
-
-
-  /** Creates a new instance. */
-  public ResourceBasedPrivateKeyFactoryBean() {}
+  private final String password;
 
 
   /**
@@ -37,7 +34,7 @@ public class ResourceBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKe
    */
   public ResourceBasedPrivateKeyFactoryBean(final Resource resource)
   {
-    setResource(resource);
+    this(resource, null);
   }
 
 
@@ -49,8 +46,8 @@ public class ResourceBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKe
    */
   public ResourceBasedPrivateKeyFactoryBean(final Resource resource, final String decryptionPassword)
   {
-    setResource(resource);
-    setPassword(decryptionPassword);
+    this.resource = CryptUtil.assertNotNullArg(resource, "Resource cannot be null");
+    this.password = decryptionPassword;
   }
 
 
@@ -58,28 +55,6 @@ public class ResourceBasedPrivateKeyFactoryBean implements FactoryBean<PrivateKe
   public Resource getResource()
   {
     return resource;
-  }
-
-
-  /**
-   * Sets the resource containing key data.
-   *
-   * @param  resource  Resource containing key bytes.
-   */
-  public void setResource(final Resource resource)
-  {
-    this.resource = resource;
-  }
-
-
-  /**
-   * Sets the password-based key used to decrypt an encrypted private key.
-   *
-   * @param  decryptionPassword  Password-based encryption key.
-   */
-  public void setPassword(final String decryptionPassword)
-  {
-    this.password = decryptionPassword;
   }
 
 

@@ -3,6 +3,7 @@ package org.cryptacular.bean;
 
 import java.io.IOException;
 import java.security.PublicKey;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
 import org.cryptacular.io.Resource;
@@ -19,21 +20,17 @@ public class ResourceBasedPublicKeyFactoryBean implements FactoryBean<PublicKey>
 {
 
   /** Resource containing key data. */
-  private Resource resource;
-
-
-  /** Creates a new instance. */
-  public ResourceBasedPublicKeyFactoryBean() {}
+  private final Resource resource;
 
 
   /**
-   * Creates a new instance by specifying all properties.
+   * Creates a new resource based public key factory bean.
    *
    * @param  resource  Resource containing encoded key data.
    */
   public ResourceBasedPublicKeyFactoryBean(final Resource resource)
   {
-    setResource(resource);
+    this.resource = CryptUtil.assertNotNullArg(resource, "Resource cannot be null");
   }
 
 
@@ -41,17 +38,6 @@ public class ResourceBasedPublicKeyFactoryBean implements FactoryBean<PublicKey>
   public Resource getResource()
   {
     return resource;
-  }
-
-
-  /**
-   * Sets the resource containing key data.
-   *
-   * @param  resource  Resource containing key bytes.
-   */
-  public void setResource(final Resource resource)
-  {
-    this.resource = resource;
   }
 
 
