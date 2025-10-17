@@ -9,7 +9,7 @@ import org.cryptacular.codec.Codec;
 import org.cryptacular.codec.HexCodec;
 
 /**
- * Describes a string-to-byte encoding provides a means to create a new instance of the coed via the {@link
+ * Describes a string-to-byte encoding and provides a means to create a new instance of the codec via the {@link
  * #newInstance()} method.
  *
  * @author  Middleware Services

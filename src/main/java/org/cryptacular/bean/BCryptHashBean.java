@@ -4,6 +4,7 @@ package org.cryptacular.bean;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 import org.bouncycastle.crypto.generators.BCrypt;
 import org.cryptacular.CryptoException;
 import org.cryptacular.StreamException;
@@ -33,7 +34,7 @@ import org.cryptacular.util.ByteUtil;
  *
  * @author  Middleware Services
  */
-public class BCryptHashBean implements HashBean<String>
+public class BCryptHashBean implements HashBean<CharSequence>
 {
   /** Custom base-64 alphabet. */
   private static final String ALPHABET = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -120,7 +121,7 @@ public class BCryptHashBean implements HashBean<String>
    * @throws CryptoException on bcrypt algorithm errors.
    */
   @Override
-  public boolean compare(final String hash, final Object... data) throws CryptoException, StreamException
+  public boolean compare(final CharSequence hash, final Object... data) throws CryptoException, StreamException
   {
     if (data.length != 1) {
       throw new IllegalArgumentException("Expected exactly one element in data array but got " + data.length);
@@ -260,12 +261,13 @@ public class BCryptHashBean implements HashBean<String>
      * @param  bCryptString  bcrypt hash of the form
      *                       <code>$2n$cost$xxxxxxxxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</code>
      */
-    protected BCryptParameters(final String bCryptString)
+    protected BCryptParameters(final CharSequence bCryptString)
     {
-      if (!bCryptString.startsWith("$2")) {
+      if (!(bCryptString.charAt(0) == '$' && bCryptString.charAt(1) == '2')) {
         throw new IllegalArgumentException("Expected bcrypt hash of the form $2n$cost$salthash");
       }
-      final String[] parts = bCryptString.split("\\$");
+      final Pattern pattern = Pattern.compile("\\$");
+      final String[] parts = pattern.split(bCryptString);
       if (parts.length != 4) {
         throw new IllegalArgumentException("Invalid bcrypt hash");
       }

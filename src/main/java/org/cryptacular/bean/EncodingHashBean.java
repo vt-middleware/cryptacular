@@ -16,7 +16,7 @@ import org.cryptacular.util.CodecUtil;
  *
  * @author  Middleware Services
  */
-public class EncodingHashBean extends AbstractHashBean implements HashBean<String>
+public class EncodingHashBean extends AbstractHashBean implements HashBean<CharSequence>
 {
 
   /** Determines kind of encoding. */
@@ -132,7 +132,7 @@ public class EncodingHashBean extends AbstractHashBean implements HashBean<Strin
    * @throws  StreamException  on stream IO errors.
    */
   @Override
-  public boolean compare(final String hash, final Object... data)
+  public boolean compare(final CharSequence hash, final Object... data)
       throws CryptoException, EncodingException, StreamException
   {
     return compareInternal(CodecUtil.decode(codecSpec.newInstance().getDecoder(), hash), data);
