@@ -12,6 +12,7 @@ import org.bouncycastle.crypto.prng.EntropySource;
 import org.bouncycastle.crypto.prng.SP800SecureRandom;
 import org.bouncycastle.crypto.prng.drbg.HashSP800DRBG;
 import org.bouncycastle.crypto.prng.drbg.SP80090DRBG;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.generator.sp80038a.EncryptedNonce;
 import org.cryptacular.generator.sp80038d.RBGNonce;
 
@@ -22,8 +23,9 @@ import org.cryptacular.generator.sp80038d.RBGNonce;
  */
 public final class NonceUtil
 {
-  /** Maximum length of nonce to generate. */
-  private static final int MAX_NONCE_LENGTH = 10240;
+  /** Maximum length of nonce to generate in bytes. */
+  private static final int MAX_NONCE_LENGTH = CryptUtil.parseInt(
+    System.getProperty("org.cryptacular.nonce.maxLength", "1024"), i -> i > 0, 1024);
 
   /** Class-wide random source. */
   private static final SecureRandom SECURE_RANDOM = new SecureRandom();
@@ -40,6 +42,17 @@ public final class NonceUtil
 
 
   /**
+   * Returns the maximum nonce length.
+   *
+   * @return max nonce length
+   */
+  public static int getMaxNonceLength()
+  {
+    return MAX_NONCE_LENGTH;
+  }
+
+
+  /**
    * Generates a nonce of the given size by repetitively concatenating system timestamps (i.e. {@link
    * System#nanoTime()}) up to the required size.
    *
@@ -51,7 +64,7 @@ public final class NonceUtil
   {
     if (length <= 0 || length > MAX_NONCE_LENGTH) {
       throw new IllegalArgumentException(
-        length + " is invalid. Length must be positive and less than " + MAX_NONCE_LENGTH);
+        length + " is invalid. Length must be positive and cannot exceed " + MAX_NONCE_LENGTH);
     }
 
     final byte[] nonce = new byte[length];
@@ -79,7 +92,7 @@ public final class NonceUtil
   {
     if (length <= 0 || length > MAX_NONCE_LENGTH) {
       throw new IllegalArgumentException(
-        length + " is invalid. Length must be positive and less than " + MAX_NONCE_LENGTH);
+        length + " is invalid. Length must be positive and cannot exceed " + MAX_NONCE_LENGTH);
     }
     final byte[] nonce = new byte[length];
     SECURE_RANDOM.nextBytes(nonce);
@@ -98,7 +111,7 @@ public final class NonceUtil
   {
     if (length <= 0 || length > MAX_NONCE_LENGTH) {
       throw new IllegalArgumentException(
-        length + " is invalid. Length must be positive and less than " + MAX_NONCE_LENGTH);
+        length + " is invalid. Length must be positive and cannot exceed " + MAX_NONCE_LENGTH);
     }
     return new EntropySource() {
       @Override
@@ -179,7 +192,7 @@ public final class NonceUtil
   {
     if (blockSize <= 0 || blockSize > MAX_NONCE_LENGTH) {
       throw new IllegalArgumentException(
-        blockSize + " is invalid. Block size must be positive and less than " + MAX_NONCE_LENGTH);
+        blockSize + " is invalid. Block size must be positive and cannot exceed " + MAX_NONCE_LENGTH);
     }
     prng.setSeed(randomNonce(blockSize));
     final byte[] iv = new byte[blockSize];

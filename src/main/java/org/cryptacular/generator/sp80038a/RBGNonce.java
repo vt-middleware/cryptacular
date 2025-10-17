@@ -18,9 +18,6 @@ import org.cryptacular.util.NonceUtil;
 public class RBGNonce implements Nonce
 {
 
-  /** Maximum length of nonce to generate. */
-  private static final int MAX_NONCE_LENGTH = 10240;
-
   /** Length of generated nonces. */
   private final int length;
 
@@ -42,8 +39,8 @@ public class RBGNonce implements Nonce
    */
   public RBGNonce(final int length)
   {
-    if (length < 1 || length > MAX_NONCE_LENGTH) {
-      throw new IllegalArgumentException("Length must be positive and less than " + MAX_NONCE_LENGTH);
+    if (length < 1 || length > NonceUtil.getMaxNonceLength()) {
+      throw new IllegalArgumentException("Length must be positive and cannot exceed " + NonceUtil.getMaxNonceLength());
     }
     this.length = length;
     this.rbg = NonceUtil.newRBG(length);

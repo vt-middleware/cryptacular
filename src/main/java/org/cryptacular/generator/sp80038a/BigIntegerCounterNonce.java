@@ -6,6 +6,7 @@ import java.util.Arrays;
 import org.cryptacular.CryptUtil;
 import org.cryptacular.generator.LimitException;
 import org.cryptacular.generator.Nonce;
+import org.cryptacular.util.NonceUtil;
 
 /**
  * Uses a {@link BigInteger} to back a counter in order to produce nonces of arbitrary length.
@@ -18,9 +19,6 @@ import org.cryptacular.generator.Nonce;
  */
 public class BigIntegerCounterNonce implements Nonce
 {
-
-  /** Maximum length of nonce to generate. */
-  private static final int MAX_NONCE_LENGTH = 10240;
 
   /** Counter. */
   private BigInteger counter;
@@ -37,8 +35,8 @@ public class BigIntegerCounterNonce implements Nonce
    */
   public BigIntegerCounterNonce(final BigInteger counter, final int length)
   {
-    if (length < 1 || length > MAX_NONCE_LENGTH) {
-      throw new IllegalArgumentException("Length must be positive and less than " + MAX_NONCE_LENGTH);
+    if (length < 1 || length > NonceUtil.getMaxNonceLength()) {
+      throw new IllegalArgumentException("Length must be positive and cannot exceed " + NonceUtil.getMaxNonceLength());
     }
     this.length = length;
     this.counter = CryptUtil.assertNotNullArg(counter, "Counter cannot be null");

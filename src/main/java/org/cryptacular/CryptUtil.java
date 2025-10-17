@@ -17,6 +17,28 @@ public final class CryptUtil
 
 
   /**
+   * Parse the supplied value as an integer. Returns the default value if the predicate is not met or if the value
+   * cannot be parsed.
+   *
+   * @param value to parse
+   * @param require predicate to enforce
+   * @param defaultValue to return if predicate is false
+   *
+   * @return parsed integer or default
+   */
+  public static int parseInt(final String value, final Predicate<Integer> require, final int defaultValue)
+  {
+    final int i;
+    try {
+      i = Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
+    return require.test(i) ? i : defaultValue;
+  }
+
+
+  /**
    * Throws {@link IllegalArgumentException} if the supplied object is null.
    *
    * @param  <T>  type of object

@@ -18,8 +18,9 @@ import org.cryptacular.util.NonceUtil;
 public final class SecretKeyGenerator
 {
 
-  /** Maximum length of ID to generate. */
-  private static final int MAX_KEY_LENGTH = 10240;
+  /** Maximum length of secret keys in bits to generate in bits. */
+  private static final int MAX_KEY_LENGTH = CryptUtil.parseInt(
+    System.getProperty("org.cryptacular.generator.maxSecretKeyLength", "1024"), i -> i > 0, 1024);
 
   /** Private constructor of static class. */
   private SecretKeyGenerator() {}
@@ -50,7 +51,7 @@ public final class SecretKeyGenerator
   public static SecretKey generate(final int bitLength, final BlockCipher cipher)
   {
     if (bitLength < 1 || bitLength > MAX_KEY_LENGTH) {
-      throw new IllegalArgumentException("Bit length must be greater than 0 and less than " + MAX_KEY_LENGTH);
+      throw new IllegalArgumentException("Bit length must be greater than 0 and cannot exceed " + MAX_KEY_LENGTH);
     }
     CryptUtil.assertNotNullArg(cipher, "Block cipher cannot be null");
     // Want as much nonce data as key bits

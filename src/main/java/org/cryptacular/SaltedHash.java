@@ -12,8 +12,9 @@ import org.cryptacular.util.CodecUtil;
 public class SaltedHash
 {
 
-  /** Maximum salt length. */
-  private static final int MAX_SALT_LENGTH = 1024;
+  /** Maximum salt length in bytes. */
+  private static final int MAX_SALT_LENGTH = CryptUtil.parseInt(
+    System.getProperty("org.cryptacular.maxSaltLength", "128"), i -> i > 0, 128);
 
   /** Digest output. */
   private final byte[] hash;

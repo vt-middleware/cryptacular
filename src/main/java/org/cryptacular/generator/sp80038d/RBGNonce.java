@@ -26,9 +26,6 @@ import org.cryptacular.util.NonceUtil;
 public class RBGNonce implements Nonce
 {
 
-  /** Maximum length of nonce to generate. */
-  private static final int MAX_NONCE_LENGTH = 10240;
-
   /** Fixed field value. */
   private final byte[] fixed;
 
@@ -71,8 +68,9 @@ public class RBGNonce implements Nonce
     if (randomLength < 12) {
       throw new IllegalArgumentException("Must specify at least 12 bytes (96 bits) for random part.");
     }
-    if (randomLength > MAX_NONCE_LENGTH) {
-      throw new IllegalArgumentException(randomLength + " is invalid. Length must be less than " + MAX_NONCE_LENGTH);
+    if (randomLength > NonceUtil.getMaxNonceLength()) {
+      throw new IllegalArgumentException(
+        randomLength + " is invalid. Length cannot exceed " + NonceUtil.getMaxNonceLength());
     }
     this.randomLength = randomLength;
     if (fixed != null) {
