@@ -68,6 +68,10 @@ public class RBGNonce implements Nonce
     if (randomLength < 12) {
       throw new IllegalArgumentException("Must specify at least 12 bytes (96 bits) for random part.");
     }
+    if (randomLength > NonceUtil.getMaxNonceLength()) {
+      throw new IllegalArgumentException(
+        randomLength + " is invalid. Length cannot exceed " + NonceUtil.getMaxNonceLength());
+    }
     this.randomLength = randomLength;
     if (fixed != null) {
       this.fixed = ByteUtil.toBytes(fixed);

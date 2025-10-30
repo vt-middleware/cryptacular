@@ -2,10 +2,13 @@
 package org.cryptacular.x509.dn;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import org.cryptacular.CryptUtil;
 
 /**
  * Ordered list of {@link Attribute}s.
@@ -20,33 +23,25 @@ public class Attributes implements Iterable<Attribute>
 
 
   /**
-   * Adds an attribute by type and value to the end of the attribute list.
+   * Creates a new attributes.
    *
-   * @param  typeOid  OID of attribute type.
-   * @param  value  Attribute value.
+   * @param attributes to include
    */
-  public void add(final String typeOid, final String value)
+  public Attributes(final Attribute... attributes)
   {
-    final StandardAttributeType type = StandardAttributeType.fromOid(typeOid);
-    if (type != null) {
-      add(new Attribute(type, value));
-    } else {
-      add(new Attribute(new UnknownAttributeType(typeOid), value));
-    }
+    this(Arrays.asList(attributes));
   }
 
 
   /**
-   * Adds the given attribute to the end of the attribute list.
+   * Creates a new attributes.
    *
-   * @param  attr  Non-null attribute.
+   * @param attributes to include
    */
-  public void add(final Attribute attr)
+  public Attributes(final List<Attribute> attributes)
   {
-    if (attr == null) {
-      throw new IllegalArgumentException("Attribute cannot be null");
-    }
-    attributes.add(attr);
+    this.attributes.addAll(
+      CryptUtil.assertNotNullArgOr(attributes, v -> v.stream().anyMatch(Objects::isNull), "Attributes cannot be null"));
   }
 
 

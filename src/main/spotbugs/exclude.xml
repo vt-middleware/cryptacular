@@ -7,19 +7,6 @@
 
   <!-- See https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html -->
 
-  <!-- Allow platform specific encoding -->
-  <Match>
-    <Class name="org.cryptacular.CiphertextHeader" />
-    <Bug pattern="DM_DEFAULT_ENCODING" />
-  </Match>
-
-  <!-- Result of InputStream#read is ignored -->
-  <Match>
-    <Class name="org.cryptacular.CiphertextHeader" />
-    <Method name="decode" />
-    <Bug pattern="RR_NOT_CHECKED" />
-  </Match>
-
   <!-- Allow constructors to throw exceptions -->
   <Match>
     <Bug pattern="CT_CONSTRUCTOR_THROW" />

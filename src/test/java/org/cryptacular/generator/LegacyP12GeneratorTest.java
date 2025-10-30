@@ -57,10 +57,7 @@ public class LegacyP12GeneratorTest
 
   private KeyStore loadP12KeyStore(final Resource resource, final String password)
   {
-    final KeyStoreFactoryBean factory = new KeyStoreFactoryBean();
-    factory.setResource(resource);
-    factory.setType("PKCS12");
-    factory.setPassword(password);
+    final KeyStoreFactoryBean factory = new KeyStoreFactoryBean(resource, "PKCS12", password);
     return factory.newInstance();
   }
 }

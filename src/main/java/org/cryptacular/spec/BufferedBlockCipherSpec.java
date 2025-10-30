@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
+import org.bouncycastle.crypto.DefaultBufferedBlockCipher;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.modes.CFBBlockCipher;
 import org.bouncycastle.crypto.modes.OFBBlockCipher;
@@ -17,6 +18,7 @@ import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.paddings.TBCPadding;
 import org.bouncycastle.crypto.paddings.X923Padding;
 import org.bouncycastle.crypto.paddings.ZeroBytePadding;
+import org.cryptacular.CryptUtil;
 
 /**
  * Describes a block cipher in terms of a (algorithm, mode, padding) tuple and provides a facility to create a new
@@ -76,9 +78,9 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>, Seria
    */
   public BufferedBlockCipherSpec(final String algName, final String cipherMode, final String cipherPadding)
   {
-    this.algorithm = algName;
-    this.mode = cipherMode;
-    this.padding = cipherPadding;
+    this.algorithm = CryptUtil.assertNotNullArg(algName, "Algorithm cannot be null");
+    this.mode = CryptUtil.assertNotNullArg(cipherMode, "Cipher mode cannot be null");
+    this.padding = CryptUtil.assertNotNullArg(cipherPadding, "Cipher padding cannot be null");
   }
 
 
@@ -136,7 +138,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>, Seria
     switch (mode) {
 
     case "CBC":
-      cipher = new CBCBlockCipher(cipher);
+      cipher = CBCBlockCipher.newInstance(cipher);
       break;
 
     case "OFB":
@@ -144,7 +146,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>, Seria
       break;
 
     case "CFB":
-      cipher = new CFBBlockCipher(cipher, cipher.getBlockSize());
+      cipher = CFBBlockCipher.newInstance(cipher, cipher.getBlockSize());
       break;
 
     default:
@@ -154,7 +156,7 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>, Seria
     if (padding != null) {
       return new PaddedBufferedBlockCipher(cipher, getPadding(padding));
     }
-    return new BufferedBlockCipher(cipher);
+    return new DefaultBufferedBlockCipher(cipher);
   }
 
 

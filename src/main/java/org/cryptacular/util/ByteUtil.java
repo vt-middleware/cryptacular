@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.StreamException;
 
 /**
@@ -23,7 +24,7 @@ public final class ByteUtil
   /** ASCII character set. */
   public static final Charset ASCII_CHARSET = StandardCharsets.US_ASCII;
 
-  /** Private constructor of utilty class. */
+  /** Private constructor of utility class. */
   private ByteUtil() {}
 
 
@@ -36,6 +37,7 @@ public final class ByteUtil
    */
   public static int toInt(final byte[] data)
   {
+    CryptUtil.assertNotNullArgOr(data, v -> v.length != 4, "Data must have a length of 4");
     return (data[0] << 24) | ((data[1] & 0xff) << 16) | ((data[2] & 0xff) << 8) | (data[3] & 0xff);
   }
 
@@ -64,6 +66,7 @@ public final class ByteUtil
    */
   public static int readInt(final InputStream in) throws StreamException
   {
+    CryptUtil.assertNotNullArg(in, "Input stream cannot be null");
     try {
       return (in.read() << 24) | ((in.read() & 0xff) << 16) | ((in.read() & 0xff) << 8) | (in.read() & 0xff);
     } catch (IOException e) {
@@ -81,6 +84,7 @@ public final class ByteUtil
    */
   public static long toLong(final byte[] data)
   {
+    CryptUtil.assertNotNullArgOr(data, v -> v.length != 8, "Data must have a length of 8");
     return
       ((long) data[0] << 56) | (((long) data[1] & 0xff) << 48) |
       (((long) data[2] & 0xff) << 40) | (((long) data[3] & 0xff) << 32) |
@@ -100,6 +104,7 @@ public final class ByteUtil
    */
   public static long readLong(final InputStream in) throws StreamException
   {
+    CryptUtil.assertNotNullArg(in, "Input stream cannot be null");
     try {
       return
         ((long) in.read() << 56) | (((long) in.read() & 0xff) << 48) |
@@ -136,6 +141,11 @@ public final class ByteUtil
    */
   public static void toBytes(final int value, final byte[] output, final int offset)
   {
+    if (offset < 0) {
+      throw new IllegalArgumentException("Offset cannot be negative");
+    }
+    CryptUtil.assertNotNullArgOr(
+      output, v -> v.length < offset + 4 || offset + 4 < 0, "Output length must support offset");
     int shift = 24;
     for (int i = 0; i < 4; i++) {
       output[offset + i] = (byte) (value >> shift);
@@ -168,6 +178,11 @@ public final class ByteUtil
    */
   public static void toBytes(final long value, final byte[] output, final int offset)
   {
+    if (offset < 0) {
+      throw new IllegalArgumentException("Offset cannot be negative");
+    }
+    CryptUtil.assertNotNullArgOr(
+      output, v -> v.length < offset + 8 || offset + 8 < 0, "Output length must support offset");
     int shift = 56;
     for (int i = 0; i < 8; i++) {
       output[offset + i] = (byte) (value >> shift);
@@ -185,7 +200,7 @@ public final class ByteUtil
    */
   public static String toString(final byte[] bytes)
   {
-    return new String(bytes, DEFAULT_CHARSET);
+    return new String(CryptUtil.assertNotNullArg(bytes, "Bytes cannot be null"), DEFAULT_CHARSET);
   }
 
 
@@ -200,7 +215,11 @@ public final class ByteUtil
    */
   public static String toString(final byte[] bytes, final int offset, final int length)
   {
-    return new String(bytes, offset, length, DEFAULT_CHARSET);
+    try {
+      return new String(CryptUtil.assertNotNullArg(bytes, "Bytes cannot be null"), offset, length, DEFAULT_CHARSET);
+    } catch (StringIndexOutOfBoundsException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 
 
@@ -225,33 +244,37 @@ public final class ByteUtil
    */
   public static CharBuffer toCharBuffer(final ByteBuffer buffer)
   {
-    return DEFAULT_CHARSET.decode(buffer);
+    return DEFAULT_CHARSET.decode(CryptUtil.assertNotNullArg(buffer, "Buffer cannot be null"));
   }
 
 
   /**
-   * Converts a string into bytes in the UTF-8 character set.
+   * Converts a character sequence into bytes in the UTF-8 character set.
    *
-   * @param  s  String to convert.
+   * @param  cs  CharSequence to convert.
    *
-   * @return  Byte buffer containing byte representation of string.
+   * @return  Byte buffer containing byte representation of the character sequence.
    */
-  public static ByteBuffer toByteBuffer(final String s)
+  public static ByteBuffer toByteBuffer(final CharSequence cs)
   {
-    return DEFAULT_CHARSET.encode(CharBuffer.wrap(s));
+    return DEFAULT_CHARSET.encode(
+      CharBuffer.wrap(CryptUtil.assertNotNullArg(cs, "Character sequence cannot be null")));
   }
 
 
   /**
-   * Converts a string into bytes in the UTF-8 character set.
+   * Converts a character sequence into bytes in the UTF-8 character set.
    *
-   * @param  s  String to convert.
+   * @param  cs  Character sequence to convert.
    *
-   * @return  Byte array containing byte representation of string.
+   * @return  Byte array containing byte representation of the character sequence.
    */
-  public static byte[] toBytes(final String s)
+  public static byte[] toBytes(final CharSequence cs)
   {
-    return s.getBytes(DEFAULT_CHARSET);
+    final ByteBuffer buffer = toByteBuffer(cs);
+    final byte[] bytes = new byte[buffer.remaining()];
+    buffer.get(bytes);
+    return bytes;
   }
 
 
@@ -277,6 +300,7 @@ public final class ByteUtil
    */
   public static byte[] toArray(final ByteBuffer buffer)
   {
+    CryptUtil.assertNotNullArg(buffer, "Buffer cannot be null");
     final int size = buffer.limit() - buffer.position();
     if (buffer.hasArray() && size == buffer.capacity()) {
       return buffer.array();

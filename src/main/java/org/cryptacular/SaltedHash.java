@@ -12,6 +12,10 @@ import org.cryptacular.util.CodecUtil;
 public class SaltedHash
 {
 
+  /** Maximum salt length in bytes. */
+  private static final int MAX_SALT_LENGTH = CryptUtil.parseInt(
+    System.getProperty("org.cryptacular.maxSaltLength", "128"), i -> i > 0, 128);
+
   /** Digest output. */
   private final byte[] hash;
 
@@ -27,8 +31,8 @@ public class SaltedHash
    */
   public SaltedHash(final byte[] hash, final byte[] salt)
   {
-    this.hash = hash;
-    this.salt = salt;
+    this.hash = CryptUtil.assertNotNullArg(hash, "Hash cannot be null");
+    this.salt = CryptUtil.assertNotNullArg(salt, "Salt cannot be null");
   }
 
 
@@ -41,6 +45,13 @@ public class SaltedHash
    */
   public SaltedHash(final byte[] hashWithSalt, final int digestLength, final boolean toEnd)
   {
+    CryptUtil.assertNotNullArg(hashWithSalt, "Hash with salt cannot be null");
+    if (digestLength < 0 || digestLength > MAX_SALT_LENGTH) {
+      throw new IllegalArgumentException("Digest length must be positive and cannot exceed " + MAX_SALT_LENGTH);
+    }
+    if (hashWithSalt.length <= digestLength) {
+      throw new IllegalArgumentException("Hash with salt length must be greater than digest length");
+    }
     this.hash = new byte[digestLength];
     this.salt = new byte[hashWithSalt.length - digestLength];
     if (toEnd) {

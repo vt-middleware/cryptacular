@@ -22,8 +22,7 @@ public class Base32DecoderTest
   @DataProvider(name = "encoded-data")
   public Object[][] getEncodedData()
   {
-    final Base32Decoder unpadded = new Base32Decoder();
-    unpadded.setPaddedInput(false);
+    final Base32Decoder unpadded = new Base32Decoder(false);
     return
       new Object[][] {
         // Multiple of 40 bits

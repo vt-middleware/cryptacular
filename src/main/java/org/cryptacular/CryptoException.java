@@ -20,6 +20,17 @@ public class CryptoException extends RuntimeException
 
 
   /**
+   * Creates a new instance with the given cause.
+   *
+   * @param  cause  Error cause.
+   */
+  public CryptoException(final Throwable cause)
+  {
+    super(cause);
+  }
+
+
+  /**
    * Creates a new instance with the given error message and cause.
    *
    * @param  message  Error message.

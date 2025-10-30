@@ -7,6 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.prng.SP800SecureRandomBuilder;
+import org.cryptacular.CryptUtil;
 import org.cryptacular.util.NonceUtil;
 
 /**
@@ -16,6 +17,10 @@ import org.cryptacular.util.NonceUtil;
  */
 public final class SecretKeyGenerator
 {
+
+  /** Maximum length of secret keys in bits to generate in bits. */
+  private static final int MAX_KEY_LENGTH = CryptUtil.parseInt(
+    System.getProperty("org.cryptacular.generator.maxSecretKeyLength", "1024"), i -> i > 0, 1024);
 
   /** Private constructor of static class. */
   private SecretKeyGenerator() {}
@@ -30,6 +35,7 @@ public final class SecretKeyGenerator
    */
   public static SecretKey generate(final BlockCipher cipher)
   {
+    CryptUtil.assertNotNullArg(cipher, "Block cipher cannot be null");
     return generate(cipher.getBlockSize() * 8, cipher);
   }
 
@@ -44,6 +50,10 @@ public final class SecretKeyGenerator
    */
   public static SecretKey generate(final int bitLength, final BlockCipher cipher)
   {
+    if (bitLength < 1 || bitLength > MAX_KEY_LENGTH) {
+      throw new IllegalArgumentException("Bit length must be greater than 0 and cannot exceed " + MAX_KEY_LENGTH);
+    }
+    CryptUtil.assertNotNullArg(cipher, "Block cipher cannot be null");
     // Want as much nonce data as key bits
     final byte[] nonce = NonceUtil.randomNonce((bitLength + 7) / 8);
     return generate(bitLength, cipher, new SP800SecureRandomBuilder().buildHash(new SHA256Digest(), nonce, false));
@@ -61,6 +71,11 @@ public final class SecretKeyGenerator
    */
   public static SecretKey generate(final int bitLength, final BlockCipher cipher, final SecureRandom random)
   {
+    if (bitLength < 1 || bitLength > MAX_KEY_LENGTH) {
+      throw new IllegalArgumentException("Bit length must be greater than 0 and less than " + MAX_KEY_LENGTH);
+    }
+    CryptUtil.assertNotNullArg(cipher, "Block cipher cannot be null");
+    CryptUtil.assertNotNullArg(random, "Secure random cannot be null");
     // Round up for bit lengths that are not a multiple of 8
     final byte[] key = new byte[(bitLength + 7) / 8];
     random.nextBytes(key);
