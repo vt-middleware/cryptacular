@@ -17,9 +17,7 @@ import org.cryptacular.FailListener;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link RandomIdGenerator}.
@@ -54,7 +52,7 @@ public class RandomIdGeneratorTest
   {
     for (int i = 0; i < 100; i++) {
       final Matcher m = expected.matcher(generator.generate());
-      assertTrue(m.matches());
+      assertThat(m.matches()).isTrue();
     }
   }
 
@@ -79,10 +77,10 @@ public class RandomIdGeneratorTest
     final List<Future<String>> results = executor.invokeAll(tasks);
     for (Future<String> result : results) {
       final String id = result.get(1, TimeUnit.SECONDS);
-      assertNotNull(id);
+      assertThat(id).isNotNull();
       identifiers.add(id);
     }
-    assertEquals(poolSize, identifiers.size());
+    assertThat(identifiers.size()).isEqualTo(poolSize);
   }
 
   /**
@@ -105,9 +103,9 @@ public class RandomIdGeneratorTest
     final List<Future<String>> results = executor.invokeAll(tasks);
     for (Future<String> result : results) {
       final String id = result.get(1, TimeUnit.SECONDS);
-      assertNotNull(id);
+      assertThat(id).isNotNull();
       identifiers.add(id);
     }
-    assertEquals(poolSize, identifiers.size());
+    assertThat(identifiers.size()).isEqualTo(poolSize);
   }
 }

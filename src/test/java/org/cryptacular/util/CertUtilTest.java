@@ -22,9 +22,7 @@ import org.cryptacular.x509.KeyUsageBits;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link CertUtil} class.
@@ -314,7 +312,7 @@ public class CertUtilTest
   @Test(dataProvider = "subject-cn")
   public void testSubjectCN(final X509Certificate cert, final String expected)
   {
-    assertEquals(CertUtil.subjectCN(cert), expected);
+    assertThat(CertUtil.subjectCN(cert)).isEqualTo(expected);
   }
 
   @Test(dataProvider = "subject-alt-names")
@@ -323,12 +321,12 @@ public class CertUtilTest
   {
     final GeneralNames names = CertUtil.subjectAltNames(cert);
     if (expected.length == 0) {
-      assertNull(names);
+      assertThat(names).isNull();
       return;
     }
-    assertEquals(names.getNames().length, expected.length);
+    assertThat(names.getNames().length).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(names.getNames()[i].getName().toString(), expected[i]);
+      assertThat(names.getNames()[i].getName().toString()).isEqualTo(expected[i]);
     }
   }
 
@@ -341,12 +339,12 @@ public class CertUtilTest
   {
     final GeneralNames names = CertUtil.subjectAltNames(cert, types);
     if (expected.length == 0) {
-      assertNull(names);
+      assertThat(names).isNull();
       return;
     }
-    assertEquals(names.getNames().length, expected.length);
+    assertThat(names.getNames().length).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(names.getNames()[i].getName().toString(), expected[i]);
+      assertThat(names.getNames()[i].getName().toString()).isEqualTo(expected[i]);
     }
   }
 
@@ -355,9 +353,9 @@ public class CertUtilTest
     throws Exception
   {
     final List<String> names = CertUtil.subjectNames(cert);
-    assertEquals(names.size(), expected.length);
+    assertThat(names.size()).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(names.get(i), expected[i]);
+      assertThat(names.get(i)).isEqualTo(expected[i]);
     }
   }
 
@@ -366,9 +364,9 @@ public class CertUtilTest
     throws Exception
   {
     final List<String> names = CertUtil.subjectNames(cert, types);
-    assertEquals(names.size(), expected.length);
+    assertThat(names.size()).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(names.get(i), expected[i]);
+      assertThat(names.get(i)).isEqualTo(expected[i]);
     }
   }
 
@@ -379,42 +377,42 @@ public class CertUtilTest
     final X509Certificate expected)
     throws Exception
   {
-    assertEquals(CertUtil.findEntityCertificate(key, candidates), expected);
+    assertThat(CertUtil.findEntityCertificate(key, candidates)).isEqualTo(expected);
   }
 
   @Test(dataProvider = "basic-usage")
   public void testAllowsBasicUsage(final X509Certificate cert, final KeyUsageBits[] expectedUses)
     throws Exception
   {
-    assertTrue(CertUtil.allowsUsage(cert, expectedUses));
+    assertThat(CertUtil.allowsUsage(cert, expectedUses)).isTrue();
   }
 
   @Test(dataProvider = "extended-usage")
   public void testAllowsExtendedUsage(final X509Certificate cert, final KeyPurposeId[] expectedPurposes)
     throws Exception
   {
-    assertTrue(CertUtil.allowsUsage(cert, expectedPurposes));
+    assertThat(CertUtil.allowsUsage(cert, expectedPurposes)).isTrue();
   }
 
   @Test(dataProvider = "has-policies")
   public void testHasPolicies(final X509Certificate cert, final String[] expectedPolicies)
     throws Exception
   {
-    assertTrue(CertUtil.hasPolicies(cert, expectedPolicies));
+    assertThat(CertUtil.hasPolicies(cert, expectedPolicies)).isTrue();
   }
 
   @Test(dataProvider = "subject-keyid")
   public void testSubjectKeyId(final X509Certificate cert, final String expectedKeyId)
     throws Exception
   {
-    assertEquals(CertUtil.subjectKeyId(cert).toUpperCase(), expectedKeyId);
+    assertThat(CertUtil.subjectKeyId(cert).toUpperCase()).isEqualTo(expectedKeyId);
   }
 
   @Test(dataProvider = "authority-keyid")
   public void testAuthorityKeyId(final X509Certificate cert, final String expectedKeyId)
     throws Exception
   {
-    assertEquals(CertUtil.authorityKeyId(cert).toUpperCase(), expectedKeyId);
+    assertThat(CertUtil.authorityKeyId(cert).toUpperCase()).isEqualTo(expectedKeyId);
   }
 
 
@@ -422,7 +420,7 @@ public class CertUtilTest
   public void testReadCertificateChains(final String path, final int expectedCount)
     throws Exception
   {
-    assertEquals(CertUtil.readCertificateChain(path).length, expectedCount);
+    assertThat(CertUtil.readCertificateChain(path).length).isEqualTo(expectedCount);
   }
 
   @Test(dataProvider = "encode-cert-p7")
@@ -431,34 +429,34 @@ public class CertUtilTest
     final String actualEncodedCertString = CertUtil.encodeCert(certificate, CertUtil.EncodeType.PKCS7);
     final X509Certificate decodedCert = CertUtil.decodeCertificate(CertUtil.encodeCert(certificate,
       CertUtil.EncodeType.PKCS7).getBytes());
-    assertEquals(actualEncodedCertString, expectedEncodedCert);
-    assertEquals(certificate, decodedCert);
+    assertThat(actualEncodedCertString).isEqualTo(expectedEncodedCert);
+    assertThat(certificate).isEqualTo(decodedCert);
   }
 
   @Test(dataProvider = "encode-cert-x509")
   public void certEncodedAsX509(final X509Certificate certificate, final String x509Cert)
   {
     final String encodedCert = CertUtil.encodeCert(certificate, CertUtil.EncodeType.X509);
-    assertEquals(encodedCert, x509Cert);
+    assertThat(encodedCert).isEqualTo(x509Cert);
   }
 
   @Test(dataProvider = "encode-cert-der")
   public void certEncodedAsDER(final X509Certificate certificate, final byte[] derCert)
   {
     final byte[] encodedCert = CertUtil.encodeCert(certificate, CertUtil.EncodeType.DER);
-    assertEquals(encodedCert, derCert);
+    assertThat(encodedCert).isEqualTo(derCert);
   }
 
   @Test(dataProvider = "subject-dn")
   public void testSubjectDN(final X509Certificate certificate, final String expectedResponse)
   {
-    assertEquals(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.RFC2253), expectedResponse);
+    assertThat(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.RFC2253)).isEqualTo(expectedResponse);
   }
 
   @Test(dataProvider = "subject-dn-spaces")
   public void testSubjectDNWithSpaces(final X509Certificate certificate, final String expectedResponse)
   {
-    assertEquals(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.READABLE), expectedResponse);
+    assertThat(CertUtil.subjectDN(certificate, CertUtil.X500PrincipalFormat.READABLE)).isEqualTo(expectedResponse);
   }
 
   @Test
@@ -475,8 +473,10 @@ public class CertUtilTest
     final X509Certificate x509Certificate = CertUtil.generateX509Certificate(keyPair, dn,
       Date.from(expectedNotBefore), Date.from(expectedNotAfter), "SHA256WithRSA");
 
-    assertEquals(truncateToSeconds(expectedNotBefore), truncateToSeconds(x509Certificate.getNotBefore().toInstant()));
-    assertEquals(truncateToSeconds(expectedNotAfter), truncateToSeconds(x509Certificate.getNotAfter().toInstant()));
+    assertThat(truncateToSeconds(x509Certificate.getNotBefore().toInstant()))
+      .isEqualTo(truncateToSeconds(expectedNotBefore));
+    assertThat(truncateToSeconds(x509Certificate.getNotAfter().toInstant()))
+      .isEqualTo(truncateToSeconds(expectedNotAfter));
   }
 
   @Test(expectedExceptions = RuntimeException.class,

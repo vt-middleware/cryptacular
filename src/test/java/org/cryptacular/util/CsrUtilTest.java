@@ -10,7 +10,7 @@ import org.bouncycastle.asn1.pkcs.CertificationRequest;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Test class for {@link CsrUtil}.
@@ -84,17 +84,17 @@ public class CsrUtilTest
     final CertificationRequest csr1 = CsrUtil.readCsr(getClass().getResourceAsStream(classPath));
     final String encoded = CsrUtil.encodeCsr(new PKCS10CertificationRequest(csr1));
     final CertificationRequest csr2 = CsrUtil.decodeCsr(encoded);
-    assertEquals(csr1.getEncoded(), csr2.getEncoded());
+    assertThat(csr1.getEncoded()).isEqualTo(csr2.getEncoded());
   }
 
   @Test(dataProvider = "names")
   public void testNames(final String classPath, final String... names)
   {
     final CertificationRequest csr = CsrUtil.readCsr(getClass().getResourceAsStream(classPath));
-    assertEquals(CsrUtil.commonNames(csr).get(0), names[0]);
+    assertThat(CsrUtil.commonNames(csr).get(0)).isEqualTo(names[0]);
     final List<String> sans = CsrUtil.subjectAltNames(csr);
     for (int i = 1; i < names.length; i++) {
-      assertEquals(sans.get(i - 1), names[i]);
+      assertThat(sans.get(i - 1)).isEqualTo(names[i]);
     }
   }
 
@@ -102,14 +102,14 @@ public class CsrUtilTest
   public void testKeyLength(final String classPath, final int length)
   {
     final CertificationRequest csr = CsrUtil.readCsr(getClass().getResourceAsStream(classPath));
-    assertEquals(CsrUtil.keyLength(csr), length);
+    assertThat(CsrUtil.keyLength(csr)).isEqualTo(length);
   }
 
   @Test(dataProvider = "sig-alg-names")
   public void testSigAlgName(final String classPath, final String sigAlgName)
   {
     final CertificationRequest csr = CsrUtil.readCsr(getClass().getResourceAsStream(classPath));
-    assertEquals(CsrUtil.sigAlgName(csr), sigAlgName);
+    assertThat(CsrUtil.sigAlgName(csr)).isEqualTo(sigAlgName);
   }
 
   @Test(dataProvider = "key-algs")
@@ -120,7 +120,7 @@ public class CsrUtilTest
     final String dn = "CN=" + hostname + ",DC=example,DC=org";
     final String[] sans = {"dev." + hostname, "pprd." + hostname};
     final CertificationRequest csr = CsrUtil.generateCsr(keyPair, dn, sans).toASN1Structure();
-    assertEquals(CsrUtil.commonNames(csr).get(0), hostname);
-    assertEquals(CsrUtil.subjectAltNames(csr), Arrays.asList(sans));
+    assertThat(CsrUtil.commonNames(csr).get(0)).isEqualTo(hostname);
+    assertThat(CsrUtil.subjectAltNames(csr)).isEqualTo(Arrays.asList(sans));
   }
 }

@@ -28,7 +28,7 @@ import org.cryptacular.io.FileResource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link CipherUtil} class.
@@ -130,7 +130,7 @@ public class CipherUtilTest
     final SecretKey key = SecretKeyGenerator.generate(cipher);
     final byte[] ciphertext = CipherUtil.encrypt(cipher, key, nonce, plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
-    assertEquals(new String(result), plaintext);
+    assertThat(new String(result)).isEqualTo(plaintext);
   }
 
 
@@ -141,7 +141,7 @@ public class CipherUtilTest
     final SecretKey key = SecretKeyGenerator.generate(under);
     final byte[] ciphertext = CipherUtil.encrypt(cipher, key, new RBGNonce(12), plaintext.getBytes());
     final byte[] result = CipherUtil.decrypt(cipher, key, ciphertext);
-    assertEquals(new String(result), plaintext);
+    assertThat(new String(result)).isEqualTo(plaintext);
   }
 
 
@@ -160,7 +160,7 @@ public class CipherUtilTest
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);
-    assertEquals(actual.toString(), expected);
+    assertThat(actual.toString()).isEqualTo(expected);
   }
 
 
@@ -178,7 +178,7 @@ public class CipherUtilTest
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream actual = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, key, tempIn, actual);
-    assertEquals(actual.toString(), expected);
+    assertThat(actual.toString()).isEqualTo(expected);
   }
 
 
@@ -191,7 +191,7 @@ public class CipherUtilTest
       "0000001f0000000c76746d770002ba17043672d900000007767463727970745a38dee735266e3f5f7aafec8d1c9ed8a0830a2ff9" +
         "c3a46c25f89e69b6eb39dbb82fd13da50e32b2544a73f1a4476677b377e6";
     final byte[] plaintext = CipherUtil.decrypt(cipher, STATIC_KEY, CodecUtil.hex(v1CiphertextHex));
-    assertEquals(ByteUtil.toString(plaintext), expected);
+    assertThat(ByteUtil.toString(plaintext)).isEqualTo(expected);
   }
 
 
@@ -206,6 +206,6 @@ public class CipherUtilTest
     final ByteArrayInputStream in = new ByteArrayInputStream(CodecUtil.hex(v1CiphertextHex));
     final ByteArrayOutputStream out = new ByteArrayOutputStream();
     CipherUtil.decrypt(cipher, STATIC_KEY, in, out);
-    assertEquals(ByteUtil.toString(out.toByteArray()), expected);
+    assertThat(ByteUtil.toString(out.toByteArray())).isEqualTo(expected);
   }
 }

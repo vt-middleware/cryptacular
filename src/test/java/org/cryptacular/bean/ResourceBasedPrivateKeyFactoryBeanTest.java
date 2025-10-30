@@ -9,7 +9,7 @@ import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link ResourceBasedPrivateKeyFactoryBean}.
@@ -55,6 +55,6 @@ public class ResourceBasedPrivateKeyFactoryBeanTest
   {
     final Resource resource = new FileResource(new File(path));
     final ResourceBasedPrivateKeyFactoryBean factory = new ResourceBasedPrivateKeyFactoryBean(resource, password);
-    assertTrue(factory.newInstance() instanceof PrivateKey);
+    assertThat(factory.newInstance()).isInstanceOf(PrivateKey.class);
   }
 }

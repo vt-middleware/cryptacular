@@ -7,7 +7,7 @@ import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link SimpleHashBean}.
@@ -48,6 +48,6 @@ public class SimpleHashBeanTest
     throws Exception
   {
     final SimpleHashBean bean = new SimpleHashBean(digest, iterations);
-    assertEquals(CodecUtil.b64(bean.hash(input)), expectedBase64);
+    assertThat(CodecUtil.b64(bean.hash(input))).isEqualTo(expectedBase64);
   }
 }

@@ -6,7 +6,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.cryptacular.generator.sp80038a.RBGNonce;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link CiphertextHeader}.
@@ -33,11 +33,11 @@ public class CiphertextHeaderTest
     Arrays.fill(nonce, (byte) 7);
     final CiphertextHeader expected = new CiphertextHeader(nonce, "aleph", this::getKey);
     final byte[] encoded = expected.encode();
-    assertEquals(expected.getLength(), encoded.length);
+    assertThat(encoded.length).isEqualTo(expected.getLength());
     final CiphertextHeader actual = CiphertextHeader.decode(encoded, this::getKey);
-    assertEquals(expected.getNonce(), actual.getNonce());
-    assertEquals(expected.getKeyName(), actual.getKeyName());
-    assertEquals(expected.getLength(), actual.getLength());
+    assertThat(actual.getNonce()).isEqualTo(expected.getNonce());
+    assertThat(actual.getKeyName()).isEqualTo(expected.getKeyName());
+    assertThat(actual.getLength()).isEqualTo(expected.getLength());
   }
 
   @Test(

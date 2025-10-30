@@ -5,7 +5,7 @@ import org.cryptacular.FailListener;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /** @author  Middleware Services */
 @Listeners(FailListener.class)
@@ -41,7 +41,7 @@ public class ByteUtilTest
   {
     final byte[] bytes = new byte[4];
     ByteUtil.toBytes(value, bytes, 0);
-    assertEquals(ByteUtil.toInt(bytes), value);
+    assertThat(ByteUtil.toInt(bytes)).isEqualTo(value);
   }
 
   @Test(dataProvider = "longs")
@@ -50,6 +50,6 @@ public class ByteUtilTest
   {
     final byte[] bytes = new byte[8];
     ByteUtil.toBytes(value, bytes, 0);
-    assertEquals(ByteUtil.toLong(bytes), value);
+    assertThat(ByteUtil.toLong(bytes)).isEqualTo(value);
   }
 }

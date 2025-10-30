@@ -8,7 +8,7 @@ import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link ResourceBasedSecretKeyFactoryBean}.
@@ -38,6 +38,6 @@ public class ResourceBasedSecretKeyFactoryBeanTest
     throws Exception
   {
     final ResourceBasedSecretKeyFactoryBean factory = new ResourceBasedSecretKeyFactoryBean(resource, algorithm);
-    assertEquals(factory.newInstance().getEncoded().length, expectedSize);
+    assertThat(factory.newInstance().getEncoded().length).isEqualTo(expectedSize);
   }
 }

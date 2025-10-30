@@ -8,7 +8,7 @@ import org.cryptacular.util.ByteUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link HexEncoder} class.
@@ -69,6 +69,6 @@ public class HexEncoderTest
     final CharBuffer output = CharBuffer.allocate(encoder.outputSize(data.length));
     encoder.encode(ByteBuffer.wrap(data), output);
     encoder.finalize(output);
-    assertEquals(output.flip().toString(), expected);
+    assertThat(output.flip().toString()).isEqualTo(expected);
   }
 }

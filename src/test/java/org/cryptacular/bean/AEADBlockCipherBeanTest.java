@@ -15,7 +15,7 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link AEADBlockCipherBean}.
@@ -81,7 +81,7 @@ public class AEADBlockCipherBeanTest
   {
     final AEADBlockCipherBean cipherBean = newCipherBean(AEADBlockCipherSpec.parse(cipherSpecString));
     final byte[] ciphertext = cipherBean.encrypt(ByteUtil.toBytes(input));
-    assertEquals(ByteUtil.toString(cipherBean.decrypt(ciphertext)), input);
+    assertThat(ByteUtil.toString(cipherBean.decrypt(ciphertext))).isEqualTo(input);
   }
 
 
@@ -96,7 +96,7 @@ public class AEADBlockCipherBeanTest
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream finalOut = new ByteArrayOutputStream(8192);
     cipherBean.decrypt(tempIn, finalOut);
-    assertEquals(ByteUtil.toString(finalOut.toByteArray()), ByteUtil.toString(StreamUtil.readAll(path)));
+    assertThat(ByteUtil.toString(finalOut.toByteArray())).isEqualTo(ByteUtil.toString(StreamUtil.readAll(path)));
   }
 
 
@@ -109,7 +109,7 @@ public class AEADBlockCipherBeanTest
         "0000001f0000000c76746d770002ba17043672d900000007767463727970745a38dee735266e3f5f7aafec8d1c9ed8a0830a2ff9" +
         "c3a46c25f89e69b6eb39dbb82fd13da50e32b2544a73f1a4476677b377e6";
     final byte[] plaintext = cipherBean.decrypt(CodecUtil.hex(v1CiphertextHex));
-    assertEquals(expected, ByteUtil.toString(plaintext));
+    assertThat(expected).isEqualTo(ByteUtil.toString(plaintext));
   }
 
 
@@ -124,7 +124,7 @@ public class AEADBlockCipherBeanTest
     final ByteArrayInputStream in = new ByteArrayInputStream(CodecUtil.hex(v1CiphertextHex));
     final ByteArrayOutputStream out = new ByteArrayOutputStream();
     cipherBean.decrypt(in, out);
-    assertEquals(expected, ByteUtil.toString(out.toByteArray()));
+    assertThat(expected).isEqualTo(ByteUtil.toString(out.toByteArray()));
   }
 
 

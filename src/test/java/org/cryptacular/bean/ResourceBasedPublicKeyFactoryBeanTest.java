@@ -8,7 +8,7 @@ import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link ResourceBasedPublicKeyFactoryBean}.
@@ -37,6 +37,6 @@ public class ResourceBasedPublicKeyFactoryBeanTest
   {
     final Resource resource = new ClassPathResource(path);
     final ResourceBasedPublicKeyFactoryBean factory = new ResourceBasedPublicKeyFactoryBean(resource);
-    assertTrue(factory.newInstance() instanceof PublicKey);
+    assertThat(factory.newInstance()).isInstanceOf(PublicKey.class);
   }
 }

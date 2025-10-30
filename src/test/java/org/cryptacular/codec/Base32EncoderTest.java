@@ -8,7 +8,7 @@ import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link Base64Encoder}.
@@ -65,7 +65,6 @@ public class Base32EncoderTest
     final CharBuffer output = CharBuffer.allocate(encoder.outputSize(input.limit()));
     encoder.encode(input, output);
     encoder.finalize(output);
-    assertEquals(output.flip().toString(), expected);
+    assertThat(output.flip().toString()).isEqualTo(expected);
   }
-
 }

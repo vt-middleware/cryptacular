@@ -10,7 +10,7 @@ import org.cryptacular.io.FileResource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link KeyStoreBasedKeyFactoryBean}.
@@ -61,11 +61,11 @@ public class KeyStoreBasedKeyFactoryBeanTest
       keyStoreFactory.newInstance(), alias, "vtcrypt");
 
     final Key key = secretKeyFactory.newInstance();
-    assertEquals(key.getAlgorithm(), expectedAlg);
+    assertThat(key.getAlgorithm()).isEqualTo(expectedAlg);
     if (key instanceof SecretKey) {
-      assertEquals(key.getEncoded().length, expectedSize);
+      assertThat(key.getEncoded().length).isEqualTo(expectedSize);
     } else if (key instanceof RSAPrivateKey) {
-      assertEquals(((RSAPrivateKey) key).getModulus().bitLength(), expectedSize);
+      assertThat(((RSAPrivateKey) key).getModulus().bitLength()).isEqualTo(expectedSize);
     }
   }
 }

@@ -7,7 +7,7 @@ import org.cryptacular.util.CertUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link LdapNameFormatter} class.
@@ -78,6 +78,6 @@ public class LdapNameFormatterTest
   public void testFormat(final X500Principal dn, final String expected)
     throws Exception
   {
-    assertEquals(new LdapNameFormatter().format(dn), expected);
+    assertThat(new LdapNameFormatter().format(dn)).isEqualTo(expected);
   }
 }

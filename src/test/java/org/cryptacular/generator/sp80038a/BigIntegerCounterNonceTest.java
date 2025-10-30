@@ -7,7 +7,7 @@ import org.cryptacular.util.ByteUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link BigIntegerCounterNonce}.
@@ -34,7 +34,7 @@ public class BigIntegerCounterNonceTest
       new BigInteger(ByteUtil.toBytes(start)),
       expectedLength);
     final byte[] value = nonce.generate();
-    assertEquals(value.length, expectedLength);
-    assertEquals(new BigInteger(value), new BigInteger(ByteUtil.toBytes(start + 1)));
+    assertThat(value.length).isEqualTo(expectedLength);
+    assertThat(new BigInteger(value)).isEqualTo(new BigInteger(ByteUtil.toBytes(start + 1)));
   }
 }

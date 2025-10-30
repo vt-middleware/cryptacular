@@ -13,7 +13,7 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Test for {@link AbstractWrappedKey} classes.
@@ -58,8 +58,8 @@ public class WrappedKeyTest
 
     final KeyPair jcePair = readJCEKeyPair(algorithm, bcPubKeyPath, bcPrivKeyPath);
 
-    assertTrue(KeyPairUtil.isKeyPair(wrappedPair.getPublic(), jcePair.getPrivate()));
-    assertTrue(KeyPairUtil.isKeyPair(jcePair.getPublic(), wrappedPair.getPrivate()));
+    assertThat(KeyPairUtil.isKeyPair(wrappedPair.getPublic(), jcePair.getPrivate())).isTrue();
+    assertThat(KeyPairUtil.isKeyPair(jcePair.getPublic(), wrappedPair.getPrivate())).isTrue();
   }
 
 

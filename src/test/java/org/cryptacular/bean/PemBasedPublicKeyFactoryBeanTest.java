@@ -9,7 +9,7 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link PemBasedPublicKeyFactoryBean}.
@@ -38,6 +38,6 @@ public class PemBasedPublicKeyFactoryBeanTest
   {
     final String pem = ByteUtil.toString(StreamUtil.readAll(new File(path)));
     final PemBasedPublicKeyFactoryBean factory = new PemBasedPublicKeyFactoryBean(pem);
-    assertTrue(factory.newInstance() instanceof PublicKey);
+    assertThat(factory.newInstance()).isInstanceOf(PublicKey.class);
   }
 }

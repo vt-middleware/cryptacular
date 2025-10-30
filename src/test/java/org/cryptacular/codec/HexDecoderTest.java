@@ -8,7 +8,7 @@ import org.cryptacular.util.ByteUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link HexDecoder} class.
@@ -67,6 +67,6 @@ public class HexDecoderTest
     decoder.decode(CharBuffer.wrap(encoded), output);
     decoder.finalize(output);
     output.flip();
-    assertEquals(ByteUtil.toString(output), expected);
+    assertThat(ByteUtil.toString(output)).isEqualTo(expected);
   }
 }

@@ -19,9 +19,7 @@ import org.cryptacular.generator.KeyPairGenerator;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link KeyPairUtil} class.
@@ -325,21 +323,21 @@ public class KeyPairUtilTest
   public void testLengthPublicKey(final PublicKey key, final int expectedLength)
     throws Exception
   {
-    assertEquals(KeyPairUtil.length(key), expectedLength);
+    assertThat(KeyPairUtil.length(key)).isEqualTo(expectedLength);
   }
 
   @Test(dataProvider = "private-keys")
   public void testLengthPrivateKey(final PrivateKey key, final int expectedLength)
     throws Exception
   {
-    assertEquals(KeyPairUtil.length(key), expectedLength);
+    assertThat(KeyPairUtil.length(key)).isEqualTo(expectedLength);
   }
 
   @Test(dataProvider = "key-pairs")
   public void testIsKeyPair(final PublicKey pubKey, final PrivateKey privKey, final boolean expected)
     throws Exception
   {
-    assertEquals(KeyPairUtil.isKeyPair(pubKey, privKey), expected);
+    assertThat(KeyPairUtil.isKeyPair(pubKey, privKey)).isEqualTo(expected);
   }
 
   @Test(dataProvider = "private-key-files")
@@ -347,8 +345,8 @@ public class KeyPairUtilTest
     throws Exception
   {
     final PrivateKey key = KeyPairUtil.readPrivateKey(path);
-    assertNotNull(key);
-    assertTrue(expectedType.isAssignableFrom(key.getClass()));
+    assertThat(key).isNotNull();
+    assertThat(expectedType.isAssignableFrom(key.getClass())).isTrue();
   }
 
   @Test(dataProvider = "encrypted-private-key-files")
@@ -356,8 +354,8 @@ public class KeyPairUtilTest
     throws Exception
   {
     final PrivateKey key = KeyPairUtil.readPrivateKey(path, password.toCharArray());
-    assertNotNull(key);
-    assertTrue(expectedType.isAssignableFrom(key.getClass()));
+    assertThat(key).isNotNull();
+    assertThat(expectedType.isAssignableFrom(key.getClass())).isTrue();
   }
 
   @Test(dataProvider = "public-key-files")
@@ -365,8 +363,8 @@ public class KeyPairUtilTest
     throws Exception
   {
     final PublicKey key = KeyPairUtil.readPublicKey(path);
-    assertNotNull(key);
-    assertTrue(expectedType.isAssignableFrom(key.getClass()));
+    assertThat(key).isNotNull();
+    assertThat(expectedType.isAssignableFrom(key.getClass())).isTrue();
   }
 
   @Test(dataProvider = "private-key-files")
@@ -375,8 +373,8 @@ public class KeyPairUtilTest
   {
     final TestableFileInputStream is = new TestableFileInputStream(path);
     final PrivateKey key = KeyPairUtil.readPrivateKey(is);
-    assertNotNull(key);
-    assertTrue(is.isClosed());
+    assertThat(key).isNotNull();
+    assertThat(is.isClosed()).isTrue();
   }
 
   @Test(dataProvider = "public-key-files")
@@ -385,8 +383,8 @@ public class KeyPairUtilTest
   {
     final TestableFileInputStream is = new TestableFileInputStream(path);
     final PublicKey key = KeyPairUtil.readPublicKey(is);
-    assertNotNull(key);
-    assertTrue(is.isClosed());
+    assertThat(key).isNotNull();
+    assertThat(is.isClosed()).isTrue();
   }
 
 

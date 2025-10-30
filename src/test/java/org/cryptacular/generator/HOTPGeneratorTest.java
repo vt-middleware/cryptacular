@@ -6,7 +6,7 @@ import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link HOTPGenerator}.
@@ -40,6 +40,6 @@ public class HOTPGeneratorTest
     throws Exception
   {
     final HOTPGenerator generator = new HOTPGenerator();
-    assertEquals(generator.generate(CodecUtil.hex(hexKey), count), expected);
+    assertThat(generator.generate(CodecUtil.hex(hexKey), count)).isEqualTo(expected);
   }
 }

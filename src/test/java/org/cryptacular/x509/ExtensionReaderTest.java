@@ -22,7 +22,7 @@ import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link ExtensionReader}.
@@ -233,9 +233,9 @@ public class ExtensionReaderTest
     throws Exception
   {
     final GeneralNames names = new ExtensionReader(cert).readSubjectAlternativeName();
-    assertEquals(names.getNames().length, expected.length);
+    assertThat(names.getNames().length).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(names.getNames()[i].getName().toString(), expected[i]);
+      assertThat(names.getNames()[i].getName().toString()).isEqualTo(expected[i]);
     }
   }
 
@@ -244,9 +244,9 @@ public class ExtensionReaderTest
     throws Exception
   {
     final GeneralNames names = new ExtensionReader(cert).readIssuerAlternativeName();
-    assertEquals(names.getNames().length, expected.length);
+    assertThat(names.getNames().length).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(names.getNames()[i].getName().toString(), expected[i]);
+      assertThat(names.getNames()[i].getName().toString()).isEqualTo(expected[i]);
     }
   }
 
@@ -254,7 +254,7 @@ public class ExtensionReaderTest
   public void testReadBasicConstraints(final X509Certificate cert, final boolean expected)
     throws Exception
   {
-    assertEquals(new ExtensionReader(cert).readBasicConstraints().isCA(), expected);
+    assertThat(new ExtensionReader(cert).readBasicConstraints().isCA()).isEqualTo(expected);
   }
 
   @Test(dataProvider = "certificate-policies")
@@ -262,15 +262,16 @@ public class ExtensionReaderTest
     throws Exception
   {
     final List<PolicyInformation> policies = new ExtensionReader(cert).readCertificatePolicies();
-    assertEquals(policies.size(), expected.length);
+    assertThat(policies.size()).isEqualTo(expected.length);
 
     PolicyInformation current;
     for (int i = 0; i < expected.length; i++) {
       current = policies.get(i);
-      assertEquals(current.getPolicyIdentifier(), expected[i].getPolicyIdentifier());
+      assertThat(current.getPolicyIdentifier()).isEqualTo(expected[i].getPolicyIdentifier());
       if (expected[i].getPolicyQualifiers() != null) {
         for (int j = 0; j < expected[i].getPolicyQualifiers().size(); j++) {
-          assertEquals(current.getPolicyQualifiers().getObjectAt(j), expected[i].getPolicyQualifiers().getObjectAt(j));
+          assertThat(current.getPolicyQualifiers().getObjectAt(j))
+            .isEqualTo(expected[i].getPolicyQualifiers().getObjectAt(j));
         }
       }
     }
@@ -281,7 +282,7 @@ public class ExtensionReaderTest
     throws Exception
   {
     final SubjectKeyIdentifier keyId = new ExtensionReader(cert).readSubjectKeyIdentifier();
-    assertEquals(CodecUtil.hex(keyId.getKeyIdentifier(), true).toUpperCase(), expected);
+    assertThat(CodecUtil.hex(keyId.getKeyIdentifier(), true).toUpperCase()).isEqualTo(expected);
   }
 
   @Test(dataProvider = "authority-key-id")
@@ -289,7 +290,7 @@ public class ExtensionReaderTest
     throws Exception
   {
     final AuthorityKeyIdentifier keyId = new ExtensionReader(cert).readAuthorityKeyIdentifier();
-    assertEquals(CodecUtil.hex(keyId.getKeyIdentifierOctets(), true).toUpperCase(), expected);
+    assertThat(CodecUtil.hex(keyId.getKeyIdentifierOctets(), true).toUpperCase()).isEqualTo(expected);
   }
 
   @Test(dataProvider = "key-usage")
@@ -304,7 +305,7 @@ public class ExtensionReaderTest
     } else {
       result = (bytes[1] & 0xff) << 8 | (bytes[0] & 0xff);
     }
-    assertEquals(result, expected);
+    assertThat(result).isEqualTo(expected);
   }
 
   @Test(dataProvider = "extended-key-usage")
@@ -312,9 +313,9 @@ public class ExtensionReaderTest
     throws Exception
   {
     final List<KeyPurposeId> purposes = new ExtensionReader(cert).readExtendedKeyUsage();
-    assertEquals(purposes.size(), expected.length);
+    assertThat(purposes.size()).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(purposes.get(i), expected[i]);
+      assertThat(purposes.get(i)).isEqualTo(expected[i]);
     }
   }
 
@@ -323,9 +324,9 @@ public class ExtensionReaderTest
     throws Exception
   {
     final List<DistributionPoint> points = new ExtensionReader(cert).readCRLDistributionPoints();
-    assertEquals(points.size(), expected.length);
+    assertThat(points.size()).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(points.get(i), expected[i]);
+      assertThat(points.get(i)).isEqualTo(expected[i]);
     }
   }
 
@@ -334,9 +335,9 @@ public class ExtensionReaderTest
     throws Exception
   {
     final List<AccessDescription> descriptions = new ExtensionReader(cert).readAuthorityInformationAccess();
-    assertEquals(descriptions.size(), expected.length);
+    assertThat(descriptions.size()).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals(descriptions.get(i), expected[i]);
+      assertThat(descriptions.get(i)).isEqualTo(expected[i]);
     }
   }
 

@@ -3,8 +3,7 @@ package org.cryptacular.bean;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link BCryptHashBean} class.
@@ -30,12 +29,12 @@ public class BCryptHashBeanTest
   {
     final BCryptHashBean.BCryptParameters params = new BCryptHashBean.BCryptParameters(expected);
     final String hash = new BCryptHashBean(params.getCost()).hash(params.getSalt(), password);
-    assertEquals(params.encode(hash), expected);
+    assertThat(params.encode(hash)).isEqualTo(expected);
   }
 
   @Test(dataProvider = "hashes")
   public void testCompare(final String password, final String expected)
   {
-    assertTrue(new BCryptHashBean(10).compare(expected, password));
+    assertThat(new BCryptHashBean(10).compare(expected, password)).isTrue();
   }
 }

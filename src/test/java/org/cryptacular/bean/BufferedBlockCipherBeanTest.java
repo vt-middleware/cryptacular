@@ -18,7 +18,7 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link BufferedBlockCipherBean}.
@@ -98,7 +98,7 @@ public class BufferedBlockCipherBeanTest
       cipherSpec, getTestKeyStore(), "vtcrypt", "vtcrypt", nonce);
 
     final byte[] ciphertext = cipherBean.encrypt(ByteUtil.toBytes(input));
-    assertEquals(ByteUtil.toString(cipherBean.decrypt(ciphertext)), input);
+    assertThat(ByteUtil.toString(cipherBean.decrypt(ciphertext))).isEqualTo(input);
   }
 
 
@@ -116,7 +116,7 @@ public class BufferedBlockCipherBeanTest
     final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
     final ByteArrayOutputStream finalOut = new ByteArrayOutputStream(8192);
     cipherBean.decrypt(tempIn, finalOut);
-    assertEquals(ByteUtil.toString(finalOut.toByteArray()), ByteUtil.toString(StreamUtil.readAll(path)));
+    assertThat(ByteUtil.toString(finalOut.toByteArray())).isEqualTo(ByteUtil.toString(StreamUtil.readAll(path)));
   }
 
   private static KeyStore getTestKeyStore()

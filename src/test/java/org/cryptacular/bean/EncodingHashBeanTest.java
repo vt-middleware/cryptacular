@@ -9,8 +9,7 @@ import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link EncodingHashBean}.
@@ -85,7 +84,7 @@ public class EncodingHashBeanTest
   public void testHash(final EncodingHashBean bean, final Object[] input, final String expected)
     throws Exception
   {
-    assertEquals(bean.hash(input), expected);
+    assertThat(bean.hash(input)).isEqualTo(expected);
   }
 
 
@@ -93,6 +92,6 @@ public class EncodingHashBeanTest
   public void testCompare(final EncodingHashBean bean, final String hash, final Object[] input)
     throws Exception
   {
-    assertTrue(bean.compare(hash, input));
+    assertThat(bean.compare(hash, input)).isTrue();
   }
 }

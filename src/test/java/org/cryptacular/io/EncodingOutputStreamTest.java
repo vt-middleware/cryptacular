@@ -10,7 +10,7 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link EncodingOutputStream} class.
@@ -48,6 +48,6 @@ public class EncodingOutputStreamTest
     } finally {
       StreamUtil.closeStream(output);
     }
-    assertEquals(ByteUtil.toString(bufOut.toByteArray()), expected);
+    assertThat(ByteUtil.toString(bufOut.toByteArray())).isEqualTo(expected);
   }
 }

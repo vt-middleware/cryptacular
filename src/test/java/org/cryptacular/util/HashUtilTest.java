@@ -12,8 +12,7 @@ import org.cryptacular.SaltedHash;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link HashUtil}.
@@ -114,7 +113,7 @@ public class HashUtilTest
   public void testSaltedHash(final Digest digest, final Object[] data, final int iterations, final String expected)
     throws Exception
   {
-    assertEquals(CodecUtil.b64(HashUtil.hash(digest, iterations, data)), expected);
+    assertThat(CodecUtil.b64(HashUtil.hash(digest, iterations, data))).isEqualTo(expected);
   }
 
 
@@ -122,7 +121,7 @@ public class HashUtilTest
   public void testCompareHash(final Digest digest, final byte[] hash, final int iterations, final byte[] data)
     throws Exception
   {
-    assertTrue(HashUtil.compareHash(digest, hash, iterations, data));
+    assertThat(HashUtil.compareHash(digest, hash, iterations, data)).isTrue();
   }
 
 
@@ -135,7 +134,7 @@ public class HashUtilTest
     final byte[] data)
     throws Exception
   {
-    assertTrue(HashUtil.compareHash(digest, saltedHash, iterations, saltAfterData, data));
+    assertThat(HashUtil.compareHash(digest, saltedHash, iterations, saltAfterData, data)).isTrue();
   }
 
 
@@ -144,7 +143,7 @@ public class HashUtilTest
     throws Exception
   {
     try (InputStream in = StreamUtil.makeStream(new File(path))) {
-      assertEquals(Hex.toHexString(HashUtil.sha1(in)), expected);
+      assertThat(Hex.toHexString(HashUtil.sha1(in))).isEqualTo(expected);
     }
   }
 }

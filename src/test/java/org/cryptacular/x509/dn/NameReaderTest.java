@@ -7,7 +7,7 @@ import org.cryptacular.util.CertUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link NameReader}.
@@ -84,7 +84,7 @@ public class NameReaderTest
     throws Exception
   {
     final RDNSequence sequence = new NameReader(cert).readSubject();
-    assertEquals(sequence.toString(), expected);
+    assertThat(sequence.toString()).isEqualTo(expected);
   }
 
   @Test(dataProvider = "issuers")
@@ -92,6 +92,6 @@ public class NameReaderTest
     throws Exception
   {
     final RDNSequence sequence = new NameReader(cert).readIssuer();
-    assertEquals(sequence.toString(), expected);
+    assertThat(sequence.toString()).isEqualTo(expected);
   }
 }

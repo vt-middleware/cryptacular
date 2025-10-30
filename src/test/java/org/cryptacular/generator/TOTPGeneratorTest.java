@@ -8,8 +8,7 @@ import org.cryptacular.spec.DigestSpec;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link HOTPGenerator}.
@@ -62,7 +61,7 @@ public class TOTPGeneratorTest
   {
     final TOTPGenerator generator = new TOTPGenerator(digestSpec, otpSize);
     generator.setCurrentTime(currentTime);
-    assertEquals(generator.generate(asciiKey.getBytes(StandardCharsets.US_ASCII)), expected);
+    assertThat(generator.generate(asciiKey.getBytes(StandardCharsets.US_ASCII))).isEqualTo(expected);
   }
 
   /** Ensure the system time is used by default. */
@@ -73,6 +72,6 @@ public class TOTPGeneratorTest
     final Instant t1 = generator.currentTime();
     Thread.sleep(1001);
     final Instant t2 = generator.currentTime();
-    assertTrue(t2.isAfter(t1));
+    assertThat(t2.isAfter(t1)).isTrue();
   }
 }

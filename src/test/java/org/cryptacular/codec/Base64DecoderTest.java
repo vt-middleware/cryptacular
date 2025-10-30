@@ -13,7 +13,7 @@ import org.cryptacular.util.StreamUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link Base64Decoder} class.
@@ -84,7 +84,7 @@ public class Base64DecoderTest
     decoder.decode(input, output);
     decoder.finalize(output);
     output.flip();
-    assertEquals(ByteUtil.toArray(output), expected);
+    assertThat(ByteUtil.toArray(output)).isEqualTo(expected);
   }
 
 
@@ -114,6 +114,6 @@ public class Base64DecoderTest
     } finally {
       StreamUtil.closeReader(reader);
     }
-    assertEquals(actual.toString(), expected);
+    assertThat(actual.toString()).isEqualTo(expected);
   }
 }

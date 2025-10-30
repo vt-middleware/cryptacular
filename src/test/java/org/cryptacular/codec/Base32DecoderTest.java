@@ -9,7 +9,7 @@ import org.cryptacular.util.CodecUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link Base64Decoder}.
@@ -68,6 +68,6 @@ public class Base32DecoderTest
     decoder.decode(input, output);
     decoder.finalize(output);
     output.flip();
-    assertEquals(ByteUtil.toArray(output), expected);
+    assertThat(ByteUtil.toArray(output)).isEqualTo(expected);
   }
 }

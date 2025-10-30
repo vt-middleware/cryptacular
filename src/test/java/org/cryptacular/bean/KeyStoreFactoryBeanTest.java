@@ -8,7 +8,7 @@ import org.cryptacular.io.Resource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link KeyStoreFactoryBean}.
@@ -49,6 +49,6 @@ public class KeyStoreFactoryBeanTest
     throws Exception
   {
     final KeyStoreFactoryBean factory = new KeyStoreFactoryBean(resource, type, "vtcrypt");
-    assertEquals(factory.newInstance().size(), expectedSize);
+    assertThat(factory.newInstance().size()).isEqualTo(expectedSize);
   }
 }
