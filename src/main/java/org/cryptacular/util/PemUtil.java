@@ -1,14 +1,12 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.regex.Pattern;
 import org.cryptacular.CryptUtil;
 import org.cryptacular.codec.Base64Decoder;
-import org.cryptacular.io.pem.PemObject;
+import org.cryptacular.pem.Constants;
 
 /**
  * Utility class with helper methods for common PEM encoding operations.
@@ -18,52 +16,11 @@ import org.cryptacular.io.pem.PemObject;
 public final class PemUtil
 {
 
-  /**
-   * Line length.
-   *
-   * @deprecated Use {@link PemObject#RFC1421_MAX_LINE_LENGTH}.
-   */
-  @Deprecated
-  public static final int LINE_LENGTH = PemObject.RFC1421_MAX_LINE_LENGTH;
-
-  /**
-   * PEM encoding header start string.
-   *
-   * @deprecated Use {@link PemObject#RFC1421_ENCAPSULATION_BEGIN_MARKER}.
-   */
-  @Deprecated
-  public static final String HEADER_BEGIN = PemObject.RFC1421_ENCAPSULATION_BEGIN_MARKER;
-
-  /**
-   * PEM encoding footer start string.
-   *
-   * @deprecated Use {@link PemObject#RFC1421_ENCAPSULATION_END_MARKER}.
-   */
-  @Deprecated
-  public static final String FOOTER_END = PemObject.RFC1421_ENCAPSULATION_END_MARKER;
-
-  /**
-   * Procedure type tag for PEM-encoded private key in OpenSSL format.
-   *
-   * @deprecated Use {@link PemObject#RFC1421_HEADER_FIELD_PROC_TYPE}.
-   */
-  @Deprecated
-  public static final String PROC_TYPE = PemObject.RFC1421_HEADER_FIELD_PROC_TYPE;
-
-  /**
-   * Decryption info tag for PEM-encoded private key in OpenSSL format.
-   *
-   * @deprecated Use {@link PemObject#RFC1421_HEADER_FIELD_DEK_INFO}.
-   */
-  @Deprecated
-  public static final String DEK_INFO = PemObject.RFC1421_HEADER_FIELD_DEK_INFO;
-
   /** Pattern used to split multiple PEM-encoded objects in a single file. */
   private static final Pattern PEM_SPLITTER = Pattern.compile("-----(?:BEGIN|END) [A-Z ]+-----");
 
   /** Pattern used to a file by line terminator. */
   private static final Pattern LINE_SPLITTER = Pattern.compile("[\r\n]+");
-
 
 
   /** Private constructor of utility class. */
@@ -81,17 +38,20 @@ public final class PemUtil
   public static boolean isPem(final byte[] data)
   {
     CryptUtil.assertNotNullArgOr(
-      data, v -> v.length < LINE_LENGTH, "Data must be at least " + LINE_LENGTH + " bytes long");
+      data,
+      v -> v.length < Constants.RFC1421_MAX_LINE_LENGTH,
+      "Data must be at least " + Constants.RFC1421_MAX_LINE_LENGTH + " bytes long");
     final String start = new String(data, 0, 10, ByteUtil.ASCII_CHARSET).trim();
-    if (!start.startsWith(PemObject.RFC1421_ENCAPSULATION_BEGIN_MARKER) &&
-            !start.startsWith(PemObject.RFC4716_ENCAPSULATION_BEGIN_MARKER) &&
-            !start.startsWith(PemObject.RFC1421_HEADER_FIELD_PROC_TYPE)) {
+    if (!start.startsWith(Constants.RFC1421_ENCAPSULATION_BEGIN_MARKER) &&
+        !start.startsWith(Constants.RFC4716_ENCAPSULATION_BEGIN_MARKER) &&
+        !start.startsWith(Constants.RFC1421_HEADER_FIELD_PROC_TYPE))
+    {
       // Check all bytes in first line to make sure they are in the range
       // of base64 character set encoding
-      for (int i = 0; i < PemObject.RFC7468_MAX_LINE_LENGTH; i++) {
+      for (int i = 0; i < Constants.RFC7468_MAX_LINE_LENGTH; i++) {
         if (!isBase64Char(data[i])) {
           // Last two bytes may be padding character '=' (61)
-          if (i > PemObject.RFC7468_MAX_LINE_LENGTH - 3) {
+          if (i > Constants.RFC7468_MAX_LINE_LENGTH - 3) {
             if (data[i] != 61) {
               return false;
             }
@@ -153,8 +113,9 @@ public final class PemUtil
     for (String object : PEM_SPLITTER.split(pem)) {
       buffer.clear();
       for (String line : LINE_SPLITTER.split(object)) {
-        if (line.startsWith(PemObject.RFC1421_HEADER_FIELD_DEK_INFO) ||
-                line.startsWith(PemObject.RFC1421_HEADER_FIELD_PROC_TYPE)) {
+        if (line.startsWith(Constants.RFC1421_HEADER_FIELD_DEK_INFO) ||
+            line.startsWith(Constants.RFC1421_HEADER_FIELD_PROC_TYPE))
+        {
           continue;
         }
         buffer.append(line);
@@ -165,22 +126,5 @@ public final class PemUtil
     }
     output.flip();
     return ByteUtil.toArray(output);
-  }
-
-
-  /**
-   * Reads the contents of a {@link BufferedReader} pointing to PEM data.
-   *
-   * @param  reader {@link BufferedReader} reader that contains the data to parse
-   *
-   * @return {@link PemObject} instance with the data read
-   *
-   * @throws IOException In case of exceptions reading the buffer
-   * @throws IllegalArgumentException In case of malformed PEM data
-   */
-  public static PemObject read(final BufferedReader reader)
-          throws IOException, IllegalArgumentException
-  {
-    return new PemObject.Builder().build(reader);
   }
 }

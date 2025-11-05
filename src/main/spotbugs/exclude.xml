@@ -46,4 +46,10 @@
     </Or>
   </Match>
 
+  <!-- Allow class name to shadow -->
+  <Match>
+    <Class name="org.cryptacular.pem.PemObject" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
 </FindBugsFilter>

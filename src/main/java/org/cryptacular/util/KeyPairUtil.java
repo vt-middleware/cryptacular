@@ -32,6 +32,7 @@ import org.cryptacular.adapter.Converter;
 import org.cryptacular.asn.OpenSSLPrivateKeyDecoder;
 import org.cryptacular.asn.PKCS8PrivateKeyDecoder;
 import org.cryptacular.asn.PublicKeyDecoder;
+import org.cryptacular.ssh.SSHPublicKeyDecoder;
 
 /**
  * Utility methods for public/private key pairs used for asymmetric encryption.
@@ -491,6 +492,18 @@ public final class KeyPairUtil
    */
   public static PublicKey decodePublicKey(final byte[] encoded) throws EncodingException
   {
-    return Converter.convertPublicKey(new PublicKeyDecoder().decode(encoded));
+    AsymmetricKeyParameter key = null;
+    try {
+      key = new PublicKeyDecoder().decode(encoded);
+    } catch (Exception e) {
+      // attempt to decode SSH public key
+      try {
+        key = new SSHPublicKeyDecoder().decode(encoded);
+      } catch (Exception ignored) {}
+      if (key == null) {
+        throw e;
+      }
+    }
+    return Converter.convertPublicKey(key);
   }
 }

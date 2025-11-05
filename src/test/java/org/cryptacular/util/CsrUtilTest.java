@@ -6,6 +6,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import org.bouncycastle.asn1.pkcs.CertificationRequest;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.testng.annotations.DataProvider;
@@ -116,7 +117,7 @@ public class CsrUtilTest
   public void testGenerateCsr(final String keyAlg) throws Exception
   {
     final KeyPair keyPair = KeyPairGenerator.getInstance(keyAlg).generateKeyPair();
-    final String hostname = keyAlg.toLowerCase() + ".example.org";
+    final String hostname = keyAlg.toLowerCase(Locale.ROOT) + ".example.org";
     final String dn = "CN=" + hostname + ",DC=example,DC=org";
     final String[] sans = {"dev." + hostname, "pprd." + hostname};
     final CertificationRequest csr = CsrUtil.generateCsr(keyPair, dn, sans).toASN1Structure();

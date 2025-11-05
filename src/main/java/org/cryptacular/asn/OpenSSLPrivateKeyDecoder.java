@@ -19,9 +19,9 @@ import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
 import org.cryptacular.EncodingException;
-import org.cryptacular.io.pem.PemObject;
 import org.cryptacular.pbe.OpenSSLAlgorithm;
 import org.cryptacular.pbe.OpenSSLEncryptionScheme;
+import org.cryptacular.pem.Constants;
 import org.cryptacular.util.ByteUtil;
 import org.cryptacular.util.CodecUtil;
 import org.cryptacular.util.PemUtil;
@@ -38,7 +38,7 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
   protected byte[] decryptKey(final byte[] encrypted, final char[] password)
   {
     final String pem = new String(encrypted, ByteUtil.ASCII_CHARSET);
-    final int start = pem.indexOf(PemObject.RFC1421_HEADER_FIELD_DEK_INFO);
+    final int start = pem.indexOf(Constants.RFC1421_HEADER_FIELD_DEK_INFO);
     final int eol = pem.indexOf('\n', start);
     final String[] dekInfo = pem.substring(start + 10, eol).split(",");
     final String alg = dekInfo[0];
