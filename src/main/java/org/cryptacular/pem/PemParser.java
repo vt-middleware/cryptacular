@@ -173,26 +173,26 @@ final class PemParser
     throws IllegalArgumentException
   {
     switch (format) {
-    case RFC4716:
-      if (maxLineLength > Constants.RFC4716_MAX_LINE_LENGTH) {
-        throw new IllegalArgumentException(
-          "Malformed RFC 4716 type PEM data (b64 lines longer than maximum allowed length)");
-      }
-      break;
-    case RFC7468:
-      if (maxLineLength > Constants.RFC7468_MAX_LINE_LENGTH) {
-        throw new IllegalArgumentException(
-          "Malformed RFC 7468 type PEM data (b64 lines longer than maximum allowed length)");
-      }
-      break;
-    case RFC1421:
-      if (maxLineLength > Constants.RFC1421_MAX_LINE_LENGTH) {
-        throw new IllegalArgumentException(
-          "Malformed RFC 1421 type PEM data (b64 lines longer than maximum allowed length)");
-      }
-      break;
-    default:
-      break;
+      case RFC4716:
+        if (maxLineLength > Constants.RFC4716_MAX_LINE_LENGTH) {
+          throw new IllegalArgumentException(
+            "Malformed RFC 4716 type PEM data (b64 lines longer than maximum allowed length)");
+        }
+        break;
+      case RFC7468:
+        if (maxLineLength > Constants.RFC7468_MAX_LINE_LENGTH) {
+          throw new IllegalArgumentException(
+            "Malformed RFC 7468 type PEM data (b64 lines longer than maximum allowed length)");
+        }
+        break;
+      case RFC1421:
+        if (maxLineLength > Constants.RFC1421_MAX_LINE_LENGTH) {
+          throw new IllegalArgumentException(
+            "Malformed RFC 1421 type PEM data (b64 lines longer than maximum allowed length)");
+        }
+        break;
+      default:
+        break;
     }
   }
 

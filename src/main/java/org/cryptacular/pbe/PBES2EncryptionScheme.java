@@ -95,40 +95,35 @@ public class PBES2EncryptionScheme extends AbstractEncryptionScheme
     byte[] iv = null;
     CipherParameters cipherParameters = generator.generateDerivedParameters(keyLength);
     switch (alg) {
-
-    case RC2:
-      setCipher(alg.getCipherSpec().newInstance());
-
-      final ASN1Sequence rc2Params = ASN1Sequence.getInstance(scheme.getParameters());
-      if (rc2Params.size() > 1) {
-        cipherParameters = new RC2Parameters(
-          ((KeyParameter) cipherParameters).getKey(),
-          ASN1Integer.getInstance(rc2Params.getObjectAt(0)).getValue().intValue());
-        iv = ASN1OctetString.getInstance(rc2Params.getObjectAt(0)).getOctets();
-      }
-      break;
-
-    case RC5:
-
-      final ASN1Sequence rc5Params = ASN1Sequence.getInstance(scheme.getParameters());
-      final int rounds = ASN1Integer.getInstance(rc5Params.getObjectAt(1)).getValue().intValue();
-      final int blockSize = ASN1Integer.getInstance(rc5Params.getObjectAt(2)).getValue().intValue();
-      if (blockSize == 64) {
-        setCipher(new PaddedBufferedBlockCipher(CBCBlockCipher.newInstance(new RC564Engine()), new PKCS7Padding()));
-      } else if (blockSize == 32) {
-        setCipher(new PaddedBufferedBlockCipher(CBCBlockCipher.newInstance(new RC532Engine()), new PKCS7Padding()));
-      } else {
-        throw new IllegalArgumentException("Invalid RC5 block size: " + blockSize);
-      }
-      cipherParameters = new RC5Parameters(((KeyParameter) cipherParameters).getKey(), rounds);
-      if (rc5Params.size() > 3) {
-        iv = ASN1OctetString.getInstance(rc5Params.getObjectAt(3)).getOctets();
-      }
-      break;
-
-    default:
-      setCipher(alg.getCipherSpec().newInstance());
-      iv = ASN1OctetString.getInstance(scheme.getParameters()).getOctets();
+      case RC2:
+        setCipher(alg.getCipherSpec().newInstance());
+        final ASN1Sequence rc2Params = ASN1Sequence.getInstance(scheme.getParameters());
+        if (rc2Params.size() > 1) {
+          cipherParameters = new RC2Parameters(
+            ((KeyParameter) cipherParameters).getKey(),
+            ASN1Integer.getInstance(rc2Params.getObjectAt(0)).getValue().intValue());
+          iv = ASN1OctetString.getInstance(rc2Params.getObjectAt(0)).getOctets();
+        }
+        break;
+      case RC5:
+        final ASN1Sequence rc5Params = ASN1Sequence.getInstance(scheme.getParameters());
+        final int rounds = ASN1Integer.getInstance(rc5Params.getObjectAt(1)).getValue().intValue();
+        final int blockSize = ASN1Integer.getInstance(rc5Params.getObjectAt(2)).getValue().intValue();
+        if (blockSize == 64) {
+          setCipher(new PaddedBufferedBlockCipher(CBCBlockCipher.newInstance(new RC564Engine()), new PKCS7Padding()));
+        } else if (blockSize == 32) {
+          setCipher(new PaddedBufferedBlockCipher(CBCBlockCipher.newInstance(new RC532Engine()), new PKCS7Padding()));
+        } else {
+          throw new IllegalArgumentException("Invalid RC5 block size: " + blockSize);
+        }
+        cipherParameters = new RC5Parameters(((KeyParameter) cipherParameters).getKey(), rounds);
+        if (rc5Params.size() > 3) {
+          iv = ASN1OctetString.getInstance(rc5Params.getObjectAt(3)).getOctets();
+        }
+        break;
+      default:
+        setCipher(alg.getCipherSpec().newInstance());
+        iv = ASN1OctetString.getInstance(scheme.getParameters()).getOctets();
     }
     if (iv != null) {
       cipherParameters = new ParametersWithIV(cipherParameters, iv);

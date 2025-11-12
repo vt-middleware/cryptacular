@@ -91,19 +91,19 @@ public final class PemObject extends org.bouncycastle.util.io.pem.PemObject
   private void assertHeadersValid(final List<PemHeader> headers)
   {
     switch (descriptor.getFormat()) {
-    case RFC1421:
-      assertPemHeaderValid(headers, Constants.RFC1421_SPECIFIERS, Format.RFC1421, false, true);
-      break;
-    case RFC2440:
-      assertPemHeaderValid(headers, Constants.RFC2440_SPECIFIERS, Format.RFC2440, false, false);
-      break;
-    case RFC4716:
-      assertPemHeaderValid(headers, Constants.RFC4716_SPECIFIERS, Format.RFC4716, true, false);
-      break;
-    case RFC7468:
-      throw new IllegalArgumentException("Headers are not allowed in this PEM format specified (RFC 7468)");
-    default:
-      break;
+      case RFC1421:
+        assertPemHeaderValid(headers, Constants.RFC1421_SPECIFIERS, Format.RFC1421, false, true);
+        break;
+      case RFC2440:
+        assertPemHeaderValid(headers, Constants.RFC2440_SPECIFIERS, Format.RFC2440, false, false);
+        break;
+      case RFC4716:
+        assertPemHeaderValid(headers, Constants.RFC4716_SPECIFIERS, Format.RFC4716, true, false);
+        break;
+      case RFC7468:
+        throw new IllegalArgumentException("Headers are not allowed in this PEM format specified (RFC 7468)");
+      default:
+        break;
     }
   }
 

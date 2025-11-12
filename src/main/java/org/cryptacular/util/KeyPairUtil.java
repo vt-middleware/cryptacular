@@ -135,21 +135,17 @@ public final class KeyPairUtil
     // Dispatch onto the algorithm-specific method
     final boolean result;
     switch (alg) {
-
-    case "DSA":
-      result = isKeyPair((DSAPublicKey) pubKey, (DSAPrivateKey) privKey);
-      break;
-
-    case "RSA":
-      result = isKeyPair((RSAPublicKey) pubKey, (RSAPrivateKey) privKey);
-      break;
-
-    case "EC":
-      result = isKeyPair((ECPublicKey) pubKey, (ECPrivateKey) privKey);
-      break;
-
-    default:
-      throw new IllegalArgumentException(alg + " not supported.");
+      case "DSA":
+        result = isKeyPair((DSAPublicKey) pubKey, (DSAPrivateKey) privKey);
+        break;
+      case "RSA":
+        result = isKeyPair((RSAPublicKey) pubKey, (RSAPrivateKey) privKey);
+        break;
+      case "EC":
+        result = isKeyPair((ECPublicKey) pubKey, (ECPrivateKey) privKey);
+        break;
+      default:
+        throw new IllegalArgumentException(alg + " not supported.");
     }
     return result;
   }

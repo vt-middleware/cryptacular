@@ -136,21 +136,17 @@ public class BufferedBlockCipherSpec implements Spec<BufferedBlockCipher>, Seria
     BlockCipher cipher = getBlockCipherSpec().newInstance();
 
     switch (mode) {
-
-    case "CBC":
-      cipher = CBCBlockCipher.newInstance(cipher);
-      break;
-
-    case "OFB":
-      cipher = new OFBBlockCipher(cipher, cipher.getBlockSize());
-      break;
-
-    case "CFB":
-      cipher = CFBBlockCipher.newInstance(cipher, cipher.getBlockSize());
-      break;
-
-    default:
-      break;
+      case "CBC":
+        cipher = CBCBlockCipher.newInstance(cipher);
+        break;
+      case "OFB":
+        cipher = new OFBBlockCipher(cipher, cipher.getBlockSize());
+        break;
+      case "CFB":
+        cipher = CFBBlockCipher.newInstance(cipher, cipher.getBlockSize());
+        break;
+      default:
+        break;
     }
 
     if (padding != null) {

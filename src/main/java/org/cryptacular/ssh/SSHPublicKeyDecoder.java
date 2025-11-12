@@ -111,18 +111,18 @@ public class SSHPublicKeyDecoder
     final ByteBuffer buffer = ByteBuffer.wrap(encoded).order(ByteOrder.BIG_ENDIAN);
     final String type = decodeString(buffer);
     switch (type) {
-    case "ssh-rsa":
-      final BigInteger e = decodeMPInt(buffer);
-      final BigInteger m = decodeMPInt(buffer);
-      return new RSAKeyParameters(false, m, e);
-    case "ssh-dss":
-      final BigInteger p = decodeMPInt(buffer);
-      final BigInteger q = decodeMPInt(buffer);
-      final BigInteger g = decodeMPInt(buffer);
-      final BigInteger y = decodeMPInt(buffer);
-      return new DSAPublicKeyParameters(y, new DSAParameters(p, q, g));
-    default:
-      throw new EncodingException("Unsupported SSH2 public key type: " + type);
+      case "ssh-rsa":
+        final BigInteger e = decodeMPInt(buffer);
+        final BigInteger m = decodeMPInt(buffer);
+        return new RSAKeyParameters(false, m, e);
+      case "ssh-dss":
+        final BigInteger p = decodeMPInt(buffer);
+        final BigInteger q = decodeMPInt(buffer);
+        final BigInteger g = decodeMPInt(buffer);
+        final BigInteger y = decodeMPInt(buffer);
+        return new DSAPublicKeyParameters(y, new DSAParameters(p, q, g));
+      default:
+        throw new EncodingException("Unsupported SSH2 public key type: " + type);
     }
   }
 
