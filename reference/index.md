@@ -53,40 +53,13 @@ Cryptacular provides a number of components for common hashing operations such a
 (e.g. hex) and salted hash comparison (e.g. password comparison). The following examples demonstrate common operations.
 
 {% highlight java %}
-// Compute the SHA-1 hash of a string
-byte[] sha1Bytes = HashUtil.sha1("Codito ergo sum");
-
-// Compute the hex-encoded SHA-256 hash of a string
-String sha256Hex = CodecUtil.hex(HashUtil.sha256("Ecce homo"));
-
-// Note that HashUtil handles several input types directly:
-// - CharSequence (converts to UTF-8 bytes)
-// - InputStream (reads stream as bytes)
-// - Resource (reads contents as bytes)
-// Thus the usage for hashing a stream is the same as a string
-byte[] sha256Bytes = HashUtil.sha256(new FileInputStream("/path/to/data"));
+{% include source/reference/1.java %}
 {% endhighlight %}
 
 A common password authentication routine follows.
 
 {% highlight java %}
-// Compute a salted SHA-1 hash of an input string and compare it to a value of
-// record stored as a base64-encoded string stored in "authoritativeHashString".
-// The stored value is thus base64(A+B), where A is the salted SHA-1 hash bytes
-// and B is the salt bytes. LDAP directories store password hashes this way.
-
-// Create a SaltedHash object to store the value to compare against
-SaltedHash authoritativeHash = new SaltedHash(
-  CodecUtil.b64(authoritativeHashString), // String to bytes
-  20, // SHA-1 hashes are 160 bits/20 bytes long,
-  true); // Salt is appended to the end of the hash bytes
-
-// Perform the hash comparison
-boolean areEqual = HashUtil.compareHash(
-  new org.bouncycastle.crypto.digests.SHA1Digest(),
-  authoritativeHash,
-  1, // One hashing round,
-  "Th3P@ssw0rd"); // Input string to hash and compare
+{% include source/reference/2.java %}
 {% endhighlight %}
 
 ## Encryption and decryption
@@ -107,50 +80,7 @@ https://en.wikipedia.org/wiki/Authenticated_encryption) ciphers are demonstrated
 and recommended for new software.
 
 {% highlight java %}
-// Define the underlying AES cipher used for encryption/decryption
-BlockCipher block = new org.bouncycastle.crypto.engines.AESEngine();
-
-// Wrap the underlying AES block cipher in a GCM mode cipher
-AEADBlockCipher cipher = new org.bouncycastle.crypto.modes.GCMBlockCipher(block); 
-
-// We generate a new 128-bit AES key here, but one could be loaded from a
-// Keystore or other secure storage
-SecretKey key = SecretKeyGenerator.generate(128, block);
-
-// Take care to use a suitable Nonce class for the chosen cipher mode
-// org.cryptacular.generator.sp80038d.RBGNonce - AEAD-mode ciphers
-// org.cryptacular.generator.sp80038a.RBGNonce - block mode (e.g. CBC) ciphers
-Nonce nonce = new org.cryptacular.generator.sp80038d.RBGNonce();
-
-//============
-// Encryption
-//============
-// Create input stream around the original plaintext input to encrypt
-InputStream inPlain = new FileInputStream("/path/to/plain.txt");
-
-// Create output stream to the file that will hold base64-encoded ciphertext
-OutputStream outCipher = new EncodingOutputStream(
-  new FileOutputStream("/path/to/cipher.b64"),
-  new Base64Encoder(72)); // Line breaks at 72 chars per line
-
-// Perform encryption
-CipherUtil.encrypt(aeadCipher, key, nonce, inPlain, outCipher);
-
-//============
-// Decryption
-//============
-// Create input stream around ciphertext input
-// Note we have to handle base64 decoding
-InputStream inCipher = new DecodingInputStream(
-  new FileInputStream("/path/to/cipher.b64"),
-  new Base64Decoder());
-
-// Create output stream to hold decrypted plaintext
-OutputStream outPlain = new EncodingOutputStream(
-  new FileOutputStream("/path/to/plain2.txt"));
-
-// Perform decryption
-CipherUtil.decrypt(aeadCipher, key, inCipher, outPlain);
+{% include source/reference/3.java %}
 {% endhighlight %}
 
 ## Beans
@@ -184,45 +114,30 @@ handled securely. All ciphertext data is base64 encoded to allow for more conven
         c:type="JCEKS"
         c:password="changeit" />
 
+  <bean id="blockCipherSpec"
+        class="org.cryptacular.spec.AEADBlockCipherSpec"
+        c:algorithm="AES"
+        c:mode="GCM" />
+
+  <bean id="nonce"
+        class="org.cryptacular.generator.sp80038d.RBGNonce" />
+
   <bean id="keyStore"
         factory-bean="keystoreFactory"
         factory-method="newInstance" />
 
   <bean id="cipherBean"
         class="org.cryptacular.bean.AEADBlockCipherBean"
-        p:keyStore-ref="keystore"
-        p:keyAlias="keyAliasInKeyStore"
-        p:keyPassword="changeit">
-    <property name="blockCipherSpec">
-      <bean class="org.cryptacular.spec.AEADBlockCipherSpec"
-            c:algorithm="AES"
-            c:mode="GCM" />
-    </property>
-    <property name="nonce">
-      <bean class="org.cryptacular.generator.sp80038d.RBGNonce" />
-    </property>
-  </bean>
+        c:blockCipherSpec-ref="blockCipherSpec"
+        c:keyStore-ref="keystore"
+        c:keyAlias="keyAliasInKeyStore"
+        c:keyPassword="changeit"
+        c:nonce-ref="nonce" />
 </beans>
 {% endhighlight %}
 
 {% highlight java %}
-@org.springframework.stereotype.Service
-public class EncryptionService() {
-  @Inject
-  private CipherBean cipherBean;
-
-  private Encoder encoder = new Base64Encoder(72);
-
-  private Decoder decoder = new Base64Decoder();
-
-  public String encrypt(String plainText) {
-    return encoder.encode(cipherBean.encrypt(ByteUtil.toBytes(plainText)));
-  }
-
-  public String decrypt(String cipherText) {
-    return ByteUtil.toString(cipherBean.decrypt(decoder.decode(cipherText)));
-  }
-}
+{% include source/reference/4.java %}
 {% endhighlight %}
 
 ### Hash beans
@@ -240,29 +155,23 @@ password and salt.
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+  <bean id="codecSpec"
+        class="org.cryptacular.spec.CodecSpec"
+        c:encoding="Hex" />
+
+  <bean id="digestSpec"
+        class="org.cryptacular.spec.DigestSpec"
+        c:algName="SHA256" />
+
   <bean id="hashBean"
         class="org.cryptacular.bean.EncodingHashBean"
-        p:iterations="10"
-        p:salted="true">
-    <property name="codecSpec">
-      <bean class="org.cryptacular.spec.CodecSpec" c:encoding="Hex" />
-    </property>
-    <property name="digestSpec">
-      <bean class="org.cryptacular.spec.DigestSpec" c:algName="SHA256" />
-    </property>
-  </bean>
+        c:codecSpec-ref="codecSpec"
+        c:digestSpec-ref="disgestSpec"
+        c:iterations="10"
+        c:salted="true" />
 </beans>
 {% endhighlight %}
 
 {% highlight java %}
-@org.springframework.stereotype.Service
-public class PasswordHashService() {
-  @Inject
-  private HashBean<String> hashBean;
-
-  public String hash(String password, String byte[] salt) {
-    // Hash beans handle conversion of objects to bytes for common input types
-    // See HashUtil#hash() JavaDocs for more information
-    return hashBean.hash(password, salt);
-  }
+{% include source/reference/5.java %}
 {% endhighlight %}
