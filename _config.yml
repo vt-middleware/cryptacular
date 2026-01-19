@@ -1,5 +1,8 @@
 version:
-  - 1.2.7
+  - 1.3.0
+
+commitURL:
+  - "https://github.com/vt-middleware/cryptacular/commit/"
 
 issueURL:
   - "https://github.com/vt-middleware/cryptacular/issues/"

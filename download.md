@@ -21,6 +21,15 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.3.0 - 19Jan2026 (Requires Java 8)
+
+Issue | Description
+:---- | :----------
+[cryptacular-80]({{ site.issueURL }}80) | Use CharSequence instead of String for EncodingHashBean.
+[cryptacular-80]({{ site.issueURL }}80) | Refactor beans for thread safety; remove setters in favor of constructor parameters.
+[cryptacular-80]({{ site.issueURL }}80) | Rename CiphertextHeaderV2 to CiphertextHeader; remove deprecated version.
+[cryptacular-69]({{ site.issueURL }}69) | Support decoding SSH public keys
+
 ### Version 1.2.7 - 15Aug2024 (Requires Java 8)
 
 Issue | Description
