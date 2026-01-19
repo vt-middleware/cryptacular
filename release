@@ -115,9 +115,18 @@ git pull origin gh-pages
 # remove root directory javadocs
 git rm -r javadocs/org javadocs/*.html javadocs/*.css javadocs/*.js javadocs/package-list
 # add new javadocs to root directory
-cp -Rp target/apidocs/ javadocs
+cp target/${PROJECT}-${RELEASE_VERSION}-javadoc.jar javadocs
+pushd javadocs
+jar xf ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+rm -rf META-INF ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+popd
 # add new javadocs to release version directory
-cp -Rp target/apidocs/ javadocs/${RELEASE_VERSION}
+mkdir javadocs/${RELEASE_VERSION}
+cp target/${PROJECT}-${RELEASE_VERSION}-javadoc.jar javadocs/${RELEASE_VERSION}
+pushd javadocs/${RELEASE_VERSION}
+jar xf ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+rm -rf META-INF ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+popd
 git add javadocs
 git commit -a -m "Updated javadocs for ${RELEASE_VERSION} release."
 echo "Committed new javadocs"
@@ -139,7 +148,7 @@ git push origin gh-pages
 echo "Uploading bundle jar to sonatype"
 user_continue
 
-SONATYPE_TOKEN=$(echo "${SONATYPE_USER}:${SONATYPE_PASSWORD}" | base64)
+SONATYPE_TOKEN=$(echo -n "${SONATYPE_USER}:${SONATYPE_PASSWORD}" | base64)
 curl --verbose --request POST \
   --header "Authorization: Bearer ${SONATYPE_TOKEN}" \
   -F "file=@target/${PROJECT}-${RELEASE_VERSION}-maven.zip" \
