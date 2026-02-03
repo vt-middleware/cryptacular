@@ -479,8 +479,7 @@ public class CertUtilTest
       .isEqualTo(truncateToSeconds(expectedNotAfter));
   }
 
-  @Test(expectedExceptions = RuntimeException.class,
-    expectedExceptionsMessageRegExp = "Unknown signature type requested: UNSUPPORTEDALGO")
+  @Test
   public void testGenX509UnSupportedAlgo()
   {
     final KeyPair keyPair = KeyPairGenerator.generateRSA(new SecureRandom(), 2048);
@@ -491,8 +490,11 @@ public class CertUtilTest
     final Instant expectedNotBefore = Instant.now();
     final Instant expectedNotAfter = Instant.now().plus(Duration.ofDays(365));
 
-    CertUtil.generateX509Certificate(keyPair, dn,
-        Date.from(expectedNotBefore), Date.from(expectedNotAfter), "UNSUPPORTEDALGO");
+    assertThatThrownBy(
+      () -> CertUtil.generateX509Certificate(
+        keyPair, dn, Date.from(expectedNotBefore), Date.from(expectedNotAfter), "UNSUPPORTEDALGO"))
+      .isInstanceOf(RuntimeException.class)
+      .hasMessage("Unknown signature type requested: UNSUPPORTEDALGO");
   }
 
 

@@ -18,12 +18,12 @@ public class CiphertextHeaderTest
   /** Test HMAC key. */
   private final SecretKey key = new SecretKeySpec(new RBGNonce().generate(), "AES");
 
-  @Test(
-      expectedExceptions = IllegalArgumentException.class,
-      expectedExceptionsMessageRegExp = "Nonce exceeds size limit in bytes.*")
+  @Test
   public void testNonceLimitConstructor()
   {
-    new CiphertextHeader(new byte[256], "key2");
+    assertThatThrownBy(() -> new CiphertextHeader(new byte[256], "key2"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageStartingWith("Nonce exceeds size limit in bytes ");
   }
 
   @Test
@@ -40,9 +40,7 @@ public class CiphertextHeaderTest
     assertThat(actual.getLength()).isEqualTo(expected.getLength());
   }
 
-  @Test(
-      expectedExceptions = EncodingException.class,
-      expectedExceptionsMessageRegExp = "Ciphertext header HMAC verification failed")
+  @Test
   public void testEncodeDecodeFailBadHMAC()
   {
     final byte[] nonce = new byte[16];
@@ -53,7 +51,9 @@ public class CiphertextHeaderTest
     final int index = encoded.length - 3;
     final byte b = encoded[index];
     encoded[index] = (byte) (b + 1);
-    CiphertextHeader.decode(encoded, this::getKey);
+    assertThatThrownBy(() -> CiphertextHeader.decode(encoded, this::getKey))
+      .isInstanceOf(EncodingException.class)
+      .hasMessage("Ciphertext header HMAC verification failed");
   }
 
   private SecretKey getKey(final String alias)
