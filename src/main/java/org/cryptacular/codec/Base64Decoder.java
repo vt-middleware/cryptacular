@@ -99,7 +99,7 @@ public class Base64Decoder extends AbstractBaseNDecoder
     /** URL-safe alphabet flag. */
     private boolean urlSafe;
 
-    /** Arbitrary alphbet. */
+    /** Arbitrary alphabet. */
     private String alphabet;
 
     /** Padding flag. */

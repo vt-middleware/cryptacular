@@ -143,7 +143,7 @@ public class Base64Encoder extends AbstractBaseNEncoder
     /** URL-safe alphabet flag. */
     private boolean urlSafe;
 
-    /** Arbitrary alphbet. */
+    /** Arbitrary alphabet. */
     private String alphabet;
 
     /** Padding flag. */
