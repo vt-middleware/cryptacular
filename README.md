@@ -1,4 +1,7 @@
-## Cryptacular [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cryptacular/cryptacular/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.cryptacular/cryptacular)
+## Cryptacular
+
+[![Maven Central](https://img.shields.io/maven-central/v/org.cryptacular/cryptacular?style=for-the-badge&logo=apachemaven)](https://central.sonatype.com/artifact/org.cryptacular/cryptacular)
+[![GitHub Releases](https://img.shields.io/github/release/vt-middleware/cryptacular.svg?style=for-the-badge&logo=github)](https://github.com/vt-middleware/cryptacular/releases)
 
 The spectacular complement to the Bouncy Castle crypto API for Java.
 
