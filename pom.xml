@@ -60,7 +60,7 @@
     <testng.verbosity>0</testng.verbosity>
     <japicmp.enabled>true</japicmp.enabled>
     <japicmp.oldVersion>1.3.0</japicmp.oldVersion>
-    <bc.version>1.83</bc.version>
+    <bc.version>1.84</bc.version>
   </properties>
 
   <dependencies>
@@ -113,7 +113,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.4.0</version>
+        <version>3.5.0</version>
         <executions>
           <execution>
             <id>copy-info</id>
@@ -220,7 +220,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.9.8.2</version>
+        <version>4.9.8.3</version>
         <configuration>
           <effort>Max</effort>
           <threshold>Medium</threshold>
@@ -239,7 +239,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.4</version>
+        <version>3.5.5</version>
         <configuration>
           <threadCount>10</threadCount>
           <properties>
@@ -253,7 +253,7 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.25.4</version>
+        <version>0.25.6</version>
         <configuration>
           <oldVersion>
             <dependency>
@@ -343,7 +343,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>6.0.0</version>
+        <version>6.0.2</version>
         <executions>
           <execution>
             <id>bundle-manifest</id>
