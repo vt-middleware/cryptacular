@@ -5,7 +5,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.Provider;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.time.Instant;
@@ -15,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.cryptacular.FailListener;
 import org.cryptacular.generator.KeyPairGenerator;
 import org.cryptacular.x509.GeneralNameType;
@@ -497,6 +500,49 @@ public class CertUtilTest
       .hasMessage("Unknown signature type requested: UNSUPPORTEDALGO");
   }
 
+
+  @Test
+  public void testBouncyCastleProviderFallsBackToBC()
+  {
+    Security.removeProvider("BC");
+    try {
+      final Provider provider = CertUtil.bouncyCastleProvider();
+      assertThat(provider).isNotNull();
+      assertThat(provider.getName()).isEqualTo("BC");
+    } finally {
+      Security.removeProvider("BC");
+    }
+  }
+
+  @Test
+  public void testBouncyCastleProviderUsesRegisteredBC()
+  {
+    final Provider bc = new BouncyCastleProvider();
+    Security.addProvider(bc);
+    try {
+      final Provider provider = CertUtil.bouncyCastleProvider();
+      assertThat(provider).isSameAs(bc);
+    } finally {
+      Security.removeProvider("BC");
+    }
+  }
+
+  @Test
+  public void testGenX509WithRegisteredBCProvider()
+  {
+    final Provider bc = new BouncyCastleProvider();
+    Security.addProvider(bc);
+    try {
+      final KeyPair keyPair = KeyPairGenerator.generateRSA(new SecureRandom(), 2048);
+      final String dn = "CN=test.example.org,DC=example,DC=org";
+      final X509Certificate cert = CertUtil.generateX509Certificate(
+        keyPair, dn, Duration.ofDays(365), "SHA256WithRSA");
+      assertThat(cert).isNotNull();
+      assertThat(CertUtil.subjectCN(cert)).isEqualTo("test.example.org");
+    } finally {
+      Security.removeProvider("BC");
+    }
+  }
 
   private OffsetDateTime truncateToSeconds(final Instant instant)
   {
