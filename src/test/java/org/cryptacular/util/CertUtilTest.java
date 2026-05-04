@@ -544,6 +544,19 @@ public class CertUtilTest
     }
   }
 
+  @Test
+  public void testBouncyCastleProviderPrefersFips()
+  {
+    final Provider bcFipsMock = new Provider("BCFIPS", 1.0, "stub") {};
+    Security.addProvider(bcFipsMock);
+    try {
+      final Provider provider = CertUtil.bouncyCastleProvider();
+      assertThat(provider.getName()).isEqualTo("BCFIPS");
+    } finally {
+      Security.removeProvider("BCFIPS");
+    }
+  }
+
   private OffsetDateTime truncateToSeconds(final Instant instant)
   {
     return instant.atOffset(ZoneOffset.UTC).withNano(0);
