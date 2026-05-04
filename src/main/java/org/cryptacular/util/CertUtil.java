@@ -616,7 +616,7 @@ public final class CertUtil
     }
   }
 
-  static Provider bouncyCastleProvider()
+  public static Provider bouncyCastleProvider()
   {
     Provider p = Security.getProvider("BCFIPS");
     if (p != null) {
