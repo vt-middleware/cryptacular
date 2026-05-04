@@ -4,6 +4,7 @@ package org.cryptacular.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.PrivateKey;
@@ -14,6 +15,8 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
@@ -24,7 +27,8 @@ import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.signers.DSASigner;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
-import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
+import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.cryptacular.CryptUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.StreamException;
@@ -235,13 +239,13 @@ public final class KeyPairUtil
     CryptUtil.assertNotNullArg(privKey, "Private key cannot be null");
     final ECDSASigner signer = new ECDSASigner();
     try {
-      signer.init(true, ECUtil.generatePrivateKeyParameter(privKey));
+      signer.init(true, PrivateKeyFactory.createKey(PrivateKeyInfo.getInstance(privKey.getEncoded())));
 
       final BigInteger[] sig = signer.generateSignature(SIGN_BYTES);
-      signer.init(false, ECUtil.generatePublicKeyParameter(pubKey));
+      signer.init(false, PublicKeyFactory.createKey(SubjectPublicKeyInfo.getInstance(pubKey.getEncoded())));
       return signer.verifySignature(SIGN_BYTES, sig[0], sig[1]);
-    } catch (Exception e) {
-      throw new org.cryptacular.CryptoException("Signature computation error", e);
+    } catch (IOException e) {
+      throw new org.cryptacular.CryptoException("Key encoding error", e);
     }
   }
 

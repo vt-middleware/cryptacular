@@ -271,7 +271,8 @@ public final class CsrUtil
         throw new CryptoException("Error adding subject alt names to CSR", e);
       }
     }
-    final JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder(sigAlg);
+    final JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder(sigAlg)
+        .setProvider(CertUtil.bouncyCastleProvider());
     try {
       final ContentSigner signer = csBuilder.build(keyPair.getPrivate());
       return p10Builder.build(signer);

@@ -4,10 +4,13 @@ package org.cryptacular.util;
 import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.Provider;
+import java.security.Security;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.bouncycastle.asn1.pkcs.CertificationRequest;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -123,5 +126,23 @@ public class CsrUtilTest
     final CertificationRequest csr = CsrUtil.generateCsr(keyPair, dn, sans).toASN1Structure();
     assertThat(CsrUtil.commonNames(csr).get(0)).isEqualTo(hostname);
     assertThat(CsrUtil.subjectAltNames(csr)).isEqualTo(Arrays.asList(sans));
+  }
+
+  @Test(dataProvider = "key-algs")
+  public void testGenerateCsrWithRegisteredBCProvider(final String keyAlg) throws Exception
+  {
+    final Provider bc = new BouncyCastleProvider();
+    Security.addProvider(bc);
+    try {
+      final KeyPair keyPair = KeyPairGenerator.getInstance(keyAlg).generateKeyPair();
+      final String hostname = keyAlg.toLowerCase(Locale.ROOT) + ".example.org";
+      final String dn = "CN=" + hostname + ",DC=example,DC=org";
+      final String[] sans = {"dev." + hostname, "pprd." + hostname};
+      final CertificationRequest csr = CsrUtil.generateCsr(keyPair, dn, sans).toASN1Structure();
+      assertThat(CsrUtil.commonNames(csr).get(0)).isEqualTo(hostname);
+      assertThat(CsrUtil.subjectAltNames(csr)).isEqualTo(Arrays.asList(sans));
+    } finally {
+      Security.removeProvider("BC");
+    }
   }
 }
