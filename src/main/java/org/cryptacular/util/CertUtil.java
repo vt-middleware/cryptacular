@@ -10,6 +10,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.Provider;
+import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -37,7 +39,6 @@ import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -596,7 +597,9 @@ public final class CertUtil
     final BigInteger serial = BigInteger.valueOf(now.toEpochMilli());
 
     try {
-      final ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgo).build(keyPair.getPrivate());
+      final Provider provider = bouncyCastleProvider();
+      final ContentSigner contentSigner =
+        new JcaContentSignerBuilder(signatureAlgo).setProvider(provider).build(keyPair.getPrivate());
       final X500Name x500Name = new X500Name(RFC4519Style.INSTANCE, dn);
       final X509v3CertificateBuilder certificateBuilder =
         new JcaX509v3CertificateBuilder(x500Name,
@@ -607,9 +610,27 @@ public final class CertUtil
           keyPair.getPublic())
           .addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
       return new JcaX509CertificateConverter()
-        .setProvider(new BouncyCastleProvider()).getCertificate(certificateBuilder.build(contentSigner));
+        .setProvider(provider).getCertificate(certificateBuilder.build(contentSigner));
     } catch (OperatorCreationException | CertIOException | CertificateException e) {
       throw new RuntimeException("Certificate generation error", e);
+    }
+  }
+
+  public static Provider bouncyCastleProvider()
+  {
+    Provider p = Security.getProvider("BCFIPS");
+    if (p != null) {
+      return p;
+    }
+    p = Security.getProvider("BC");
+    if (p != null) {
+      return p;
+    }
+    try {
+      return (Provider) Class.forName("org.bouncycastle.jce.provider.BouncyCastleProvider")
+        .getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      throw new IllegalStateException("No BouncyCastle provider found (BC or BCFIPS)", e);
     }
   }
 

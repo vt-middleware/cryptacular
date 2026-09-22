@@ -10,6 +10,7 @@ import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.x9.ECNamedCurveTable;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.DSAParameters;
@@ -17,7 +18,6 @@ import org.bouncycastle.crypto.params.DSAPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
-import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
 import org.cryptacular.EncodingException;
 import org.cryptacular.pbe.OpenSSLAlgorithm;
 import org.cryptacular.pbe.OpenSSLEncryptionScheme;
@@ -129,7 +129,7 @@ public class OpenSSLPrivateKeyDecoder extends AbstractPrivateKeyDecoder<Asymmetr
     final ASN1TaggedObject asn1Params = ASN1TaggedObject.getInstance(seq.getObjectAt(2));
     final X9ECParameters params;
     if (asn1Params.getBaseObject() instanceof ASN1ObjectIdentifier) {
-      params = ECUtil.getNamedCurveByOid(ASN1ObjectIdentifier.getInstance(asn1Params.getBaseObject()));
+      params = ECNamedCurveTable.getByOID(ASN1ObjectIdentifier.getInstance(asn1Params.getBaseObject()));
     } else {
       params = X9ECParameters.getInstance(asn1Params.getBaseObject());
     }
